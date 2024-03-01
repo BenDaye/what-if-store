@@ -1,0 +1,26 @@
+{
+  "Create": "创建",
+  "Created": "已创建",
+  "DarkMode": {
+    "Auto": "系统",
+    "Off": "日间",
+    "On": "夜间",
+    "_": "主题"
+  },
+  "Import": "导入",
+  "Imported": "已导入",
+  "Language": {
+    "Activated": "激活",
+    "Update": "修改语言",
+    "Updated": "已修改语言",
+    "_": "语言",
+    "en": "English",
+    "zh": "简体中文"
+  },
+  "Remove": "删除",
+  "Removed": "已删除",
+  "Settings": "设置",
+  "Submit": "提交",
+  "Update": "修改",
+  "Updated": "已修改"
+}

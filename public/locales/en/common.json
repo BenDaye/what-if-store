@@ -1,0 +1,26 @@
+{
+  "Create": "Create",
+  "Created": "Created",
+  "DarkMode": {
+    "Auto": "System",
+    "Off": "Light",
+    "On": "Dark",
+    "_": "Theme"
+  },
+  "Import": "Import",
+  "Imported": "Imported",
+  "Language": {
+    "Activated": "Activated",
+    "Update": "Update Language",
+    "Updated": "Language Updated",
+    "_": "Language",
+    "en": "English",
+    "zh": "简体中文"
+  },
+  "Remove": "Remove",
+  "Removed": "Removed",
+  "Settings": "Settings",
+  "Submit": "Submit",
+  "Update": "Update",
+  "Updated": "Updated"
+}

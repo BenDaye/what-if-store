@@ -1,0 +1,9 @@
+next.config.js
+next.config.mjs
+next-i18next.config.js
+dist
+.next
+node_modules
+
+helper
+uploads
