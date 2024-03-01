@@ -22,9 +22,9 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-type DashboardUserUpdateProfileDialogProps = DialogProps;
-export const DashboardUserUpdateProfileDialog = (
-  props: DashboardUserUpdateProfileDialogProps,
+type DashboardAuthUpdateProfileDialogProps = DialogProps;
+export const DashboardAuthUpdateProfileDialog = (
+  props: DashboardAuthUpdateProfileDialogProps,
 ) => {
   const { showError, showSuccess } = useNotice();
   const { t: tCommon } = useTranslation('common');

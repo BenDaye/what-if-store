@@ -11,7 +11,7 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetStaticPropsType<typeof getStaticProps>
 > = () => {
-  return <>Hello Page</>;
+  return <>Users Page</>;
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;

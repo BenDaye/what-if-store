@@ -1,7 +1,7 @@
 import { SessionMenuItem, SettingsIconButton } from '@/components/common';
 import { AuthRole } from '@prisma/client';
 import { useBoolean } from 'usehooks-ts';
-import { DashboardUserUpdateProfileDialog } from '../user/UpdateProfileDialog';
+import { DashboardAuthUpdateProfileDialog } from '../auth/UpdateProfileDialog';
 
 export const DashboardSettingsIconButton = () => {
   const {
@@ -20,7 +20,7 @@ export const DashboardSettingsIconButton = () => {
         />,
       ]}
     >
-      <DashboardUserUpdateProfileDialog
+      <DashboardAuthUpdateProfileDialog
         open={updateProfileDialogVisible}
         onClose={() => closeUpdateProfileDialog()}
         fullWidth
