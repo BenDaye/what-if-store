@@ -13,6 +13,7 @@ datasource db {
 enum AuthRole {
   USER
   ADMIN
+  AUTHOR
 }
 
 model User {
@@ -23,6 +24,7 @@ model User {
   password    String
   role        AuthRole     @default(USER)
   UserProfile UserProfile?
+  Author      Author?
 }
 
 model UserProfile {
@@ -34,4 +36,140 @@ model UserProfile {
   email     String?
   nickname  String?
   bio       String?
+  avatar    String?
+}
+
+enum AuthorType {
+  IndependentDeveloper
+  Company
+  Community
+}
+
+model Author {
+  id            String         @id @default(uuid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String         @unique
+  type          AuthorType
+  name          String         @unique
+  verified      Boolean        @default(false)
+  Application   Application[]
+  AuthorProfile AuthorProfile?
+}
+
+model AuthorProfile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String   @unique
+  email     String?
+  bio       String?
+  website   String?
+  avatar    String?
+}
+
+enum ApplicationCategory {
+  AR
+  Books
+  Business
+  DeveloperTools
+  Education
+  Entertainment
+  Finance
+  FoodDrink
+  GraphicsDesign
+  HealthFitness
+  Kids
+  Lifestyle
+  MagazinesNewspapers
+  Medical
+  Music
+  Navigation
+  News
+  PhotoVideo
+  Productivity
+  Reference
+  Extensions
+  Shopping
+  SocialNetworking
+  Sports
+  Travel
+  Utilities
+  Weather
+  Other
+}
+
+enum ApplicationPlatform {
+  IOS
+  ANDROID
+  WEB
+  MAC
+  WINDOWS
+  LINUX
+  OTHER
+}
+
+enum ApplicationStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  REJECTED
+  DELETED
+  BANNED
+  HIDDEN
+  PUBLISHED
+  SUSPENDED
+}
+
+model Application {
+  id                     String                  @id @default(uuid())
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  name                   String
+  category               ApplicationCategory
+  platforms              ApplicationPlatform[]
+  countries              String[]
+  ageRating              String
+  author                 Author                  @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  authorId               String                  @unique
+  ApplicationInformation ApplicationInformation?
+  VersionHistories       ApplicationVersion[]
+  price                  Float?                  @default(0)
+  status                 ApplicationStatus       @default(DRAFT)
+
+  @@unique([name, authorId])
+}
+
+model ApplicationInformation {
+  id            String      @id @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String      @unique
+  description   String?
+  website       String?
+  logo          String?
+  screenshots   String[]
+  // NOTE: 如果db用的是mongodb可以使用type来定义(暂时先不改了).既然用的是pg,那就用zod做验证吧
+  compatibility Json
+  languages     String[]
+  copyright     String?
+  privacyPolicy String?
+  termsOfUse    String?
+  github        String?
+}
+
+model ApplicationVersion {
+  id            String      @id @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  version       String
+  releaseDate   DateTime
+  changelog     String?
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String
+
+  @@unique([version, applicationId])
 }
