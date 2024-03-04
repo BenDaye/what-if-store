@@ -24,7 +24,6 @@ export const useDashboardUser = (id?: IdSchema | null) => {
   const { data, refetch, isFetching, error, isError } =
     trpc.protectedDashboardUser.getProfileById.useQuery(id ?? '[UNSET]', {
       enabled: !!id && authenticated,
-      queryKey: ['protectedDashboardUser.getProfileById', id ?? '[UNSET]'],
     });
   trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
     enabled: authenticated,
@@ -98,15 +97,8 @@ export const useDashboardUsers = (
       ...query,
     },
     {
-      queryKey: [
-        'protectedDashboardUser.list',
-        query ?? {
-          limit: 20,
-        },
-      ],
       enabled: authenticated,
       getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialPageParam: undefined,
     },
   );
 
@@ -118,7 +110,7 @@ export const useDashboardUsers = (
   }, [error, isError, showWarning, notify]);
 
   useEffect(() => {
-    setFlattedData(data?.items ?? []);
+    setFlattedData(data?.pages.map((page) => page.items).flat() ?? []);
   }, [data]);
 
   trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
@@ -132,12 +124,20 @@ export const useDashboardUsers = (
   useInterval(fetchNextPage, hasNextPage && !isFetching ? 1000 : null);
 
   const adminData = useMemo(
-    () => data?.items.filter((item) => item.role === AuthRole.ADMIN) ?? [],
+    () =>
+      data?.pages
+        .map((page) => page.items)
+        .flat()
+        .filter((item) => item.role === AuthRole.ADMIN) ?? [],
     [data],
   );
 
   const userData = useMemo(
-    () => data?.items.filter((item) => item.role === AuthRole.USER) ?? [],
+    () =>
+      data?.pages
+        .map((page) => page.items)
+        .flat()
+        .filter((item) => item.role === AuthRole.USER) ?? [],
     [data],
   );
 
