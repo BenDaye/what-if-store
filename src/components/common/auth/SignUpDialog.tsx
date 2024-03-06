@@ -1,4 +1,4 @@
-import { AuthProps, useNotice } from '@/hooks';
+import { AuthProps, useAuth, useNotice } from '@/hooks';
 import { signUpSchema } from '@/server/schemas/auth';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,7 +20,6 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
@@ -42,11 +41,11 @@ const signUpForm = signUpSchema
 type SignUpForm = z.infer<typeof signUpForm>;
 
 export const SignUpDialog = ({
-  role,
-  enableSignIn,
-  enableSignUp,
+  disableSignIn,
+  disableSignUp,
   ...props
 }: SignUpDialogProps) => {
+  const { signIn } = useAuth();
   const { showError, showSuccess, showWarning } = useNotice();
   const { status } = useSession();
   const { t: tAuth } = useTranslation('auth');
@@ -59,29 +58,25 @@ export const SignUpDialog = ({
     resolver: zodResolver(signUpForm),
   });
   const { value: showPassword, toggle: toggleShowPassword } = useBoolean(false);
-  const { mutateAsync: signUpForUser } = trpc.publicAppAuth.signUp.useMutation({
+  const { mutateAsync: signUp } = trpc.publicAppAuth.signUp.useMutation({
     onError: (err) => showError(err.message),
     onSuccess: () => {
       showSuccess(tAuth('SignUp.Succeeded'));
       reset();
       props.onClose?.({}, 'backdropClick');
+      signIn();
     },
   });
 
-  const signUpForAdmin = () => {
-    // TODO: Implement admin sign up
-  };
-
   const onSubmit = useCallback(
     async (data: SignUpForm) => {
-      if (!enableSignUp) {
+      if (disableSignUp) {
         showWarning(tAuth('SignUp.Disabled'));
         return;
       }
-      if (role === AuthRole.USER) await signUpForUser(data).catch(() => null);
-      if (role === AuthRole.ADMIN) signUpForAdmin();
+      await signUp(data).catch(() => null);
     },
-    [enableSignUp, role, signUpForUser, showWarning, tAuth],
+    [disableSignUp, signUp, showWarning, tAuth],
   );
 
   return (
@@ -95,8 +90,9 @@ export const SignUpDialog = ({
       >
         <AppBar position="static" enableColorOnDark elevation={0}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
-            <Typography variant="subtitle1" color="text.primary">
+            <Typography variant="subtitle1">
               {tAuth('SignUp._')}
+              {disableSignUp && ` (${tAuth('SignUp.Disabled')})`}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <IconButton
@@ -106,6 +102,7 @@ export const SignUpDialog = ({
                 props?.onClose?.({}, 'backdropClick');
               }}
               disabled={status === 'loading'}
+              color="inherit"
             >
               <CloseIcon />
             </IconButton>
@@ -128,6 +125,7 @@ export const SignUpDialog = ({
                 placeholder={tAuth('Account')}
                 autoFocus
                 required
+                disabled={disableSignUp}
               />
             )}
           />
@@ -152,7 +150,6 @@ export const SignUpDialog = ({
                     <IconButton
                       aria-label="Toggle Password visibility"
                       onClick={toggleShowPassword}
-                      onMouseDown={toggleShowPassword}
                       edge="end"
                     >
                       {showPassword ? (
@@ -163,6 +160,7 @@ export const SignUpDialog = ({
                     </IconButton>
                   ),
                 }}
+                disabled={disableSignUp}
               />
             )}
           />
@@ -171,7 +169,7 @@ export const SignUpDialog = ({
             name="confirmPassword"
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label={tAuth('Confirm Password')}
+                label={tAuth('ConfirmPassword')}
                 value={value}
                 variant="filled"
                 onChange={onChange}
@@ -187,7 +185,6 @@ export const SignUpDialog = ({
                     <IconButton
                       aria-label="Toggle Password visibility"
                       onClick={toggleShowPassword}
-                      onMouseDown={toggleShowPassword}
                       edge="end"
                     >
                       {showPassword ? (
@@ -198,14 +195,17 @@ export const SignUpDialog = ({
                     </IconButton>
                   ),
                 }}
+                disabled={disableSignUp}
               />
             )}
           />
         </DialogContent>
         <DialogActions>
-          {enableSignIn && (
-            <SignInButton color="info" onClick={() => reset()} />
-          )}
+          <SignInButton
+            color="secondary"
+            onClick={() => reset()}
+            disabled={disableSignIn}
+          />
           <Box sx={{ flexGrow: 1 }}></Box>
           <LoadingButton
             loading={status === 'loading'}

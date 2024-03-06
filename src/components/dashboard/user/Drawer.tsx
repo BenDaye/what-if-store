@@ -2,10 +2,10 @@ import {
   AppBar,
   Drawer,
   DrawerProps,
-  List,
   Toolbar,
   Typography,
 } from '@mui/material';
+import { UserList } from './List';
 
 export const UserDrawer = (props: DrawerProps) => {
   return (
@@ -20,16 +20,7 @@ export const UserDrawer = (props: DrawerProps) => {
         </Toolbar>
       </AppBar>
 
-      <List
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          overflow: 'hidden',
-          overflowY: 'auto',
-        }}
-      ></List>
+      <UserList disablePadding dense sx={{ overflowY: 'auto' }} />
     </Drawer>
   );
 };

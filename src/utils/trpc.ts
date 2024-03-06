@@ -11,6 +11,8 @@ import type { AppRouter } from '@/server/routers/_app';
 import { TRPCLink } from '@trpc/client';
 import type { inferRouterOutputs } from '@trpc/server';
 
+let client: ReturnType<typeof createWSClient> | null = null;
+
 function getEndingLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
   if (typeof window === 'undefined') {
     return httpBatchLink({
@@ -28,14 +30,31 @@ function getEndingLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
       transformer: superjson,
     });
   }
-  const client = createWSClient({
+  client = createWSClient({
     url: `${process.env.NEXT_PUBLIC_WS_URL}`,
+    lazy: {
+      enabled: true,
+      closeMs: 30 * 1000,
+    },
   });
   return wsLink<AppRouter>({
     client,
     transformer: superjson,
   });
 }
+
+export const resetTRPCClient = () => {
+  if (client) {
+    client.close();
+  }
+  client = createWSClient({
+    url: `${process.env.NEXT_PUBLIC_WS_URL}`,
+    lazy: {
+      enabled: true,
+      closeMs: 30 * 1000,
+    },
+  });
+};
 
 /**
  * A set of strongly-typed React hooks from your `AppRouter` type signature with `createReactQueryHooks`.

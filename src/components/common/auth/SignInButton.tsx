@@ -11,17 +11,12 @@ export const SignInButton = (props: SignInButtonProps) => {
   const { signIn } = useAuth();
 
   return (
-    <>
-      <Button
-        {...props}
-        disabled={props?.disabled || status === 'authenticated'}
-        onClick={(ev) => {
-          props.onClick?.(ev);
-          signIn();
-        }}
-      >
-        {tAuth('SignIn._')}
-      </Button>
-    </>
+    <Button
+      disabled={status === 'authenticated'}
+      onClick={() => signIn()}
+      {...props}
+    >
+      {props?.children ?? tAuth('SignIn._')}
+    </Button>
   );
 };

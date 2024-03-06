@@ -3,11 +3,17 @@
  */
 import { router } from '../trpc';
 import {
-  publicAppAuth,
   protectedAppAuth,
-  publicDashboardAuth,
   protectedDashboardAuth,
+  publicAppAuth,
+  publicDashboardAuth,
 } from './auth';
+import {
+  protectedAppAuthor,
+  protectedDashboardAuthor,
+  publicAppAuthor,
+  publicDashboardAuthor,
+} from './author';
 import {
   protectedAppMeta,
   protectedDashboardMeta,
@@ -37,6 +43,11 @@ export const appRouter = router({
   protectedDashboardUser,
   publicAppUser,
   publicDashboardUser,
+  // NOTE: Author
+  protectedAppAuthor,
+  protectedDashboardAuthor,
+  publicAppAuthor,
+  publicDashboardAuthor,
 });
 
 export type AppRouter = typeof appRouter;

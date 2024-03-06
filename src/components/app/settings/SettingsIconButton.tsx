@@ -1,7 +1,6 @@
 import { SessionMenuItem, SettingsIconButton } from '@/components/common';
-import { AuthRole } from '@prisma/client';
 import { useBoolean } from 'usehooks-ts';
-import { AppUserUpdateProfileDialog } from '../user/UpdateProfileDialog';
+import { AppAuthUpdateProfileDialog } from '../auth/UpdateProfileDialog';
 
 export const AppSettingsIconButton = () => {
   const {
@@ -15,12 +14,11 @@ export const AppSettingsIconButton = () => {
       prependMenuItems={[
         <SessionMenuItem
           key="session-menu-item-update-profile"
-          role={AuthRole.USER}
           onClick={openUpdateProfileDialog}
         />,
       ]}
     >
-      <AppUserUpdateProfileDialog
+      <AppAuthUpdateProfileDialog
         open={updateProfileDialogVisible}
         onClose={() => closeUpdateProfileDialog()}
         fullWidth

@@ -12,15 +12,66 @@ import {
   publicProcedure,
   router,
 } from '../trpc';
-import { CommonTRPCError, onError } from '../utils/errors';
-import { formatListArgs, formatListResponse } from '../utils/format';
+import {
+  CommonTRPCError,
+  formatListArgs,
+  formatListResponse,
+  onError,
+} from '../utils';
 
-const defaultAppInclude = Prisma.validator<Prisma.UserInclude>()({
-  UserProfile: true,
+const defaultSelect = Prisma.validator<Prisma.UserSelect>()({
+  id: true,
+  role: true,
+  Author: {
+    select: {
+      id: true,
+      type: true,
+      verified: true,
+    },
+  },
 });
 
-const fullAppInclude = Prisma.validator<Prisma.UserInclude>()({
-  UserProfile: true,
+const fullSelect = Prisma.validator<Prisma.UserSelect>()({
+  id: true,
+  role: true,
+  username: true,
+  createdAt: true,
+  updatedAt: true,
+  UserProfile: {
+    select: {
+      nickname: true,
+      email: true,
+      avatar: true,
+      bio: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  },
+  Author: {
+    select: {
+      id: true,
+      type: true,
+      verified: true,
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+      AuthorProfile: {
+        select: {
+          email: true,
+          bio: true,
+          avatar: true,
+          website: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      _count: {
+        select: {
+          Application: true,
+        },
+      },
+    },
+  },
 });
 
 export const publicAppUser = router({
@@ -67,7 +118,7 @@ export const protectedAppUser = router({
         if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         return await prisma.user.findUniqueOrThrow({
           where: { id: session.user?.id },
-          include: fullAppInclude,
+          select: fullSelect,
         });
       } catch (err) {
         throw onError(err);
@@ -174,7 +225,7 @@ export const protectedDashboardUser = router({
                   createdAt: 'asc',
                 },
               ],
-              include: defaultAppInclude,
+              select: defaultSelect,
             }),
             prisma.user.count({ where }),
           ]);
@@ -190,26 +241,13 @@ export const protectedDashboardUser = router({
         if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         return await prisma.user.findUniqueOrThrow({
           where: { id: session.user?.id },
-          include: fullAppInclude,
+          select: fullSelect,
         });
       } catch (err) {
         throw onError(err);
       }
     },
   ),
-  getProfileById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma, session }, input: id }) => {
-      try {
-        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
-        return await prisma.user.findUniqueOrThrow({
-          where: { id },
-          include: fullAppInclude,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
   updateProfile: protectedAdminProcedure
     .input(userUpdateProfileInputSchema)
     .mutation(
@@ -236,4 +274,40 @@ export const protectedDashboardUser = router({
         }
       },
     ),
+  getProfileById: protectedAdminProcedure
+    .input(idSchema)
+    .query(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
+        return await prisma.user.findUniqueOrThrow({
+          where: { id },
+          select: fullSelect,
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  updateProfileById: protectedAdminProcedure
+    .input(userUpdateProfileInputSchema.extend({ id: idSchema }))
+    .mutation(async ({ ctx: { prisma }, input: { id, nickname, email } }) => {
+      try {
+        await prisma.user.update({
+          where: { id },
+          data: {
+            UserProfile: {
+              update: {
+                data: {
+                  nickname,
+                  email,
+                },
+              },
+            },
+          },
+        });
+        userEmitter.emit('update', id);
+        return { nickname, email };
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
 });

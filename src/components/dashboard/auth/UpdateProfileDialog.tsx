@@ -54,6 +54,7 @@ export const DashboardAuthUpdateProfileDialog = (
           name: nickname,
           email,
         });
+        props?.onClose?.({}, 'backdropClick');
       },
     });
   const onSubmit = async (data: UserUpdateProfileInputSchema) => {
@@ -136,7 +137,9 @@ export const DashboardAuthUpdateProfileDialog = (
         <Button
           color="error"
           disabled={unauthenticated}
-          onClick={() => signOut()}
+          onClick={() =>
+            signOut().then(() => props.onClose?.({}, 'backdropClick'))
+          }
         >
           {tAuth('SignOut._')}
         </Button>

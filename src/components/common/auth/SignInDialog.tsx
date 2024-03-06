@@ -1,5 +1,6 @@
 import { AuthProps, useNotice } from '@/hooks';
 import { SignInSchema, signInSchema } from '@/server/schemas/auth';
+import { resetTRPCClient } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Close as CloseIcon,
@@ -19,10 +20,10 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { signIn, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
-import { useCallback } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
 import { SignUpButton } from './SignUpButton';
@@ -30,13 +31,13 @@ import { SignUpButton } from './SignUpButton';
 type SignInDialogProps = DialogProps & AuthProps;
 
 export const SignInDialog = ({
-  role,
-  enableSignIn,
-  enableSignUp,
+  disableSignIn,
+  disableSignUp,
   ...props
 }: SignInDialogProps) => {
+  const { query, pathname } = useRouter();
   const { showError, showSuccess, showWarning } = useNotice();
-  const { status } = useSession();
+  const { status, update: updateSession } = useSession();
   const { t: tAuth } = useTranslation('auth');
   const { handleSubmit, control, reset } = useForm<SignInSchema>({
     defaultValues: {
@@ -48,29 +49,22 @@ export const SignInDialog = ({
   const { value: showPassword, toggle: toggleShowPassword } = useBoolean(false);
   const onSubmit = useCallback(
     async (data: SignInSchema) => {
-      if (!enableSignIn) {
+      if (disableSignIn) {
         showWarning(tAuth('SignIn.Disabled'));
         return;
       }
       try {
-        const result =
-          role === AuthRole.USER
-            ? await signIn('credentials-user', {
-                ...data,
-                redirect: false,
-              })
-            : role === AuthRole.ADMIN
-              ? await signIn('credentials-admin', { ...data, redirect: false })
-              : { error: 'Unknown Auth Role' };
+        const result = await signIn('credentials', {
+          ...data,
+          redirect: false,
+        });
         if (result?.error) {
           throw new Error(result.error);
         }
-        showSuccess(tAuth('SignIn.Succeeded'), {
-          autoHideDuration: 1000,
-          onClose: () => {
-            if (typeof window !== 'undefined') window.location.reload();
-          },
-        });
+        await updateSession();
+        resetTRPCClient();
+        showSuccess(tAuth('SignIn.Succeeded'));
+        props?.onClose?.({}, 'backdropClick');
       } catch (error) {
         if (error instanceof Error) {
           showError(tAuth(error.message));
@@ -80,8 +74,25 @@ export const SignInDialog = ({
         reset();
       }
     },
-    [reset, role, showError, showSuccess, showWarning, tAuth, enableSignIn],
+    [
+      disableSignIn,
+      showWarning,
+      tAuth,
+      updateSession,
+      showSuccess,
+      props,
+      showError,
+      reset,
+    ],
   );
+
+  useEffect(() => {
+    const { error: nextAuthError } = query;
+    if (!nextAuthError) return;
+    if (typeof nextAuthError === 'string') showError(tAuth(nextAuthError));
+    if (Array.isArray(nextAuthError))
+      nextAuthError.forEach((err) => showError(tAuth(err)));
+  }, [query, showError, tAuth]);
 
   return (
     <>
@@ -94,20 +105,24 @@ export const SignInDialog = ({
       >
         <AppBar position="static" enableColorOnDark elevation={0}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
-            <Typography variant="subtitle1" color="text.primary">
+            <Typography variant="subtitle1">
               {tAuth('SignIn._')}
+              {disableSignIn && ` (${tAuth('SignIn.Disabled')})`}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <IconButton
-              edge="end"
-              onClick={() => {
-                reset();
-                props?.onClose?.({}, 'backdropClick');
-              }}
-              disabled={status === 'loading'}
-            >
-              <CloseIcon />
-            </IconButton>
+            {!pathname.startsWith('/auth/signin') && (
+              <IconButton
+                edge="end"
+                onClick={() => {
+                  reset();
+                  props?.onClose?.({}, 'backdropClick');
+                }}
+                disabled={status === 'loading'}
+                color="inherit"
+              >
+                <CloseIcon />
+              </IconButton>
+            )}
           </Toolbar>
         </AppBar>
         <DialogContent dividers>
@@ -127,6 +142,7 @@ export const SignInDialog = ({
                 placeholder={tAuth('Account')}
                 autoFocus
                 required
+                disabled={disableSignIn}
               />
             )}
           />
@@ -151,7 +167,6 @@ export const SignInDialog = ({
                     <IconButton
                       aria-label="Toggle Password visibility"
                       onClick={toggleShowPassword}
-                      onMouseDown={toggleShowPassword}
                       edge="end"
                     >
                       {showPassword ? (
@@ -162,14 +177,17 @@ export const SignInDialog = ({
                     </IconButton>
                   ),
                 }}
+                disabled={disableSignIn}
               />
             )}
           />
         </DialogContent>
         <DialogActions sx={{ gap: 1 }}>
-          {enableSignUp && (
-            <SignUpButton color="info" onClick={() => reset()} />
-          )}
+          <SignUpButton
+            color="secondary"
+            onClick={() => reset()}
+            disabled={disableSignUp}
+          />
           <Box sx={{ flexGrow: 1 }}></Box>
           <LoadingButton
             loading={status === 'loading'}

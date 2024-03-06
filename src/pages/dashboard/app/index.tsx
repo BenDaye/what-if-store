@@ -1,26 +1,32 @@
 import nextI18NextConfig from '@/../next-i18next.config';
 import { DashboardLayout } from '@/components/layouts';
 import { NextPageWithLayout } from '@/pages/_app';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
 import { createServerSideHelpers } from '@trpc/react-query/server';
-import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { getServerSession } from 'next-auth';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import SuperJSON from 'superjson';
 
 const Page: NextPageWithLayout<
-  InferGetStaticPropsType<typeof getStaticProps>
+  InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  return <>Applications Page</>;
+  return <>Application Page</>;
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
+// NOTE: 如果trpc开启了ssr，那下面这个方法将无法正确的返回数据 (https://trpc.io/docs/client/nextjs/ssr)
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
   const helpers = createServerSideHelpers({
     router: appRouter,
     ctx: {
-      session: null,
+      session,
       redis,
       prisma,
     },
@@ -38,37 +44,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
       )),
       trpcState: helpers.dehydrate(),
     },
-    revalidate: 10,
   };
 };
-
-// NOTE: 如果trpc开启了ssr，那下面这个方法将无法正确的返回数据 (https://trpc.io/docs/client/nextjs/ssr)
-// export const getServerSideProps = async (
-//   context: GetServerSidePropsContext,
-// ) => {
-//   const session = await getServerSession(context.req, context.res, authOptions);
-//   const helpers = createServerSideHelpers({
-//     router: appRouter,
-//     ctx: {
-//       session,
-//       redis,
-//       prisma,
-//     },
-//     transformer: SuperJSON,
-//   });
-
-//   await helpers.publicDashboardMeta.get.prefetch();
-
-//   return {
-//     props: {
-//       ...(await serverSideTranslations(
-//         context.locale ?? 'zh',
-//         undefined,
-//         nextI18NextConfig,
-//       )),
-//       trpcState: helpers.dehydrate(),
-//     },
-//   };
-// };
 
 export default Page;

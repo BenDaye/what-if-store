@@ -1,5 +1,6 @@
 import {
   blue,
+  deepOrange,
   green,
   grey,
   lightBlue,
@@ -17,7 +18,7 @@ export const theme = createTheme(
         main: blue[600],
       },
       secondary: {
-        main: blue[50],
+        main: deepOrange[600],
       },
       success: {
         main: green[600],

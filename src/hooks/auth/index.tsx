@@ -1,16 +1,20 @@
 import { SignInDialog, SignUpDialog } from '@/components/common/auth';
 import { NOOP, NOOPAsync } from '@/utils/noop';
-import { AuthRole } from '@prisma/client';
-import { signOut as signOutNextAuth } from 'next-auth/react';
+import { resetTRPCClient } from '@/utils/trpc';
+import { signOut as signOutNextAuth, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
-import { PropsWithChildren, createContext, useContext } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+} from 'react';
 import { useBoolean } from 'usehooks-ts';
 import { useNotice } from '../notice';
 
 export interface AuthProps {
-  role?: AuthRole;
-  enableSignIn?: boolean;
-  enableSignUp?: boolean;
+  disableSignIn?: boolean;
+  disableSignUp?: boolean;
 }
 
 interface AuthProviderProps {
@@ -29,21 +33,18 @@ export const useAuth = () => useContext(AuthProviderContext);
 
 export const AuthProvider = ({
   children,
-  role = AuthRole.USER,
-  enableSignIn = true,
-  enableSignUp = true,
+  disableSignIn = true,
+  disableSignUp = true,
 }: PropsWithChildren<AuthProps>) => {
-  const { showError, showSuccess } = useNotice();
+  const { update: updateSession } = useSession();
+  const { showError, showSuccess, showWarning } = useNotice();
   const { t } = useTranslation('auth');
   const signOut = async () => {
     try {
-      await signOutNextAuth({ redirect: false });
-      showSuccess(t('SignOut.Succeeded'), {
-        autoHideDuration: 1000,
-        onClose: () => {
-          if (typeof window !== 'undefined') window.location.reload();
-        },
-      });
+      await signOutNextAuth({ redirect: false, callbackUrl: '/app' });
+      await updateSession();
+      resetTRPCClient();
+      showSuccess(t('SignOut.Succeeded'));
     } catch (error) {
       if (error instanceof Error) {
         showError(error.message);
@@ -51,6 +52,7 @@ export const AuthProvider = ({
       console.error(error);
     }
   };
+
   const {
     value: signInDialog,
     setFalse: closeSignInDialog,
@@ -62,15 +64,18 @@ export const AuthProvider = ({
     setTrue: openSignUpDialog,
   } = useBoolean(false);
 
-  const signIn = () => {
+  const signIn = useCallback(() => {
+    if (disableSignIn) return showWarning(t('SignIn.Disabled'));
     closeSignUpDialog();
     openSignInDialog();
-  };
+  }, [closeSignUpDialog, disableSignIn, openSignInDialog, showWarning, t]);
 
-  const signUp = () => {
+  const signUp = useCallback(() => {
+    if (disableSignUp) return showWarning(t('SignUp.Disabled'));
     closeSignInDialog();
     openSignUpDialog();
-  };
+  }, [closeSignInDialog, disableSignUp, openSignUpDialog, showWarning, t]);
+
   return (
     <AuthProviderContext.Provider
       value={{
@@ -81,24 +86,22 @@ export const AuthProvider = ({
     >
       {children}
       <SignInDialog
-        open={signInDialog}
+        open={signInDialog && !disableSignIn}
         onClose={() => closeSignInDialog()}
         fullWidth
         maxWidth="xs"
         disableEscapeKeyDown
-        role={role}
-        enableSignIn={enableSignIn}
-        enableSignUp={enableSignUp}
+        disableSignIn={disableSignIn}
+        disableSignUp={disableSignUp}
       />
       <SignUpDialog
-        open={signUpDialog}
+        open={signUpDialog && !disableSignUp}
         onClose={() => closeSignUpDialog()}
         fullWidth
         maxWidth="xs"
         disableEscapeKeyDown
-        role={role}
-        enableSignIn={enableSignIn}
-        enableSignUp={enableSignUp}
+        disableSignIn={disableSignIn}
+        disableSignUp={disableSignUp}
       />
     </AuthProviderContext.Provider>
   );

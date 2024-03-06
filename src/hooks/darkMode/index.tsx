@@ -111,7 +111,9 @@ export const DarkModeProvider = ({
 export const TernaryDarkModeProvider = ({
   children,
 }: PropsWithChildren): ReactElement<PropsWithChildren> => {
-  const { isDarkMode } = useTernaryDarkMode();
+  const { isDarkMode } = useTernaryDarkMode({
+    initializeWithValue: false,
+  });
 
   const theme = useMemo(
     () => (isDarkMode ? themes.DARK : themes.LIGHT),

@@ -10,7 +10,7 @@ import '@fontsource/roboto/700.css';
 import 'overlayscrollbars/overlayscrollbars.css';
 
 import { DefaultLayout } from '@/components/layouts';
-import { TernaryDarkModeProvider } from '@/hooks';
+import { AuthProvider, TernaryDarkModeProvider } from '@/hooks';
 import { NoticeProvider } from '@/hooks/notice';
 import { CreateContextOptions } from '@/server/context';
 import { createEmotionCache } from '@/theme';
@@ -83,7 +83,16 @@ const MyApp: AppType<CreateContextOptions> = ({
                     fetch(resource, init).then((res) => res.json()),
                 }}
               >
-                {getLayout(<Component {...pageProps} />)}
+                <AuthProvider
+                  disableSignIn={Boolean(
+                    process.env.NEXT_PUBLIC_DISABLE_SIGN_IN,
+                  )}
+                  disableSignUp={Boolean(
+                    process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
+                  )}
+                >
+                  {getLayout(<Component {...pageProps} />)}
+                </AuthProvider>
               </SWRConfig>
             </SessionProvider>
           </NoticeProvider>

@@ -1,4 +1,4 @@
-import { amber, cyan, green, grey, orange, red } from '@mui/material/colors';
+import { amber, cyan, green, orange, purple, red } from '@mui/material/colors';
 import { zhCN } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 
@@ -7,10 +7,10 @@ export const theme = createTheme(
     palette: {
       mode: 'dark',
       primary: {
-        main: amber[700],
+        main: amber[600],
       },
       secondary: {
-        main: grey[800],
+        main: purple[600],
       },
       success: {
         main: green[600],

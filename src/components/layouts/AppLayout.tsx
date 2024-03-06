@@ -1,3 +1,4 @@
+import { useHeadMeta } from '@/hooks';
 import { Box } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -7,20 +8,14 @@ import { AppNavDrawer, AppProvider } from '../app';
 import { HelloDrawer, WorldDrawer } from '../example';
 import { Main } from './Main';
 
-type HeadMeta = {
-  title?: string;
-  description?: string;
-};
-
 const navDrawerWidth = 48;
 const listDrawerWidth = 300;
 
 export const AppLayout = ({
-  title,
-  description,
   children,
-}: PropsWithChildren<HeadMeta>): ReactElement<PropsWithChildren<HeadMeta>> => {
+}: PropsWithChildren): ReactElement<PropsWithChildren> => {
   const { t: tMeta } = useTranslation('meta');
+  const { title, description } = useHeadMeta('App');
   const router = useRouter();
   const openHelloListDrawer = useMemo(
     () => router.pathname.startsWith('/app/hello'),

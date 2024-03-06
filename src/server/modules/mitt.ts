@@ -8,14 +8,14 @@ type BaseEvents = {
 };
 
 const mittGlobal = global as typeof global & {
-  // user
-  userEmitter?: Emitter<UserEvents>;
+  userEmitter?: Emitter<BaseEvents>;
+  authorEmitter?: Emitter<BaseEvents>;
 };
 
-type UserEvents = BaseEvents;
-export const userEmitter = mittGlobal?.userEmitter ?? mitt<UserEvents>();
+export const userEmitter = mittGlobal?.userEmitter ?? mitt<BaseEvents>();
+export const authorEmitter = mittGlobal?.authorEmitter ?? mitt<BaseEvents>();
 
 if (env.NODE_ENV !== 'production') {
-  // user
   mittGlobal.userEmitter = userEmitter;
+  mittGlobal.authorEmitter = authorEmitter;
 }

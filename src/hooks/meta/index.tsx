@@ -36,7 +36,6 @@ export const useHeadMeta = (type: HeadMetaType = 'Default'): HeadMeta => {
 
   const { data: appMeta, isFetched: isFetchedAppMeta } =
     trpc.publicAppMeta.get.useQuery(undefined, {
-      queryKey: ['publicAppMeta.get', undefined],
       enabled: type === 'App',
       refetchOnWindowFocus: true,
     });
@@ -47,7 +46,6 @@ export const useHeadMeta = (type: HeadMetaType = 'Default'): HeadMeta => {
 
   const { data: dashboardMeta, isFetched: isFetchedDashboardMeta } =
     trpc.publicDashboardMeta.get.useQuery(undefined, {
-      queryKey: ['publicDashboardMeta.get', undefined],
       enabled: type === 'Dashboard',
       refetchOnWindowFocus: true,
     });

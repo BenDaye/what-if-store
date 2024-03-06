@@ -1,5 +1,4 @@
 import { SessionMenuItem, SettingsIconButton } from '@/components/common';
-import { AuthRole } from '@prisma/client';
 import { useBoolean } from 'usehooks-ts';
 import { DashboardAuthUpdateProfileDialog } from '../auth/UpdateProfileDialog';
 
@@ -15,7 +14,6 @@ export const DashboardSettingsIconButton = () => {
       prependMenuItems={[
         <SessionMenuItem
           key="session-menu-item-update-profile"
-          role={AuthRole.ADMIN}
           onClick={openUpdateProfileDialog}
         />,
       ]}

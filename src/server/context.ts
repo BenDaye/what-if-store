@@ -19,7 +19,7 @@ export const createContext = async (
 
   appLogger
     .child({}, { msgPrefix: '[TRPC] ' })
-    .debug(session, 'Create Context');
+    .debug(session || 'Create Context For Guest', 'Create Context');
 
   return {
     session,

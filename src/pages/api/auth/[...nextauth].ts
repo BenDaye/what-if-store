@@ -1,9 +1,8 @@
 import { prisma } from '@/server/modules/prisma';
 import { signInSchema } from '@/server/schemas/auth';
-import { Prisma, AuthRole } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { verify } from 'argon2';
-import { Session, User } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import { AuthOptions, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -20,20 +19,10 @@ const select = Prisma.validator<Prisma.UserSelect>()({
   },
 });
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === 'development',
   callbacks: {
-    jwt: async ({
-      token,
-      user,
-      trigger,
-      session,
-    }: {
-      token: JWT;
-      user: User;
-      trigger?: string | undefined;
-      session?: Session['user'];
-    }) => {
+    jwt: async ({ token, user, trigger, session }) => {
       if (user) {
         token.id = user.id;
         token.username = user.username;
@@ -49,7 +38,7 @@ export const authOptions = {
 
       return token;
     },
-    session: async ({ session, token }: { session: Session; token: JWT }) => {
+    session: async ({ session, token }) => {
       if (token) {
         session.user = {
           id: token.id,
@@ -64,12 +53,17 @@ export const authOptions = {
     },
   },
   jwt: {
-    maxAge: 30 * 60 * 24 * 7,
+    maxAge: 7 * 24 * 60 * 60,
+  },
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/app',
+    error: '/auth/signin',
   },
   providers: [
     CredentialsProvider({
-      id: 'credentials-admin',
-      name: 'Credentials Admin',
+      id: 'credentials',
+      name: 'Credentials',
       credentials: {
         username: { label: 'Username', type: 'text', placeholder: 'Username' },
         password: {
@@ -86,7 +80,6 @@ export const authOptions = {
           const result = await prisma.user.findFirst({
             where: {
               username,
-              role: AuthRole.ADMIN,
             },
             select,
           });
@@ -106,52 +99,8 @@ export const authOptions = {
         } catch (error) {
           console.error(error);
           if (error instanceof Error) {
-            throw error;
-          }
-          return null;
-        }
-      },
-    }),
-    CredentialsProvider({
-      id: 'credentials-user',
-      name: 'Credentials User',
-      credentials: {
-        username: { label: 'Username', type: 'text', placeholder: 'Username' },
-        password: {
-          label: 'Password',
-          type: 'password',
-        },
-      },
-      async authorize(credentials): Promise<User | null> {
-        try {
-          const valid = await signInSchema.spa(credentials);
-          if (!valid.success) throw new Error(valid.error.message);
-          const { username, password } = valid.data;
-
-          const result = await prisma.user.findFirst({
-            where: {
-              username,
-              role: AuthRole.USER,
-            },
-            select,
-          });
-
-          if (!result)
-            throw new Error('Account not found or password incorrect');
-          if (!(await verify(result.password, password)))
-            throw new Error('Account not found or password incorrect');
-
-          return {
-            id: result.id,
-            username: result.username,
-            role: result.role,
-            name: result.UserProfile?.nickname,
-            email: result.UserProfile?.email,
-          };
-        } catch (error) {
-          console.error(error);
-          if (error instanceof Error) {
-            throw error;
+            // NOTE: We don't recommend providing information about which part of the credentials were wrong, as it might be abused by malicious hackers.
+            throw new Error('CredentialsSignin');
           }
           return null;
         }
