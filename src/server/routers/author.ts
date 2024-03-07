@@ -19,14 +19,36 @@ import {
   onError,
 } from '../utils';
 
-const defaultAppInclude = Prisma.validator<Prisma.AuthorInclude>()({
-  AuthorProfile: true,
+const defaultSelect = Prisma.validator<Prisma.AuthorSelect>()({
+  id: true,
+  userId: true,
+  type: true,
+  verified: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
-const fullAppInclude = Prisma.validator<Prisma.AuthorInclude>()({
-  AuthorProfile: true,
-  Application: true,
-});
+const fullSelect = {
+  ...defaultSelect,
+  ...Prisma.validator<Prisma.AuthorSelect>()({
+    name: true,
+    AuthorProfile: {
+      select: {
+        email: true,
+        bio: true,
+        website: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    },
+    _count: {
+      select: {
+        Application: true,
+      },
+    },
+  }),
+};
 
 export const publicAppAuthor = router({
   subscribe: publicProcedure.subscription(() => {
@@ -73,7 +95,7 @@ export const protectedAppAuthor = router({
         if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         return await prisma.author.findUniqueOrThrow({
           where: { id },
-          include: fullAppInclude,
+          select: fullSelect,
         });
       } catch (err) {
         throw onError(err);
@@ -186,7 +208,7 @@ export const protectedDashboardAuthor = router({
                   createdAt: 'asc',
                 },
               ],
-              include: defaultAppInclude,
+              select: defaultSelect,
             }),
             prisma.author.count({ where }),
           ]);
@@ -202,7 +224,7 @@ export const protectedDashboardAuthor = router({
       try {
         return await prisma.author.findUniqueOrThrow({
           where: { id },
-          include: fullAppInclude,
+          select: fullSelect,
         });
       } catch (err) {
         throw onError(err);

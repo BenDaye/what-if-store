@@ -22,57 +22,51 @@ import {
 const defaultSelect = Prisma.validator<Prisma.UserSelect>()({
   id: true,
   role: true,
-  Author: {
-    select: {
-      id: true,
-      type: true,
-      verified: true,
-    },
-  },
-});
-
-const fullSelect = Prisma.validator<Prisma.UserSelect>()({
-  id: true,
-  role: true,
-  username: true,
   createdAt: true,
   updatedAt: true,
-  UserProfile: {
-    select: {
-      nickname: true,
-      email: true,
-      avatar: true,
-      bio: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  },
-  Author: {
-    select: {
-      id: true,
-      type: true,
-      verified: true,
-      name: true,
-      createdAt: true,
-      updatedAt: true,
-      AuthorProfile: {
-        select: {
-          email: true,
-          bio: true,
-          avatar: true,
-          website: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      },
-      _count: {
-        select: {
-          Application: true,
-        },
-      },
-    },
-  },
 });
+
+const fullSelect = {
+  ...defaultSelect,
+  ...Prisma.validator<Prisma.UserSelect>()({
+    username: true,
+    UserProfile: {
+      select: {
+        nickname: true,
+        email: true,
+        avatar: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    },
+    Author: {
+      select: {
+        id: true,
+        type: true,
+        verified: true,
+        createdAt: true,
+        updatedAt: true,
+        name: true,
+        AuthorProfile: {
+          select: {
+            email: true,
+            bio: true,
+            avatar: true,
+            website: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        _count: {
+          select: {
+            Application: true,
+          },
+        },
+      },
+    },
+  }),
+};
 
 export const publicAppUser = router({
   subscribe: publicProcedure.subscription(() => {

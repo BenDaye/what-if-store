@@ -1,21 +1,27 @@
+import { CollapseList } from '@/components/common';
+import { useDashboardUsers } from '@/hooks';
 import { UserListInputSchema } from '@/server/schemas';
-import { trpc } from '@/utils/trpc';
 import { List, ListProps } from '@mui/material';
-import { Fragment } from 'react';
+import { AuthRole } from '@prisma/client';
 import { UserListItemButton } from './ListItemButton';
 
-type UserListProps = ListProps & { UserListProps?: UserListInputSchema };
+type UserListProps = ListProps & { input?: UserListInputSchema };
 
-export const UserList = ({ UserListProps, ...props }: UserListProps) => {
-  const { data, refetch } = trpc.protectedDashboardUser.list.useInfiniteQuery(
-    { ...UserListProps },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
-
-  trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
-    onData: () => refetch(),
+export const UserList = ({ input, ...props }: UserListProps) => {
+  const { flattedData: users } = useDashboardUsers(true, {
+    ...input,
+    limit: input?.limit ?? 20,
+    role: [AuthRole.USER],
+  });
+  const { flattedData: authors } = useDashboardUsers(true, {
+    ...input,
+    limit: input?.limit ?? 20,
+    role: [AuthRole.AUTHOR],
+  });
+  const { flattedData: admins } = useDashboardUsers(true, {
+    ...input,
+    limit: input?.limit ?? 20,
+    role: [AuthRole.ADMIN],
   });
 
   return (
@@ -30,13 +36,24 @@ export const UserList = ({ UserListProps, ...props }: UserListProps) => {
         ...props?.sx,
       }}
     >
-      {data?.pages.map((page, pageIndex) => (
-        <Fragment key={pageIndex}>
-          {page.items.map((item) => (
-            <UserListItemButton key={item.id} itemId={item.id} />
-          ))}
-        </Fragment>
-      ))}
+      <CollapseList primaryText={`users`} secondaryText={`(${users.length})`}>
+        {users.map((item) => (
+          <UserListItemButton key={item.id} itemId={item.id} />
+        ))}
+      </CollapseList>
+      <CollapseList
+        primaryText={`authors`}
+        secondaryText={`(${authors.length})`}
+      >
+        {authors.map((item) => (
+          <UserListItemButton key={item.id} itemId={item.id} />
+        ))}
+      </CollapseList>
+      <CollapseList primaryText={`admins`} secondaryText={`(${admins.length})`}>
+        {admins.map((item) => (
+          <UserListItemButton key={item.id} itemId={item.id} />
+        ))}
+      </CollapseList>
     </List>
   );
 };

@@ -1,10 +1,15 @@
 import nextI18NextConfig from '@/../next-i18next.config';
+import { PageContainer } from '@/components/common';
+import { AuthorProfileCard, AuthorTypeChip } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
+import { useDashboardAuthor } from '@/hooks';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
-import { AuthRole } from '@prisma/client';
+import { Typography } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { AuthorType } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
@@ -13,8 +18,32 @@ import SuperJSON from 'superjson';
 
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = () => {
-  return <>User Page</>;
+> = ({ id }) => {
+  const { data, name, type } = useDashboardAuthor(id);
+
+  return (
+    <PageContainer
+      hasHeader
+      header={
+        <>
+          <AuthorTypeChip type={type} />
+          <Typography variant="subtitle1">{name}</Typography>
+        </>
+      }
+    >
+      <Grid container spacing={2}>
+        <Grid xs={12} md={6} xl>
+          <AuthorProfileCard data={data} />
+        </Grid>
+        <Grid xs={12} md={6} xl>
+          <AuthorProfileCard data={data} />
+        </Grid>
+        <Grid xs={12} xl={6}>
+          <AuthorProfileCard data={data} />
+        </Grid>
+      </Grid>
+    </PageContainer>
+  );
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -36,18 +65,21 @@ export const getServerSideProps = async (
 
   await helpers.publicDashboardMeta.get.prefetch();
 
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
+  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
     limit: 20,
-    role: [AuthRole.USER],
+    type: [AuthorType.IndependentDeveloper],
   });
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
+  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
     limit: 20,
-    role: [AuthRole.AUTHOR],
+    type: [AuthorType.Company],
   });
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
+  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
     limit: 20,
-    role: [AuthRole.ADMIN],
+    type: [AuthorType.Community],
   });
+
+  const id = context.params?.id as string;
+  if (id) await helpers.protectedDashboardAuthor.getProfileById.prefetch(id);
 
   return {
     props: {
@@ -56,6 +88,7 @@ export const getServerSideProps = async (
         undefined,
         nextI18NextConfig,
       )),
+      id,
       trpcState: helpers.dehydrate(),
     },
   };

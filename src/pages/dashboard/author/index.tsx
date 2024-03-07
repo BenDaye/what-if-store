@@ -4,7 +4,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
-import { AuthRole } from '@prisma/client';
+import { AuthorType } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
@@ -14,7 +14,7 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  return <>User Page</>;
+  return <>Author Page</>;
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -36,17 +36,17 @@ export const getServerSideProps = async (
 
   await helpers.publicDashboardMeta.get.prefetch();
 
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
+  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
     limit: 20,
-    role: [AuthRole.USER],
+    type: [AuthorType.IndependentDeveloper],
   });
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
+  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
     limit: 20,
-    role: [AuthRole.AUTHOR],
+    type: [AuthorType.Company],
   });
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
+  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
     limit: 20,
-    role: [AuthRole.ADMIN],
+    type: [AuthorType.Community],
   });
 
   return {

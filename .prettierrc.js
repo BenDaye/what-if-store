@@ -4,11 +4,11 @@
 /** @type { PrettierConfig | SortImportsConfig } */
 const config = {
   printWidth: 80,
-  trailingComma: "all",
-  endOfLine: "auto",
+  trailingComma: 'all',
+  endOfLine: 'auto',
   singleQuote: true,
-  importOrder: ["___", "__", "<THIRD_PARTY_MODULES>", "^[./]"],
-  plugins: [require.resolve("@ianvs/prettier-plugin-sort-imports")],
+  importOrder: ['___', '__', '<THIRD_PARTY_MODULES>', '^[./]'],
+  plugins: [require.resolve('@ianvs/prettier-plugin-sort-imports')],
 };
 
 module.exports = config;

@@ -1,8 +1,9 @@
 import { IconButtonWithTooltip } from '@/components/common';
 import {
-  Apps as AppsIcon,
+  Widgets as AppsIcon,
+  Engineering as AuthorsIcon,
   Dashboard as DashboardIcon,
-  People as UsersIcon,
+  Person as UsersIcon,
 } from '@mui/icons-material';
 import { Box, Drawer, DrawerProps } from '@mui/material';
 import { useTranslation } from 'next-i18next';
@@ -10,7 +11,7 @@ import { useRouter } from 'next/router';
 import { DashboardSettingsIconButton } from './settings/SettingsIconButton';
 
 export const DashboardNavDrawer = (props: DrawerProps) => {
-  const router = useRouter();
+  const { pathname, push } = useRouter();
   const { t: tCommon } = useTranslation('common');
   return (
     <Drawer
@@ -45,23 +46,26 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
         <IconButtonWithTooltip
           title={tCommon('Dashboard')}
           icon={<DashboardIcon />}
-          onClick={() => router.push('/dashboard')}
-          active={
-            router.pathname === '/dashboard' ||
-            router.pathname === '/dashboard/'
-          }
+          onClick={() => push('/dashboard')}
+          active={pathname === '/dashboard' || pathname === '/dashboard/'}
+        />
+        <IconButtonWithTooltip
+          title={tCommon('Authors')}
+          icon={<AuthorsIcon />}
+          onClick={() => push('/dashboard/author')}
+          active={pathname.startsWith('/dashboard/author')}
         />
         <IconButtonWithTooltip
           title={tCommon('Users')}
           icon={<UsersIcon />}
-          onClick={() => router.push('/dashboard/user')}
-          active={router.pathname.startsWith('/dashboard/user')}
+          onClick={() => push('/dashboard/user')}
+          active={pathname.startsWith('/dashboard/user')}
         />
         <IconButtonWithTooltip
           title={tCommon('Apps')}
           icon={<AppsIcon />}
-          onClick={() => router.push('/dashboard/app')}
-          active={router.pathname.startsWith('/dashboard/app')}
+          onClick={() => push('/dashboard/app')}
+          active={pathname.startsWith('/dashboard/app')}
         />
       </Box>
       <Box

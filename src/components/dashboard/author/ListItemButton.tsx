@@ -1,4 +1,4 @@
-import { useDashboardUser } from '@/hooks';
+import { useDashboardAuthor } from '@/hooks';
 import { IdSchema } from '@/server/schemas';
 import {
   Avatar,
@@ -10,20 +10,20 @@ import {
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-type UserListItemButtonProps = ListItemButtonProps & {
+type AuthorListItemButtonProps = ListItemButtonProps & {
   itemId: IdSchema;
 };
 
-export const UserListItemButton = ({
+export const AuthorListItemButton = ({
   itemId,
   ...props
-}: UserListItemButtonProps) => {
-  const { avatarSrc, avatarText, nickname, bio, error, isError } =
-    useDashboardUser(itemId);
+}: AuthorListItemButtonProps) => {
+  const { avatarSrc, avatarText, name, bio, error, isError } =
+    useDashboardAuthor(itemId);
 
   const { pathname, query, push } = useRouter();
   const selected = useMemo(
-    () => pathname === '/dashboard/user/[id]' && query?.id === itemId,
+    () => pathname === '/dashboard/author/[id]' && query?.id === itemId,
     [itemId, pathname, query?.id],
   );
 
@@ -31,7 +31,7 @@ export const UserListItemButton = ({
     <ListItemButton
       dense
       selected={selected}
-      onClick={() => push(`/dashboard/user/${itemId}`)}
+      onClick={() => push(`/dashboard/author/${itemId}`)}
       {...props}
     >
       <ListItemAvatar>
@@ -41,7 +41,7 @@ export const UserListItemButton = ({
       </ListItemAvatar>
 
       <ListItemText
-        primary={nickname}
+        primary={name}
         primaryTypographyProps={{
           noWrap: true,
           textOverflow: 'ellipsis',

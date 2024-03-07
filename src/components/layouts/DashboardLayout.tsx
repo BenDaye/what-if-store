@@ -12,6 +12,7 @@ import {
   DashboardProvider,
   UserDrawer,
 } from '../dashboard';
+import { AuthorDrawer } from '../dashboard/author';
 import { Main } from './Main';
 
 const navDrawerWidth = 48;
@@ -21,18 +22,22 @@ export const DashboardLayout = ({
 }: PropsWithChildren): ReactElement<PropsWithChildren> => {
   const { t: tMeta } = useTranslation('meta');
   const { title, description } = useHeadMeta('Dashboard');
-  const router = useRouter();
+  const { pathname } = useRouter();
   const openAppListDrawer = useMemo(
-    () => router.pathname.startsWith('/dashboard/app'),
-    [router.pathname],
+    () => pathname.startsWith('/dashboard/app'),
+    [pathname],
   );
   const openUserListDrawer = useMemo(
-    () => router.pathname.startsWith('/dashboard/user'),
-    [router.pathname],
+    () => pathname.startsWith('/dashboard/user'),
+    [pathname],
+  );
+  const openAuthorListDrawer = useMemo(
+    () => pathname.startsWith('/dashboard/author'),
+    [pathname],
   );
   const openDrawer = useMemo(
-    () => openAppListDrawer || openUserListDrawer,
-    [openAppListDrawer, openUserListDrawer],
+    () => openAppListDrawer || openUserListDrawer || openAuthorListDrawer,
+    [openAppListDrawer, openAuthorListDrawer, openUserListDrawer],
   );
   const [listDrawerWidth, setListDrawerWidth] = useLocalStorage<number>(
     'dashboard-layout-left-drawer-width',
@@ -84,6 +89,12 @@ export const DashboardLayout = ({
           size={{
             height: openDrawer ? '100vh' : 0,
             width: openDrawer ? listDrawerWidth : 0,
+          }}
+          resizeHandleClasses={{
+            right:
+              theme.palette.mode === 'dark'
+                ? 'resizeHandleClass darkMode'
+                : 'resizeHandleClass',
           }}
           position={{ x: navDrawerWidth + 1, y: 0 }}
           maxWidth={480}
@@ -137,6 +148,21 @@ export const DashboardLayout = ({
         />
         <UserDrawer
           open={openUserListDrawer}
+          variant="persistent"
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            width: listDrawerWidth + 1,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: listDrawerWidth + 1,
+              boxSizing: 'border-box',
+              left: navDrawerWidth + 1,
+            },
+          }}
+          transitionDuration={0}
+        />
+        <AuthorDrawer
+          open={openAuthorListDrawer}
           variant="persistent"
           ModalProps={{ keepMounted: true }}
           sx={{

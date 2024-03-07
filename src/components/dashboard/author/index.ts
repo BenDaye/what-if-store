@@ -1,4 +1,4 @@
-export * from './AuthRoleChip';
+export * from './AuthorTypeChip';
 export * from './Drawer';
 export * from './List';
 export * from './ListItemButton';

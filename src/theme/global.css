@@ -19,3 +19,15 @@
     transform: translateX(-2px) translateY(0) translateZ(0) rotate(0deg);
   }
 }
+
+.resizeHandleClass {
+  transition: background-color 0.8s ease;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  &.darkMode {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

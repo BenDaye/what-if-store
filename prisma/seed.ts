@@ -1,4 +1,4 @@
-import { PrismaClient, AuthRole } from '@prisma/client';
+import { AuthRole, AuthorType, PrismaClient } from '@prisma/client';
 import { hash } from 'argon2';
 
 const prisma = new PrismaClient();
@@ -37,6 +37,34 @@ const main = async () => {
   });
 
   console.log({ genesisUser });
+
+  const genesisAuthor = await prisma.user.upsert({
+    where: { username: 'Posse-mistress-monte-hidden' },
+    update: {},
+    create: {
+      username: 'Posse-mistress-monte-hidden',
+      password: await hash('hc@s9A-*w%~Q3Ub243aq'),
+      role: AuthRole.AUTHOR,
+      UserProfile: {
+        create: {
+          nickname: 'Genesis Author',
+        },
+      },
+      Author: {
+        create: {
+          name: 'Genesis Author',
+          type: AuthorType.IndependentDeveloper,
+          AuthorProfile: {
+            create: {
+              bio: 'Genesis Author Bio',
+            },
+          },
+        },
+      },
+    },
+  });
+
+  console.log({ genesisAuthor });
 };
 
 main()

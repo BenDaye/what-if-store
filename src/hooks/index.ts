@@ -1,5 +1,6 @@
 export { AuthProvider, useAuth } from './auth';
 export type { AuthProps } from './auth';
+export { useDashboardAuthor, useDashboardAuthors } from './author';
 export {
   useCopy,
   useCurrentRouteId,
@@ -13,9 +14,4 @@ export {
 } from './darkMode';
 export { useHeadMeta } from './meta';
 export { NoticeProvider, useNotice } from './notice';
-export {
-  useAppUserCurrentRouterId,
-  useDashboardUser,
-  useDashboardUserCurrentRouterId,
-  useDashboardUsers,
-} from './user';
+export { useDashboardUser, useDashboardUsers } from './user';
