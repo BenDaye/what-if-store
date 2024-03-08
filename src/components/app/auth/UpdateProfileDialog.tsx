@@ -31,7 +31,10 @@ export const AppAuthUpdateProfileDialog = (
   const { t: tAuth } = useTranslation('auth');
   const { data: session, status, update: updateSession } = useSession();
   const unauthenticated = useMemo(
-    () => status !== 'authenticated' || session.user?.role !== AuthRole.USER,
+    () =>
+      status !== 'authenticated' ||
+      (session.user?.role !== AuthRole.USER &&
+        session.user?.role !== AuthRole.AUTHOR),
     [session, status],
   );
   const { handleSubmit, control, reset, setValue } =
@@ -46,7 +49,7 @@ export const AppAuthUpdateProfileDialog = (
     if (session?.user?.email) setValue('email', session.user.email);
   }, [session, setValue]);
   const { mutateAsync: updateProfile } =
-    trpc.protectedAppUser.updateProfile.useMutation({
+    trpc.protectedAppUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: ({ nickname, email }) => {
         showSuccess(tAuth('Profile.Updated'));
@@ -136,7 +139,7 @@ export const AppAuthUpdateProfileDialog = (
       <DialogActions sx={{ gap: 1 }}>
         <Button
           color="error"
-          disabled={unauthenticated}
+          disabled={status !== 'authenticated'}
           onClick={() =>
             signOut().then(() => props.onClose?.({}, 'backdropClick'))
           }

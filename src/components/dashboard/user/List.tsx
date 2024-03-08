@@ -8,22 +8,6 @@ import { UserListItemButton } from './ListItemButton';
 type UserListProps = ListProps & { input?: UserListInputSchema };
 
 export const UserList = ({ input, ...props }: UserListProps) => {
-  const { flattedData: users } = useDashboardUsers(true, {
-    ...input,
-    limit: input?.limit ?? 20,
-    role: [AuthRole.USER],
-  });
-  const { flattedData: authors } = useDashboardUsers(true, {
-    ...input,
-    limit: input?.limit ?? 20,
-    role: [AuthRole.AUTHOR],
-  });
-  const { flattedData: admins } = useDashboardUsers(true, {
-    ...input,
-    limit: input?.limit ?? 20,
-    role: [AuthRole.ADMIN],
-  });
-
   return (
     <List
       {...props}
@@ -36,24 +20,33 @@ export const UserList = ({ input, ...props }: UserListProps) => {
         ...props?.sx,
       }}
     >
-      <CollapseList primaryText={`users`} secondaryText={`(${users.length})`}>
-        {users.map((item) => (
-          <UserListItemButton key={item.id} itemId={item.id} />
-        ))}
-      </CollapseList>
-      <CollapseList
-        primaryText={`authors`}
-        secondaryText={`(${authors.length})`}
-      >
-        {authors.map((item) => (
-          <UserListItemButton key={item.id} itemId={item.id} />
-        ))}
-      </CollapseList>
-      <CollapseList primaryText={`admins`} secondaryText={`(${admins.length})`}>
-        {admins.map((item) => (
-          <UserListItemButton key={item.id} itemId={item.id} />
-        ))}
-      </CollapseList>
+      {Object.values(AuthRole).map((role) => (
+        <UserCollapseList key={role} role={role} input={input} />
+      ))}
     </List>
+  );
+};
+
+type UserCollapseListProps = {
+  input?: UserListInputSchema;
+  role: AuthRole;
+};
+const UserCollapseList = ({ role, input }: UserCollapseListProps) => {
+  const { flattedData } = useDashboardUsers(true, {
+    ...input,
+    role: [role],
+  });
+
+  return (
+    <CollapseList
+      localStorageKey={`user-role:${role}`}
+      primaryText={role}
+      secondaryText={`(${flattedData.length})`}
+      defaultExpandMore={true}
+    >
+      {flattedData.map((item) => (
+        <UserListItemButton key={item.id} itemId={item.id} />
+      ))}
+    </CollapseList>
   );
 };

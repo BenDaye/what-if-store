@@ -1,52 +1,52 @@
-import { UserListInputSchema } from '@/server/schemas';
+import { ApplicationListInputSchema } from '@/server/schemas';
 import { IdSchema } from '@/server/schemas/id';
 import { RouterOutput, trpc } from '@/utils/trpc';
-import { AuthRole } from '@prisma/client';
+import { ApplicationCategory, AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { useInterval } from 'usehooks-ts';
 import { useNotice } from '../notice';
 
-export const useDashboardUser = (id: IdSchema) => {
+export const useDashboardApplication = (id: IdSchema) => {
   const { data: session, status } = useSession();
   const authenticated = useMemo(
     () => status === 'authenticated' && session.user?.role === AuthRole.ADMIN,
     [status, session],
   );
   const { data, refetch, isFetching, error, isError } =
-    trpc.protectedDashboardUser.getProfileById.useQuery(id ?? '[UNSET]', {
+    trpc.protectedDashboardApplication.getById.useQuery(id ?? '[UNSET]', {
       enabled: !!id && authenticated,
     });
-  trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
+  trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
     enabled: authenticated,
     onData: (_id) => {
       if (_id === id) refetch();
     },
   });
 
-  const username = useMemo(() => data?.username ?? '-', [data]);
-  const role = useMemo(() => data?.role ?? AuthRole.USER, [data]);
+  const name = useMemo(() => data?.name ?? '-', [data]);
+  const category = useMemo(
+    () => data?.category ?? ApplicationCategory.Other,
+    [data],
+  );
   const avatarSrc = useMemo(
-    () => data?.UserProfile?.avatar || undefined,
+    () => data?.ApplicationInformation?.logo || undefined,
     [data],
   );
-  const avatarText = useMemo(
-    () =>
-      data?.UserProfile?.nickname?.charAt(0) ??
-      data?.username?.charAt(0) ??
-      '-',
-    [data],
-  );
+  const avatarText = useMemo(() => data?.name?.charAt(0) ?? '-', [data]);
 
-  const nickname = useMemo(
-    () => data?.UserProfile?.nickname ?? data?.username ?? '-',
+  const website = useMemo(
+    () => data?.ApplicationInformation?.website ?? '-',
     [data],
   );
 
-  const email = useMemo(() => data?.UserProfile?.email ?? '-', [data]);
+  const description = useMemo(
+    () => data?.ApplicationInformation?.description ?? '-',
+    [data],
+  );
 
-  const bio = useMemo(() => data?.UserProfile?.bio ?? '-', [data]);
+  const author = useMemo(() => data?.author, [data]);
 
   const { showWarning } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
@@ -62,19 +62,19 @@ export const useDashboardUser = (id: IdSchema) => {
     isFetching,
     error,
     isError,
-    username,
-    role,
+    name,
+    category,
     avatarSrc,
     avatarText,
-    nickname,
-    email,
-    bio,
+    website,
+    description,
+    author,
   };
 };
 
-export const useDashboardUsers = (
+export const useDashboardApplications = (
   notify = true,
-  query?: UserListInputSchema,
+  query?: ApplicationListInputSchema,
 ) => {
   const { data: session, status } = useSession();
   const authenticated = useMemo(
@@ -83,7 +83,7 @@ export const useDashboardUsers = (
   );
   const { showWarning } = useNotice();
   const [flattedData, setFlattedData] = useState<
-    RouterOutput['protectedDashboardUser']['list']['items']
+    RouterOutput['protectedDashboardApplication']['list']['items']
   >([]);
   const {
     hasNextPage,
@@ -94,7 +94,7 @@ export const useDashboardUsers = (
     error,
     isError,
     refetch,
-  } = trpc.protectedDashboardUser.list.useInfiniteQuery(
+  } = trpc.protectedDashboardApplication.list.useInfiniteQuery(
     {
       limit: 20,
       ...query,
@@ -116,7 +116,7 @@ export const useDashboardUsers = (
     setFlattedData(data?.pages.flatMap((page) => page.items) ?? []);
   }, [data]);
 
-  trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
+  trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
     enabled: authenticated,
     onData: () => refetch(),
     onError: (err) => {

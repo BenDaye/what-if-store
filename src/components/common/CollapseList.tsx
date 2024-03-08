@@ -1,8 +1,6 @@
 import { ExpandMore, NavigateNext } from '@mui/icons-material';
 import {
   Box,
-  BoxProps,
-  Collapse,
   CollapseProps,
   List,
   ListItemButton,
@@ -15,11 +13,12 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
+import { animated, easings, useSpring } from '@react-spring/web';
 import {
   OverlayScrollbarsComponent,
   OverlayScrollbarsComponentProps,
 } from 'overlayscrollbars-react';
-import { PropsWithChildren, ReactNode, useMemo } from 'react';
+import { HTMLAttributes, PropsWithChildren, ReactNode, useMemo } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 type CollapseListItemButtonProps = {
@@ -45,6 +44,8 @@ export const CollapseListItemButton = ({
   return (
     <ListItemButton
       sx={{
+        px: 1,
+        py: 0,
         flexGrow: 0,
         flexShrink: 0,
         bgcolor: (theme) =>
@@ -77,7 +78,10 @@ export const CollapseListItemButton = ({
       {overrides?.listPrimary ?? (
         <ListItemText
           primary={primaryText ?? ''}
-          primaryTypographyProps={{ variant: 'caption' }}
+          primaryTypographyProps={{
+            variant: 'caption',
+            fontWeight: (theme) => theme.typography.fontWeightMedium,
+          }}
           sx={{ my: 0 }}
           {...overrides?.ListItemTextProps}
         />
@@ -88,7 +92,10 @@ export const CollapseListItemButton = ({
           <Typography
             variant="caption"
             color="text.secondary"
-            sx={{ fontFamily: 'Roboto Mono' }}
+            sx={{
+              fontFamily: 'Roboto Mono',
+              fontWeight: (theme) => theme.typography.fontWeightMedium,
+            }}
             {...overrides?.TypographyProps}
           >
             {secondaryText ?? ''}
@@ -101,7 +108,7 @@ export const CollapseListItemButton = ({
 
 type InnerCollapseListProps = {
   overrides?: {
-    BoxProps?: BoxProps;
+    BoxProps?: HTMLAttributes<HTMLDivElement>;
     OverlayScrollbarsComponentProps?: OverlayScrollbarsComponentProps;
     CollapseProps?: CollapseProps;
     ListProps?: ListProps;
@@ -116,14 +123,23 @@ export const InnerCollapseList = ({
   overrides,
   children,
 }: PropsWithChildren<InnerCollapseListProps>) => {
+  const styles = useSpring({
+    flexGrow: expandMore ? 1 : 0,
+    config: {
+      easing: easings.easeInOutCirc,
+      duration: 200,
+    },
+  });
   return (
-    <Box
-      sx={{
+    <animated.div
+      style={{
         display: 'flex',
-        flexGrow: expandMore ? 1 : 0,
+        flexShrink: 0,
         flexDirection: 'column',
         alignItems: 'stretch',
         overflowY: 'auto',
+        flexBasis: 0,
+        ...styles,
       }}
       {...overrides?.BoxProps}
     >
@@ -136,25 +152,11 @@ export const InnerCollapseList = ({
         }}
         {...overrides?.OverlayScrollbarsComponentProps}
       >
-        <Collapse
-          in={expandMore}
-          timeout="auto"
-          unmountOnExit={false}
-          {...overrides?.CollapseProps}
-        >
-          <List
-            disablePadding
-            dense
-            sx={{
-              minHeight,
-            }}
-            {...overrides?.ListProps}
-          >
-            {overrides?.ListProps?.children ?? children}
-          </List>
-        </Collapse>
+        <List disablePadding dense sx={{ minHeight }} {...overrides?.ListProps}>
+          {overrides?.ListProps?.children ?? children}
+        </List>
       </OverlayScrollbarsComponent>
-    </Box>
+    </animated.div>
   );
 };
 
@@ -168,18 +170,22 @@ type CollapseListProps = {
   secondaryText?: string;
   expandMore?: boolean;
   minHeight?: number;
+  localStorageKey?: string;
+  defaultExpandMore?: boolean;
 };
 
 export const CollapseList = ({
   overrides,
   primaryText,
   secondaryText,
-  minHeight,
+  minHeight = 240,
+  localStorageKey,
+  defaultExpandMore = true,
   children,
 }: PropsWithChildren<CollapseListProps>) => {
   const [expandMore, setExpandMode] = useLocalStorage(
-    `collapse-list-expand-more:${primaryText}`,
-    true,
+    `collapse-list-expand-more:${localStorageKey ?? primaryText}`,
+    defaultExpandMore,
     {
       initializeWithValue: false,
     },

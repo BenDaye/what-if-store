@@ -1,6 +1,6 @@
 import { IconButtonWithTooltip } from '@/components/common';
 import {
-  Widgets as AppsIcon,
+  Widgets as ApplicationsIcon,
   Engineering as AuthorsIcon,
   Dashboard as DashboardIcon,
   Person as UsersIcon,
@@ -50,6 +50,12 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
           active={pathname === '/dashboard' || pathname === '/dashboard/'}
         />
         <IconButtonWithTooltip
+          title={tCommon('Apps')}
+          icon={<ApplicationsIcon />}
+          onClick={() => push('/dashboard/application')}
+          active={pathname.startsWith('/dashboard/application')}
+        />
+        <IconButtonWithTooltip
           title={tCommon('Authors')}
           icon={<AuthorsIcon />}
           onClick={() => push('/dashboard/author')}
@@ -60,12 +66,6 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
           icon={<UsersIcon />}
           onClick={() => push('/dashboard/user')}
           active={pathname.startsWith('/dashboard/user')}
-        />
-        <IconButtonWithTooltip
-          title={tCommon('Apps')}
-          icon={<AppsIcon />}
-          onClick={() => push('/dashboard/app')}
-          active={pathname.startsWith('/dashboard/app')}
         />
       </Box>
       <Box

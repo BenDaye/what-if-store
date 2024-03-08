@@ -36,18 +36,14 @@ export const getServerSideProps = async (
 
   await helpers.publicDashboardMeta.get.prefetch();
 
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
-    limit: 20,
-    role: [AuthRole.USER],
-  });
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
-    limit: 20,
-    role: [AuthRole.AUTHOR],
-  });
-  await helpers.protectedDashboardUser.list.prefetchInfinite({
-    limit: 20,
-    role: [AuthRole.ADMIN],
-  });
+  await Promise.all(
+    Object.values(AuthRole).map((item) =>
+      helpers.protectedDashboardUser.list.prefetchInfinite({
+        limit: 20,
+        role: [item],
+      }),
+    ),
+  );
 
   return {
     props: {

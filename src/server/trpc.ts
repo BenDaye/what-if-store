@@ -11,8 +11,8 @@
 import { AuthRole } from '@prisma/client';
 import { initTRPC } from '@trpc/server';
 import SuperJSON from 'superjson';
-import { CommonTRPCError } from './utils/errors';
 import { Context } from './context';
+import { CommonTRPCError } from './utils/errors';
 
 const t = initTRPC.context<Context>().create({
   /**
@@ -55,7 +55,22 @@ const isAuthorized = t.middleware(async ({ ctx, next }) => {
 });
 
 const isAuthorizedUser = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session?.user?.id || ctx.session?.user?.role !== AuthRole.USER)
+  if (
+    !ctx.session?.user?.id ||
+    (ctx.session?.user?.role !== AuthRole.USER &&
+      ctx.session?.user?.role !== AuthRole.AUTHOR)
+  )
+    throw new CommonTRPCError('UNAUTHORIZED');
+
+  return next({
+    ctx: {
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+});
+
+const isAuthorizedAuthor = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session?.user?.id || ctx.session?.user?.role !== AuthRole.AUTHOR)
     throw new CommonTRPCError('UNAUTHORIZED');
 
   return next({
@@ -78,6 +93,7 @@ const isAuthorizedAdmin = t.middleware(async ({ ctx, next }) => {
 
 export const protectedProcedure = t.procedure.use(isAuthorized);
 export const protectedUserProcedure = t.procedure.use(isAuthorizedUser);
+export const protectedAuthorProcedure = t.procedure.use(isAuthorizedAuthor);
 export const protectedAdminProcedure = t.procedure.use(isAuthorizedAdmin);
 
 /**

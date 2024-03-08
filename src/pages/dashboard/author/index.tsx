@@ -36,18 +36,14 @@ export const getServerSideProps = async (
 
   await helpers.publicDashboardMeta.get.prefetch();
 
-  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
-    limit: 20,
-    type: [AuthorType.IndependentDeveloper],
-  });
-  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
-    limit: 20,
-    type: [AuthorType.Company],
-  });
-  await helpers.protectedDashboardAuthor.list.prefetchInfinite({
-    limit: 20,
-    type: [AuthorType.Community],
-  });
+  await Promise.all(
+    Object.values(AuthorType).map((item) =>
+      helpers.protectedDashboardAuthor.list.prefetchInfinite({
+        limit: 20,
+        type: [item],
+      }),
+    ),
+  );
 
   return {
     props: {

@@ -2,10 +2,11 @@ import { Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { authorEmitter } from '../modules';
 import {
+  IdSchema,
   authorListInputSchema,
   authorUpdateProfileInputSchema,
+  idSchema,
 } from '../schemas';
-import { IdSchema, idSchema } from '../schemas/id';
 import {
   protectedAdminProcedure,
   protectedUserProcedure,
@@ -88,7 +89,7 @@ export const publicAppAuthor = router({
 });
 
 export const protectedAppAuthor = router({
-  getProfile: protectedUserProcedure
+  get: protectedUserProcedure
     .input(idSchema)
     .query(async ({ ctx: { prisma, session }, input: id }) => {
       try {
@@ -101,7 +102,7 @@ export const protectedAppAuthor = router({
         throw onError(err);
       }
     }),
-  updateProfile: protectedUserProcedure
+  update: protectedUserProcedure
     .input(authorUpdateProfileInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
@@ -129,7 +130,7 @@ export const protectedAppAuthor = router({
           },
         });
         authorEmitter.emit('update', session.user?.id);
-        return input;
+        return true;
       } catch (err) {
         throw onError(err);
       }
@@ -218,7 +219,7 @@ export const protectedDashboardAuthor = router({
         }
       },
     ),
-  getProfileById: protectedAdminProcedure
+  getById: protectedAdminProcedure
     .input(idSchema)
     .query(async ({ ctx: { prisma }, input: id }) => {
       try {
@@ -230,32 +231,32 @@ export const protectedDashboardAuthor = router({
         throw onError(err);
       }
     }),
-  updateProfileById: protectedAdminProcedure
+  updateById: protectedAdminProcedure
     .input(
       authorUpdateProfileInputSchema.extend({
         id: idSchema,
       }),
     )
-    .mutation(async ({ ctx: { prisma }, input: { id, ...rest } }) => {
+    .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.author.update({
           where: { id },
           data: {
-            name: rest.name,
+            name: input.name,
             AuthorProfile: {
               update: {
                 data: {
-                  email: rest.email,
-                  bio: rest.bio,
-                  website: rest.website,
-                  avatar: rest.avatar,
+                  email: input.email,
+                  bio: input.bio,
+                  website: input.website,
+                  avatar: input.avatar,
                 },
               },
             },
           },
         });
         authorEmitter.emit('update', id);
-        return rest;
+        return true;
       } catch (err) {
         throw onError(err);
       }

@@ -20,7 +20,8 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { signIn, useSession } from 'next-auth/react';
+import { AuthRole } from '@prisma/client';
+import { getSession, signIn, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
@@ -35,7 +36,7 @@ export const SignInDialog = ({
   disableSignUp,
   ...props
 }: SignInDialogProps) => {
-  const { query, pathname } = useRouter();
+  const { query, pathname, push } = useRouter();
   const { showError, showSuccess, showWarning } = useNotice();
   const { status, update: updateSession } = useSession();
   const { t: tAuth } = useTranslation('auth');
@@ -63,7 +64,19 @@ export const SignInDialog = ({
         }
         await updateSession();
         resetTRPCClient();
-        showSuccess(tAuth('SignIn.Succeeded'));
+        showSuccess(tAuth('SignIn.Succeeded'), {
+          autoHideDuration: 1000,
+          onClose: async () => {
+            const _session = await getSession();
+            if (
+              _session?.user?.role === AuthRole.ADMIN &&
+              !pathname.startsWith('/dashboard')
+            ) {
+              push('/dashboard');
+              return;
+            }
+          },
+        });
         props?.onClose?.({}, 'backdropClick');
       } catch (error) {
         if (error instanceof Error) {
@@ -81,6 +94,8 @@ export const SignInDialog = ({
       updateSession,
       showSuccess,
       props,
+      pathname,
+      push,
       showError,
       reset,
     ],

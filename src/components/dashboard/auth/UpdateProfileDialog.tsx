@@ -46,7 +46,7 @@ export const DashboardAuthUpdateProfileDialog = (
     if (session?.user?.email) setValue('email', session.user.email);
   }, [session, setValue]);
   const { mutateAsync: updateProfile } =
-    trpc.protectedDashboardUser.updateProfile.useMutation({
+    trpc.protectedDashboardUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: ({ nickname, email }) => {
         showSuccess(tAuth('Profile.Updated'));
@@ -136,7 +136,7 @@ export const DashboardAuthUpdateProfileDialog = (
       <DialogActions sx={{ gap: 1 }}>
         <Button
           color="error"
-          disabled={unauthenticated}
+          disabled={status !== 'authenticated'}
           onClick={() =>
             signOut().then(() => props.onClose?.({}, 'backdropClick'))
           }

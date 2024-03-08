@@ -3,6 +3,7 @@ import { NOOP, NOOPAsync } from '@/utils/noop';
 import { resetTRPCClient } from '@/utils/trpc';
 import { signOut as signOutNextAuth, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import {
   PropsWithChildren,
   createContext,
@@ -36,15 +37,19 @@ export const AuthProvider = ({
   disableSignIn = true,
   disableSignUp = true,
 }: PropsWithChildren<AuthProps>) => {
+  const { push } = useRouter();
   const { update: updateSession } = useSession();
   const { showError, showSuccess, showWarning } = useNotice();
   const { t } = useTranslation('auth');
   const signOut = async () => {
     try {
-      await signOutNextAuth({ redirect: false, callbackUrl: '/app' });
+      await signOutNextAuth({ redirect: false });
       await updateSession();
       resetTRPCClient();
-      showSuccess(t('SignOut.Succeeded'));
+      showSuccess(t('SignOut.Succeeded'), {
+        autoHideDuration: 1000,
+        onClose: () => push('/app'),
+      });
     } catch (error) {
       if (error instanceof Error) {
         showError(error.message);

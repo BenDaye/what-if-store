@@ -1,4 +1,9 @@
-import { AuthRole, AuthorType, PrismaClient } from '@prisma/client';
+import {
+  ApplicationCategory,
+  AuthRole,
+  AuthorType,
+  PrismaClient,
+} from '@prisma/client';
 import { hash } from 'argon2';
 
 const prisma = new PrismaClient();
@@ -62,9 +67,38 @@ const main = async () => {
         },
       },
     },
+    include: {
+      Author: true,
+    },
   });
 
   console.log({ genesisAuthor });
+
+  const genesisApplication = await prisma.application.upsert({
+    where: {
+      name: 'Genesis Application',
+      authorId: genesisAuthor.Author?.id,
+    },
+    update: {},
+    create: {
+      name: 'Genesis Application',
+      category: ApplicationCategory.HealthFitness,
+      ageRating: '3+',
+      author: {
+        connect: {
+          id: genesisAuthor.Author?.id,
+        },
+      },
+      ApplicationInformation: {
+        create: {
+          description: 'Genesis Application Description',
+          compatibility: {},
+        },
+      },
+    },
+  });
+
+  console.log({ genesisApplication });
 };
 
 main()

@@ -7,7 +7,7 @@ import { PropsWithChildren, ReactElement, useMemo, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
 import {
-  AppDrawer,
+  ApplicationDrawer,
   DashboardNavDrawer,
   DashboardProvider,
   UserDrawer,
@@ -23,7 +23,7 @@ export const DashboardLayout = ({
   const { t: tMeta } = useTranslation('meta');
   const { title, description } = useHeadMeta('Dashboard');
   const { pathname } = useRouter();
-  const openAppListDrawer = useMemo(
+  const openApplicationListDrawer = useMemo(
     () => pathname.startsWith('/dashboard/app'),
     [pathname],
   );
@@ -36,8 +36,9 @@ export const DashboardLayout = ({
     [pathname],
   );
   const openDrawer = useMemo(
-    () => openAppListDrawer || openUserListDrawer || openAuthorListDrawer,
-    [openAppListDrawer, openAuthorListDrawer, openUserListDrawer],
+    () =>
+      openApplicationListDrawer || openUserListDrawer || openAuthorListDrawer,
+    [openApplicationListDrawer, openAuthorListDrawer, openUserListDrawer],
   );
   const [listDrawerWidth, setListDrawerWidth] = useLocalStorage<number>(
     'dashboard-layout-left-drawer-width',
@@ -129,10 +130,11 @@ export const DashboardLayout = ({
               width: navDrawerWidth + 1,
               boxSizing: 'border-box',
             },
+            height: '100vh',
           }}
         />
-        <AppDrawer
-          open={openAppListDrawer}
+        <ApplicationDrawer
+          open={openApplicationListDrawer}
           variant="persistent"
           ModalProps={{ keepMounted: true }}
           sx={{
@@ -143,6 +145,7 @@ export const DashboardLayout = ({
               boxSizing: 'border-box',
               left: navDrawerWidth + 1,
             },
+            height: '100vh',
           }}
           transitionDuration={0}
         />
@@ -158,6 +161,7 @@ export const DashboardLayout = ({
               boxSizing: 'border-box',
               left: navDrawerWidth + 1,
             },
+            height: '100vh',
           }}
           transitionDuration={0}
         />
@@ -173,6 +177,7 @@ export const DashboardLayout = ({
               boxSizing: 'border-box',
               left: navDrawerWidth + 1,
             },
+            height: '100vh',
           }}
           transitionDuration={0}
         />

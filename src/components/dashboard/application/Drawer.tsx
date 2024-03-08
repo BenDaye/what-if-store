@@ -2,12 +2,12 @@ import {
   AppBar,
   Drawer,
   DrawerProps,
-  List,
   Toolbar,
   Typography,
 } from '@mui/material';
+import { ApplicationList } from './List';
 
-export const AppDrawer = (props: DrawerProps) => {
+export const ApplicationDrawer = (props: DrawerProps) => {
   return (
     <Drawer {...props}>
       <AppBar color="inherit" position="static" elevation={1}>
@@ -16,20 +16,11 @@ export const AppDrawer = (props: DrawerProps) => {
           variant="dense"
           disableGutters
         >
-          <Typography variant="subtitle2">App Drawer</Typography>
+          <Typography variant="subtitle2">Application Drawer</Typography>
         </Toolbar>
       </AppBar>
 
-      <List
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          overflow: 'hidden',
-          overflowY: 'auto',
-        }}
-      ></List>
+      <ApplicationList disablePadding dense />
     </Drawer>
   );
 };

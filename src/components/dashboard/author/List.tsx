@@ -8,22 +8,6 @@ import { AuthorListItemButton } from './ListItemButton';
 type AuthorListProps = ListProps & { input?: AuthorListInputSchema };
 
 export const AuthorList = ({ input, ...props }: AuthorListProps) => {
-  const { flattedData: independentDevelopers } = useDashboardAuthors(true, {
-    ...input,
-    limit: input?.limit ?? 20,
-    type: [AuthorType.IndependentDeveloper],
-  });
-  const { flattedData: companies } = useDashboardAuthors(true, {
-    ...input,
-    limit: input?.limit ?? 20,
-    type: [AuthorType.Company],
-  });
-  const { flattedData: communities } = useDashboardAuthors(true, {
-    ...input,
-    limit: input?.limit ?? 20,
-    type: [AuthorType.Community],
-  });
-
   return (
     <List
       {...props}
@@ -36,30 +20,33 @@ export const AuthorList = ({ input, ...props }: AuthorListProps) => {
         ...props?.sx,
       }}
     >
-      <CollapseList
-        primaryText={`independent developers`}
-        secondaryText={`(${independentDevelopers.length})`}
-      >
-        {independentDevelopers.map((item) => (
-          <AuthorListItemButton key={item.id} itemId={item.id} />
-        ))}
-      </CollapseList>
-      <CollapseList
-        primaryText={`companies`}
-        secondaryText={`(${companies.length})`}
-      >
-        {companies.map((item) => (
-          <AuthorListItemButton key={item.id} itemId={item.id} />
-        ))}
-      </CollapseList>
-      <CollapseList
-        primaryText={`communities`}
-        secondaryText={`(${communities.length})`}
-      >
-        {communities.map((item) => (
-          <AuthorListItemButton key={item.id} itemId={item.id} />
-        ))}
-      </CollapseList>
+      {Object.values(AuthorType).map((type) => (
+        <AuthorCollapseList key={type} type={type} input={input} />
+      ))}
     </List>
+  );
+};
+
+type AuthorCollapseListProps = {
+  input?: AuthorListInputSchema;
+  type: AuthorType;
+};
+const AuthorCollapseList = ({ type, input }: AuthorCollapseListProps) => {
+  const { flattedData } = useDashboardAuthors(true, {
+    ...input,
+    type: [type],
+  });
+
+  return (
+    <CollapseList
+      localStorageKey={`author-type:${type}`}
+      primaryText={type}
+      secondaryText={`(${flattedData.length})`}
+      defaultExpandMore={true}
+    >
+      {flattedData.map((item) => (
+        <AuthorListItemButton key={item.id} itemId={item.id} />
+      ))}
+    </CollapseList>
   );
 };

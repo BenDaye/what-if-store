@@ -1,10 +1,9 @@
 import { TRPCError } from '@trpc/server';
 import { hash } from 'argon2';
-import { onError } from '../utils/errors';
 import { userEmitter } from '../modules';
-import { signUpSchema } from '../schemas/auth';
-import { idSchema } from '../schemas/id';
+import { idSchema, signUpSchema } from '../schemas';
 import { publicProcedure, router } from '../trpc';
+import { onError } from '../utils/errors';
 
 export const publicAppAuth = router({
   signUp: publicProcedure

@@ -1,7 +1,7 @@
-import { publicProcedure, router } from '../trpc';
-import { redisKeyMap } from '../modules';
-import { metaSchema } from '../schemas/meta';
 import { TRPCError } from '@trpc/server';
+import { redisKeyMap } from '../modules';
+import { metaSchema } from '../schemas';
+import { publicProcedure, router } from '../trpc';
 
 export const publicAppMeta = router({
   get: publicProcedure.output(metaSchema).query(async ({ ctx: { redis } }) => {

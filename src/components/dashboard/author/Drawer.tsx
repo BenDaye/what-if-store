@@ -20,7 +20,7 @@ export const AuthorDrawer = (props: DrawerProps) => {
         </Toolbar>
       </AppBar>
 
-      <AuthorList disablePadding dense sx={{ overflowY: 'auto' }} />
+      <AuthorList disablePadding dense />
     </Drawer>
   );
 };

@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 
 type UserProfileCardProps = {
-  data?: RouterOutput['protectedDashboardUser']['getProfileById'];
+  data?: RouterOutput['protectedDashboardUser']['getById'];
 };
 
 export const UserProfileCard = ({ data }: UserProfileCardProps) => {

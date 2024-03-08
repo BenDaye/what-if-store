@@ -20,7 +20,7 @@ export const UserDrawer = (props: DrawerProps) => {
         </Toolbar>
       </AppBar>
 
-      <UserList disablePadding dense sx={{ overflowY: 'auto' }} />
+      <UserList disablePadding dense />
     </Drawer>
   );
 };

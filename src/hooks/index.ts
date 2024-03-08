@@ -1,3 +1,7 @@
+export {
+  useDashboardApplication,
+  useDashboardApplications,
+} from './application';
 export { AuthProvider, useAuth } from './auth';
 export type { AuthProps } from './auth';
 export { useDashboardAuthor, useDashboardAuthors } from './author';

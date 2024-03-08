@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 
 type AuthorProfileCardProps = {
-  data?: RouterOutput['protectedDashboardAuthor']['getProfileById'];
+  data?: RouterOutput['protectedDashboardAuthor']['getById'];
 };
 
 export const AuthorProfileCard = ({ data }: AuthorProfileCardProps) => {

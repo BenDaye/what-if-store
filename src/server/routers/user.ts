@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { userEmitter } from '../modules';
-import { IdSchema, idSchema } from '../schemas/id';
+import { IdSchema, idSchema } from '../schemas';
 import {
   userListInputSchema,
   userUpdateProfileInputSchema,
@@ -106,45 +106,42 @@ export const publicAppUser = router({
 });
 
 export const protectedAppUser = router({
-  getProfile: protectedUserProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
+  get: protectedUserProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
+      return await prisma.user.findUniqueOrThrow({
+        where: { id: session.user?.id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
+  update: protectedUserProcedure
+    .input(userUpdateProfileInputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
-        return await prisma.user.findUniqueOrThrow({
+        await prisma.user.update({
           where: { id: session.user?.id },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    },
-  ),
-  updateProfile: protectedUserProcedure
-    .input(userUpdateProfileInputSchema)
-    .mutation(
-      async ({ ctx: { prisma, session }, input: { nickname, email } }) => {
-        try {
-          if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
-          await prisma.user.update({
-            where: { id: session.user?.id },
-            data: {
-              UserProfile: {
-                update: {
-                  data: {
-                    nickname,
-                    email,
-                  },
+          data: {
+            UserProfile: {
+              update: {
+                data: {
+                  nickname: input.nickname,
+                  email: input.email,
                 },
               },
             },
-          });
-          userEmitter.emit('update', session.user?.id);
-          return { nickname, email };
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+          },
+        });
+        userEmitter.emit('update', session.user?.id);
+        // NOTE: RETURN TO UPDATE SESSION FOR CLIENT SIDE
+        return input;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
 });
 
 export const publicDashboardUser = router({});
@@ -229,46 +226,43 @@ export const protectedDashboardUser = router({
         }
       },
     ),
-  getProfile: protectedAdminProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
+  get: protectedAdminProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
+      return await prisma.user.findUniqueOrThrow({
+        where: { id: session.user?.id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
+  update: protectedAdminProcedure
+    .input(userUpdateProfileInputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
-        return await prisma.user.findUniqueOrThrow({
-          where: { id: session.user?.id },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    },
-  ),
-  updateProfile: protectedAdminProcedure
-    .input(userUpdateProfileInputSchema)
-    .mutation(
-      async ({ ctx: { prisma, session }, input: { nickname, email } }) => {
-        try {
-          if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
-          await prisma.user.update({
-            where: { id: session.user?.id || undefined },
-            data: {
-              UserProfile: {
-                update: {
-                  data: {
-                    nickname,
-                    email,
-                  },
+        await prisma.user.update({
+          where: { id: session.user?.id || undefined },
+          data: {
+            UserProfile: {
+              update: {
+                data: {
+                  nickname: input.nickname,
+                  email: input.email,
                 },
               },
             },
-          });
-          userEmitter.emit('update', session.user?.id);
-          return { nickname, email };
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getProfileById: protectedAdminProcedure
+          },
+        });
+        userEmitter.emit('update', session.user?.id);
+        // NOTE: RETURN TO UPDATE SESSION FOR CLIENT SIDE
+        return input;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  getById: protectedAdminProcedure
     .input(idSchema)
     .query(async ({ ctx: { prisma, session }, input: id }) => {
       try {
@@ -281,9 +275,9 @@ export const protectedDashboardUser = router({
         throw onError(err);
       }
     }),
-  updateProfileById: protectedAdminProcedure
+  updateById: protectedAdminProcedure
     .input(userUpdateProfileInputSchema.extend({ id: idSchema }))
-    .mutation(async ({ ctx: { prisma }, input: { id, nickname, email } }) => {
+    .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.user.update({
           where: { id },
@@ -291,15 +285,15 @@ export const protectedDashboardUser = router({
             UserProfile: {
               update: {
                 data: {
-                  nickname,
-                  email,
+                  nickname: input.nickname,
+                  email: input.email,
                 },
               },
             },
           },
         });
         userEmitter.emit('update', id);
-        return { nickname, email };
+        return true;
       } catch (err) {
         throw onError(err);
       }
