@@ -3,22 +3,20 @@ import { observable } from '@trpc/server/observable';
 import { authorEmitter } from '../modules';
 import {
   IdSchema,
+  authorCreateProfileInputSchema,
   authorListInputSchema,
   authorUpdateProfileInputSchema,
+  authorUpdateProfileInputSchemaForAdmin,
   idSchema,
 } from '../schemas';
 import {
   protectedAdminProcedure,
+  protectedAuthorProcedure,
   protectedUserProcedure,
   publicProcedure,
   router,
 } from '../trpc';
-import {
-  CommonTRPCError,
-  formatListArgs,
-  formatListResponse,
-  onError,
-} from '../utils';
+import { formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.AuthorSelect>()({
   id: true,
@@ -86,14 +84,55 @@ export const publicAppAuthor = router({
       };
     });
   }),
-});
+  list: publicProcedure
+    .input(authorListInputSchema)
+    .query(
+      async ({
+        ctx: { prisma },
+        input: { limit, skip, cursor, query, ...rest },
+      }) => {
+        try {
+          const where: Prisma.AuthorWhereInput = {
+            ...(query
+              ? {
+                  name: {
+                    contains: query,
+                    mode: 'insensitive',
+                  },
+                }
+              : {}),
+            ...(rest.type?.length
+              ? {
+                  type: {
+                    in: rest.type,
+                  },
+                }
+              : {}),
+          };
 
-export const protectedAppAuthor = router({
-  get: protectedUserProcedure
+          const [items, total] = await prisma.$transaction([
+            prisma.author.findMany({
+              where,
+              ...formatListArgs(limit, skip, cursor),
+              orderBy: [
+                {
+                  createdAt: 'asc',
+                },
+              ],
+              select: defaultSelect,
+            }),
+            prisma.author.count({ where }),
+          ]);
+          return formatListResponse(items, limit, total);
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
+  getById: publicProcedure
     .input(idSchema)
-    .query(async ({ ctx: { prisma, session }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: id }) => {
       try {
-        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         return await prisma.author.findUniqueOrThrow({
           where: { id },
           select: fullSelect,
@@ -102,34 +141,73 @@ export const protectedAppAuthor = router({
         throw onError(err);
       }
     }),
-  update: protectedUserProcedure
+});
+
+export const protectedAppAuthor = router({
+  get: protectedAuthorProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      return await prisma.author.findUniqueOrThrow({
+        where: { userId: session.user.id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
+  update: protectedAuthorProcedure
     .input(authorUpdateProfileInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
-        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
-        await prisma.user.update({
-          where: { id: session.user?.id },
+        await prisma.author.update({
+          where: { userId: session.user.id },
           data: {
-            Author: {
+            name: input.name,
+            AuthorProfile: {
               update: {
                 data: {
-                  name: input.name,
-                  AuthorProfile: {
-                    update: {
-                      data: {
-                        email: input.email,
-                        bio: input.bio,
-                        website: input.website,
-                        avatar: input.avatar,
-                      },
-                    },
-                  },
+                  email: input.email,
+                  bio: input.bio,
+                  website: input.website,
+                  avatar: input.avatar,
                 },
               },
             },
           },
         });
-        authorEmitter.emit('update', session.user?.id);
+        authorEmitter.emit('update', session.user.id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  create: protectedUserProcedure
+    .input(authorCreateProfileInputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input }) => {
+      try {
+        const isAuthor = await prisma.author.findFirst({
+          where: {
+            userId: session.user.id,
+          },
+        });
+        if (isAuthor) throw new Error('Author already exists');
+
+        const author = await prisma.author.create({
+          data: {
+            name: input.name,
+            type: input.type,
+            verified: false,
+            userId: session.user.id,
+            AuthorProfile: {
+              create: {
+                email: input.email,
+                bio: input.bio,
+                website: input.website,
+                avatar: input.avatar,
+              },
+            },
+          },
+        });
+        authorEmitter.emit('create', author.id);
         return true;
       } catch (err) {
         throw onError(err);
@@ -232,17 +310,15 @@ export const protectedDashboardAuthor = router({
       }
     }),
   updateById: protectedAdminProcedure
-    .input(
-      authorUpdateProfileInputSchema.extend({
-        id: idSchema,
-      }),
-    )
+    .input(authorUpdateProfileInputSchemaForAdmin)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.author.update({
           where: { id },
           data: {
             name: input.name,
+            type: input.type,
+            verified: input.verified,
             AuthorProfile: {
               update: {
                 data: {

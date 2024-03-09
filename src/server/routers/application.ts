@@ -13,12 +13,7 @@ import {
   publicProcedure,
   router,
 } from '../trpc';
-import {
-  CommonTRPCError,
-  formatListArgs,
-  formatListResponse,
-  onError,
-} from '../utils';
+import { formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   id: true,
@@ -43,6 +38,8 @@ const fullSelect = {
         userId: true,
         name: true,
         verified: true,
+        createdAt: true,
+        updatedAt: true,
       },
     },
     ApplicationInformation: {
@@ -67,6 +64,9 @@ const fullSelect = {
         version: true,
         releaseDate: true,
         changelog: true,
+        latest: true,
+        deprecated: true,
+        preview: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -183,7 +183,7 @@ export const publicAppApplication = router({
         }
       },
     ),
-  getInformationById: publicProcedure
+  getById: publicProcedure
     .input(idSchema)
     .query(async ({ ctx: { prisma }, input: id }) => {
       try {
@@ -203,7 +203,7 @@ export const publicAppApplication = router({
 });
 
 export const protectedAppApplication = router({
-  listMy: protectedAuthorProcedure
+  list: protectedAuthorProcedure
     .input(applicationListInputSchema)
     .query(
       async ({
@@ -211,7 +211,6 @@ export const protectedAppApplication = router({
         input: { limit, skip, cursor, query, ...rest },
       }) => {
         try {
-          if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
           const where: Prisma.ApplicationWhereInput = {
             ...(query
               ? {
@@ -282,7 +281,6 @@ export const protectedAppApplication = router({
     .input(idSchema)
     .query(async ({ ctx: { prisma, session }, input: id }) => {
       try {
-        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         return await prisma.application.findUniqueOrThrow({
           where: { id, author: { userId: session.user.id } },
           select: fullSelect,
@@ -295,7 +293,6 @@ export const protectedAppApplication = router({
     .input(applicationUpdateInputSchema.extend({ id: idSchema }))
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
-        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         await prisma.application.update({
           where: { id, author: { userId: session.user.id } },
           data: {
@@ -441,9 +438,8 @@ export const protectedDashboardApplication = router({
     ),
   getById: protectedAdminProcedure
     .input(idSchema)
-    .query(async ({ ctx: { prisma, session }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: id }) => {
       try {
-        if (!session.user?.id) throw new CommonTRPCError('UNAUTHORIZED');
         return await prisma.application.findUniqueOrThrow({
           where: {
             id,

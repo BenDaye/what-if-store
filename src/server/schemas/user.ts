@@ -1,5 +1,6 @@
 import { AuthRole } from '@prisma/client';
 import { z } from 'zod';
+import { idSchema } from '.';
 import { listInputSchema } from './list';
 
 export const userListInputSchema = listInputSchema
@@ -17,4 +18,13 @@ export const userUpdateProfileInputSchema = z
   .partial();
 export type UserUpdateProfileInputSchema = z.infer<
   typeof userUpdateProfileInputSchema
+>;
+
+export const userUpdateProfileInputSchemaForAdmin =
+  userUpdateProfileInputSchema.extend({
+    id: idSchema,
+    role: z.nativeEnum(AuthRole).optional(),
+  });
+export type UserUpdateProfileInputSchemaForAdmin = z.infer<
+  typeof userUpdateProfileInputSchemaForAdmin
 >;

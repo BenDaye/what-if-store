@@ -8,15 +8,15 @@ declare module 'next-auth' {
    */
   export interface Session extends DefaultSession {
     user?: {
-      id?: string | null;
-      username?: string | null;
-      role?: AuthRole;
+      id: string;
+      username: string;
+      role: AuthRole;
     } & DefaultSession['user'];
   }
 
   interface User extends DefaultUser {
-    username?: string | null;
-    role?: AuthRole;
+    username: string;
+    role: AuthRole;
   }
 }
 

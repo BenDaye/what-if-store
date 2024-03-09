@@ -52,7 +52,7 @@ model Author {
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String         @unique
   type          AuthorType
-  name          String         @unique
+  name          String
   verified      Boolean        @default(false)
   Application   Application[]
   AuthorProfile AuthorProfile?
@@ -133,7 +133,7 @@ model Application {
   countries              String[]
   ageRating              String
   author                 Author                  @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  authorId               String                  @unique
+  authorId               String
   ApplicationInformation ApplicationInformation?
   VersionHistories       ApplicationVersion[]
   price                  Float?                  @default(0)
@@ -170,6 +170,9 @@ model ApplicationVersion {
   changelog     String?
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   applicationId String
+  latest        Boolean     @default(false)
+  deprecated    Boolean     @default(false)
+  preview       Boolean     @default(false)
 
   @@unique([version, applicationId])
 }

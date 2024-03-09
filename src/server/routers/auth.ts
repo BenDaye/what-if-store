@@ -1,49 +1,44 @@
+import { faker } from '@faker-js/faker';
 import { TRPCError } from '@trpc/server';
 import { hash } from 'argon2';
 import { userEmitter } from '../modules';
-import { idSchema, signUpSchema } from '../schemas';
+import { signUpSchema } from '../schemas';
 import { publicProcedure, router } from '../trpc';
 import { onError } from '../utils/errors';
 
 export const publicAppAuth = router({
   signUp: publicProcedure
     .input(signUpSchema)
-    .output(idSchema)
+    .output(Boolean)
     .mutation(async ({ ctx: { prisma }, input }) => {
       try {
-        const id = await prisma.$transaction(async (tx) => {
-          const exist = await tx.user.findUnique({
-            where: { username: input.username },
+        const isUser = await prisma.user.findFirst({
+          where: { username: input.username },
+        });
+        if (isUser) {
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'Username already exists',
           });
-          if (exist)
-            throw new TRPCError({
-              code: 'CONFLICT',
-              message: `Username [${input.username}] already exists`,
-            });
-          const user = await tx.user.create({
-            data: {
-              username: input.username,
-              password: await hash(input.password),
-              UserProfile: {
-                create: {},
+        }
+        const { id } = await prisma.user.create({
+          data: {
+            username: input.username,
+            password: await hash(input.password),
+            UserProfile: {
+              create: {
+                nickname: faker.internet.userName(),
+                bio: faker.person.bio(),
+                avatar: faker.image.avatar(),
               },
             },
-          });
-
-          await tx.userProfile.update({
-            where: {
-              userId: user.id,
-            },
-            data: {
-              nickname: `User#${user.id}`,
-            },
-          });
-
-          return user.id;
+          },
+          select: {
+            id: true,
+          },
         });
-
         userEmitter.emit('create', id);
-        return id;
+        return true;
       } catch (error) {
         throw onError(error);
       }
