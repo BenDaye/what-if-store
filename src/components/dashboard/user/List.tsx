@@ -3,6 +3,7 @@ import { useDashboardUsers } from '@/hooks';
 import { UserListInputSchema } from '@/server/schemas';
 import { List, ListProps } from '@mui/material';
 import { AuthRole } from '@prisma/client';
+import { useTranslation } from 'next-i18next';
 import { UserListItemButton } from './ListItemButton';
 
 type UserListProps = ListProps & { input?: UserListInputSchema };
@@ -37,10 +38,13 @@ const UserCollapseList = ({ role, input }: UserCollapseListProps) => {
     role: [role],
   });
 
+  const { t } = useTranslation('user');
+  const primaryText = t(`Role.${role}`, role);
+
   return (
     <CollapseList
       localStorageKey={`user-role:${role}`}
-      primaryText={role}
+      primaryText={primaryText}
       secondaryText={`(${flattedData.length})`}
       defaultExpandMore={true}
     >

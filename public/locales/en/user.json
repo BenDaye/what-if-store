@@ -1,0 +1,7 @@
+{
+  "Role": {
+    "ADMIN": "Admin",
+    "AUTHOR": "Author",
+    "USER": "User"
+  }
+}

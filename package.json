@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "run-p dev:*",
+    "dev": "run-p dev:* db:studio:dev",
     "dev:client": "dotenv -e .env.development.local -- next dev",
     "dev:server": "dotenv -e .env.development.local -- tsx watch src/server/dev.ts  --tsconfig tsconfig.server.json ",
     "build": "run-s build:client build:server",

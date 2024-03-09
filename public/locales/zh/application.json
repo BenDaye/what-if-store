@@ -1,0 +1,32 @@
+{
+  "Category": {
+    "AR": "AR",
+    "Books": "图书",
+    "Business": "商务",
+    "DeveloperTools": "开发工具",
+    "Education": "教育",
+    "Entertainment": "娱乐",
+    "Extensions": "扩展",
+    "Finance": "财务",
+    "FoodDrink": "美食",
+    "GraphicsDesign": "图形设计",
+    "HealthFitness": "健康",
+    "Kids": "儿童",
+    "Lifestyle": "生活方式",
+    "MagazinesNewspapers": "杂志",
+    "Medical": "医疗",
+    "Music": "音乐",
+    "Navigation": "导航",
+    "News": "新闻",
+    "Other": "其他",
+    "PhotoVideo": "摄影",
+    "Productivity": "效率",
+    "Reference": "参考",
+    "Shopping": "购物",
+    "SocialNetworking": "社交",
+    "Sports": "体育",
+    "Travel": "旅行",
+    "Utilities": "工具",
+    "Weather": "天气"
+  }
+}

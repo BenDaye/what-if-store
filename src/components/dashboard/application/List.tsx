@@ -3,6 +3,7 @@ import { useDashboardApplications } from '@/hooks';
 import { ApplicationListInputSchema } from '@/server/schemas';
 import { List, ListProps } from '@mui/material';
 import { ApplicationCategory } from '@prisma/client';
+import { useTranslation } from 'next-i18next';
 import { ApplicationListItemButton } from './ListItemButton';
 
 type ApplicationListProps = ListProps & { input?: ApplicationListInputSchema };
@@ -43,10 +44,13 @@ const ApplicationCollapseList = ({
     category: [category],
   });
 
+  const { t } = useTranslation('application');
+  const primaryText = t(`Category.${category}`, category);
+
   return (
     <CollapseList
       localStorageKey={`application-category:${category}`}
-      primaryText={category}
+      primaryText={primaryText}
       secondaryText={`(${flattedData.length})`}
       defaultExpandMore={false}
     >
