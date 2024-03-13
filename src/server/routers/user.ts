@@ -32,33 +32,29 @@ const fullSelect = {
         email: true,
         avatar: true,
         bio: true,
-        createdAt: true,
-        updatedAt: true,
       },
     },
-    Author: {
+    ProviderProfile: {
       select: {
         id: true,
         type: true,
-        verified: true,
-        createdAt: true,
-        updatedAt: true,
         name: true,
-        AuthorProfile: {
-          select: {
-            email: true,
-            bio: true,
-            avatar: true,
-            website: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-        _count: {
-          select: {
-            Application: true,
-          },
-        },
+        email: true,
+        bio: true,
+        avatar: true,
+        website: true,
+      },
+    },
+    _count: {
+      select: {
+        ProvidingApplications: true,
+        OwningApplications: true,
+        FollowingApplications: true,
+        ProvidingCollections: true,
+        OwningCollections: true,
+        FollowingCollections: true,
+        FollowingUsers: true,
+        FollowedByUsers: true,
       },
     },
   }),
@@ -124,7 +120,7 @@ export const publicAppUser = router({
                 }
               : {}),
             role: {
-              not: AuthRole.ADMIN,
+              not: AuthRole.Admin,
             },
           };
 
@@ -155,7 +151,7 @@ export const publicAppUser = router({
           where: {
             id,
             role: {
-              not: AuthRole.ADMIN,
+              not: AuthRole.Admin,
             },
           },
           select: fullSelect,
@@ -189,6 +185,8 @@ export const protectedAppUser = router({
                 data: {
                   nickname: input.nickname,
                   email: input.email,
+                  avatar: input.avatar,
+                  bio: input.bio,
                 },
               },
             },
@@ -307,6 +305,8 @@ export const protectedDashboardUser = router({
                 data: {
                   nickname: input.nickname,
                   email: input.email,
+                  avatar: input.avatar,
+                  bio: input.bio,
                 },
               },
             },
@@ -344,6 +344,8 @@ export const protectedDashboardUser = router({
                 data: {
                   nickname: input.nickname,
                   email: input.email,
+                  avatar: input.avatar,
+                  bio: input.bio,
                 },
               },
             },

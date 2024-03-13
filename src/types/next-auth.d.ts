@@ -11,12 +11,18 @@ declare module 'next-auth' {
       id: string;
       username: string;
       role: AuthRole;
+      nickname?: string | null;
+      avatar?: string | null;
+      bio?: string | null;
     } & DefaultSession['user'];
   }
 
   interface User extends DefaultUser {
     username: string;
     role: AuthRole;
+    avatar?: string | null;
+    bio?: string | null;
+    nickname?: string | null;
   }
 }
 
@@ -25,8 +31,11 @@ declare module 'next-auth/jwt' {
    * Returned by the `jwt` callback and `getToken`, when using JWT sessions
    */
   export interface JWT extends DefaultJWT {
-    id?: string | null;
-    username?: string | null;
-    role?: AuthRole;
+    id: string;
+    username: string;
+    role: AuthRole;
+    nickname?: string | null;
+    avatar?: string | null;
+    bio?: string | null;
   }
 }

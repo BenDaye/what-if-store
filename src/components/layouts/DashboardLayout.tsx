@@ -12,7 +12,7 @@ import {
   DashboardProvider,
   UserDrawer,
 } from '../dashboard';
-import { AuthorDrawer } from '../dashboard/author';
+import { ProviderDrawer } from '../dashboard/provider';
 import { Main } from './Main';
 
 const navDrawerWidth = 48;
@@ -31,14 +31,14 @@ export const DashboardLayout = ({
     () => pathname.startsWith('/dashboard/user'),
     [pathname],
   );
-  const openAuthorListDrawer = useMemo(
-    () => pathname.startsWith('/dashboard/author'),
+  const openProviderListDrawer = useMemo(
+    () => pathname.startsWith('/dashboard/provider'),
     [pathname],
   );
   const openDrawer = useMemo(
     () =>
-      openApplicationListDrawer || openUserListDrawer || openAuthorListDrawer,
-    [openApplicationListDrawer, openAuthorListDrawer, openUserListDrawer],
+      openApplicationListDrawer || openUserListDrawer || openProviderListDrawer,
+    [openApplicationListDrawer, openProviderListDrawer, openUserListDrawer],
   );
   const [listDrawerWidth, setListDrawerWidth] = useLocalStorage<number>(
     'dashboard-layout-left-drawer-width',
@@ -165,8 +165,8 @@ export const DashboardLayout = ({
           }}
           transitionDuration={0}
         />
-        <AuthorDrawer
-          open={openAuthorListDrawer}
+        <ProviderDrawer
+          open={openProviderListDrawer}
           variant="persistent"
           ModalProps={{ keepMounted: true }}
           sx={{

@@ -4,6 +4,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
+import { ApplicationCategory } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
@@ -34,6 +35,14 @@ export const getServerSideProps = async (
   });
 
   await helpers.publicAppMeta.get.prefetch();
+  await Promise.all(
+    Object.values(ApplicationCategory).map((item) =>
+      helpers.publicAppApplication.list.prefetchInfinite({
+        limit: 20,
+        category: [item],
+      }),
+    ),
+  );
 
   return {
     props: {

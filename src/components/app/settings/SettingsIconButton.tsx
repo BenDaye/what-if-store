@@ -1,6 +1,6 @@
 import { SessionMenuItem, SettingsIconButton } from '@/components/common';
 import { useBoolean } from 'usehooks-ts';
-import { AppAuthUpdateProfileDialog } from '../auth/UpdateProfileDialog';
+import { AppUserUpdateProfileDialog } from '../user/UpdateProfileDialog';
 
 export const AppSettingsIconButton = () => {
   const {
@@ -18,7 +18,7 @@ export const AppSettingsIconButton = () => {
         />,
       ]}
     >
-      <AppAuthUpdateProfileDialog
+      <AppUserUpdateProfileDialog
         open={updateProfileDialogVisible}
         onClose={() => closeUpdateProfileDialog()}
         fullWidth

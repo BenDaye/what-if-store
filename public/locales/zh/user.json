@@ -1,7 +1,15 @@
 {
+  "Profile": {
+    "Email": "邮箱",
+    "Nickname": "昵称",
+    "Update": "编辑账号信息",
+    "Updated": "账号信息已更新",
+    "_": "账号信息"
+  },
   "Role": {
     "ADMIN": "管理",
     "AUTHOR": "作者",
-    "USER": "用户"
+    "USER": "用户",
+    "_": "账号类型"
   }
 }

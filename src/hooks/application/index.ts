@@ -11,7 +11,7 @@ import { useNotice } from '../notice';
 export const useDashboardApplication = (id: IdSchema) => {
   const { data: session, status } = useSession();
   const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.ADMIN,
+    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
   const { data, refetch, isFetching, error, isError } =
@@ -30,23 +30,17 @@ export const useDashboardApplication = (id: IdSchema) => {
     () => data?.category ?? ApplicationCategory.Other,
     [data],
   );
-  const avatarSrc = useMemo(
-    () => data?.ApplicationInformation?.logo || undefined,
-    [data],
-  );
+  const avatarSrc = useMemo(() => data?.Information?.logo || undefined, [data]);
   const avatarText = useMemo(() => data?.name?.charAt(0) ?? '-', [data]);
 
-  const website = useMemo(
-    () => data?.ApplicationInformation?.website ?? '-',
-    [data],
-  );
+  const website = useMemo(() => data?.Information?.website ?? '-', [data]);
 
   const description = useMemo(
-    () => data?.ApplicationInformation?.description ?? '-',
+    () => data?.Information?.description ?? '-',
     [data],
   );
 
-  const author = useMemo(() => data?.author, [data]);
+  const provider = useMemo(() => data?.Provider, [data]);
 
   const { showWarning } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
@@ -68,7 +62,7 @@ export const useDashboardApplication = (id: IdSchema) => {
     avatarText,
     website,
     description,
-    author,
+    provider,
   };
 };
 
@@ -78,7 +72,7 @@ export const useDashboardApplications = (
 ) => {
   const { data: session, status } = useSession();
   const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.ADMIN,
+    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
   const { showWarning } = useNotice();

@@ -9,7 +9,7 @@ import {
 } from '../schemas';
 import {
   protectedAdminProcedure,
-  protectedAuthorProcedure,
+  protectedProviderProcedure,
   publicProcedure,
   router,
 } from '../trpc';
@@ -17,7 +17,7 @@ import { formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   id: true,
-  authorId: true,
+  providerId: true,
   name: true,
   category: true,
   status: true,
@@ -32,17 +32,12 @@ const fullSelect = {
     countries: true,
     ageRating: true,
     price: true,
-    author: {
+    Provider: {
       select: {
         id: true,
-        userId: true,
-        name: true,
-        verified: true,
-        createdAt: true,
-        updatedAt: true,
       },
     },
-    ApplicationInformation: {
+    Information: {
       select: {
         description: true,
         website: true,
@@ -54,8 +49,6 @@ const fullSelect = {
         privacyPolicy: true,
         termsOfUse: true,
         github: true,
-        createdAt: true,
-        updatedAt: true,
       },
     },
     VersionHistories: {
@@ -67,8 +60,6 @@ const fullSelect = {
         latest: true,
         deprecated: true,
         preview: true,
-        createdAt: true,
-        updatedAt: true,
       },
     },
   }),
@@ -128,7 +119,7 @@ export const publicAppApplication = router({
                       },
                     },
                     {
-                      ApplicationInformation: {
+                      Information: {
                         description: {
                           contains: query,
                           mode: 'insensitive',
@@ -160,7 +151,7 @@ export const publicAppApplication = router({
                 }
               : {}),
             status: {
-              in: [ApplicationStatus.PUBLISHED, ApplicationStatus.SUSPENDED],
+              in: [ApplicationStatus.Published, ApplicationStatus.Suspended],
             },
           };
 
@@ -191,7 +182,7 @@ export const publicAppApplication = router({
           where: {
             id,
             status: {
-              in: [ApplicationStatus.PUBLISHED, ApplicationStatus.SUSPENDED],
+              in: [ApplicationStatus.Published, ApplicationStatus.Suspended],
             },
           },
           select: fullSelect,
@@ -203,7 +194,7 @@ export const publicAppApplication = router({
 });
 
 export const protectedAppApplication = router({
-  list: protectedAuthorProcedure
+  list: protectedProviderProcedure
     .input(applicationListInputSchema)
     .query(
       async ({
@@ -222,7 +213,7 @@ export const protectedAppApplication = router({
                       },
                     },
                     {
-                      ApplicationInformation: {
+                      Information: {
                         description: {
                           contains: query,
                           mode: 'insensitive',
@@ -253,8 +244,8 @@ export const protectedAppApplication = router({
                   },
                 }
               : {}),
-            author: {
-              userId: session.user.id,
+            Provider: {
+              id: session.user.id,
             },
           };
 
@@ -277,31 +268,31 @@ export const protectedAppApplication = router({
         }
       },
     ),
-  getById: protectedAuthorProcedure
+  getById: protectedProviderProcedure
     .input(idSchema)
     .query(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         return await prisma.application.findUniqueOrThrow({
-          where: { id, author: { userId: session.user.id } },
+          where: { id, providerId: session.user.id },
           select: fullSelect,
         });
       } catch (err) {
         throw onError(err);
       }
     }),
-  updateById: protectedAuthorProcedure
+  updateById: protectedProviderProcedure
     .input(applicationUpdateInputSchema.extend({ id: idSchema }))
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
         await prisma.application.update({
-          where: { id, author: { userId: session.user.id } },
+          where: { id, providerId: session.user.id },
           data: {
             name: input.name,
             category: input.category,
             platforms: input.platforms,
             countries: input.countries,
             ageRating: input.ageRating,
-            ApplicationInformation: {
+            Information: {
               update: {
                 data: {
                   description: input.description,
@@ -325,7 +316,7 @@ export const protectedAppApplication = router({
       }
     }),
   // TODO: applyToChangeStatus bullmq
-  // applyToChangeStatus: protectedAuthorProcedure.input(String).mutation(),
+  // applyToChangeStatus: protectedProviderProcedure.input(String).mutation(),
 });
 
 export const publicDashboardApplication = router({});
@@ -384,7 +375,7 @@ export const protectedDashboardApplication = router({
                       },
                     },
                     {
-                      ApplicationInformation: {
+                      Information: {
                         description: {
                           contains: query,
                           mode: 'insensitive',
@@ -462,7 +453,7 @@ export const protectedDashboardApplication = router({
             platforms: input.platforms,
             countries: input.countries,
             ageRating: input.ageRating,
-            ApplicationInformation: {
+            Information: {
               update: {
                 data: {
                   description: input.description,

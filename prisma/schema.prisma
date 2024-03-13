@@ -11,63 +11,80 @@ datasource db {
 }
 
 enum AuthRole {
-  USER
-  ADMIN
-  AUTHOR
+  User
+  Admin
+  Provider
 }
 
 model User {
-  id          String       @id @default(uuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  username    String       @unique
-  password    String
-  role        AuthRole     @default(USER)
-  UserProfile UserProfile?
-  Author      Author?
+  id                    String                  @id @default(uuid())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  username              String                  @unique
+  password              String
+  role                  AuthRole                @default(User)
+  UserProfile           UserProfile?
+  ProviderProfile       ProviderProfile?
+  FollowingUsers        User[]                  @relation("UserFollows")
+  FollowedByUsers       User[]                  @relation("UserFollows")
+  ProvidingApplications Application[]
+  OwningApplications    Application[]           @relation("ApplicationOwns")
+  FollowingApplications Application[]           @relation("ApplicationFollows")
+  ProvidingCollections  ApplicationCollection[] @relation()
+  OwningCollections     ApplicationCollection[] @relation("CollectionOwns")
+  FollowingCollections  ApplicationCollection[] @relation("CollectionFollows")
 }
 
 model UserProfile {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @unique
   email     String?
   nickname  String?
   bio       String?
   avatar    String?
+  country   String?
+  userId    String   @unique
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum AuthorType {
+enum ProviderType {
   IndependentDeveloper
   Company
   Community
 }
 
-model Author {
-  id            String         @id @default(uuid())
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String         @unique
-  type          AuthorType
+model ProviderProfile {
+  id            String                 @id @default(uuid())
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  type          ProviderType
   name          String
-  verified      Boolean        @default(false)
-  Application   Application[]
-  AuthorProfile AuthorProfile?
+  email         String?
+  bio           String?
+  website       String?
+  avatar        String?
+  verified      Boolean                @default(false)
+  Verifications ProviderVerification[]
+  userId        String                 @unique
+  User          User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model AuthorProfile {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  String   @unique
-  email     String?
-  bio       String?
-  website   String?
-  avatar    String?
+enum ProviderVerificationStatus {
+  Pending
+  Approved
+  rejected
+}
+
+model ProviderVerification {
+  id          String                     @id @default(uuid())
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt
+  status      ProviderVerificationStatus @default(Pending)
+  application String?
+  replication String?
+  providerId  String
+  Provider    ProviderProfile            @relation(fields: [providerId], references: [id], onDelete: Cascade)
 }
 
 enum ApplicationCategory {
@@ -102,52 +119,55 @@ enum ApplicationCategory {
 }
 
 enum ApplicationPlatform {
-  IOS
-  ANDROID
-  WEB
-  MAC
-  WINDOWS
-  LINUX
-  OTHER
+  iOS
+  Android
+  Web
+  Mac
+  Windows
+  Linux
+  Other
 }
 
 enum ApplicationStatus {
-  DRAFT
-  PENDING
-  APPROVED
-  REJECTED
-  DELETED
-  BANNED
-  HIDDEN
-  PUBLISHED
-  SUSPENDED
+  Draft
+  Pending
+  Approved
+  Rejected
+  Deleted
+  Banned
+  Hidden
+  Published
+  Suspended
 }
 
 model Application {
-  id                     String                  @id @default(uuid())
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  name                   String
-  category               ApplicationCategory
-  platforms              ApplicationPlatform[]
-  countries              String[]
-  ageRating              String
-  author                 Author                  @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  authorId               String
-  ApplicationInformation ApplicationInformation?
-  VersionHistories       ApplicationVersion[]
-  price                  Float?                  @default(0)
-  status                 ApplicationStatus       @default(DRAFT)
+  id               String                  @id @default(uuid())
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  name             String
+  category         ApplicationCategory
+  platforms        ApplicationPlatform[]
+  countries        String[]
+  ageRating        String
+  price            Float?                  @default(0)
+  status           ApplicationStatus       @default(Draft)
+  Information      ApplicationInformation?
+  VersionHistories ApplicationVersion[]
+  providerId       String
+  Provider         User                    @relation(fields: [providerId], references: [id], onDelete: Restrict)
+  FollowedByUsers  User[]                  @relation("ApplicationFollows")
+  OwnedByUsers     User[]                  @relation("ApplicationOwns")
+  Collections      ApplicationCollection[]
+  Groups           ApplicationGroup[]
+  Tags             ApplicationTag[]
 
-  @@unique([name, authorId])
+  @@unique([name, providerId])
 }
 
 model ApplicationInformation {
   id            String      @id @default(uuid())
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId String      @unique
   description   String?
   website       String?
   logo          String?
@@ -159,6 +179,8 @@ model ApplicationInformation {
   privacyPolicy String?
   termsOfUse    String?
   github        String?
+  applicationId String      @unique
+  Application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
 
 model ApplicationVersion {
@@ -168,11 +190,51 @@ model ApplicationVersion {
   version       String
   releaseDate   DateTime
   changelog     String?
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  applicationId String
   latest        Boolean     @default(false)
   deprecated    Boolean     @default(false)
   preview       Boolean     @default(false)
+  applicationId String
+  Application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@unique([version, applicationId])
+}
+
+enum ApplicationGroupType {
+  Permanent
+  Persistent
+  Temporary
+}
+
+model ApplicationGroup {
+  id           String               @id @default(uuid())
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  name         String               @unique
+  description  String?
+  type         ApplicationGroupType @default(Temporary)
+  priority     Int                  @default(0)
+  Applications Application[]
+}
+
+model ApplicationCollection {
+  id              String        @id @default(uuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  name            String
+  description     String?
+  providerId      String
+  Provider        User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  Applications    Application[]
+  FollowedByUsers User[]        @relation("CollectionFollows")
+  OwnedByUsers    User[]        @relation("CollectionOwns")
+
+  @@unique([name, providerId])
+}
+
+model ApplicationTag {
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  name         String        @unique
+  Applications Application[]
 }

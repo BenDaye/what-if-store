@@ -1,4 +1,5 @@
 import { useAuth, useNotice } from '@/hooks';
+import { ProviderUpdateProfileInputSchema } from '@/server/schemas';
 import { UserUpdateProfileInputSchema } from '@/server/schemas/user';
 import { trpc } from '@/utils/trpc';
 import { Close as CloseIcon } from '@mui/icons-material';
@@ -22,23 +23,20 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-type AppAuthUpdateProfileDialogProps = DialogProps;
-export const AppAuthUpdateProfileDialog = (
-  props: AppAuthUpdateProfileDialogProps,
+type DashboardProviderUpdateProfileDialogProps = DialogProps;
+export const DashboardProviderUpdateProfileDialog = (
+  props: DashboardProviderUpdateProfileDialogProps,
 ) => {
   const { showError, showSuccess } = useNotice();
   const { t: tCommon } = useTranslation('common');
   const { t: tAuth } = useTranslation('auth');
   const { data: session, status, update: updateSession } = useSession();
   const unauthenticated = useMemo(
-    () =>
-      status !== 'authenticated' ||
-      (session.user?.role !== AuthRole.USER &&
-        session.user?.role !== AuthRole.AUTHOR),
+    () => status !== 'authenticated' || session.user?.role !== AuthRole.Admin,
     [session, status],
   );
   const { handleSubmit, control, reset, setValue } =
-    useForm<UserUpdateProfileInputSchema>({
+    useForm<ProviderUpdateProfileInputSchema>({
       defaultValues: {
         nickname: session?.user?.name ?? '',
         email: session?.user?.email ?? '',
@@ -49,7 +47,7 @@ export const AppAuthUpdateProfileDialog = (
     if (session?.user?.email) setValue('email', session.user.email);
   }, [session, setValue]);
   const { mutateAsync: updateProfile } =
-    trpc.protectedAppUser.update.useMutation({
+    trpc.protectedDashboardUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: ({ nickname, email }) => {
         showSuccess(tAuth('Profile.Updated'));

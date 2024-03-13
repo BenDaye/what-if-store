@@ -4,9 +4,9 @@ import {
   ApplicationPlatform,
   ApplicationStatus,
   AuthRole,
-  AuthorType,
   Prisma,
   PrismaClient,
+  ProviderType,
 } from '@prisma/client';
 import { hash } from 'argon2';
 
@@ -19,7 +19,7 @@ const main = async () => {
     create: {
       username: 'Laugh-nimbly-exotica-ascribe',
       password: await hash('hc@s9A-*w%~Q3Ub243aq'),
-      role: AuthRole.ADMIN,
+      role: AuthRole.Admin,
       UserProfile: {
         create: {
           nickname: faker.internet.userName(),
@@ -39,7 +39,7 @@ const main = async () => {
     create: {
       username: 'Unformed-deadwood-jaundice-sage',
       password: await hash('hc@s9A-*w%~Q3Ub243aq'),
-      role: AuthRole.USER,
+      role: AuthRole.User,
       UserProfile: {
         create: {
           nickname: faker.internet.userName(),
@@ -53,13 +53,13 @@ const main = async () => {
 
   console.log({ genesisUser });
 
-  const genesisAuthor = await prisma.user.upsert({
+  const genesisProvider = await prisma.user.upsert({
     where: { username: 'Posse-mistress-monte-hidden' },
     update: {},
     create: {
       username: 'Posse-mistress-monte-hidden',
       password: await hash('hc@s9A-*w%~Q3Ub243aq'),
-      role: AuthRole.AUTHOR,
+      role: AuthRole.Provider,
       UserProfile: {
         create: {
           nickname: faker.internet.userName(),
@@ -68,38 +68,30 @@ const main = async () => {
           avatar: faker.image.avatar(),
         },
       },
-      Author: {
+      ProviderProfile: {
         create: {
           name: faker.person.fullName(),
-          type: AuthorType.IndependentDeveloper,
-          AuthorProfile: {
-            create: {
-              bio: faker.person.bio(),
-              avatar: faker.image.avatar(),
-              email: faker.internet.email(),
-              website: faker.internet.url(),
-            },
-          },
+          type: ProviderType.IndependentDeveloper,
+          bio: faker.person.bio(),
+          avatar: faker.image.avatar(),
+          email: faker.internet.email(),
+          website: faker.internet.url(),
         },
       },
     },
-    include: {
-      Author: true,
-    },
   });
 
-  console.log({ genesisAuthor });
+  console.log({ genesisProvider });
 
   for await (const category of getRandomApplicationCategories()) {
     const data: Prisma.ApplicationUncheckedCreateInput = {
       name: faker.commerce.productName(),
       category,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-      authorId: genesisAuthor.Author?.id!,
+      providerId: genesisProvider.id,
       platforms: getRandomApplicationPlatforms(),
       countries: getRandomApplicationCountries(),
       ageRating: getRandomApplicationAgeRating(),
-      ApplicationInformation: {
+      Information: {
         create: {
           description: faker.commerce.productDescription(),
           website: faker.internet.url(),

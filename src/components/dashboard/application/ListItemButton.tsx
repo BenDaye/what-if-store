@@ -18,7 +18,7 @@ export const ApplicationListItemButton = ({
   itemId,
   ...props
 }: ApplicationListItemButtonProps) => {
-  const { avatarSrc, avatarText, name, description, author, error, isError } =
+  const { avatarSrc, avatarText, name, description, provider, error, isError } =
     useDashboardApplication(itemId);
 
   const { pathname, query, push } = useRouter();
@@ -46,7 +46,7 @@ export const ApplicationListItemButton = ({
           noWrap: true,
           textOverflow: 'ellipsis',
         }}
-        secondary={isError ? error?.message : author?.name ?? description}
+        secondary={isError ? error?.message : provider?.id ?? description}
         secondaryTypographyProps={{
           noWrap: true,
           textOverflow: 'ellipsis',

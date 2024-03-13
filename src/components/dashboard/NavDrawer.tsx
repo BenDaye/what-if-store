@@ -1,8 +1,8 @@
 import { IconButtonWithTooltip } from '@/components/common';
 import {
   Widgets as ApplicationsIcon,
-  Engineering as AuthorsIcon,
   Dashboard as DashboardIcon,
+  Engineering as ProvidersIcon,
   Person as UsersIcon,
 } from '@mui/icons-material';
 import { Box, Drawer, DrawerProps } from '@mui/material';
@@ -56,10 +56,10 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
           active={pathname.startsWith('/dashboard/application')}
         />
         <IconButtonWithTooltip
-          title={tCommon('Authors')}
-          icon={<AuthorsIcon />}
-          onClick={() => push('/dashboard/author')}
-          active={pathname.startsWith('/dashboard/author')}
+          title={tCommon('Providers')}
+          icon={<ProvidersIcon />}
+          onClick={() => push('/dashboard/provider')}
+          active={pathname.startsWith('/dashboard/provider')}
         />
         <IconButtonWithTooltip
           title={tCommon('Users')}

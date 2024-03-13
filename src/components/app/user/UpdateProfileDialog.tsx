@@ -22,16 +22,21 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-type DashboardAuthUpdateProfileDialogProps = DialogProps;
-export const DashboardAuthUpdateProfileDialog = (
-  props: DashboardAuthUpdateProfileDialogProps,
+type AppUserUpdateProfileDialogProps = DialogProps;
+export const AppUserUpdateProfileDialog = (
+  props: AppUserUpdateProfileDialogProps,
 ) => {
   const { showError, showSuccess } = useNotice();
   const { t: tCommon } = useTranslation('common');
   const { t: tAuth } = useTranslation('auth');
+  const { t: tUser } = useTranslation('user');
+
   const { data: session, status, update: updateSession } = useSession();
   const unauthenticated = useMemo(
-    () => status !== 'authenticated' || session.user?.role !== AuthRole.ADMIN,
+    () =>
+      status !== 'authenticated' ||
+      (session.user?.role !== AuthRole.User &&
+        session.user?.role !== AuthRole.Provider),
     [session, status],
   );
   const { handleSubmit, control, reset, setValue } =
@@ -46,10 +51,10 @@ export const DashboardAuthUpdateProfileDialog = (
     if (session?.user?.email) setValue('email', session.user.email);
   }, [session, setValue]);
   const { mutateAsync: updateProfile } =
-    trpc.protectedDashboardUser.update.useMutation({
+    trpc.protectedAppUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: ({ nickname, email }) => {
-        showSuccess(tAuth('Profile.Updated'));
+        showSuccess(tUser('Profile.Updated'));
         updateSession({
           name: nickname,
           email,
@@ -77,7 +82,7 @@ export const DashboardAuthUpdateProfileDialog = (
       <AppBar position="static" enableColorOnDark elevation={0}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
           <Typography variant="subtitle1" color="text.primary">
-            {tAuth('Profile.Update')}
+            {tUser('Profile.Update')}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
@@ -108,8 +113,8 @@ export const DashboardAuthUpdateProfileDialog = (
               error={!!error}
               helperText={error ? error.message : null}
               margin="normal"
-              label={tAuth('Profile.Nickname')}
-              placeholder={tAuth('Profile.Nickname')}
+              label={tUser('Profile.Nickname')}
+              placeholder={tUser('Profile.Nickname')}
               autoFocus
             />
           )}
@@ -127,8 +132,8 @@ export const DashboardAuthUpdateProfileDialog = (
               helperText={error ? error.message : null}
               margin="normal"
               type="email"
-              label={tAuth('Profile.Email')}
-              placeholder={tAuth('Profile.Email')}
+              label={tUser('Profile.Email')}
+              placeholder={tUser('Profile.Email')}
             />
           )}
         />

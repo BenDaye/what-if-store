@@ -11,7 +11,7 @@ import { useNotice } from '../notice';
 export const useDashboardUser = (id: IdSchema) => {
   const { data: session, status } = useSession();
   const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.ADMIN,
+    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
   const { data, refetch, isFetching, error, isError } =
@@ -26,7 +26,7 @@ export const useDashboardUser = (id: IdSchema) => {
   });
 
   const username = useMemo(() => data?.username ?? '-', [data]);
-  const role = useMemo(() => data?.role ?? AuthRole.USER, [data]);
+  const role = useMemo(() => data?.role ?? AuthRole.User, [data]);
   const avatarSrc = useMemo(
     () => data?.UserProfile?.avatar || undefined,
     [data],
@@ -48,13 +48,23 @@ export const useDashboardUser = (id: IdSchema) => {
 
   const bio = useMemo(() => data?.UserProfile?.bio ?? '-', [data]);
 
-  const { showWarning } = useNotice();
+  const { showWarning, showSuccess, showError } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
+  const { t: tUser } = useTranslation('user');
 
   useEffect(() => {
     if (!isError) return;
     showWarning(tError(error.message));
   }, [isError, error, showWarning, tError]);
+
+  const { mutateAsync: update } =
+    trpc.protectedDashboardUser.updateById.useMutation({
+      onSuccess: () => {
+        showSuccess(tUser('Profile.Updated'));
+        refetch();
+      },
+      onError: (err) => showError(err.message),
+    });
 
   return {
     data,
@@ -69,6 +79,83 @@ export const useDashboardUser = (id: IdSchema) => {
     nickname,
     email,
     bio,
+    update,
+  };
+};
+
+export const useDashboardUserMy = () => {
+  const { data: session, status, update: updateSession } = useSession();
+  const authenticated = useMemo(
+    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
+    [status, session],
+  );
+  const { data, refetch, isFetching, error, isError } =
+    trpc.protectedDashboardUser.get.useQuery(undefined, {
+      enabled: authenticated,
+    });
+  trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
+    enabled: authenticated,
+    onData: (_id) => {
+      if (_id === session?.user?.id) refetch();
+    },
+  });
+
+  const username = useMemo(() => data?.username ?? '-', [data]);
+  const role = useMemo(() => data?.role ?? AuthRole.User, [data]);
+  const avatarSrc = useMemo(
+    () => data?.UserProfile?.avatar || undefined,
+    [data],
+  );
+  const avatarText = useMemo(
+    () =>
+      data?.UserProfile?.nickname?.charAt(0) ??
+      data?.username?.charAt(0) ??
+      '-',
+    [data],
+  );
+
+  const nickname = useMemo(
+    () => data?.UserProfile?.nickname ?? data?.username ?? '-',
+    [data],
+  );
+
+  const email = useMemo(() => data?.UserProfile?.email ?? '-', [data]);
+
+  const bio = useMemo(() => data?.UserProfile?.bio ?? '-', [data]);
+
+  const { showWarning, showSuccess, showError } = useNotice();
+  const { t: tError } = useTranslation('errorMessage');
+  const { t: tUser } = useTranslation('user');
+
+  useEffect(() => {
+    if (!isError) return;
+    showWarning(tError(error.message));
+  }, [isError, error, showWarning, tError]);
+
+  const { mutateAsync: update } =
+    trpc.protectedDashboardUser.update.useMutation({
+      onSuccess: async (response) => {
+        showSuccess(tUser('Profile.Updated'));
+        await updateSession(response);
+        refetch();
+      },
+      onError: (err) => showError(err.message),
+    });
+
+  return {
+    data,
+    refetch,
+    isFetching,
+    error,
+    isError,
+    username,
+    role,
+    avatarSrc,
+    avatarText,
+    nickname,
+    email,
+    bio,
+    update,
   };
 };
 
@@ -78,7 +165,7 @@ export const useDashboardUsers = (
 ) => {
   const { data: session, status } = useSession();
   const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.ADMIN,
+    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
   const { showWarning } = useNotice();

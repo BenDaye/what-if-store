@@ -14,11 +14,11 @@ import {
   Typography,
 } from '@mui/material';
 
-type AuthorProfileCardProps = {
-  data?: RouterOutput['protectedDashboardAuthor']['getById'];
+type ProviderProfileCardProps = {
+  data?: RouterOutput['protectedDashboardProvider']['getById'];
 };
 
-export const AuthorProfileCard = ({ data }: AuthorProfileCardProps) => {
+export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
   return (
     <Card
       sx={{
@@ -28,7 +28,7 @@ export const AuthorProfileCard = ({ data }: AuthorProfileCardProps) => {
       }}
     >
       <CardHeader
-        subheader="Author Profile"
+        subheader="Provider Profile"
         subheaderTypographyProps={{
           variant: 'subtitle2',
           color: 'text.secondary',
@@ -43,7 +43,7 @@ export const AuthorProfileCard = ({ data }: AuthorProfileCardProps) => {
         <ListItemAvatar>
           <Avatar
             alt={`Avatar${data?.id}`}
-            src={data?.AuthorProfile?.avatar || undefined}
+            src={data?.avatar || undefined}
             sx={{
               height: 120,
               width: 120,
@@ -67,7 +67,7 @@ export const AuthorProfileCard = ({ data }: AuthorProfileCardProps) => {
               variant: 'h6',
               letterSpacing: 0.5,
             }}
-            secondary={data?.AuthorProfile?.email ?? '-'}
+            secondary={data?.email ?? '-'}
             secondaryTypographyProps={{
               variant: 'body2',
             }}
@@ -81,7 +81,7 @@ export const AuthorProfileCard = ({ data }: AuthorProfileCardProps) => {
             component={'div'}
             sx={{ flex: 1, mb: 0.8 }}
           >
-            {data?.AuthorProfile?.bio ?? '-'}
+            {data?.bio ?? '-'}
           </Typography>
         </Box>
       </ListItem>

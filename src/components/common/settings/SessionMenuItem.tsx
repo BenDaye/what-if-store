@@ -35,15 +35,18 @@ export const SessionMenuItem = ({ onClick = NOOP }: SessionMenuItemProps) => {
             fontSize: (theme) => theme.typography.body2.fontSize,
             fontWeight: 700,
           }}
+          src={session?.user?.avatar || undefined}
         >
-          {session?.user?.username?.[0] ?? ''}
+          {session?.user?.nickname?.charAt(0) ??
+            session?.user?.nickname?.charAt(0) ??
+            '-'}
         </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={
           status !== 'authenticated'
             ? tAuth('Unauthenticated')
-            : session?.user?.name ?? ''
+            : session?.user?.nickname ?? ''
         }
         primaryTypographyProps={{
           color: status !== 'authenticated' ? 'text.disabled' : 'primary.light',

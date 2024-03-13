@@ -69,7 +69,7 @@ export const SignInDialog = ({
           onClose: async () => {
             const _session = await getSession();
             if (
-              _session?.user?.role === AuthRole.ADMIN &&
+              _session?.user?.role === AuthRole.Admin &&
               !pathname.startsWith('/dashboard')
             ) {
               push('/dashboard');

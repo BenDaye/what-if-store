@@ -17,11 +17,11 @@ export const AuthRoleChip = ({
   const { t: tUser } = useTranslation('user');
   const color = useMemo<ChipProps['color']>(() => {
     switch (role) {
-      case AuthRole.USER:
+      case AuthRole.User:
         return 'success';
-      case AuthRole.AUTHOR:
+      case AuthRole.Provider:
         return 'warning';
-      case AuthRole.ADMIN:
+      case AuthRole.Admin:
         return 'error';
       default:
         return 'default';

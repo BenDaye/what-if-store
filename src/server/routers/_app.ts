@@ -15,17 +15,17 @@ import {
   publicDashboardAuth,
 } from './auth';
 import {
-  protectedAppAuthor,
-  protectedDashboardAuthor,
-  publicAppAuthor,
-  publicDashboardAuthor,
-} from './author';
-import {
   protectedAppMeta,
   protectedDashboardMeta,
   publicAppMeta,
   publicDashboardMeta,
 } from './meta';
+import {
+  protectedAppProvider,
+  protectedDashboardProvider,
+  publicAppProvider,
+  publicDashboardProvider,
+} from './provider';
 import {
   protectedAppUser,
   protectedDashboardUser,
@@ -49,11 +49,11 @@ export const appRouter = router({
   protectedDashboardUser,
   publicAppUser,
   publicDashboardUser,
-  // NOTE: Author
-  protectedAppAuthor,
-  protectedDashboardAuthor,
-  publicAppAuthor,
-  publicDashboardAuthor,
+  // NOTE: Provider
+  protectedAppProvider,
+  protectedDashboardProvider,
+  publicAppProvider,
+  publicDashboardProvider,
   // NOTE: Application
   protectedAppApplication,
   protectedDashboardApplication,

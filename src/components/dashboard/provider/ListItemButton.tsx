@@ -1,4 +1,4 @@
-import { useDashboardAuthor } from '@/hooks';
+import { useDashboardProvider } from '@/hooks';
 import { IdSchema } from '@/server/schemas';
 import {
   Avatar,
@@ -10,20 +10,20 @@ import {
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-type AuthorListItemButtonProps = ListItemButtonProps & {
+type ProviderListItemButtonProps = ListItemButtonProps & {
   itemId: IdSchema;
 };
 
-export const AuthorListItemButton = ({
+export const ProviderListItemButton = ({
   itemId,
   ...props
-}: AuthorListItemButtonProps) => {
+}: ProviderListItemButtonProps) => {
   const { avatarSrc, avatarText, name, bio, error, isError } =
-    useDashboardAuthor(itemId);
+    useDashboardProvider(itemId);
 
   const { pathname, query, push } = useRouter();
   const selected = useMemo(
-    () => pathname === '/dashboard/author/[id]' && query?.id === itemId,
+    () => pathname === '/dashboard/provider/[id]' && query?.id === itemId,
     [itemId, pathname, query?.id],
   );
 
@@ -31,7 +31,7 @@ export const AuthorListItemButton = ({
     <ListItemButton
       dense
       selected={selected}
-      onClick={() => push(`/dashboard/author/${itemId}`)}
+      onClick={() => push(`/dashboard/provider/${itemId}`)}
       {...props}
     >
       <ListItemAvatar>

@@ -5,9 +5,9 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { AuthorList } from './List';
+import { ProviderList } from './List';
 
-export const AuthorDrawer = (props: DrawerProps) => {
+export const ProviderDrawer = (props: DrawerProps) => {
   return (
     <Drawer {...props}>
       <AppBar color="inherit" position="static" elevation={1}>
@@ -16,11 +16,11 @@ export const AuthorDrawer = (props: DrawerProps) => {
           variant="dense"
           disableGutters
         >
-          <Typography variant="subtitle2">Author Drawer</Typography>
+          <Typography variant="subtitle2">Provider Drawer</Typography>
         </Toolbar>
       </AppBar>
 
-      <AuthorList disablePadding dense />
+      <ProviderList disablePadding dense />
     </Drawer>
   );
 };

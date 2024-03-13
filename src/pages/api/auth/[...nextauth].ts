@@ -15,6 +15,8 @@ const select = Prisma.validator<Prisma.UserSelect>()({
     select: {
       nickname: true,
       email: true,
+      avatar: true,
+      bio: true,
     },
   },
 });
@@ -27,13 +29,17 @@ export const authOptions: AuthOptions = {
         token.id = user.id;
         token.username = user.username;
         token.role = user.role;
-        token.name = user.name;
+        token.nickname = user.nickname;
         token.email = user.email;
+        token.avatar = user.avatar;
+        token.bio = user.bio;
       }
 
       if (trigger === 'update') {
-        if (session?.name) token.name = session.name;
+        if (session?.nickname) token.nickname = session.nickname;
         if (session?.email) token.email = session.email;
+        if (session?.avatar) token.avatar = session.avatar;
+        if (session?.bio) token.bio = session.bio;
       }
 
       return token;
@@ -44,8 +50,10 @@ export const authOptions: AuthOptions = {
           id: token.id,
           username: token.username,
           role: token.role,
-          name: token.name,
+          nickname: token.nickname,
           email: token.email,
+          avatar: token.avatar,
+          bio: token.bio,
         };
       }
 
@@ -93,8 +101,10 @@ export const authOptions: AuthOptions = {
             id: result.id,
             username: result.username,
             role: result.role,
-            name: result.UserProfile?.nickname,
+            nickname: result.UserProfile?.nickname,
             email: result.UserProfile?.email,
+            avatar: result.UserProfile?.avatar,
+            bio: result.UserProfile?.bio,
           };
         } catch (error) {
           console.error(error);

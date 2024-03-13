@@ -54,8 +54,8 @@ const isAuthorizedUser = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || typeof ctx.session?.user?.role === undefined)
     throw new CommonTRPCError('UNAUTHORIZED');
   if (
-    ctx.session?.user?.role !== AuthRole.USER &&
-    ctx.session?.user?.role !== AuthRole.AUTHOR
+    ctx.session?.user?.role !== AuthRole.User &&
+    ctx.session?.user?.role !== AuthRole.Provider
   )
     throw new CommonTRPCError('UNAUTHORIZED');
 
@@ -66,10 +66,10 @@ const isAuthorizedUser = t.middleware(async ({ ctx, next }) => {
   });
 });
 
-const isAuthorizedAuthor = t.middleware(async ({ ctx, next }) => {
+const isAuthorizedProvider = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || typeof ctx.session?.user?.role === undefined)
     throw new CommonTRPCError('UNAUTHORIZED');
-  if (ctx.session?.user?.role !== AuthRole.AUTHOR)
+  if (ctx.session?.user?.role !== AuthRole.Provider)
     throw new CommonTRPCError('UNAUTHORIZED');
 
   return next({
@@ -82,7 +82,7 @@ const isAuthorizedAuthor = t.middleware(async ({ ctx, next }) => {
 const isAuthorizedAdmin = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || typeof ctx.session?.user?.role === undefined)
     throw new CommonTRPCError('UNAUTHORIZED');
-  if (ctx.session?.user?.role !== AuthRole.ADMIN)
+  if (ctx.session?.user?.role !== AuthRole.Admin)
     throw new CommonTRPCError('UNAUTHORIZED');
 
   return next({
@@ -94,7 +94,7 @@ const isAuthorizedAdmin = t.middleware(async ({ ctx, next }) => {
 
 export const protectedProcedure = t.procedure.use(isAuthorized);
 export const protectedUserProcedure = t.procedure.use(isAuthorizedUser);
-export const protectedAuthorProcedure = t.procedure.use(isAuthorizedAuthor);
+export const protectedProviderProcedure = t.procedure.use(isAuthorizedProvider);
 export const protectedAdminProcedure = t.procedure.use(isAuthorizedAdmin);
 
 /**
