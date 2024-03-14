@@ -188,7 +188,7 @@ model ApplicationVersion {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   version       String
-  releaseDate   DateTime
+  releaseDate   DateTime    @default(now())
   changelog     String?
   latest        Boolean     @default(false)
   deprecated    Boolean     @default(false)
@@ -222,6 +222,7 @@ model ApplicationCollection {
   updatedAt       DateTime      @updatedAt
   name            String
   description     String?
+  price           Float?        @default(0)
   providerId      String
   Provider        User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
   Applications    Application[]

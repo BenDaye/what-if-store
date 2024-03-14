@@ -3,13 +3,16 @@ import { observable } from '@trpc/server/observable';
 import { applicationEmitter } from '../modules';
 import {
   IdSchema,
+  applicationCreateInputSchema,
   applicationListInputSchema,
+  applicationReviewInputSchema,
   applicationUpdateInputSchema,
   idSchema,
 } from '../schemas';
 import {
   protectedAdminProcedure,
   protectedProviderProcedure,
+  protectedUserProcedure,
   publicProcedure,
   router,
 } from '../trpc';
@@ -20,6 +23,7 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   providerId: true,
   name: true,
   category: true,
+  price: true,
   status: true,
   createdAt: true,
   updatedAt: true,
@@ -31,7 +35,6 @@ const fullSelect = {
     platforms: true,
     countries: true,
     ageRating: true,
-    price: true,
     Provider: {
       select: {
         id: true,
@@ -60,6 +63,27 @@ const fullSelect = {
         latest: true,
         deprecated: true,
         preview: true,
+      },
+    },
+    FollowedByUsers: {
+      select: { id: true },
+    },
+    OwnedByUsers: {
+      select: { id: true },
+    },
+    Collections: {
+      select: {
+        id: true,
+      },
+    },
+    Groups: {
+      select: {
+        id: true,
+      },
+    },
+    Tags: {
+      select: {
+        id: true,
       },
     },
   }),
@@ -247,6 +271,9 @@ export const protectedAppApplication = router({
             Provider: {
               id: session.user.id,
             },
+            status: {
+              not: ApplicationStatus.Deleted,
+            },
           };
 
           const [items, total] = await prisma.$transaction([
@@ -268,12 +295,111 @@ export const protectedAppApplication = router({
         }
       },
     ),
+  create: protectedProviderProcedure
+    .input(applicationCreateInputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input }) => {
+      try {
+        const result = await prisma.application.create({
+          data: {
+            providerId: session.user.id,
+            name: input.name,
+            category: input.category,
+            platforms: input.platforms,
+            countries: input.countries,
+            ageRating: input.ageRating,
+            price: input.price,
+            Information: {
+              create: {
+                description: input.description,
+                website: input.website,
+                logo: input.logo,
+                screenshots: input.screenshots,
+                compatibility: input.compatibility,
+                languages: input.languages,
+                privacyPolicy: input.privacyPolicy,
+                termsOfUse: input.termsOfUse,
+                github: input.github,
+              },
+            },
+            VersionHistories: {
+              create: {
+                version: input.version ?? '1.0.0',
+                releaseDate: input.releaseDate,
+                changelog: input.changelog,
+                latest: input.latest,
+                deprecated: input.deprecated,
+                preview: input.preview,
+              },
+            },
+            OwnedByUsers: {
+              connect: {
+                id: session.user.id,
+              },
+            },
+            FollowedByUsers: {
+              connect: {
+                id: session.user.id,
+              },
+            },
+          },
+          select: defaultSelect,
+        });
+        applicationEmitter.emit('create', result.id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  submit: protectedProviderProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.application.update({
+          where: {
+            id,
+            providerId: session.user.id,
+            status: ApplicationStatus.Draft,
+          },
+          data: {
+            status: ApplicationStatus.Pending,
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  suspend: protectedProviderProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.application.update({
+          where: {
+            id,
+            providerId: session.user.id,
+            status: ApplicationStatus.Published,
+          },
+          data: {
+            status: ApplicationStatus.Suspended,
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   getById: protectedProviderProcedure
     .input(idSchema)
     .query(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         return await prisma.application.findUniqueOrThrow({
-          where: { id, providerId: session.user.id },
+          where: {
+            id,
+            providerId: session.user.id,
+            status: { not: ApplicationStatus.Deleted },
+          },
           select: fullSelect,
         });
       } catch (err) {
@@ -281,30 +407,33 @@ export const protectedAppApplication = router({
       }
     }),
   updateById: protectedProviderProcedure
-    .input(applicationUpdateInputSchema.extend({ id: idSchema }))
+    .input(applicationUpdateInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
         await prisma.application.update({
-          where: { id, providerId: session.user.id },
+          where: {
+            id,
+            providerId: session.user.id,
+            status: { not: ApplicationStatus.Deleted },
+          },
           data: {
             name: input.name,
             category: input.category,
             platforms: input.platforms,
             countries: input.countries,
             ageRating: input.ageRating,
+            price: input.price,
             Information: {
               update: {
-                data: {
-                  description: input.description,
-                  website: input.website,
-                  logo: input.logo,
-                  screenshots: input.screenshots,
-                  compatibility: input.compatibility,
-                  languages: input.languages,
-                  privacyPolicy: input.privacyPolicy,
-                  termsOfUse: input.termsOfUse,
-                  github: input.github,
-                },
+                description: input.description,
+                website: input.website,
+                logo: input.logo,
+                screenshots: input.screenshots,
+                compatibility: input.compatibility,
+                languages: input.languages,
+                privacyPolicy: input.privacyPolicy,
+                termsOfUse: input.termsOfUse,
+                github: input.github,
               },
             },
           },
@@ -315,8 +444,90 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
-  // TODO: applyToChangeStatus bullmq
-  // applyToChangeStatus: protectedProviderProcedure.input(String).mutation(),
+  removeById: protectedProviderProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        // WARNING: Soft delete, it should be deleted from database in a bullmq task
+        await prisma.application.update({
+          where: {
+            id,
+            providerId: session.user.id,
+            status: { not: ApplicationStatus.Deleted },
+          },
+          data: {
+            status: ApplicationStatus.Deleted,
+          },
+        });
+        applicationEmitter.emit('remove', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  followById: protectedUserProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.application.update({
+          where: { id, status: ApplicationStatus.Published },
+          data: {
+            FollowedByUsers: {
+              connect: {
+                id: session.user.id,
+              },
+            },
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  unfollowById: protectedUserProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.application.update({
+          where: { id },
+          data: {
+            FollowedByUsers: {
+              disconnect: {
+                id: session.user.id,
+              },
+            },
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  ownById: protectedUserProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        // WARNING: It should be checked if the user can pay for the application
+        await prisma.application.update({
+          where: { id, status: ApplicationStatus.Published },
+          data: {
+            OwnedByUsers: {
+              connect: {
+                id: session.user.id,
+              },
+            },
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  // TODO: Make the application free for a limited time. Use bullmq to schedule the task
+  // free: protectedProviderProcedure.input(applicationFreeInputSchema).mutation()
 });
 
 export const publicDashboardApplication = router({});
@@ -442,7 +653,7 @@ export const protectedDashboardApplication = router({
       }
     }),
   updateById: protectedAdminProcedure
-    .input(applicationUpdateInputSchema.extend({ id: idSchema }))
+    .input(applicationUpdateInputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.application.update({
@@ -453,19 +664,18 @@ export const protectedDashboardApplication = router({
             platforms: input.platforms,
             countries: input.countries,
             ageRating: input.ageRating,
+            price: input.price,
             Information: {
               update: {
-                data: {
-                  description: input.description,
-                  website: input.website,
-                  logo: input.logo,
-                  screenshots: input.screenshots,
-                  compatibility: input.compatibility,
-                  languages: input.languages,
-                  privacyPolicy: input.privacyPolicy,
-                  termsOfUse: input.termsOfUse,
-                  github: input.github,
-                },
+                description: input.description,
+                website: input.website,
+                logo: input.logo,
+                screenshots: input.screenshots,
+                compatibility: input.compatibility,
+                languages: input.languages,
+                privacyPolicy: input.privacyPolicy,
+                termsOfUse: input.termsOfUse,
+                github: input.github,
               },
             },
           },
@@ -476,5 +686,59 @@ export const protectedDashboardApplication = router({
         throw onError(err);
       }
     }),
-  // TODO: replyToChangeStatus bullmq
+  cleanupFollowersById: protectedAdminProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma }, input: id }) => {
+      try {
+        await prisma.application.update({
+          where: {
+            id,
+          },
+          data: {
+            FollowedByUsers: {
+              set: [],
+            },
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  cleanupOwnersById: protectedAdminProcedure
+    .input(idSchema)
+    .mutation(async ({ ctx: { prisma }, input: id }) => {
+      try {
+        await prisma.application.update({
+          where: { id },
+          data: {
+            OwnedByUsers: {
+              set: [],
+            },
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  reviewById: protectedAdminProcedure
+    .input(applicationReviewInputSchema)
+    .mutation(async ({ ctx: { prisma }, input: { id, status } }) => {
+      try {
+        // WARNING: It should be checked if the next status is logical
+        await prisma.application.update({
+          where: { id },
+          data: {
+            status,
+          },
+        });
+        applicationEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
 });

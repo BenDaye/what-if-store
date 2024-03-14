@@ -1,6 +1,10 @@
-import { ApplicationCategory, ApplicationPlatform } from '@prisma/client';
+import {
+  ApplicationCategory,
+  ApplicationPlatform,
+  ApplicationStatus,
+} from '@prisma/client';
 import { z } from 'zod';
-import { idSchema } from '.';
+import { idSchema } from './id';
 import { listInputSchema } from './list';
 
 export const applicationListInputSchema = listInputSchema
@@ -14,38 +18,59 @@ export type ApplicationListInputSchema = z.infer<
   typeof applicationListInputSchema
 >;
 
-export const applicationCreateInputSchema = z.object({
-  name: z.string(),
-  category: z.nativeEnum(ApplicationCategory),
-  platforms: z.nativeEnum(ApplicationPlatform).array(),
-  countries: z.string().array(),
-  ageRating: z.string(),
-  description: z.string(),
-  website: z.string().url(),
-  logo: z.string(),
-  screenshots: z.string().array(),
-  // FIXME: 验证兼容性
-  compatibility: z.any(),
-  languages: z.string().array(),
-  copyright: z.string(),
-  privacyPolicy: z.string(),
-  termsOfUse: z.string(),
-  github: z.string().url(),
-});
+export const applicationCreateInputSchema = z
+  .object({
+    name: z.string(),
+    category: z.nativeEnum(ApplicationCategory),
+    platforms: z.nativeEnum(ApplicationPlatform).array(),
+    countries: z.string().array(),
+    ageRating: z.string(),
+    price: z.number().nonnegative(),
+    // INFO: Information
+    description: z.string(),
+    website: z.string().url(),
+    logo: z.string(),
+    screenshots: z.string().array(),
+    // FIXME: 验证兼容性
+    compatibility: z.any(),
+    languages: z.string().array(),
+    copyright: z.string(),
+    privacyPolicy: z.string(),
+    termsOfUse: z.string(),
+    github: z.string().url(),
+    // INFO: Version History
+    version: z.string().regex(/^(\d+\.)?(\d+\.)?(\*|\d+)$/),
+    releaseDate: z.coerce.date(),
+    changelog: z.string().nullable(),
+    latest: z.boolean(),
+    deprecated: z.boolean(),
+    preview: z.boolean(),
+  })
+  .partial({
+    version: true,
+    releaseDate: true,
+    changelog: true,
+    latest: true,
+    deprecated: true,
+    preview: true,
+  });
 export type ApplicationCreateInputSchema = z.infer<
   typeof applicationCreateInputSchema
 >;
 
-export const applicationUpdateInputSchema =
-  applicationCreateInputSchema.partial();
+export const applicationUpdateInputSchema = applicationCreateInputSchema
+  .partial()
+  .extend({
+    id: idSchema,
+  });
 export type ApplicationUpdateInputSchema = z.infer<
   typeof applicationUpdateInputSchema
 >;
 
-export const applicationUpdateInputSchemaForAdmin =
-  applicationUpdateInputSchema.extend({
-    id: idSchema,
-  });
-export type ApplicationUpdateInputSchemaForAdmin = z.infer<
-  typeof applicationUpdateInputSchemaForAdmin
+export const applicationReviewInputSchema = z.object({
+  id: idSchema,
+  status: z.nativeEnum(ApplicationStatus),
+});
+export type ApplicationReviewInputSchema = z.infer<
+  typeof applicationReviewInputSchema
 >;

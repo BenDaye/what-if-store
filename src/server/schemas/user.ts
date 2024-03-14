@@ -1,6 +1,6 @@
 import { AuthRole } from '@prisma/client';
 import { z } from 'zod';
-import { idSchema } from '.';
+import { idSchema } from './id';
 import { listInputSchema } from './list';
 
 export const userListInputSchema = listInputSchema

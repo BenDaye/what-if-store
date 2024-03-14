@@ -18,6 +18,7 @@
     "tanstack",
     "trpc",
     "ulidx",
+    "unfollow",
     "usehooks"
   ],
   "editor.formatOnType": true,
