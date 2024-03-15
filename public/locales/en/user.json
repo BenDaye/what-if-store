@@ -1,7 +1,15 @@
 {
+  "Profile": {
+    "Email": "Email",
+    "Nickname": "Nickname",
+    "Update": "Update Profile",
+    "Updated": "Profile Updated",
+    "_": "Profile"
+  },
   "Role": {
-    "ADMIN": "Admin",
-    "AUTHOR": "Author",
-    "USER": "User"
+    "Admin": "SuperVisor",
+    "Provider": "Provider",
+    "User": "User",
+    "_": "Role"
   }
 }

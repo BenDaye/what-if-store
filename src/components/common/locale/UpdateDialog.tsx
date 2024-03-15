@@ -38,7 +38,7 @@ export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
     <Dialog {...props}>
       <AppBar position="static" enableColorOnDark elevation={0}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1" color="text.primary">
+          <Typography variant="subtitle1">
             {tCommon('Language.Update')}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
@@ -47,6 +47,7 @@ export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
             onClick={() => {
               props?.onClose?.({}, 'backdropClick');
             }}
+            color="inherit"
           >
             <CloseIcon />
           </IconButton>
