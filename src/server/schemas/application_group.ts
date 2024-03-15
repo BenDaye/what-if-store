@@ -17,6 +17,7 @@ export const applicationGroupCreateInputSchema = z.object({
   description: z.string(),
   type: z.nativeEnum(ApplicationGroupType),
   priority: z.number(),
+  applications: z.array(idSchema).min(2),
 });
 export type ApplicationGroupCreateInputSchema = z.infer<
   typeof applicationGroupCreateInputSchema

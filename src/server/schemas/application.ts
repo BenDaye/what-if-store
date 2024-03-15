@@ -26,25 +26,27 @@ export const applicationCreateInputSchema = z
     countries: z.string().array(),
     ageRating: z.string(),
     price: z.number().nonnegative(),
-    // INFO: Information
+    // NOTE: Information
     description: z.string(),
     website: z.string().url(),
     logo: z.string(),
     screenshots: z.string().array(),
-    // FIXME: 验证兼容性
+    // TODO: It should be checked if the structure is correct
     compatibility: z.any(),
     languages: z.string().array(),
     copyright: z.string(),
     privacyPolicy: z.string(),
     termsOfUse: z.string(),
     github: z.string().url(),
-    // INFO: Version History
+    // NOTE: Version History
     version: z.string().regex(/^(\d+\.)?(\d+\.)?(\*|\d+)$/),
     releaseDate: z.coerce.date(),
     changelog: z.string().nullable(),
     latest: z.boolean(),
     deprecated: z.boolean(),
     preview: z.boolean(),
+    // NOTE: Tag
+    tags: z.array(idSchema),
   })
   .partial({
     version: true,
@@ -53,6 +55,7 @@ export const applicationCreateInputSchema = z
     latest: true,
     deprecated: true,
     preview: true,
+    tags: true,
   });
 export type ApplicationCreateInputSchema = z.infer<
   typeof applicationCreateInputSchema

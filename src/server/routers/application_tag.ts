@@ -7,6 +7,7 @@ import {
   applicationTagListInputSchema,
   applicationTagUpdateInputSchema,
   idSchema,
+  mutationOutputSchema,
 } from '../schemas';
 import {
   protectedAdminProcedure,
@@ -86,8 +87,48 @@ export const publicAppApplicationTag = router({
 });
 
 export const protectedAppApplicationTag = router({
+  list: protectedProviderProcedure
+    .input(applicationTagListInputSchema)
+    .query(
+      async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
+        try {
+          const where: Prisma.ApplicationTagWhereInput = {
+            ...(query
+              ? {
+                  OR: [
+                    {
+                      name: {
+                        contains: query,
+                        mode: 'insensitive',
+                      },
+                    },
+                  ],
+                }
+              : {}),
+          };
+
+          const [items, total] = await prisma.$transaction([
+            prisma.applicationTag.findMany({
+              where,
+              ...formatListArgs(limit, skip, cursor),
+              orderBy: [
+                {
+                  createdAt: 'asc',
+                },
+              ],
+              select: defaultSelect,
+            }),
+            prisma.applicationTag.count({ where }),
+          ]);
+          return formatListResponse(items, limit, total);
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
   create: protectedProviderProcedure
     .input(applicationTagCreateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input }) => {
       try {
         const result = await prisma.applicationTag.create({
@@ -194,6 +235,7 @@ export const protectedDashboardApplicationTag = router({
     }),
   updateById: protectedAdminProcedure
     .input(applicationTagUpdateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.applicationTag.update({
@@ -210,6 +252,7 @@ export const protectedDashboardApplicationTag = router({
     }),
   removeById: protectedAdminProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: id }) => {
       try {
         await prisma.applicationTag.delete({

@@ -1,9 +1,4 @@
-export {
-  providerVerificationQueue,
-  providerVerificationWorker,
-  shutdownBullMQ,
-  startupBullMQ,
-} from './bullmq';
+export * from './bullmq';
 export { env } from './env';
 export * from './mitt';
 export { appLogger } from './pino';

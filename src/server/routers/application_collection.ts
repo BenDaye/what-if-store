@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { ApplicationStatus, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationCollectionEmitter } from '../modules';
 import {
@@ -7,6 +7,7 @@ import {
   applicationCollectionListInputSchema,
   applicationCollectionUpdateInputSchema,
   idSchema,
+  mutationOutputSchema,
 } from '../schemas';
 import {
   protectedAdminProcedure,
@@ -136,23 +137,50 @@ export const publicAppApplicationCollection = router({
 export const protectedAppApplicationCollection = router({
   create: protectedProviderProcedure
     .input(applicationCollectionCreateInputSchema)
-    .mutation(async ({ ctx: { prisma, session }, input }) => {
-      try {
-        const result = await prisma.applicationCollection.create({
-          data: {
-            providerId: session.user.id,
-            ...input,
-          },
-          select: defaultSelect,
-        });
-        applicationCollectionEmitter.emit('create', result.id);
-        return true;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+    .output(mutationOutputSchema)
+    .mutation(
+      async ({
+        ctx: { prisma, session },
+        input: { name, description, price, applications },
+      }) => {
+        try {
+          // TODO: It should be checked if the application is provided by the user
+          const result = await prisma.applicationCollection.create({
+            data: {
+              providerId: session.user.id,
+              name,
+              description,
+              price,
+              Applications: {
+                connect: applications.map((id) => ({
+                  id,
+                  providerId: session.user.id,
+                  status: ApplicationStatus.Published,
+                })),
+              },
+              FollowedByUsers: {
+                connect: {
+                  id: session.user.id,
+                },
+              },
+              OwnedByUsers: {
+                connect: {
+                  id: session.user.id,
+                },
+              },
+            },
+            select: defaultSelect,
+          });
+          applicationCollectionEmitter.emit('create', result.id);
+          return true;
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
   updateById: protectedProviderProcedure
     .input(applicationCollectionUpdateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
         const result = await prisma.applicationCollection.update({
@@ -171,8 +199,10 @@ export const protectedAppApplicationCollection = router({
     }),
   removeById: protectedProviderProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
+        // TODO: It should be checked if the application collection has more than one follower or owner
         await prisma.applicationCollection.delete({
           where: {
             id,
@@ -187,6 +217,7 @@ export const protectedAppApplicationCollection = router({
     }),
   followById: protectedUserProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         await prisma.applicationCollection.update({
@@ -207,9 +238,10 @@ export const protectedAppApplicationCollection = router({
     }),
   ownById: protectedUserProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
-        // WARNING: This is a simplified version of the logic, in a real-world scenario, you would want to check if the user has the right to own the application collection
+        // TODO: It should be checked if the user can pay for the application collection
         await prisma.applicationCollection.update({
           where: { id },
           data: {
@@ -326,6 +358,7 @@ export const protectedDashboardApplicationCollection = router({
     }),
   updateById: protectedAdminProcedure
     .input(applicationCollectionUpdateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.applicationCollection.update({
@@ -342,8 +375,10 @@ export const protectedDashboardApplicationCollection = router({
     }),
   removeById: protectedAdminProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: id }) => {
       try {
+        // TODO: It should be checked if the application collection has more than one follower or owner
         await prisma.applicationCollection.delete({
           where: {
             id,

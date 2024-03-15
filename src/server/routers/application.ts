@@ -8,6 +8,7 @@ import {
   applicationReviewInputSchema,
   applicationUpdateInputSchema,
   idSchema,
+  mutationOutputSchema,
 } from '../schemas';
 import {
   protectedAdminProcedure,
@@ -297,6 +298,7 @@ export const protectedAppApplication = router({
     ),
   create: protectedProviderProcedure
     .input(applicationCreateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         const result = await prisma.application.create({
@@ -341,6 +343,9 @@ export const protectedAppApplication = router({
                 id: session.user.id,
               },
             },
+            Tags: {
+              connect: input.tags?.map((id) => ({ id })),
+            },
           },
           select: defaultSelect,
         });
@@ -352,6 +357,7 @@ export const protectedAppApplication = router({
     }),
   submit: protectedProviderProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         await prisma.application.update({
@@ -372,6 +378,7 @@ export const protectedAppApplication = router({
     }),
   suspend: protectedProviderProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         await prisma.application.update({
@@ -408,6 +415,7 @@ export const protectedAppApplication = router({
     }),
   updateById: protectedProviderProcedure
     .input(applicationUpdateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
         await prisma.application.update({
@@ -436,6 +444,9 @@ export const protectedAppApplication = router({
                 github: input.github,
               },
             },
+            Tags: {
+              set: input.tags?.map((id) => ({ id })),
+            },
           },
         });
         applicationEmitter.emit('update', id);
@@ -446,9 +457,10 @@ export const protectedAppApplication = router({
     }),
   removeById: protectedProviderProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
-        // WARNING: Soft delete, it should be deleted from database in a bullmq task
+        // TODO: Soft delete, it should be deleted from database in a bullmq task
         await prisma.application.update({
           where: {
             id,
@@ -467,6 +479,7 @@ export const protectedAppApplication = router({
     }),
   followById: protectedUserProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         await prisma.application.update({
@@ -487,6 +500,7 @@ export const protectedAppApplication = router({
     }),
   unfollowById: protectedUserProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         await prisma.application.update({
@@ -507,9 +521,10 @@ export const protectedAppApplication = router({
     }),
   ownById: protectedUserProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
-        // WARNING: It should be checked if the user can pay for the application
+        // TODO: It should be checked if the user can pay for the application
         await prisma.application.update({
           where: { id, status: ApplicationStatus.Published },
           data: {
@@ -654,6 +669,7 @@ export const protectedDashboardApplication = router({
     }),
   updateById: protectedAdminProcedure
     .input(applicationUpdateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.application.update({
@@ -678,6 +694,9 @@ export const protectedDashboardApplication = router({
                 github: input.github,
               },
             },
+            Tags: {
+              set: input.tags?.map((id) => ({ id })),
+            },
           },
         });
         applicationEmitter.emit('update', id);
@@ -688,6 +707,7 @@ export const protectedDashboardApplication = router({
     }),
   cleanupFollowersById: protectedAdminProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: id }) => {
       try {
         await prisma.application.update({
@@ -708,6 +728,7 @@ export const protectedDashboardApplication = router({
     }),
   cleanupOwnersById: protectedAdminProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: id }) => {
       try {
         await prisma.application.update({
@@ -726,9 +747,10 @@ export const protectedDashboardApplication = router({
     }),
   reviewById: protectedAdminProcedure
     .input(applicationReviewInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, status } }) => {
       try {
-        // WARNING: It should be checked if the next status is logical
+        // TODO: It should be checked if the next status is logical
         await prisma.application.update({
           where: { id },
           data: {

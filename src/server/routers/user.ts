@@ -193,7 +193,7 @@ export const protectedAppUser = router({
           },
         });
         userEmitter.emit('update', session.user.id);
-        // NOTE: RETURN TO UPDATE SESSION FOR CLIENT SIDE
+        // NOTE: Typically mutation should only return "true", but we return the input for client side to call "updateSession"
         return input;
       } catch (err) {
         throw onError(err);
@@ -313,7 +313,7 @@ export const protectedDashboardUser = router({
           },
         });
         userEmitter.emit('update', session.user.id);
-        // NOTE: RETURN TO UPDATE SESSION FOR CLIENT SIDE
+        // NOTE: Typically mutation should only return "true", but we return the input for client side to call "updateSession"
         return input;
       } catch (err) {
         throw onError(err);

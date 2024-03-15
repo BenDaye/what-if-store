@@ -2,14 +2,14 @@ import { faker } from '@faker-js/faker';
 import { TRPCError } from '@trpc/server';
 import { hash } from 'argon2';
 import { userEmitter } from '../modules';
-import { signUpSchema } from '../schemas';
+import { mutationOutputSchema, signUpSchema } from '../schemas';
 import { publicProcedure, router } from '../trpc';
 import { onError } from '../utils/errors';
 
 export const publicAppAuth = router({
   signUp: publicProcedure
     .input(signUpSchema)
-    .output(Boolean)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input }) => {
       try {
         const isUser = await prisma.user.findFirst({

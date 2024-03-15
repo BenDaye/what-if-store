@@ -7,6 +7,7 @@ import {
   applicationGroupListInputSchema,
   applicationGroupUpdateInputSchema,
   idSchema,
+  mutationOutputSchema,
 } from '../schemas';
 import { protectedAdminProcedure, publicProcedure, router } from '../trpc';
 import { formatListArgs, formatListResponse, onError } from '../utils';
@@ -242,6 +243,7 @@ export const protectedDashboardApplicationGroup = router({
     ),
   create: protectedAdminProcedure
     .input(applicationGroupCreateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input }) => {
       try {
         const result = await prisma.applicationGroup.create({
@@ -270,6 +272,7 @@ export const protectedDashboardApplicationGroup = router({
     }),
   updateById: protectedAdminProcedure
     .input(applicationGroupUpdateInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.applicationGroup.update({
@@ -286,9 +289,10 @@ export const protectedDashboardApplicationGroup = router({
     }),
   removeById: protectedAdminProcedure
     .input(idSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: id }) => {
       try {
-        // FIXME: is it necessary to check the group type?
+        // TODO: Should it be checked if the application group type is deletable?
         await prisma.applicationGroup.delete({
           where: {
             id,

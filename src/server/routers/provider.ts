@@ -3,7 +3,9 @@ import { observable } from '@trpc/server/observable';
 import { providerEmitter, providerVerificationQueue } from '../modules';
 import {
   IdSchema,
+  bullmqJobIdSchema,
   idSchema,
+  mutationOutputSchema,
   providerCreateProfileInputSchema,
   providerListInputSchema,
   providerUpdateProfileInputSchema,
@@ -169,6 +171,7 @@ export const protectedAppProvider = router({
     }),
   create: protectedUserProcedure
     .input(providerCreateProfileInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         const isProvider = await prisma.providerProfile.findFirst({
@@ -197,6 +200,7 @@ export const protectedAppProvider = router({
     }),
   applyVerification: protectedProviderProcedure
     .input(providerVerificationRequestInputSchema)
+    .output(bullmqJobIdSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         const provider = await prisma.providerProfile.findUnique({
@@ -326,6 +330,7 @@ export const protectedDashboardProvider = router({
     }),
   updateById: protectedAdminProcedure
     .input(providerUpdateProfileInputSchemaForAdmin)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
         await prisma.providerProfile.update({
@@ -347,6 +352,7 @@ export const protectedDashboardProvider = router({
     }),
   replyVerification: protectedAdminProcedure
     .input(providerVerificationResponseInputSchema)
+    .output(mutationOutputSchema)
     .mutation(
       async ({ ctx: { prisma }, input: { id, status, replication } }) => {
         try {
