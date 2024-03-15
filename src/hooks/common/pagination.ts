@@ -12,7 +12,7 @@ export function useGridPagination(params?: GridPagination) {
   const [pagination, setPagination] = useState<GridPagination>(
     params ?? {
       page: 0,
-      pageSize: 100,
+      pageSize: 20,
       sortBy: 'id',
       sortDirection: 'asc',
     },
@@ -47,7 +47,7 @@ export function useGridPagination(params?: GridPagination) {
   const reset = useCallback(() => {
     setPagination({
       page: 0,
-      pageSize: 10,
+      pageSize: 20,
       sortBy: 'id',
       sortDirection: 'asc',
     });

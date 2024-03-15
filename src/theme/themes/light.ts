@@ -48,6 +48,11 @@ export const theme = createTheme(
           dividers: true,
         },
       },
+      MuiAppBar: {
+        defaultProps: {
+          elevation: 1,
+        },
+      },
     },
     typography: {
       fontFamily: [

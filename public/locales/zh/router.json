@@ -1,0 +1,9 @@
+{
+  "App": {},
+  "Dashboard": {
+    "Application": "应用管理",
+    "Provider": "作者管理",
+    "User": "用户管理",
+    "_": "仪表盘"
+  }
+}

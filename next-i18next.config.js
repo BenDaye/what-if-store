@@ -11,6 +11,7 @@ module.exports = {
   nonExplicitSupportedLngs: true,
   ns: [
     'common',
+    'router',
     'errorMessage',
     'meta',
     'auth',

@@ -1,9 +1,12 @@
 import nextI18NextConfig from '@/../next-i18next.config';
+import { PageContainer, RouterBreadcrumbs } from '@/components/common';
+import { ApplicationDataGrid } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { ApplicationCategory } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -14,7 +17,22 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  return <>Application Page</>;
+  return (
+    <PageContainer
+      hasHeader
+      header={
+        <>
+          <RouterBreadcrumbs />
+        </>
+      }
+    >
+      <Grid container spacing={2}>
+        <Grid xs={12} md={6} xl>
+          <ApplicationDataGrid />
+        </Grid>
+      </Grid>
+    </PageContainer>
+  );
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -36,14 +54,15 @@ export const getServerSideProps = async (
 
   await helpers.publicDashboardMeta.get.prefetch();
 
-  await Promise.all(
-    Object.values(ApplicationCategory).map((item) =>
+  await Promise.all([
+    ...Object.values(ApplicationCategory).map((item) =>
       helpers.protectedDashboardApplication.list.prefetchInfinite({
         limit: 20,
         category: [item],
       }),
     ),
-  );
+    helpers.protectedDashboardApplication.list.prefetchInfinite({ limit: 20 }),
+  ]);
 
   return {
     props: {
