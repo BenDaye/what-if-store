@@ -30,6 +30,9 @@ const Page: NextPageWithLayout<
         <Grid xs={12} md={6} xl>
           <ApplicationDataGrid />
         </Grid>
+        <Grid xs={12} md={6} xl={6}>
+          A
+        </Grid>
       </Grid>
     </PageContainer>
   );
