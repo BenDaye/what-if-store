@@ -28,6 +28,16 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   status: true,
   createdAt: true,
   updatedAt: true,
+  _count: {
+    select: {
+      FollowedByUsers: true,
+      OwnedByUsers: true,
+      Collections: true,
+      Groups: true,
+      Tags: true,
+      VersionHistories: true,
+    },
+  },
 });
 
 const fullSelect = {

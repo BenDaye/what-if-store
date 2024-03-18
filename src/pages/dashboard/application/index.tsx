@@ -1,6 +1,11 @@
 import nextI18NextConfig from '@/../next-i18next.config';
 import { PageContainer, RouterBreadcrumbs } from '@/components/common';
-import { ApplicationDataGrid } from '@/components/dashboard';
+import {
+  ApplicationCollectionDataGrid,
+  ApplicationDataGrid,
+  ApplicationGroupDataGrid,
+  ApplicationTagDataGrid,
+} from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
@@ -27,11 +32,41 @@ const Page: NextPageWithLayout<
       }
     >
       <Grid container spacing={2}>
-        <Grid xs={12} md={6} xl>
-          <ApplicationDataGrid />
+        <Grid xs={12} md={6} xl={9}>
+          <ApplicationDataGrid
+            overrides={{
+              CardContentProps: {
+                sx: { height: 600 },
+              },
+            }}
+          />
+        </Grid>
+        <Grid xs={12} md={6} xl={3}>
+          <ApplicationTagDataGrid
+            overrides={{
+              CardContentProps: {
+                sx: { height: 600 },
+              },
+            }}
+          />
         </Grid>
         <Grid xs={12} md={6} xl={6}>
-          A
+          <ApplicationGroupDataGrid
+            overrides={{
+              CardContentProps: {
+                sx: { height: 600 },
+              },
+            }}
+          />
+        </Grid>
+        <Grid xs={12} md={6} xl={6}>
+          <ApplicationCollectionDataGrid
+            overrides={{
+              CardContentProps: {
+                sx: { height: 600 },
+              },
+            }}
+          />
         </Grid>
       </Grid>
     </PageContainer>

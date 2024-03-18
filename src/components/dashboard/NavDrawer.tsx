@@ -50,7 +50,7 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
           active={pathname === '/dashboard' || pathname === '/dashboard/'}
         />
         <IconButtonWithTooltip
-          title={tCommon('Apps')}
+          title={tCommon('Applications')}
           icon={<ApplicationsIcon />}
           onClick={() => push('/dashboard/application')}
           active={pathname.startsWith('/dashboard/application')}

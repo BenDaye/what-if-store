@@ -1,4 +1,4 @@
-import { useDashboardApplicationsWithPagination } from '@/hooks';
+import { useDashboardApplicationCollectionsWithPagination } from '@/hooks';
 import {
   createdAtColumn,
   idColumn,
@@ -26,10 +26,8 @@ import {
 import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
-import { IdRenderCell as ProviderIdRenderCell } from '../provider/IdRenderCell';
-import { IdRenderCell as ApplicationIdRenderCell } from './IdRenderCell';
 
-type ApplicationDataGridProps = {
+type ApplicationCollectionDataGridProps = {
   overrides?: {
     DataGridProps?: DataGridProps;
     CardProps?: CardProps;
@@ -38,9 +36,9 @@ type ApplicationDataGridProps = {
   };
 };
 
-export const ApplicationDataGrid = ({
+export const ApplicationCollectionDataGrid = ({
   overrides,
-}: ApplicationDataGridProps) => {
+}: ApplicationCollectionDataGridProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application');
   const {
@@ -48,7 +46,7 @@ export const ApplicationDataGrid = ({
     total,
     isFetching,
     pagination: { page, pageSize, setPaginationModel },
-  } = useDashboardApplicationsWithPagination();
+  } = useDashboardApplicationCollectionsWithPagination();
   const setFilterModel = useCallback((filterMode: GridFilterModel) => {
     // TODO: implement filter
     console.log(filterMode);
@@ -58,7 +56,7 @@ export const ApplicationDataGrid = ({
     console.log(sortModel);
   }, []);
   const columns: GridColDef<
-    RouterOutput['protectedDashboardApplication']['list']['items'][number]
+    RouterOutput['protectedDashboardApplicationCollection']['list']['items'][number]
   >[] = [
     {
       field: 'id',
@@ -76,34 +74,30 @@ export const ApplicationDataGrid = ({
     },
     {
       field: 'name',
-      headerName: tApplication('DataGridHeaderName.Name', 'Name'),
+      headerName: tApplication('DataGridHeaderName.Collection.Name', 'Name'),
       flex: 4,
-      renderCell: ({ row }) => (
-        <ApplicationIdRenderCell applicationId={row.id} />
-      ),
     },
     {
-      field: 'providerId',
-      headerName: tApplication('DataGridHeaderName.Provider', 'Provider'),
+      field: 'description',
+      headerName: tApplication(
+        'DataGridHeaderName.Collection.Description',
+        'Description',
+      ),
       flex: 3,
       editable: false,
-      renderCell: ({ value }) => <ProviderIdRenderCell providerId={value} />,
     },
     {
-      field: 'category',
-      headerName: tApplication('DataGridHeaderName.Category', 'Category'),
-      flex: 2,
-      valueFormatter: ({ value }) => tApplication(`Category.${value}`, value),
-    },
-    {
-      field: 'status',
-      headerName: tApplication('DataGridHeaderName.Status', 'Status'),
-      flex: 2,
-      valueFormatter: ({ value }) => tApplication(`Status.${value}`, value),
+      field: '_count.applications',
+      headerName: tApplication(
+        'DataGridHeaderName.Collection.Count.Application',
+        'Applications',
+      ),
+      flex: 1,
+      type: 'number',
     },
     {
       field: 'price',
-      headerName: tApplication('DataGridHeaderName.Price', 'Price'),
+      headerName: tApplication('DataGridHeaderName.Collection.Price', 'Price'),
       flex: 1,
       type: 'number',
       valueFormatter: ({ value }) => currency(value),
@@ -111,7 +105,10 @@ export const ApplicationDataGrid = ({
   ];
   return (
     <Card {...overrides?.CardProps}>
-      <CardHeader title={tApplication('_')} {...overrides?.CardHeaderProps} />
+      <CardHeader
+        title={tApplication('Collection._')}
+        {...overrides?.CardHeaderProps}
+      />
       <CardContent {...overrides?.CardContentProps}>
         <DataGrid
           slots={{

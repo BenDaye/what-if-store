@@ -1,7 +1,6 @@
 import { GridColTypeDef } from '@mui/x-data-grid';
 
 export const createdAtColumn: GridColTypeDef = {
-  headerName: '创建时间',
   width: 200,
   headerAlign: 'left',
   align: 'left',
@@ -11,7 +10,6 @@ export const createdAtColumn: GridColTypeDef = {
 };
 
 export const updatedAtColumn: GridColTypeDef = {
-  headerName: '更新时间',
   width: 200,
   headerAlign: 'left',
   align: 'left',

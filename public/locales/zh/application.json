@@ -29,5 +29,60 @@
     "Utilities": "工具",
     "Weather": "天气"
   },
+  "Collection": {
+    "_": "应用合集"
+  },
+  "DataGridHeaderName": {
+    "Category": "类别",
+    "Collection": {
+      "Count": {
+        "Application": "应用数量"
+      },
+      "Description": "合集描述",
+      "Name": "合集名称",
+      "Price": "合集价格"
+    },
+    "Group": {
+      "Count": {
+        "Application": "应用数量"
+      },
+      "Description": "分组描述",
+      "Name": "分组名称",
+      "Type": "分组类型"
+    },
+    "Name": "应用名称",
+    "Price": "价格",
+    "Provider": "作者",
+    "Status": "状态",
+    "Tag": {
+      "Count": {
+        "Application": "应用数量"
+      },
+      "Description": "标签描述",
+      "Name": "标签名称"
+    }
+  },
+  "Group": {
+    "Type": {
+      "Permanent": "固定",
+      "Persistent": "常驻",
+      "Temporary": "临时"
+    },
+    "_": "应用分组"
+  },
+  "Status": {
+    "Approved": "已批准",
+    "Banned": "已禁用",
+    "Deleted": "已删除",
+    "Draft": "起稿中",
+    "Hidden": "已隐藏",
+    "Pending": "审核中",
+    "Published": "已发布",
+    "Rejected": "已拒绝",
+    "Suspended": "已暂停"
+  },
+  "Tag": {
+    "_": "应用标签"
+  },
   "_": "应用"
 }
