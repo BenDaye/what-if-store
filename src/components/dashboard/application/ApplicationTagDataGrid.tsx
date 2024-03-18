@@ -35,6 +35,9 @@ type ApplicationTagDataGridProps = {
   };
 };
 
+type RowModel =
+  RouterOutput['protectedDashboardApplicationTag']['list']['items'][number];
+
 export const ApplicationTagDataGrid = ({
   overrides,
 }: ApplicationTagDataGridProps) => {
@@ -54,9 +57,7 @@ export const ApplicationTagDataGrid = ({
     // TODO: implement sort
     console.log(sortModel);
   }, []);
-  const columns: GridColDef<
-    RouterOutput['protectedDashboardApplicationTag']['list']['items'][number]
-  >[] = [
+  const columns: GridColDef<RowModel>[] = [
     {
       field: 'id',
       ...idColumn,
@@ -86,6 +87,21 @@ export const ApplicationTagDataGrid = ({
       type: 'number',
     },
   ];
+  const processRowUpdate = useCallback(
+    (
+      updatedRow: RowModel,
+      originalRow: RowModel,
+    ): Promise<RowModel> | RowModel => {
+      // TODO: implement update
+      console.log(updatedRow, originalRow);
+      return originalRow;
+    },
+    [],
+  );
+  const onProcessRowUpdateError = useCallback((error: any) => {
+    // TODO: implement error handling
+    console.error(error);
+  }, []);
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
@@ -120,6 +136,9 @@ export const ApplicationTagDataGrid = ({
           onFilterModelChange={setFilterModel}
           sortingMode="server"
           onSortModelChange={setSortModel}
+          editMode="row"
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={onProcessRowUpdateError}
           {...overrides?.DataGridProps}
         />
       </CardContent>

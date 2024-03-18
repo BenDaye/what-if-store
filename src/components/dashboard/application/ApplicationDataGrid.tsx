@@ -23,6 +23,7 @@ import {
   GridToolbar,
   zhCN,
 } from '@mui/x-data-grid';
+import { ApplicationCategory, ApplicationStatus } from '@prisma/client';
 import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
@@ -37,6 +38,9 @@ type ApplicationDataGridProps = {
     CardContentProps?: CardContentProps;
   };
 };
+
+type RowModel =
+  RouterOutput['protectedDashboardApplication']['list']['items'][number];
 
 export const ApplicationDataGrid = ({
   overrides,
@@ -57,9 +61,7 @@ export const ApplicationDataGrid = ({
     // TODO: implement sort
     console.log(sortModel);
   }, []);
-  const columns: GridColDef<
-    RouterOutput['protectedDashboardApplication']['list']['items'][number]
-  >[] = [
+  const columns: GridColDef<RowModel>[] = [
     {
       field: 'id',
       ...idColumn,
@@ -86,7 +88,6 @@ export const ApplicationDataGrid = ({
       field: 'providerId',
       headerName: tApplication('DataGridHeaderName.Provider', 'Provider'),
       flex: 3,
-      editable: false,
       renderCell: ({ value }) => <ProviderIdRenderCell providerId={value} />,
     },
     {
@@ -94,12 +95,26 @@ export const ApplicationDataGrid = ({
       headerName: tApplication('DataGridHeaderName.Category', 'Category'),
       flex: 2,
       valueFormatter: ({ value }) => tApplication(`Category.${value}`, value),
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: () =>
+        Object.values(ApplicationCategory).map((category) => ({
+          value: category,
+          label: tApplication(`Category.${category}`, category),
+        })),
     },
     {
       field: 'status',
       headerName: tApplication('DataGridHeaderName.Status', 'Status'),
       flex: 2,
       valueFormatter: ({ value }) => tApplication(`Status.${value}`, value),
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: () =>
+        Object.values(ApplicationStatus).map((status) => ({
+          value: status,
+          label: tApplication(`Status.${status}`, status),
+        })),
     },
     {
       field: 'price',
@@ -109,6 +124,21 @@ export const ApplicationDataGrid = ({
       valueFormatter: ({ value }) => currency(value),
     },
   ];
+  const processRowUpdate = useCallback(
+    (
+      updatedRow: RowModel,
+      originalRow: RowModel,
+    ): Promise<RowModel> | RowModel => {
+      // TODO: implement update
+      console.log(updatedRow, originalRow);
+      return originalRow;
+    },
+    [],
+  );
+  const onProcessRowUpdateError = useCallback((error: any) => {
+    // TODO: implement error handling
+    console.error(error);
+  }, []);
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader title={tApplication('_')} {...overrides?.CardHeaderProps} />
@@ -140,6 +170,9 @@ export const ApplicationDataGrid = ({
           onFilterModelChange={setFilterModel}
           sortingMode="server"
           onSortModelChange={setSortModel}
+          editMode="row"
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={onProcessRowUpdateError}
           {...overrides?.DataGridProps}
         />
       </CardContent>

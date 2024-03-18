@@ -36,6 +36,9 @@ type ApplicationCollectionDataGridProps = {
   };
 };
 
+type RowModel =
+  RouterOutput['protectedDashboardApplicationCollection']['list']['items'][number];
+
 export const ApplicationCollectionDataGrid = ({
   overrides,
 }: ApplicationCollectionDataGridProps) => {
@@ -55,9 +58,7 @@ export const ApplicationCollectionDataGrid = ({
     // TODO: implement sort
     console.log(sortModel);
   }, []);
-  const columns: GridColDef<
-    RouterOutput['protectedDashboardApplicationCollection']['list']['items'][number]
-  >[] = [
+  const columns: GridColDef<RowModel>[] = [
     {
       field: 'id',
       ...idColumn,
@@ -76,6 +77,7 @@ export const ApplicationCollectionDataGrid = ({
       field: 'name',
       headerName: tApplication('DataGridHeaderName.Collection.Name', 'Name'),
       flex: 4,
+      editable: true,
     },
     {
       field: 'description',
@@ -84,7 +86,7 @@ export const ApplicationCollectionDataGrid = ({
         'Description',
       ),
       flex: 3,
-      editable: false,
+      editable: true,
     },
     {
       field: '_count.applications',
@@ -103,6 +105,21 @@ export const ApplicationCollectionDataGrid = ({
       valueFormatter: ({ value }) => currency(value),
     },
   ];
+  const processRowUpdate = useCallback(
+    (
+      updatedRow: RowModel,
+      originalRow: RowModel,
+    ): Promise<RowModel> | RowModel => {
+      // TODO: implement update
+      console.log(updatedRow, originalRow);
+      return originalRow;
+    },
+    [],
+  );
+  const onProcessRowUpdateError = useCallback((error: any) => {
+    // TODO: implement error handling
+    console.error(error);
+  }, []);
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
@@ -137,6 +154,9 @@ export const ApplicationCollectionDataGrid = ({
           onFilterModelChange={setFilterModel}
           sortingMode="server"
           onSortModelChange={setSortModel}
+          editMode="row"
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={onProcessRowUpdateError}
           {...overrides?.DataGridProps}
         />
       </CardContent>

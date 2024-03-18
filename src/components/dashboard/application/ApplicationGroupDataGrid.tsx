@@ -23,6 +23,7 @@ import {
   GridToolbar,
   zhCN,
 } from '@mui/x-data-grid';
+import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
 
@@ -34,6 +35,9 @@ type ApplicationGroupDataGridProps = {
     CardContentProps?: CardContentProps;
   };
 };
+
+type RowModel =
+  RouterOutput['protectedDashboardApplicationGroup']['list']['items'][number];
 
 export const ApplicationGroupDataGrid = ({
   overrides,
@@ -54,9 +58,7 @@ export const ApplicationGroupDataGrid = ({
     // TODO: implement sort
     console.log(sortModel);
   }, []);
-  const columns: GridColDef<
-    RouterOutput['protectedDashboardApplicationGroup']['list']['items'][number]
-  >[] = [
+  const columns: GridColDef<RowModel>[] = [
     {
       field: 'id',
       ...idColumn,
@@ -80,6 +82,13 @@ export const ApplicationGroupDataGrid = ({
       field: 'type',
       headerName: tApplication('DataGridHeaderName.Group.Type', 'Type'),
       flex: 1,
+      valueFormatter: ({ value }) => tApplication(`Group.Type.${value}`, value),
+      type: 'singleSelect',
+      valueOptions: () =>
+        Object.values(ApplicationGroupType).map((value) => ({
+          value,
+          label: tApplication(`Group.Type.${value}`, value),
+        })),
     },
     {
       field: 'description',
@@ -100,6 +109,21 @@ export const ApplicationGroupDataGrid = ({
       type: 'number',
     },
   ];
+  const processRowUpdate = useCallback(
+    (
+      updatedRow: RowModel,
+      originalRow: RowModel,
+    ): Promise<RowModel> | RowModel => {
+      // TODO: implement update
+      console.log(updatedRow, originalRow);
+      return originalRow;
+    },
+    [],
+  );
+  const onProcessRowUpdateError = useCallback((error: any) => {
+    // TODO: implement error handling
+    console.error(error);
+  }, []);
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
@@ -134,6 +158,9 @@ export const ApplicationGroupDataGrid = ({
           onFilterModelChange={setFilterModel}
           sortingMode="server"
           onSortModelChange={setSortModel}
+          editMode="row"
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={onProcessRowUpdateError}
           {...overrides?.DataGridProps}
         />
       </CardContent>
