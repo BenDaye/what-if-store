@@ -41,6 +41,11 @@ export const useDashboardApplication = (id: IdSchema) => {
 
   const provider = useMemo(() => data?.Provider, [data]);
 
+  const latestVersion = useMemo(
+    () => data?.VersionHistories.find((v) => v.latest)?.version ?? '-',
+    [data],
+  );
+
   const { showWarning } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
 
@@ -62,6 +67,7 @@ export const useDashboardApplication = (id: IdSchema) => {
     website,
     description,
     provider,
+    latestVersion,
   };
 };
 

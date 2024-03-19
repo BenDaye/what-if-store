@@ -4,14 +4,20 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-export type RouterBreadcrumbsProps = BreadcrumbsProps;
+export type RouterBreadcrumbsProps = {
+  overrides?: { BreadcrumbsProps?: BreadcrumbsProps };
+  lastText?: string;
+};
 
-export const RouterBreadcrumbs = (props: RouterBreadcrumbsProps) => {
+export const RouterBreadcrumbs = ({
+  overrides,
+  lastText,
+}: RouterBreadcrumbsProps) => {
   const { pathname } = useRouter();
   const routes = useMemo(() => pathname.split('/').slice(1), [pathname]);
   const { t: tRouter } = useTranslation('router');
   return (
-    <Breadcrumbs {...props}>
+    <Breadcrumbs {...overrides?.BreadcrumbsProps}>
       {routes.map((route, index) => {
         const last = index === routes.length - 1;
         const href = last
@@ -29,7 +35,7 @@ export const RouterBreadcrumbs = (props: RouterBreadcrumbsProps) => {
         if (last) {
           return (
             <Typography key={route} color="text.primary" variant="subtitle2">
-              {text}
+              {lastText ?? text}
             </Typography>
           );
         }
