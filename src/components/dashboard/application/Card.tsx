@@ -1,9 +1,14 @@
 import { useDashboardApplication } from '@/hooks';
 import { IdSchema } from '@/server/schemas';
 import {
+  Favorite as FollowIcon,
+  CloudDownload as OwnIcon,
+} from '@mui/icons-material';
+import {
   Avatar,
   Card,
   CardActionsProps,
+  CardContent,
   CardContentProps,
   CardHeader,
   CardHeaderProps,
@@ -13,7 +18,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { ProviderLink } from '../provider';
+import { UserLink } from '../user';
 
 type ApplicationCardProps = {
   applicationId: IdSchema;
@@ -40,40 +45,107 @@ export const ApplicationCard = ({
   } = useDashboardApplication(applicationId);
   return (
     <Card {...overrides?.CardProps}>
-      <CardHeader
-        avatar={
-          <Avatar
-            src={avatarSrc}
-            sx={{ height: 96, width: 96 }}
-            variant="rounded"
-          >
-            {avatarText}
-          </Avatar>
-        }
-        title={
-          <Stack direction="row" spacing={1}>
-            <Typography variant="h6" paragraph>
-              {name}
-            </Typography>
-            <Chip label={latestVersion} size="small" sx={{ borderRadius: 1 }} />
-          </Stack>
-        }
-        subheader={
-          <Stack direction="column" spacing={1}>
-            <Stack
-              direction="row"
-              spacing={1}
-              divider={<Divider flexItem orientation="vertical" />}
-            >
-              {provider?.id && <ProviderLink providerId={provider.id} />}
-              <Typography>{data?._count.OwnedByUsers}</Typography>
-              <Typography>{data?._count.FollowedByUsers}</Typography>
-            </Stack>
-            <Typography variant="body2">{description}</Typography>
-          </Stack>
-        }
-        {...overrides?.CardHeaderProps}
+      <ApplicationCardHeader
+        data={{
+          name,
+          avatarSrc,
+          avatarText,
+          latestVersion,
+          providerId: provider?.id,
+          OwnedByUsers: data?._count.OwnedByUsers,
+          FollowedByUsers: data?._count.FollowedByUsers,
+          description: description,
+        }}
+        overrides={{
+          CardHeaderProps: overrides?.CardHeaderProps,
+        }}
       />
+      <CardContent></CardContent>
     </Card>
+  );
+};
+
+type ApplicationCardHeaderProps = {
+  data: {
+    name: string;
+    avatarSrc?: string;
+    avatarText: string;
+    latestVersion: string;
+    providerId?: string;
+    OwnedByUsers?: number;
+    FollowedByUsers?: number;
+    description: string;
+  };
+  overrides?: {
+    CardHeaderProps?: CardHeaderProps;
+  };
+};
+
+const ApplicationCardHeader = ({
+  data: {
+    name,
+    avatarSrc,
+    avatarText,
+    latestVersion,
+    providerId,
+    OwnedByUsers,
+    FollowedByUsers,
+    description,
+  },
+  overrides,
+}: ApplicationCardHeaderProps) => {
+  return (
+    <CardHeader
+      avatar={
+        <Avatar
+          src={avatarSrc}
+          sx={{ height: 96, width: 96 }}
+          variant="rounded"
+        >
+          {avatarText}
+        </Avatar>
+      }
+      title={
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="h6" paragraph>
+            {name}
+          </Typography>
+          <Chip label={latestVersion} size="small" sx={{ borderRadius: 1 }} />
+        </Stack>
+      }
+      subheader={
+        <Stack direction="column" spacing={1}>
+          <Stack
+            direction="row"
+            spacing={2}
+            divider={<Divider flexItem orientation="vertical" />}
+            alignItems="center"
+          >
+            {providerId && <UserLink userId={providerId} withProvider />}
+            <Stack direction="row" alignItems="baseline">
+              <OwnIcon
+                sx={{
+                  mr: 1,
+                  fontSize: (theme) => theme.typography.overline.fontSize,
+                }}
+              />
+              <Typography>{OwnedByUsers}</Typography>
+            </Stack>
+            <Stack direction="row" alignItems="baseline">
+              <FollowIcon
+                sx={{
+                  mr: 1,
+                  fontSize: (theme) => theme.typography.overline.fontSize,
+                }}
+              />
+              <Typography>{FollowedByUsers}</Typography>
+            </Stack>
+          </Stack>
+          <Typography variant="body2">{description}</Typography>
+        </Stack>
+      }
+      sx={{ alignItems: 'flex-start' }}
+      {...overrides?.CardHeaderProps}
+    />
   );
 };

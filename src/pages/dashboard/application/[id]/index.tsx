@@ -7,6 +7,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
 import { IdSchema } from '@/server/schemas';
+import { Container } from '@mui/material';
 import { ApplicationCategory } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -26,7 +27,9 @@ const Page: NextPageWithLayout<
         </>
       }
     >
-      <ApplicationCard applicationId={id} />
+      <Container>
+        <ApplicationCard applicationId={id} />
+      </Container>
     </PageContainer>
   );
 };

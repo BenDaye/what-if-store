@@ -1,28 +1,40 @@
-import { useDashboardUser } from '@/hooks';
-import { Link, LinkProps, Typography } from '@mui/material';
+import { useDashboardProvider } from '@/hooks';
+import {
+  NewReleases as UnverifiedIcon,
+  Verified as VerifiedIcon,
+} from '@mui/icons-material';
+import { Link, LinkProps, SvgIconProps } from '@mui/material';
 
 type ProviderLinkProps = {
   providerId: string;
   overrides?: {
     LinkProps?: LinkProps;
+    SvgIconProps?: SvgIconProps;
   };
 };
 
 export const ProviderLink = ({ providerId, overrides }: ProviderLinkProps) => {
-  const { data, nickname } = useDashboardUser(providerId);
-  if (!data) {
-    return <Typography color="text.secondary">-</Typography>;
-  }
-  if (!data.ProviderProfile) {
-    return <Typography color="text.secondary">{nickname}</Typography>;
-  }
+  const { name, verified } = useDashboardProvider(providerId);
   return (
     <Link
       underline="hover"
-      href={`/dashboard/provider/${data.ProviderProfile.id}`}
+      href={`/dashboard/provider/${providerId}`}
+      sx={{ display: 'flex', alignItems: 'center' }}
+      color={verified ? 'primary.main' : 'text.secondary'}
       {...overrides?.LinkProps}
     >
-      {data.ProviderProfile.name}
+      {verified ? (
+        <VerifiedIcon
+          sx={{ fontSize: (theme) => theme.typography.button.fontSize }}
+          {...overrides?.SvgIconProps}
+        />
+      ) : (
+        <UnverifiedIcon
+          sx={{ fontSize: (theme) => theme.typography.button.fontSize }}
+          {...overrides?.SvgIconProps}
+        />
+      )}
+      {name}
     </Link>
   );
 };

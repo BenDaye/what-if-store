@@ -41,10 +41,12 @@ export const useDashboardApplication = (id: IdSchema) => {
 
   const provider = useMemo(() => data?.Provider, [data]);
 
-  const latestVersion = useMemo(
-    () => data?.VersionHistories.find((v) => v.latest)?.version ?? '-',
-    [data],
-  );
+  const latestVersion = useMemo(() => {
+    const version = data?.VersionHistories.find((v) => v.latest);
+    return version
+      ? `v${version.version}${version.preview ? '-Preview' : ''}${version.deprecated ? ' Deprecated' : ''}`
+      : '-';
+  }, [data]);
 
   const { showWarning } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
