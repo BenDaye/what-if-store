@@ -5,7 +5,9 @@ import {
   updatedAtColumn,
 } from '@/utils/dataGridColumn';
 import { RouterOutput } from '@/utils/trpc';
+import { AddBox as CreateIcon } from '@mui/icons-material';
 import {
+  Button,
   Card,
   CardContent,
   CardContentProps,
@@ -89,6 +91,13 @@ export const ApplicationCollectionDataGrid = ({
       editable: true,
     },
     {
+      field: 'price',
+      headerName: tApplication('DataGridHeaderName.Collection.Price', 'Price'),
+      flex: 1,
+      type: 'number',
+      valueFormatter: ({ value }) => currency(value),
+    },
+    {
       field: '_count.applications',
       headerName: tApplication(
         'DataGridHeaderName.Collection.Count.Application',
@@ -96,13 +105,6 @@ export const ApplicationCollectionDataGrid = ({
       ),
       flex: 1,
       type: 'number',
-    },
-    {
-      field: 'price',
-      headerName: tApplication('DataGridHeaderName.Collection.Price', 'Price'),
-      flex: 1,
-      type: 'number',
-      valueFormatter: ({ value }) => currency(value),
     },
   ];
   const processRowUpdate = useCallback(
@@ -124,6 +126,17 @@ export const ApplicationCollectionDataGrid = ({
     <Card {...overrides?.CardProps}>
       <CardHeader
         title={tApplication('Collection._')}
+        titleTypographyProps={{
+          variant: 'subtitle1',
+        }}
+        action={
+          <Button
+            startIcon={<CreateIcon />}
+            href="/dashboard/application_collection/create"
+          >
+            {tCommon('Create')}
+          </Button>
+        }
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

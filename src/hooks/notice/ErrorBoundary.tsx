@@ -13,7 +13,7 @@ type ErrorBoundaryProps = {
   children: ReactNode;
 };
 
-export class MainErrorBoundary extends Component<
+export class ErrorBoundary extends Component<
   ErrorBoundaryProps,
   ErrorBoundaryState
 > {
@@ -23,6 +23,8 @@ export class MainErrorBoundary extends Component<
 
   constructor(props: ErrorBoundaryProps) {
     super(props);
+
+    this.state = { hasError: false };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,7 +36,11 @@ export class MainErrorBoundary extends Component<
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // TODO: log error to Sentry
     console.error(errorInfo);
-    this.props.showError(error?.message);
+    this.props.showError(error?.message, {
+      onClose: () => {
+        this.setState({ hasError: false });
+      },
+    });
   }
 
   render(): ReactNode {

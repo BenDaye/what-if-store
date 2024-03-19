@@ -10,7 +10,7 @@ import {
   useCallback,
   useContext,
 } from 'react';
-import { MainErrorBoundary } from './ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export interface NoticeContextProps {
   show: (message: string, options?: OptionsObject) => SnackbarKey;
@@ -99,7 +99,7 @@ export const NoticeProvider = ({
         close,
       }}
     >
-      <MainErrorBoundary showError={showError}>{children}</MainErrorBoundary>
+      <ErrorBoundary showError={showError}>{children}</ErrorBoundary>
     </NoticeContext.Provider>
   );
 };

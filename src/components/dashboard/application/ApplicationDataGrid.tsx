@@ -5,7 +5,9 @@ import {
   updatedAtColumn,
 } from '@/utils/dataGridColumn';
 import { RouterOutput } from '@/utils/trpc';
+import { AddBox as CreateIcon } from '@mui/icons-material';
 import {
+  Button,
   Card,
   CardContent,
   CardContentProps,
@@ -141,7 +143,21 @@ export const ApplicationDataGrid = ({
   }, []);
   return (
     <Card {...overrides?.CardProps}>
-      <CardHeader title={tApplication('_')} {...overrides?.CardHeaderProps} />
+      <CardHeader
+        title={tApplication('_')}
+        titleTypographyProps={{
+          variant: 'subtitle1',
+        }}
+        action={
+          <Button
+            startIcon={<CreateIcon />}
+            href="/dashboard/application/create"
+          >
+            {tCommon('Create')}
+          </Button>
+        }
+        {...overrides?.CardHeaderProps}
+      />
       <CardContent {...overrides?.CardContentProps}>
         <DataGrid
           slots={{
