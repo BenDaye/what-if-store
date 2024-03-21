@@ -29,9 +29,50 @@
     "Utilities": "Utilities",
     "Weather": "Weather"
   },
+  "Collection": {
+    "_": "Application Collection"
+  },
+  "DataGridHeaderName": {
+    "Category": "Category",
+    "Collection": {
+      "Count": {
+        "Application": "Application Count"
+      },
+      "Description": "Description",
+      "Name": "Name",
+      "Price": "Price"
+    },
+    "Group": {
+      "Count": {
+        "Application": "Application Count"
+      },
+      "Description": "Description",
+      "Name": "Name",
+      "Type": "Type"
+    },
+    "Name": "Name",
+    "Price": "Price",
+    "Provider": "Provider",
+    "Status": "Status",
+    "Tag": {
+      "Count": {
+        "Application": "Application Count"
+      },
+      "Description": "Description",
+      "Name": "Name"
+    }
+  },
   "General": {
     "Category": "Category",
     "Countries": "Countries",
+    "DangerZone": {
+      "ChangeStatus": "Change application status",
+      "CurrentStatus": "This application status is currently {{status}}.",
+      "DeleteButton": "Delete",
+      "DeleteDescription": "Once you delete a application, there is no going back. Please be certain.\nThis operation is higher priority than change application status to \"Deleted\".",
+      "DeleteTitle": "Delete this application",
+      "_": "Danger Zone"
+    },
     "Description": "Description",
     "Extra": "Extra",
     "Github": "Github",
@@ -41,6 +82,14 @@
     "User": "User",
     "Website": "Home Page",
     "_": "General"
+  },
+  "Group": {
+    "Type": {
+      "Permanent": "Permanent",
+      "Persistent": "Persistent",
+      "Temporary": "Temporary"
+    },
+    "_": "Application Group"
   },
   "Nav": {
     "Collection": "Collection",
@@ -57,5 +106,20 @@
     "Stat": "Stat",
     "TermsOfUse": "Terms Of Use",
     "Version": "Version"
-  }
+  },
+  "Status": {
+    "Approved": "Approved",
+    "Banned": "Banned",
+    "Deleted": "Deleted",
+    "Draft": "Draft",
+    "Hidden": "Hidden",
+    "Pending": "Pending",
+    "Published": "Published",
+    "Rejected": "Rejected",
+    "Suspended": "Suspended"
+  },
+  "Tag": {
+    "_": "Application Tag"
+  },
+  "_": "Application"
 }

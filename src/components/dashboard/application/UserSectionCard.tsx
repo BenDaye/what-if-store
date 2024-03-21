@@ -18,7 +18,10 @@ type UserSectionCardProps = OverridesCardProps & {
   userId: IdSchema;
 };
 
-export const UserSectionCard = ({ userId }: UserSectionCardProps) => {
+export const UserSectionCard = ({
+  overrides,
+  userId,
+}: UserSectionCardProps) => {
   const { push } = useRouter();
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
@@ -32,9 +35,12 @@ export const UserSectionCard = ({ userId }: UserSectionCardProps) => {
   });
   const { nickname, provider } = useDashboardUser(userId);
   return (
-    <Card variant="outlined">
-      <CardHeader title={tApplication('User', 'User General')} />
-      <CardContent>
+    <Card variant="outlined" {...overrides?.CardProps}>
+      <CardHeader
+        title={tApplication('User', 'User General')}
+        {...overrides?.CardHeaderProps}
+      />
+      <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={1}>
           <Grid md={12} xl>
             <TextField
@@ -56,7 +62,7 @@ export const UserSectionCard = ({ userId }: UserSectionCardProps) => {
           )}
         </Grid>
       </CardContent>
-      <CardActions>
+      <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
         <Button onClick={() => push(`/dashboard/user/${userId}`)}>
           {tCommon('View', 'View')}

@@ -2,6 +2,7 @@ import { useDashboardApplication } from '@/hooks';
 import { IdSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import { Card, CardContent } from '@mui/material';
+import { DangerZoneSectionCard } from './DangerZoneSectionCard';
 import { ExtraSectionCard } from './ExtraSectionCard';
 import { GeneralSectionCard } from './GeneralSectionCard';
 import { UserSectionCard } from './UserSectionCard';
@@ -11,8 +12,16 @@ type GeneralCardProps = OverridesCardProps & {
 };
 
 export const GeneralCard = ({ applicationId, overrides }: GeneralCardProps) => {
-  const { name, provider, data, description, category, website, github } =
-    useDashboardApplication(applicationId);
+  const {
+    name,
+    provider,
+    data,
+    description,
+    category,
+    website,
+    github,
+    status,
+  } = useDashboardApplication(applicationId);
   return (
     <Card sx={{ flexGrow: 1 }} {...overrides?.CardProps}>
       <CardContent
@@ -38,6 +47,7 @@ export const GeneralCard = ({ applicationId, overrides }: GeneralCardProps) => {
           }}
         />
         {provider?.id && <UserSectionCard userId={provider.id} />}
+        <DangerZoneSectionCard applicationId={applicationId} status={status} />
       </CardContent>
     </Card>
   );

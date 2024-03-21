@@ -24,6 +24,7 @@ type GeneralSectionCardProps = OverridesCardProps & {
 };
 
 export const GeneralSectionCard = ({
+  overrides,
   defaultValues,
 }: GeneralSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
@@ -80,9 +81,13 @@ export const GeneralSectionCard = ({
       sx={{
         borderColor: formState.isDirty ? 'primary.main' : 'divider',
       }}
+      {...overrides?.CardProps}
     >
-      <CardHeader title={tApplication('_', 'General')} />
-      <CardContent>
+      <CardHeader
+        title={tApplication('_', 'General')}
+        {...overrides?.CardHeaderProps}
+      />
+      <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={1}>
           <Grid md={12} xl={6}>
             <Controller
@@ -204,7 +209,7 @@ export const GeneralSectionCard = ({
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions>
+      <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
         <Button
           size="small"

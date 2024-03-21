@@ -1,6 +1,10 @@
 import { ApplicationListInputSchema, IdSchema } from '@/server/schemas';
 import { RouterOutput, trpc } from '@/utils/trpc';
-import { ApplicationCategory, AuthRole } from '@prisma/client';
+import {
+  ApplicationCategory,
+  ApplicationStatus,
+  AuthRole,
+} from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
@@ -49,6 +53,11 @@ export const useDashboardApplication = (id: IdSchema) => {
       : '-';
   }, [data]);
 
+  const _status = useMemo(
+    () => data?.status ?? ApplicationStatus.Draft,
+    [data],
+  );
+
   const { showWarning } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
 
@@ -72,6 +81,7 @@ export const useDashboardApplication = (id: IdSchema) => {
     description,
     provider,
     latestVersion,
+    status: _status,
   };
 };
 

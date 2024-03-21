@@ -23,7 +23,10 @@ type ExtraSectionCardProps = OverridesCardProps & {
   defaultValues?: ApplicationUpdateInputSchema;
 };
 
-export const ExtraSectionCard = ({ defaultValues }: ExtraSectionCardProps) => {
+export const ExtraSectionCard = ({
+  overrides,
+  defaultValues,
+}: ExtraSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
     keyPrefix: 'General',
@@ -75,9 +78,13 @@ export const ExtraSectionCard = ({ defaultValues }: ExtraSectionCardProps) => {
       sx={{
         borderColor: formState.isDirty ? 'primary.main' : 'divider',
       }}
+      {...overrides?.CardProps}
     >
-      <CardHeader title={tApplication('Extra', 'Extra')} />
-      <CardContent>
+      <CardHeader
+        title={tApplication('Extra', 'Extra')}
+        {...overrides?.CardHeaderProps}
+      />
+      <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={1}>
           <Grid xs={12}>
             <CountriesAutoComplete
@@ -122,7 +129,7 @@ export const ExtraSectionCard = ({ defaultValues }: ExtraSectionCardProps) => {
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions>
+      <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
         <Button
           size="small"

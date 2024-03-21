@@ -65,6 +65,14 @@
   "General": {
     "Category": "应用类型",
     "Countries": "地区支持",
+    "DangerZone": {
+      "ChangeStatus": "修改应用状态",
+      "CurrentStatus": "当前应用状态为 {{status}}.",
+      "DeleteButton": "删除",
+      "DeleteDescription": "一旦删除应用, 操作将无法撤回. 请确认是否继续?",
+      "DeleteTitle": "删除此应用",
+      "_": "风险操作"
+    },
     "Description": "应用简述",
     "Extra": "扩展信息",
     "Github": "Github",
