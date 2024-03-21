@@ -1,4 +1,7 @@
 {
+  "General": {
+    "Name": "User Nickname"
+  },
   "Profile": {
     "Email": "Email",
     "Nickname": "Nickname",

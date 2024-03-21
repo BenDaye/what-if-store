@@ -2,8 +2,8 @@
 module.exports = {
   debug: process.env.NODE_ENV === 'development',
   i18n: {
-    defaultLocale: 'zh',
-    locales: ['en', 'zh'],
+    defaultLocale: 'en_US',
+    locales: ['en_US', 'zh_CN'],
   },
   serializeConfig: false,
   reloadOnPrerender: process.env.NODE_ENV === 'development',
@@ -19,7 +19,7 @@ module.exports = {
     'provider',
     'application',
   ],
-  preload: ['en', 'zh'],
+  preload: ['en_US', 'zh_CN'],
   defaultNS: 'common',
   react: {
     // https://locize.com/blog/next-i18next/
