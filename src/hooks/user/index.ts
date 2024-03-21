@@ -49,6 +49,8 @@ export const useDashboardUser = (id: IdSchema) => {
 
   const bio = useMemo(() => data?.UserProfile?.bio ?? '-', [data]);
 
+  const provider = useMemo(() => data?.ProviderProfile, [data]);
+
   const { showWarning, showSuccess, showError } = useNotice();
   const { t: tError } = useTranslation('errorMessage');
   const { t: tUser } = useTranslation('user');
@@ -80,6 +82,7 @@ export const useDashboardUser = (id: IdSchema) => {
     nickname,
     email,
     bio,
+    provider,
     update,
   };
 };

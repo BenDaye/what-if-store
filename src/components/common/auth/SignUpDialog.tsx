@@ -119,7 +119,7 @@ export const SignUpDialog = ({
                 onChange={onChange}
                 fullWidth
                 error={!!error}
-                helperText={error ? error.message : null}
+                helperText={error?.message ?? ' '}
                 margin="normal"
                 label={tAuth('Account')}
                 placeholder={tAuth('Account')}
@@ -140,7 +140,7 @@ export const SignUpDialog = ({
                 onChange={onChange}
                 fullWidth
                 error={!!error}
-                helperText={error ? error.message : null}
+                helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
                 margin="normal"
                 placeholder={tAuth('Password')}
@@ -175,7 +175,7 @@ export const SignUpDialog = ({
                 onChange={onChange}
                 fullWidth
                 error={!!error}
-                helperText={error ? error.message : null}
+                helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
                 margin="normal"
                 placeholder={tAuth('Confirm Password')}

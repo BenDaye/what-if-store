@@ -22,8 +22,8 @@ export const applicationCreateInputSchema = z
   .object({
     name: z.string(),
     category: z.nativeEnum(ApplicationCategory),
-    platforms: z.nativeEnum(ApplicationPlatform).array(),
-    countries: z.string().array(),
+    platforms: z.nativeEnum(ApplicationPlatform).array().min(1),
+    countries: z.string().array().min(1),
     ageRating: z.string(),
     price: z.number().nonnegative(),
     // NOTE: Information
@@ -33,7 +33,7 @@ export const applicationCreateInputSchema = z
     screenshots: z.string().array(),
     // TODO: It should be checked if the structure is correct
     compatibility: z.any(),
-    languages: z.string().array(),
+    locales: z.string().array().min(1),
     copyright: z.string(),
     privacyPolicy: z.string(),
     termsOfUse: z.string(),
@@ -46,7 +46,7 @@ export const applicationCreateInputSchema = z
     deprecated: z.boolean(),
     preview: z.boolean(),
     // NOTE: Tag
-    tags: z.array(idSchema),
+    tags: z.object({ id: idSchema }).array(),
   })
   .partial({
     version: true,

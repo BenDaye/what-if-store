@@ -1,4 +1,7 @@
 {
+  "General": {
+    "Name": "User Nickname"
+  },
   "Profile": {
     "Email": "邮箱",
     "Nickname": "昵称",

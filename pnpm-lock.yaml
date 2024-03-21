@@ -74,6 +74,9 @@ dependencies:
   bullmq:
     specifier: 5.4.2
     version: 5.4.2
+  countries-list:
+    specifier: 3.1.0
+    version: 3.1.0
   currency.js:
     specifier: 2.0.4
     version: 2.0.4
@@ -2457,6 +2460,10 @@ packages:
       path-type: 4.0.0
       typescript: 5.3.3
     dev: true
+
+  /countries-list@3.1.0:
+    resolution: {integrity: sha512-HpTBLZba1VPTZSjUnUwR7SykxV7Z/7/+ZM5x5wi5tO99Qvom6bE2SC+AQ18016ujg3jSlYBbMITrHNnPAHSM9Q==}
+    dev: false
 
   /cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}

@@ -62,6 +62,19 @@
       "Name": "标签名称"
     }
   },
+  "General": {
+    "Category": "应用类型",
+    "Countries": "地区支持",
+    "Description": "应用简述",
+    "Extra": "扩展信息",
+    "Github": "Github",
+    "Locales": "语言支持",
+    "Name": "应用名称",
+    "Tags": "应用标签",
+    "User": "作者信息",
+    "Website": "首页",
+    "_": "基础信息"
+  },
   "Group": {
     "Type": {
       "Permanent": "固定",
@@ -69,6 +82,22 @@
       "Temporary": "临时"
     },
     "_": "应用分组"
+  },
+  "Nav": {
+    "Collection": "合集",
+    "Compatibility": "兼容性",
+    "Declaration": "声明",
+    "Follow": "收藏",
+    "General": "设置",
+    "Group": "分组",
+    "Media": "图片",
+    "Own": "安装",
+    "PrivacyPolicy": "隐私政策",
+    "Relation": "关系",
+    "Review": "审核",
+    "Stat": "分析",
+    "TermsOfUse": "使用条款",
+    "Version": "版本"
   },
   "Status": {
     "Approved": "已批准",

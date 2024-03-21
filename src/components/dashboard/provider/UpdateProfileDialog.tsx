@@ -107,7 +107,7 @@ export const DashboardProviderUpdateProfileDialog = (
               onChange={onChange}
               fullWidth
               error={!!error}
-              helperText={error ? error.message : null}
+              helperText={error?.message ?? ' '}
               margin="normal"
               label={tAuth('Profile.Nickname')}
               placeholder={tAuth('Profile.Nickname')}
@@ -125,7 +125,7 @@ export const DashboardProviderUpdateProfileDialog = (
               onChange={onChange}
               fullWidth
               error={!!error}
-              helperText={error ? error.message : null}
+              helperText={error?.message ?? ' '}
               margin="normal"
               type="email"
               label={tAuth('Profile.Email')}

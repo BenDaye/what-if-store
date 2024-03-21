@@ -1,4 +1,4 @@
-import { allFakers, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import {
   ApplicationCategory,
   ApplicationPlatform,
@@ -9,6 +9,8 @@ import {
   ProviderType,
 } from '@prisma/client';
 import { hash } from 'argon2';
+import countries from 'countries-list/minimal/countries.2to3.min.json';
+import { getLocaleStringList } from '../src/utils/getLocaleList';
 
 const prisma = new PrismaClient();
 
@@ -100,7 +102,7 @@ const main = async () => {
             faker.image.urlLoremFlickr({ width: 800, height: 600 }),
           ),
           compatibility: getRandomApplicationPlatforms(),
-          languages: getRandomApplicationLanguages(),
+          locales: getRandomApplicationLanguages(),
           copyright: faker.lorem.lines(1),
           privacyPolicy: faker.lorem.paragraphs(),
           termsOfUse: faker.lorem.paragraphs(),
@@ -126,6 +128,15 @@ const main = async () => {
     });
     console.log({ genesisApplication });
   }
+
+  const genesisTags = await prisma.applicationTag.createMany({
+    skipDuplicates: true,
+    data: Array.from({
+      length: Math.floor(Math.random() * 10),
+    }).map(() => ({ name: faker.commerce.productMaterial() })),
+  });
+
+  console.log({ genesisTags });
 };
 
 main()
@@ -161,10 +172,11 @@ const getRandomApplicationStatus = (): ApplicationStatus => {
 };
 
 const getRandomApplicationCountries = (): string[] => {
-  const _length = Math.floor(Math.random() * 10);
-  return Array.from({ length: _length }, () => 1).map(() =>
-    faker.location.country(),
-  );
+  const _values = Object.keys(countries);
+  const _start = Math.floor(Math.random() * _values.length);
+  const _end =
+    _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
+  return _values.slice(_start, _end);
 };
 
 const getRandomApplicationAgeRating = (): string => {
@@ -172,7 +184,7 @@ const getRandomApplicationAgeRating = (): string => {
 };
 
 const getRandomApplicationLanguages = (): string[] => {
-  const _values = Object.keys(allFakers);
+  const _values = getLocaleStringList();
   const _start = Math.floor(Math.random() * _values.length);
   const _end =
     _start + Math.floor(Math.random() * (_values.length - _start)) + 1;

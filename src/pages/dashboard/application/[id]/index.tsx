@@ -1,6 +1,6 @@
 import nextI18NextConfig from '@/../next-i18next.config';
 import { PageContainer, RouterBreadcrumbs } from '@/components/common';
-import { ApplicationCard } from '@/components/dashboard';
+import { Page as ApplicationPage, GeneralCard } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
@@ -28,7 +28,9 @@ const Page: NextPageWithLayout<
       }
     >
       <Container>
-        <ApplicationCard applicationId={id} />
+        <ApplicationPage applicationId={id}>
+          <GeneralCard applicationId={id} />
+        </ApplicationPage>
       </Container>
     </PageContainer>
   );

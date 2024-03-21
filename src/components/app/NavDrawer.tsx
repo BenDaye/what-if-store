@@ -39,19 +39,19 @@ export const AppNavDrawer = (props: DrawerProps) => {
         }}
       >
         <IconButtonWithTooltip
-          title={tCommon('Application')}
+          title={tCommon('Applications')}
           icon={<HomeIcon />}
           onClick={() => push('/app')}
           active={pathname === '/app' || pathname === '/app/'}
         />
         <IconButtonWithTooltip
-          title={tCommon('Application')}
+          title={tCommon('Applications')}
           icon={<HomeIcon />}
           onClick={() => push('/app/hello')}
           active={pathname === '/app/hello' || pathname === '/app/hello/'}
         />
         <IconButtonWithTooltip
-          title={tCommon('Application')}
+          title={tCommon('Applications')}
           icon={<HomeIcon />}
           onClick={() => push('/app/world')}
           active={pathname === '/app/world' || pathname === '/app/world/'}

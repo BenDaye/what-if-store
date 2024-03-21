@@ -4,6 +4,7 @@ import {
   Favorite as FollowIcon,
   CloudDownload as OwnIcon,
 } from '@mui/icons-material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import {
   Avatar,
   Card,
@@ -16,8 +17,10 @@ import {
   Chip,
   Divider,
   Stack,
+  Tab,
   Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { UserLink } from '../user';
 
 type ApplicationCardProps = {
@@ -60,7 +63,10 @@ export const ApplicationCard = ({
           CardHeaderProps: overrides?.CardHeaderProps,
         }}
       />
-      <CardContent></CardContent>
+      <ApplicationCardContent
+        data={{ description }}
+        overrides={{ CardContentProps: overrides?.CardContentProps }}
+      />
     </Card>
   );
 };
@@ -147,5 +153,46 @@ const ApplicationCardHeader = ({
       sx={{ alignItems: 'flex-start' }}
       {...overrides?.CardHeaderProps}
     />
+  );
+};
+
+type ApplicationCardContentProps = {
+  data: {
+    description: string;
+  };
+  overrides?: {
+    CardContentProps?: CardContentProps;
+  };
+};
+
+type TabIndex = 'Readme' | 'Versions' | 'Comments';
+
+const ApplicationCardContent = ({
+  data,
+  overrides,
+}: ApplicationCardContentProps) => {
+  const [tabIndex, setTabIndex] = useState<TabIndex>('Readme');
+  return (
+    <CardContent sx={{ p: 0 }} {...overrides?.CardContentProps}>
+      <TabContext value={tabIndex}>
+        <TabList
+          onChange={(_, newIndex) => setTabIndex(newIndex)}
+          sx={{ borderBottom: 1, borderColor: 'divider' }}
+        >
+          <Tab label="Readme" value="Readme" />
+          <Tab label="Versions" value="Versions" />
+          <Tab label="Comments" value="Comments" disabled />
+        </TabList>
+        <TabPanel value="Readme">
+          <Typography>{`// TODO: cache and render the markdown file`}</Typography>
+        </TabPanel>
+        <TabPanel value="Versions">
+          <Typography>Version</Typography>
+        </TabPanel>
+        <TabPanel value="Comments">
+          <Typography>Comments</Typography>
+        </TabPanel>
+      </TabContext>
+    </CardContent>
   );
 };

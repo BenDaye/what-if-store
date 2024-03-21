@@ -53,6 +53,12 @@ export const theme = createTheme(
           elevation: 1,
         },
       },
+      MuiTextField: {
+        defaultProps: {
+          variant: 'filled',
+          fullWidth: true,
+        },
+      },
     },
     typography: {
       fontFamily: [

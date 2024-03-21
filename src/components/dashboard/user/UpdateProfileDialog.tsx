@@ -105,7 +105,7 @@ export const DashboardUserUpdateProfileDialog = (
               onChange={onChange}
               fullWidth
               error={!!error}
-              helperText={error ? error.message : null}
+              helperText={error?.message ?? ' '}
               margin="normal"
               label={tUser('Profile.Nickname')}
               placeholder={tUser('Profile.Nickname')}
@@ -123,7 +123,7 @@ export const DashboardUserUpdateProfileDialog = (
               onChange={onChange}
               fullWidth
               error={!!error}
-              helperText={error ? error.message : null}
+              helperText={error?.message ?? ' '}
               margin="normal"
               type="email"
               label={tUser('Profile.Email')}

@@ -174,7 +174,7 @@ model ApplicationInformation {
   screenshots   String[]
   // NOTE: 如果db用的是mongodb可以使用type来定义(暂时先不改了).既然用的是pg,那就用zod做验证吧
   compatibility Json
-  languages     String[]
+  locales       String[]
   copyright     String?
   privacyPolicy String?
   termsOfUse    String?

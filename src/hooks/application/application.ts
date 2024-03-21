@@ -33,6 +33,7 @@ export const useDashboardApplication = (id: IdSchema) => {
   const avatarText = useMemo(() => data?.name?.charAt(0) ?? '-', [data]);
 
   const website = useMemo(() => data?.Information?.website ?? '-', [data]);
+  const github = useMemo(() => data?.Information?.github ?? '-', [data]);
 
   const description = useMemo(
     () => data?.Information?.description ?? '-',
@@ -67,6 +68,7 @@ export const useDashboardApplication = (id: IdSchema) => {
     avatarSrc,
     avatarText,
     website,
+    github,
     description,
     provider,
     latestVersion,
@@ -119,7 +121,9 @@ export const useDashboardApplications = (
 
   trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
     enabled: authenticated,
-    onData: () => refetch(),
+    onData: (id) => {
+      if (flattedData.some((v) => v.id === id)) refetch();
+    },
     onError: (err) => {
       if (notify) showWarning(err.message);
     },

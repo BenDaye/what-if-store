@@ -58,7 +58,7 @@ const fullSelect = {
         logo: true,
         screenshots: true,
         compatibility: true,
-        languages: true,
+        locales: true,
         copyright: true,
         privacyPolicy: true,
         termsOfUse: true,
@@ -180,7 +180,7 @@ export const publicAppApplication = router({
               : {}),
             ...(rest.language
               ? {
-                  languages: {
+                  locales: {
                     has: rest.language,
                   },
                 }
@@ -274,7 +274,7 @@ export const protectedAppApplication = router({
               : {}),
             ...(rest.language
               ? {
-                  languages: {
+                  locales: {
                     has: rest.language,
                   },
                 }
@@ -327,7 +327,7 @@ export const protectedAppApplication = router({
                 logo: input.logo,
                 screenshots: input.screenshots,
                 compatibility: input.compatibility,
-                languages: input.languages,
+                locales: input.locales,
                 privacyPolicy: input.privacyPolicy,
                 termsOfUse: input.termsOfUse,
                 github: input.github,
@@ -354,7 +354,7 @@ export const protectedAppApplication = router({
               },
             },
             Tags: {
-              connect: input.tags?.map((id) => ({ id })),
+              connect: input.tags,
             },
           },
           select: defaultSelect,
@@ -448,14 +448,14 @@ export const protectedAppApplication = router({
                 logo: input.logo,
                 screenshots: input.screenshots,
                 compatibility: input.compatibility,
-                languages: input.languages,
+                locales: input.locales,
                 privacyPolicy: input.privacyPolicy,
                 termsOfUse: input.termsOfUse,
                 github: input.github,
               },
             },
             Tags: {
-              set: input.tags?.map((id) => ({ id })),
+              set: input.tags,
             },
           },
         });
@@ -637,7 +637,7 @@ export const protectedDashboardApplication = router({
               : {}),
             ...(rest.language
               ? {
-                  languages: {
+                  locales: {
                     has: rest.language,
                   },
                 }
@@ -698,14 +698,14 @@ export const protectedDashboardApplication = router({
                 logo: input.logo,
                 screenshots: input.screenshots,
                 compatibility: input.compatibility,
-                languages: input.languages,
+                locales: input.locales,
                 privacyPolicy: input.privacyPolicy,
                 termsOfUse: input.termsOfUse,
                 github: input.github,
               },
             },
             Tags: {
-              set: input.tags?.map((id) => ({ id })),
+              set: input.tags,
             },
           },
         });
