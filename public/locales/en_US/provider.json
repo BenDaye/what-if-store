@@ -1,4 +1,7 @@
 {
+  "General": {
+    "Name": "Provider Name"
+  },
   "Type": {
     "Community": "Community",
     "Company": "Company",

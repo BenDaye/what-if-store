@@ -1,4 +1,7 @@
 {
+  "General": {
+    "Name": "作者"
+  },
   "Type": {
     "Community": "社区",
     "Company": "公司",
