@@ -1,4 +1,12 @@
-import { amber, cyan, green, orange, purple, red } from '@mui/material/colors';
+import {
+  amber,
+  cyan,
+  green,
+  grey,
+  orange,
+  purple,
+  red,
+} from '@mui/material/colors';
 import { zhCN } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 
@@ -23,6 +31,10 @@ export const theme = createTheme(
       },
       info: {
         main: cyan[600],
+      },
+      background: {
+        paper: grey[900],
+        default: '#121212',
       },
     },
     components: {
