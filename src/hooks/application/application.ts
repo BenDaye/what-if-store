@@ -38,6 +38,14 @@ export const useDashboardApplication = (id: IdSchema) => {
 
   const website = useMemo(() => data?.Information?.website ?? '-', [data]);
   const github = useMemo(() => data?.Information?.github ?? '-', [data]);
+  const countries = useMemo(() => data?.countries ?? [], [data]);
+  const tags = useMemo(() => data?.Tags ?? [], [data]);
+  const locales = useMemo(() => data?.Information?.locales ?? [], [data]);
+
+  const screenshots = useMemo(
+    () => data?.Information?.screenshots ?? [],
+    [data],
+  );
 
   const description = useMemo(
     () => data?.Information?.description ?? '-',
@@ -82,6 +90,10 @@ export const useDashboardApplication = (id: IdSchema) => {
     provider,
     latestVersion,
     status: _status,
+    countries,
+    locales,
+    tags,
+    screenshots,
   };
 };
 

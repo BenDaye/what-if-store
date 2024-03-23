@@ -2,10 +2,8 @@ import nextI18NextConfig from '@/../next-i18next.config';
 import { PageContainer, RouterBreadcrumbs } from '@/components/common';
 import {
   Page as ApplicationPage,
-  DangerZoneSectionCard,
-  ExtraSectionCard,
-  GeneralSectionCard,
-  UserSectionCard,
+  LogoSectionCard,
+  ScreenshotSectionCard,
 } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { useDashboardApplication } from '@/hooks';
@@ -25,18 +23,7 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const {
-    name,
-    provider,
-    description,
-    category,
-    website,
-    github,
-    status,
-    countries,
-    locales,
-    tags,
-  } = useDashboardApplication(id);
+  const { avatarSrc: logo, screenshots } = useDashboardApplication(id);
   return (
     <PageContainer
       hasHeader
@@ -48,26 +35,18 @@ const Page: NextPageWithLayout<
     >
       <Container>
         <ApplicationPage applicationId={id}>
-          <GeneralSectionCard
+          <LogoSectionCard
             defaultValues={{
               id,
-              name,
-              description,
-              category,
-              website,
-              github,
+              logo,
             }}
           />
-          <ExtraSectionCard
+          <ScreenshotSectionCard
             defaultValues={{
               id,
-              countries,
-              locales,
-              tags,
+              screenshots,
             }}
           />
-          {provider?.id && <UserSectionCard userId={provider.id} />}
-          <DangerZoneSectionCard applicationId={id} status={status} />
         </ApplicationPage>
       </Container>
     </PageContainer>

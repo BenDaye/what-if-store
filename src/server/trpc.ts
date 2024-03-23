@@ -11,6 +11,7 @@
 import { AuthRole } from '@prisma/client';
 import { initTRPC } from '@trpc/server';
 import SuperJSON from 'superjson';
+import { ZodError } from 'zod';
 import { Context } from './context';
 import { CommonTRPCError } from './utils/errors';
 
@@ -22,8 +23,17 @@ const t = initTRPC.context<Context>().create({
   /**
    * @see https://trpc.io/docs/v10/error-formatting
    */
-  errorFormatter({ shape }) {
-    return shape;
+  errorFormatter({ shape, error }) {
+    return {
+      ...shape,
+      data: {
+        zodError:
+          error.code === 'BAD_REQUEST' && error.cause instanceof ZodError
+            ? error.cause.flatten()
+            : null,
+        ...shape.data,
+      },
+    };
   },
 });
 

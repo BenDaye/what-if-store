@@ -1,15 +1,24 @@
 import { IdSchema } from '@/server/schemas';
-import { Paper, PaperProps, Stack, StackProps } from '@mui/material';
+import { OverridesCardProps, OverridesProps } from '@/types/overrides';
+import {
+  Card,
+  CardContent,
+  Paper,
+  PaperProps,
+  Stack,
+  StackProps,
+} from '@mui/material';
 import { PropsWithChildren } from 'react';
 import { NavList, NavListProps } from './NavList';
 
-type PageProps = {
-  applicationId: IdSchema;
-  overrides?: {
+type PageProps = OverridesProps<
+  {
     PaperProps?: PaperProps;
     StackProps?: StackProps;
     NavListProps?: NavListProps;
-  };
+  } & OverridesCardProps['overrides']
+> & {
+  applicationId: IdSchema;
 };
 
 export const Page = ({
@@ -28,7 +37,14 @@ export const Page = ({
       <Paper sx={{ width: 240, flexShrink: 0 }} {...overrides?.PaperProps}>
         <NavList applicationId={applicationId} {...overrides?.NavListProps} />
       </Paper>
-      {children}
+      <Card sx={{ flexGrow: 1 }} {...overrides?.CardProps}>
+        <CardContent
+          sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+          {...overrides?.CardContentProps}
+        >
+          {children}
+        </CardContent>
+      </Card>
     </Stack>
   );
 };
