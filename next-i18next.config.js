@@ -1,9 +1,9 @@
 /** @type {import('next-i18next').UserConfig} */
 module.exports = {
-  debug: process.env.NODE_ENV === 'development',
+  // debug: process.env.NODE_ENV === 'development',
   i18n: {
-    defaultLocale: 'en_US',
-    locales: ['en_US', 'zh_CN'],
+    defaultLocale: 'en-US',
+    locales: ['en-US', 'zh-CN'],
   },
   serializeConfig: false,
   reloadOnPrerender: process.env.NODE_ENV === 'development',
@@ -19,7 +19,7 @@ module.exports = {
     'provider',
     'application',
   ],
-  preload: ['en_US', 'zh_CN'],
+  preload: ['en-US', 'zh-CN'],
   defaultNS: 'common',
   react: {
     // https://locize.com/blog/next-i18next/

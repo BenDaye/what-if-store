@@ -32,7 +32,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
   return {
     props: {
       ...(await serverSideTranslations(
-        context.locale ?? 'en_US',
+        context.locale ?? 'en-US',
         undefined,
         nextI18NextConfig,
       )),
@@ -62,7 +62,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 //   return {
 //     props: {
 //       ...(await serverSideTranslations(
-//         context.locale ?? 'en_US',
+//         context.locale ?? 'en-US',
 //         undefined,
 //         nextI18NextConfig,
 //       )),

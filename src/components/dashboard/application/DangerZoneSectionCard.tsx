@@ -1,6 +1,5 @@
 import { IdSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
-import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import {
   Button,
   Card,
@@ -8,11 +7,11 @@ import {
   CardHeader,
   List,
   ListItem,
-  ListItemSecondaryAction,
   ListItemText,
 } from '@mui/material';
-import { ApplicationStatus } from '@prisma/client';
+import { ApplicationStatus, AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
+import { ChangeStatusButton } from './ChangeStatusButton';
 
 type DangerZoneSectionCardProps = OverridesCardProps & {
   applicationId: IdSchema;
@@ -47,62 +46,70 @@ export const DangerZoneSectionCard = ({
         {...overrides?.CardHeaderProps}
       />
       <CardContent component={List} {...overrides?.CardContentProps}>
-        <ListItem divider>
+        <ListItem divider sx={{ gap: 1 }}>
           <ListItemText
-            primary={tDangerZone('ChangeStatus', 'Change application status')}
+            primary={tDangerZone(
+              'ChangeStatus.Title',
+              'Change application status',
+            )}
             secondary={tDangerZone(
-              'CurrentStatus',
-              'This application status is currently {{status}}.',
-              { status },
+              'ChangeStatus.Description',
+              'Changing the status is a queued task.\nThis operation will wait for some dependent tasks to align with the new status before it is completed.',
             )}
             secondaryTypographyProps={{
               whiteSpace: 'pre-line',
             }}
           />
-          <ListItemSecondaryAction>
-            <Button
-              color="error"
-              variant="contained"
-              disableElevation
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              {tApplicationStatus(status, status)}
-            </Button>
-          </ListItemSecondaryAction>
+          <ChangeStatusButton
+            overrides={{
+              ButtonProps: {
+                sx: { flexShrink: 0 },
+              },
+            }}
+            applicationId={applicationId}
+            defaultValue={status}
+            role={AuthRole.Admin}
+          />
         </ListItem>
-        <ListItem divider>
+        <ListItem divider sx={{ gap: 1 }}>
           <ListItemText
-            primary={tDangerZone('TransferTitle', 'Transfer ownership')}
+            primary={tDangerZone('Transfer.Title', 'Transfer ownership')}
             secondary={tDangerZone(
-              'TransferDescription',
+              'Transfer.Description',
               'Transfer this application to another provider.',
             )}
             secondaryTypographyProps={{
               whiteSpace: 'pre-line',
             }}
           />
-          <ListItemSecondaryAction>
-            <Button color="error" variant="contained">
-              {tDangerZone('TransferButton', 'Transfer')}
-            </Button>
-          </ListItemSecondaryAction>
+          <Button
+            color="error"
+            variant="contained"
+            sx={{ flexShrink: 0 }}
+            disableElevation
+          >
+            {tDangerZone('Transfer.Button', 'Transfer')}
+          </Button>
         </ListItem>
-        <ListItem>
+        <ListItem sx={{ gap: 1 }}>
           <ListItemText
-            primary={tDangerZone('DeleteTitle', 'Delete this application')}
+            primary={tDangerZone('Delete.Title', 'Delete this application')}
             secondary={tDangerZone(
-              'DeleteDescription',
+              'Delete.Description',
               'Once you delete a application, there is no going back. Please be certain.\nThis operation is higher priority than change application status to "Deleted".',
             )}
             secondaryTypographyProps={{
               whiteSpace: 'pre-line',
             }}
           />
-          <ListItemSecondaryAction>
-            <Button color="error" variant="contained">
-              {tDangerZone('DeleteButton', 'Delete')}
-            </Button>
-          </ListItemSecondaryAction>
+          <Button
+            color="error"
+            variant="contained"
+            sx={{ flexShrink: 0 }}
+            disableElevation
+          >
+            {tDangerZone('Delete.Button', 'Delete')}
+          </Button>
         </ListItem>
       </CardContent>
     </Card>

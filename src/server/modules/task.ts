@@ -3,26 +3,28 @@ import { appLogger } from './pino';
 
 const _logger = appLogger.child({}, { msgPrefix: '[Task] ' });
 
-const startupTasks: Promise<string>[] = [startupBullMQ()];
-
 export const launchStartupTasks = async () => {
-  await Promise.all(startupTasks)
+  await Promise.allSettled([startupBullMQ()])
     .then((result) => {
-      result.forEach((task) => _logger.info(`✅ ${task} startup task done`));
+      result.forEach((task) =>
+        task.status === 'fulfilled'
+          ? _logger.info(`✅ ${task.value} startup task done`)
+          : _logger.error({ err: task.reason }, `❌ startup task failed`),
+      );
     })
     .catch((err) => {
       _logger.error({ err }, '❌ Some startup tasks failed');
     });
-
-  await startupBullMQ();
 };
 
-const shutdownTasks: Promise<string>[] = [shutdownBullMQ()];
-
 export const launchShutdownTasks = async () => {
-  await Promise.all(shutdownTasks)
+  await Promise.allSettled([shutdownBullMQ()])
     .then((result) => {
-      result.forEach((task) => _logger.info(`✅ ${task} shutdown task done`));
+      result.forEach((task) =>
+        task.status === 'fulfilled'
+          ? _logger.info(`✅ ${task.value} startup task done`)
+          : _logger.error({ err: task.reason }, `❌ startup task failed`),
+      );
     })
     .catch((err) => {
       _logger.error({ err }, '❌ Some shutdown tasks failed');

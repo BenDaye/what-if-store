@@ -70,10 +70,12 @@ export type ApplicationUpdateInputSchema = z.infer<
   typeof applicationUpdateInputSchema
 >;
 
-export const applicationReviewInputSchema = z.object({
+export const applicationChangeStatusInputSchema = z.object({
   id: idSchema,
   status: z.nativeEnum(ApplicationStatus),
+  request: z.string().nullable().optional(),
+  response: z.string().nullable().optional(),
 });
-export type ApplicationReviewInputSchema = z.infer<
-  typeof applicationReviewInputSchema
+export type ApplicationChangeStatusInputSchema = z.infer<
+  typeof applicationChangeStatusInputSchema
 >;

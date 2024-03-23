@@ -1,11 +1,11 @@
 import { ApplicationStatus, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
-import { applicationEmitter } from '../modules';
+import { applicationChangeStatusQueue, applicationEmitter } from '../modules';
 import {
   IdSchema,
+  applicationChangeStatusInputSchema,
   applicationCreateInputSchema,
   applicationListInputSchema,
-  applicationReviewInputSchema,
   applicationUpdateInputSchema,
   idSchema,
   mutationOutputSchema,
@@ -365,43 +365,26 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
-  submit: protectedProviderProcedure
-    .input(idSchema)
+  changeStatusById: protectedProviderProcedure
+    .input(applicationChangeStatusInputSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+    .mutation(async ({ ctx: { session }, input: { id, status, request } }) => {
       try {
-        await prisma.application.update({
-          where: {
+        await applicationChangeStatusQueue.add(
+          id,
+          {
             id,
-            providerId: session.user.id,
-            status: ApplicationStatus.Draft,
+            userId: session.user.id,
+            status,
+            reviewerId: session.user.id,
+            request:
+              request ?? `Change status to ${status} by ${session.user.id}`,
           },
-          data: {
-            status: ApplicationStatus.Pending,
+          {
+            // NOTE: https://docs.bullmq.io/patterns/throttle-jobs
+            jobId: id,
           },
-        });
-        applicationEmitter.emit('update', id);
-        return true;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
-  suspend: protectedProviderProcedure
-    .input(idSchema)
-    .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
-      try {
-        await prisma.application.update({
-          where: {
-            id,
-            providerId: session.user.id,
-            status: ApplicationStatus.Published,
-          },
-          data: {
-            status: ApplicationStatus.Suspended,
-          },
-        });
-        applicationEmitter.emit('update', id);
+        );
         return true;
       } catch (err) {
         throw onError(err);
@@ -755,19 +738,25 @@ export const protectedDashboardApplication = router({
         throw onError(err);
       }
     }),
-  reviewById: protectedAdminProcedure
-    .input(applicationReviewInputSchema)
+  changeStatusById: protectedAdminProcedure
+    .input(applicationChangeStatusInputSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma }, input: { id, status } }) => {
+    .mutation(async ({ ctx: { session }, input: { id, status } }) => {
       try {
-        // TODO: It should be checked if the next status is logical
-        await prisma.application.update({
-          where: { id },
-          data: {
+        await applicationChangeStatusQueue.add(
+          id,
+          {
+            id,
+            userId: session.user.id,
             status,
+            reviewerId: session.user.id,
+            request: `Change status to ${status} by ${session.user.id}`,
           },
-        });
-        applicationEmitter.emit('update', id);
+          {
+            // NOTE: https://docs.bullmq.io/patterns/throttle-jobs
+            jobId: id,
+          },
+        );
         return true;
       } catch (err) {
         throw onError(err);

@@ -66,11 +66,30 @@
     "Category": "Category",
     "Countries": "Countries",
     "DangerZone": {
-      "ChangeStatus": "Change application status",
-      "CurrentStatus": "This application status is currently {{status}}.",
-      "DeleteButton": "Delete",
-      "DeleteDescription": "Once you delete a application, there is no going back. Please be certain.\nThis operation is higher priority than change application status to \"Deleted\".",
-      "DeleteTitle": "Delete this application",
+      "ChangeStatus": {
+        "Banned": {
+          "Button": "Ban",
+          "Description": "Once an application is banned, it will be removed from the store and will no longer be accessible to users.\n\nThe only party able to view the application page is the provider, but they are unable to perform any operations except for deletion.\n\nThis operation is exclusively available to administrators.",
+          "Title": "Ban this application"
+        },
+        "Description": "Changing the status is a queued task.\nThis operation will wait for some dependent tasks to align with the new status before it is completed.",
+        "Hidden": {
+          "Button": "Hide",
+          "Description": "Once an application is hidden, it will temporarily become invisible to all users except those who previously owned it.\n\nThis operation is exclusively available to administrators.",
+          "Title": "Hide this application"
+        },
+        "Title": "Change application status"
+      },
+      "Delete": {
+        "Button": "Delete",
+        "Description": "Once you delete an application, the action is irreversible. Please be certain.\nThis operation takes precedence over changing the application status to \"Deleted\".",
+        "Title": "Delete this application"
+      },
+      "Transfer": {
+        "Button": "Transfer",
+        "Description": "Transfer this application to another provider.",
+        "Title": "Transfer ownership"
+      },
       "_": "Danger Zone"
     },
     "Description": "Description",

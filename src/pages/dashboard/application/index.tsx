@@ -105,7 +105,7 @@ export const getServerSideProps = async (
   return {
     props: {
       ...(await serverSideTranslations(
-        context.locale ?? 'en_US',
+        context.locale ?? 'en-US',
         undefined,
         nextI18NextConfig,
       )),

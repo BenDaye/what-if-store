@@ -1,6 +1,7 @@
 import { ProviderVerificationRequestInputSchema } from '@/server/schemas';
 import { ProviderVerificationStatus } from '@prisma/client';
 import {
+  MetricsTime,
   Processor,
   Queue,
   QueueOptions,
@@ -72,7 +73,7 @@ export const providerVerificationProcessor: ProviderVerificationProcessor =
   };
 
 export const createProviderVerificationQueue = (
-  queueName?: string,
+  queueName = QUEUE_NAME.providerVerification,
   opts?: QueueOptions,
 ): ProviderVerificationQueue => {
   const _queue = new Queue(
@@ -102,19 +103,22 @@ export const createProviderVerificationQueue = (
 };
 
 export const createProviderVerificationWorker = (
-  queueName?: string,
-  processor?: ProviderVerificationProcessor,
+  queueName = QUEUE_NAME.providerVerification,
+  processor = providerVerificationProcessor,
   opts?: WorkerOptions,
 ): ProviderVerificationWorker => {
   const _worker = new Worker(
-    queueName ?? QUEUE_NAME.providerVerification,
-    processor ?? providerVerificationProcessor,
+    queueName,
+    processor,
     opts ?? {
       connection,
       autorun: false,
       limiter: {
         max: 10,
         duration: 1000,
+      },
+      metrics: {
+        maxDataPoints: MetricsTime.ONE_WEEK * 2,
       },
     },
   );

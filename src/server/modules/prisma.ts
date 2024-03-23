@@ -6,7 +6,7 @@ const _logger = appLogger.child(
   {},
   {
     msgPrefix: '[Prisma] ',
-    level: env.NODE_ENV === 'production' ? 'info' : 'debug',
+    level: env.NODE_ENV === 'production' ? 'warn' : 'info',
   },
 );
 
