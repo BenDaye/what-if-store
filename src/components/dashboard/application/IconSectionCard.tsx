@@ -1,6 +1,7 @@
 import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
 import { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
+import { shimmerSvg } from '@/utils/shimmer';
 import { trpc } from '@/utils/trpc';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -10,8 +11,11 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  ImageList,
+  ImageListItem,
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -80,7 +84,22 @@ export const IconSectionCard = ({
         title={tApplication('Icons', 'Icons')}
         {...overrides?.CardHeaderProps}
       />
-      <CardContent {...overrides?.CardContentProps}></CardContent>
+      <CardContent {...overrides?.CardContentProps}>
+        <ImageList cols={5}>
+          {defaultValues.icons.map((item) => (
+            <ImageListItem key={item.id}>
+              <Image
+                alt="icon"
+                src={item.url}
+                width={128}
+                height={128}
+                placeholder={shimmerSvg(128, 128)}
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </CardContent>
       <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
         <Button

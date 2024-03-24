@@ -20,7 +20,7 @@ export const ApplicationListItemButton = ({
 }: ApplicationListItemButtonProps) => {
   const {
     router: { error, isError },
-    data: { name, description, provider, primaryIconSrc, primaryIconText },
+    data: { name, description, provider, primaryIcon, primaryIconText },
   } = useDashboardApplication(itemId);
 
   const { pathname, query, push } = useRouter();
@@ -37,7 +37,11 @@ export const ApplicationListItemButton = ({
       {...props}
     >
       <ListItemAvatar>
-        <Avatar alt={`Avatar:${itemId}`} src={primaryIconSrc} variant="rounded">
+        <Avatar
+          alt={`Avatar:${itemId}`}
+          src={primaryIcon?.url}
+          variant="rounded"
+        >
           {primaryIconText}
         </Avatar>
       </ListItemAvatar>

@@ -3,6 +3,7 @@ import {
   CardActionsProps,
   CardContentProps,
   CardHeaderProps,
+  CardMediaProps,
   CardProps,
   TextFieldProps,
 } from '@mui/material';
@@ -17,6 +18,7 @@ export type OverridesCardProps = OverridesProps<{
   CardHeaderProps?: CardHeaderProps;
   CardContentProps?: CardContentProps;
   CardActionsProps?: CardActionsProps;
+  CardMediaProps?: CardMediaProps;
 }>;
 
 export type MultipleAutoCompleteProps<

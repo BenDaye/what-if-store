@@ -12,6 +12,7 @@ export * from './IdRenderCell';
 export * from './List';
 export * from './ListItemButton';
 export * from './LocaleAutoComplete';
+export * from './MediaSectionCard';
 export * from './NavList';
 export * from './Page';
 export * from './ScreenshotSectionCard';

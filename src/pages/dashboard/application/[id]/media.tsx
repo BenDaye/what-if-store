@@ -2,9 +2,7 @@ import nextI18NextConfig from '@/../next-i18next.config';
 import { PageContainer, RouterBreadcrumbs } from '@/components/common';
 import {
   Page as ApplicationPage,
-  BackgroundSectionCard,
-  BannerSectionCard,
-  IconSectionCard,
+  MediaSectionCard,
   ScreenshotSectionCard,
 } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
@@ -37,9 +35,7 @@ const Page: NextPageWithLayout<
     >
       <Container>
         <ApplicationPage applicationId={id}>
-          <IconSectionCard defaultValues={data} />
-          <BackgroundSectionCard defaultValues={data} />
-          <BannerSectionCard defaultValues={data} />
+          <MediaSectionCard defaultValues={data} />
           <ScreenshotSectionCard defaultValues={data} />
         </ApplicationPage>
       </Container>

@@ -22,6 +22,9 @@ const config = {
       {
         hostname: 'localhost',
       },
+      {
+        hostname: 'loremflickr.com',
+      },
     ],
   },
 };

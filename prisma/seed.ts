@@ -129,7 +129,7 @@ const main = async () => {
             },
             {
               type: ApplicationAssetType.Banner,
-              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 360 }),
               isPrimary: true,
               isLocal: false,
             },

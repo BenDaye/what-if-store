@@ -1,6 +1,7 @@
 import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
 import { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
+import { shimmerSvg } from '@/utils/shimmer';
 import { trpc } from '@/utils/trpc';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -10,8 +11,11 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  ImageList,
+  ImageListItem,
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -25,7 +29,7 @@ export const BannerSectionCard = ({
 }: BannerSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
-    keyPrefix: 'General',
+    keyPrefix: 'Media',
   });
   const { handleSubmit, reset, control, formState, setValue } =
     useForm<ApplicationUpdateInputSchema>({
@@ -77,10 +81,25 @@ export const BannerSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplication('Extra', 'Extra')}
+        title={tApplication('Banners', 'Banners')}
         {...overrides?.CardHeaderProps}
       />
-      <CardContent {...overrides?.CardContentProps}></CardContent>
+      <CardContent {...overrides?.CardContentProps}>
+        <ImageList cols={2} rowHeight={180}>
+          {defaultValues.banners.map((item) => (
+            <ImageListItem key={item.id}>
+              <Image
+                alt="banner"
+                src={item.url}
+                width={320}
+                height={180}
+                placeholder={shimmerSvg(320, 180)}
+                style={{ maxWidth: '100%', height: 'auto' }}
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </CardContent>
       <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
         <Button

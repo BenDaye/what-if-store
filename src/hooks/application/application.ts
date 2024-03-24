@@ -48,13 +48,19 @@ export const useDashboardApplicationHookDataSchema =
 
       assets: z.custom<DashboardApplicationRouterOutput['Assets']>(),
       icons: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      primaryIconSrc: z.string().optional(),
+      primaryIcon: z
+        .custom<DashboardApplicationRouterOutput['Assets'][number]>()
+        .optional(),
       primaryIconText: z.string(),
       backgrounds: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      primaryBackgroundSrc: z.string().optional(),
-      screenshots: z.custom<DashboardApplicationRouterOutput['Assets']>(),
+      primaryBackground: z
+        .custom<DashboardApplicationRouterOutput['Assets'][number]>()
+        .optional(),
       banners: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      primaryBannerSrc: z.string().optional(),
+      primaryBanner: z
+        .custom<DashboardApplicationRouterOutput['Assets'][number]>()
+        .optional(),
+      screenshots: z.custom<DashboardApplicationRouterOutput['Assets']>(),
       privacyPolicy: z.string().optional(),
       termsOfUse: z.string().optional(),
       copyright: z.string().optional(),
@@ -123,49 +129,48 @@ export const useDashboardApplication = (id: IdSchema) => {
       assets: data?.Assets ?? [],
       icons:
         data?.Assets?.filter(
-          (asset) => asset.type === ApplicationAssetType.Icon,
+          ({ type }) => type === ApplicationAssetType.Icon,
         ) ?? [],
-      primaryIconSrc: data?.Assets?.find(
-        (asset) => asset.type === ApplicationAssetType.Icon && asset.isPrimary,
-      )?.url,
+      primaryIcon: data?.Assets?.find(
+        ({ type, isPrimary }) =>
+          type === ApplicationAssetType.Icon && isPrimary,
+      ),
       primaryIconText: data?.name?.charAt(0) ?? '-',
       backgrounds:
         data?.Assets?.filter(
-          (asset) => asset.type === ApplicationAssetType.Background,
+          ({ type }) => type === ApplicationAssetType.Background,
         ) ?? [],
-      primaryBackgroundSrc: data?.Assets?.find(
-        (asset) =>
-          asset.type === ApplicationAssetType.Background && asset.isPrimary,
-      )?.url,
+      primaryBackground: data?.Assets?.find(
+        ({ type, isPrimary }) =>
+          type === ApplicationAssetType.Background && isPrimary,
+      ),
       banners:
         data?.Assets?.filter(
-          (asset) => asset.type === ApplicationAssetType.Banner,
+          ({ type }) => type === ApplicationAssetType.Banner,
         ) ?? [],
-      primaryBannerSrc: data?.Assets?.find(
-        (asset) => asset.type === ApplicationAssetType.Icon && asset.isPrimary,
-      )?.url,
+      primaryBanner: data?.Assets?.find(
+        ({ type, isPrimary }) =>
+          type === ApplicationAssetType.Banner && isPrimary,
+      ),
       screenshots:
         data?.Assets?.filter(
-          (asset) => asset.type === ApplicationAssetType.Screenshot,
+          ({ type }) => type === ApplicationAssetType.Screenshot,
         ) ?? [],
       privacyPolicy: data?.Assets?.find(
-        (asset) =>
-          asset.type === ApplicationAssetType.File &&
-          asset.name === 'PrivacyPolicy',
+        ({ type, name }) =>
+          type === ApplicationAssetType.File && name === 'PrivacyPolicy',
       )?.url,
       termsOfUse: data?.Assets?.find(
-        (asset) =>
-          asset.type === ApplicationAssetType.File &&
-          asset.name === 'TermsOfUse',
+        ({ type, name }) =>
+          type === ApplicationAssetType.File && name === 'TermsOfUse',
       )?.url,
       copyright: data?.Assets?.find(
-        (asset) =>
-          asset.type === ApplicationAssetType.File &&
-          asset.name === 'Copyright',
+        ({ type, name }) =>
+          type === ApplicationAssetType.File && name === 'Copyright',
       )?.url,
       readme: data?.Assets?.find(
-        (asset) =>
-          asset.type === ApplicationAssetType.File && asset.name === 'Readme',
+        ({ type, name }) =>
+          type === ApplicationAssetType.File && name === 'Readme',
       )?.url,
     };
   }, [id, data]);
