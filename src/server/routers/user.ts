@@ -54,7 +54,7 @@ const fullSelect = {
         OwningCollections: true,
         FollowingCollections: true,
         FollowingUsers: true,
-        FollowedByUsers: true,
+        Followers: true,
       },
     },
   }),

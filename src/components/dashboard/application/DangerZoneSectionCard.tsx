@@ -1,4 +1,4 @@
-import { IdSchema } from '@/server/schemas';
+import { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { OverridesCardProps } from '@/types/overrides';
 import {
   Button,
@@ -9,25 +9,20 @@ import {
   ListItem,
   ListItemText,
 } from '@mui/material';
-import { ApplicationStatus, AuthRole } from '@prisma/client';
+import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { ChangeStatusButton } from './ChangeStatusButton';
 
 type DangerZoneSectionCardProps = OverridesCardProps & {
-  applicationId: IdSchema;
-  status: ApplicationStatus;
+  defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
 export const DangerZoneSectionCard = ({
   overrides,
-  applicationId,
-  status,
+  defaultValues: { id: applicationId, status },
 }: DangerZoneSectionCardProps) => {
   const { t: tDangerZone } = useTranslation('application', {
     keyPrefix: 'General.DangerZone',
-  });
-  const { t: tApplicationStatus } = useTranslation('application', {
-    keyPrefix: 'Status',
   });
 
   return (

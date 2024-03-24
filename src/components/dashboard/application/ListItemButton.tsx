@@ -18,8 +18,10 @@ export const ApplicationListItemButton = ({
   itemId,
   ...props
 }: ApplicationListItemButtonProps) => {
-  const { avatarSrc, avatarText, name, description, provider, error, isError } =
-    useDashboardApplication(itemId);
+  const {
+    router: { error, isError },
+    data: { name, description, provider, primaryIconSrc, primaryIconText },
+  } = useDashboardApplication(itemId);
 
   const { pathname, query, push } = useRouter();
   const selected = useMemo(
@@ -35,8 +37,8 @@ export const ApplicationListItemButton = ({
       {...props}
     >
       <ListItemAvatar>
-        <Avatar alt={`Avatar:${itemId}`} src={avatarSrc} variant="rounded">
-          {avatarText}
+        <Avatar alt={`Avatar:${itemId}`} src={primaryIconSrc} variant="rounded">
+          {primaryIconText}
         </Avatar>
       </ListItemAvatar>
 

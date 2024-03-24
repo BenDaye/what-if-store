@@ -1,4 +1,4 @@
-import { useNotice } from '@/hooks';
+import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
 import { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
@@ -20,7 +20,7 @@ import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 type GeneralSectionCardProps = OverridesCardProps & {
-  defaultValues?: ApplicationUpdateInputSchema;
+  defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
 export const GeneralSectionCard = ({

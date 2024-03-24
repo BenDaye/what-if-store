@@ -25,18 +25,7 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const {
-    name,
-    provider,
-    description,
-    category,
-    website,
-    github,
-    status,
-    countries,
-    locales,
-    tags,
-  } = useDashboardApplication(id);
+  const { data } = useDashboardApplication(id);
   return (
     <PageContainer
       hasHeader
@@ -48,26 +37,10 @@ const Page: NextPageWithLayout<
     >
       <Container>
         <ApplicationPage applicationId={id}>
-          <GeneralSectionCard
-            defaultValues={{
-              id,
-              name,
-              description,
-              category,
-              website,
-              github,
-            }}
-          />
-          <ExtraSectionCard
-            defaultValues={{
-              id,
-              countries,
-              locales,
-              tags,
-            }}
-          />
-          {provider?.id && <UserSectionCard userId={provider.id} />}
-          <DangerZoneSectionCard applicationId={id} status={status} />
+          <GeneralSectionCard defaultValues={data} />
+          <ExtraSectionCard defaultValues={data} />
+          <UserSectionCard defaultValues={data} />
+          <DangerZoneSectionCard defaultValues={data} />
         </ApplicationPage>
       </Container>
     </PageContainer>

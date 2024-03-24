@@ -11,8 +11,10 @@ export const IdRenderCell = ({
   applicationId,
   overrides,
 }: IdRenderCellProps) => {
-  const { isError, error, isFetching, name } =
-    useDashboardApplication(applicationId);
+  const {
+    router: { isError, error, isFetching },
+    data: { name },
+  } = useDashboardApplication(applicationId);
   if (isFetching) {
     return <Typography>...</Typography>;
   }

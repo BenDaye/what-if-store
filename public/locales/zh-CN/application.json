@@ -108,6 +108,7 @@
     "Version": "版本"
   },
   "Status": {
+    "Achieved": "已归档",
     "Approved": "已批准",
     "Banned": "已禁用",
     "Deleted": "已删除",

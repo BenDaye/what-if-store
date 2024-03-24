@@ -26,7 +26,7 @@ model User {
   UserProfile           UserProfile?
   ProviderProfile       ProviderProfile?
   FollowingUsers        User[]                  @relation("UserFollows")
-  FollowedByUsers       User[]                  @relation("UserFollows")
+  Followers             User[]                  @relation("UserFollows")
   ProvidingApplications Application[]
   OwningApplications    Application[]           @relation("ApplicationOwns")
   FollowingApplications Application[]           @relation("ApplicationFollows")
@@ -138,6 +138,7 @@ enum ApplicationStatus {
   Hidden
   Published
   Suspended
+  Achieved
 }
 
 model Application {
@@ -145,42 +146,38 @@ model Application {
   createdAt        DateTime                @default(now())
   updatedAt        DateTime                @updatedAt
   name             String
+  description      String?
   category         ApplicationCategory
-  platforms        ApplicationPlatform[]
-  countries        String[]
-  ageRating        String
   price            Float?                  @default(0)
   status           ApplicationStatus       @default(Draft)
   Information      ApplicationInformation?
   VersionHistories ApplicationVersion[]
   providerId       String
   Provider         User                    @relation(fields: [providerId], references: [id], onDelete: Restrict)
-  FollowedByUsers  User[]                  @relation("ApplicationFollows")
-  OwnedByUsers     User[]                  @relation("ApplicationOwns")
+  Followers        User[]                  @relation("ApplicationFollows")
+  Owners           User[]                  @relation("ApplicationOwns")
   Collections      ApplicationCollection[]
   Groups           ApplicationGroup[]
   Tags             ApplicationTag[]
+  Assets           ApplicationAsset[]
 
   @@unique([name, providerId])
 }
 
 model ApplicationInformation {
-  id            String      @id @default(uuid())
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  description   String?
-  website       String?
-  logo          String?
-  screenshots   String[]
+  id            String                @id @default(uuid())
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  platforms     ApplicationPlatform[]
   // NOTE: 如果db用的是mongodb可以使用type来定义(暂时先不改了).既然用的是pg,那就用zod做验证吧
   compatibility Json
+  ageRating     String
+  countries     String[]
   locales       String[]
-  copyright     String?
-  privacyPolicy String?
-  termsOfUse    String?
+  website       String?
   github        String?
-  applicationId String      @unique
-  Application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String                @unique
+  Application   Application           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }
 
 model ApplicationVersion {
@@ -217,17 +214,17 @@ model ApplicationGroup {
 }
 
 model ApplicationCollection {
-  id              String        @id @default(uuid())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  name            String
-  description     String?
-  price           Float?        @default(0)
-  providerId      String
-  Provider        User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  Applications    Application[]
-  FollowedByUsers User[]        @relation("CollectionFollows")
-  OwnedByUsers    User[]        @relation("CollectionOwns")
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  name         String
+  description  String?
+  price        Float?        @default(0)
+  providerId   String
+  Provider     User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  Applications Application[]
+  Followers    User[]        @relation("CollectionFollows")
+  Owners       User[]        @relation("CollectionOwns")
 
   @@unique([name, providerId])
 }
@@ -238,4 +235,27 @@ model ApplicationTag {
   updatedAt    DateTime      @updatedAt
   name         String        @unique
   Applications Application[]
+}
+
+enum ApplicationAssetType {
+  Icon
+  Screenshot
+  Banner
+  Background
+  Video
+  File
+}
+
+model ApplicationAsset {
+  id            String               @id @default(uuid())
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  type          ApplicationAssetType
+  url           String
+  name          String?
+  description   String?
+  isPrimary     Boolean              @default(false)
+  isLocal       Boolean              @default(false)
+  applicationId String
+  Application   Application          @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 }

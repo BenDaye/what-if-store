@@ -44,6 +44,7 @@ export const validStatusTransition = (
           new Map([
             [ApplicationStatus.Suspended, true],
             [ApplicationStatus.Deleted, true],
+            [ApplicationStatus.Achieved, true],
           ]),
         ],
         [
@@ -51,6 +52,7 @@ export const validStatusTransition = (
           new Map([
             [ApplicationStatus.Published, true],
             [ApplicationStatus.Deleted, true],
+            [ApplicationStatus.Achieved, true],
           ]),
         ],
       ]);

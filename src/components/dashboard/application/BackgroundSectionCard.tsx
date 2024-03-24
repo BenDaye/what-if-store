@@ -1,4 +1,4 @@
-import { useNotice } from '@/hooks';
+import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
 import { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
@@ -15,14 +15,14 @@ import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-type LogoSectionCardProps = OverridesCardProps & {
-  defaultValues?: ApplicationUpdateInputSchema;
+type BackgroundSectionCardProps = OverridesCardProps & {
+  defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const LogoSectionCard = ({
+export const BackgroundSectionCard = ({
   overrides,
   defaultValues,
-}: LogoSectionCardProps) => {
+}: BackgroundSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
     keyPrefix: 'General',

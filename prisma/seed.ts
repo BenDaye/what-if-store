@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import {
+  ApplicationAssetType,
   ApplicationCategory,
   ApplicationPlatform,
   ApplicationStatus,
@@ -88,24 +89,21 @@ const main = async () => {
   for await (const category of getRandomApplicationCategories()) {
     const data: Prisma.ApplicationUncheckedCreateInput = {
       name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
       category,
+      price: faker.number.float({ min: 0, max: 100, multipleOf: 2 }),
+      status: getRandomApplicationStatus(),
+
       providerId: genesisProvider.id,
-      platforms: getRandomApplicationPlatforms(),
-      countries: getRandomApplicationCountries(),
-      ageRating: getRandomApplicationAgeRating(),
+
       Information: {
         create: {
-          description: faker.commerce.productDescription(),
-          website: faker.internet.url(),
-          logo: faker.image.urlLoremFlickr({ width: 128, height: 128 }),
-          screenshots: Array.from({ length: 5 }, () =>
-            faker.image.urlLoremFlickr({ width: 800, height: 600 }),
-          ),
+          platforms: getRandomApplicationPlatforms(),
           compatibility: getRandomApplicationPlatforms(),
+          ageRating: getRandomApplicationAgeRating(),
+          countries: getRandomApplicationCountries(),
           locales: getRandomApplicationLanguages(),
-          copyright: faker.lorem.lines(1),
-          privacyPolicy: faker.lorem.paragraphs(),
-          termsOfUse: faker.lorem.paragraphs(),
+          website: faker.internet.url(),
           github: faker.internet.url(),
         },
       },
@@ -114,25 +112,83 @@ const main = async () => {
           version: faker.system.semver(),
           releaseDate: faker.date.soon(),
           changelog: faker.commerce.productDescription(),
-          latest: Math.floor(Math.random() * 10) > 5,
+          latest: true,
           deprecated: Math.floor(Math.random() * 10) > 5,
           preview: Math.floor(Math.random() * 10) > 5,
         },
       },
-      price: faker.number.float({ min: 0, max: 100, multipleOf: 2 }),
-      status: getRandomApplicationStatus(),
+      Assets: {
+        createMany: {
+          skipDuplicates: true,
+          data: [
+            {
+              type: ApplicationAssetType.Icon,
+              url: faker.image.urlLoremFlickr({ width: 128, height: 128 }),
+              isPrimary: true,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Banner,
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              isPrimary: true,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Background,
+              url: faker.image.urlLoremFlickr({ width: 480, height: 480 }),
+              isPrimary: true,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Screenshot,
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              isPrimary: false,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Screenshot,
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              isPrimary: false,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Screenshot,
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              isPrimary: false,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Screenshot,
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              isPrimary: false,
+              isLocal: false,
+            },
+            {
+              type: ApplicationAssetType.Screenshot,
+              url: faker.image.urlLoremFlickr({ width: 1280, height: 720 }),
+              isPrimary: false,
+              isLocal: false,
+            },
+          ],
+        },
+      },
     };
 
-    const genesisApplication = await prisma.application.create({
-      data,
-    });
-    console.log({ genesisApplication });
+    try {
+      const genesisApplication = await prisma.application.create({
+        data,
+      });
+      console.log({ genesisApplication });
+    } catch (e) {
+      console.error(e);
+      continue;
+    }
   }
 
   const genesisTags = await prisma.applicationTag.createMany({
     skipDuplicates: true,
     data: Array.from({
-      length: Math.floor(Math.random() * 10),
+      length: Math.floor(Math.random() * 100),
     }).map(() => ({ name: faker.commerce.productMaterial() })),
   });
 

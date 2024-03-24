@@ -5,6 +5,7 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 import { idSchema } from './id';
+import { jsonSchema } from './json';
 import { listInputSchema } from './list';
 
 export const applicationListInputSchema = listInputSchema
@@ -18,45 +19,22 @@ export type ApplicationListInputSchema = z.infer<
   typeof applicationListInputSchema
 >;
 
-export const applicationCreateInputSchema = z
-  .object({
-    name: z.string(),
-    category: z.nativeEnum(ApplicationCategory),
-    platforms: z.nativeEnum(ApplicationPlatform).array().min(1),
-    countries: z.string().array().min(1),
-    ageRating: z.string(),
-    price: z.number().nonnegative(),
-    // NOTE: Information
-    description: z.string(),
-    website: z.string().url(),
-    logo: z.string(),
-    screenshots: z.string().array(),
-    // TODO: It should be checked if the structure is correct
-    compatibility: z.any(),
-    locales: z.string().array().min(1),
-    copyright: z.string(),
-    privacyPolicy: z.string(),
-    termsOfUse: z.string(),
-    github: z.string().url(),
-    // NOTE: Version History
-    version: z.string().regex(/^(\d+\.)?(\d+\.)?(\*|\d+)$/),
-    releaseDate: z.coerce.date(),
-    changelog: z.string().nullable(),
-    latest: z.boolean(),
-    deprecated: z.boolean(),
-    preview: z.boolean(),
-    // NOTE: Tag
-    tags: z.object({ id: idSchema }).array(),
-  })
-  .partial({
-    version: true,
-    releaseDate: true,
-    changelog: true,
-    latest: true,
-    deprecated: true,
-    preview: true,
-    tags: true,
-  });
+export const applicationCreateInputSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  category: z.nativeEnum(ApplicationCategory),
+  price: z.number().nonnegative(),
+
+  platforms: z.nativeEnum(ApplicationPlatform).array().min(1),
+  compatibility: jsonSchema,
+  ageRating: z.string().regex(/^\d+\+$/),
+  countries: z.string().array().min(1),
+  locales: z.string().array().min(1),
+  website: z.string().url(),
+  github: z.string().url(),
+
+  tags: z.object({ id: idSchema }).array(),
+});
 export type ApplicationCreateInputSchema = z.infer<
   typeof applicationCreateInputSchema
 >;

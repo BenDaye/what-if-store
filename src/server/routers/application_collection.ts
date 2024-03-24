@@ -158,12 +158,12 @@ export const protectedAppApplicationCollection = router({
                   status: ApplicationStatus.Published,
                 })),
               },
-              FollowedByUsers: {
+              Followers: {
                 connect: {
                   id: session.user.id,
                 },
               },
-              OwnedByUsers: {
+              Owners: {
                 connect: {
                   id: session.user.id,
                 },
@@ -223,7 +223,7 @@ export const protectedAppApplicationCollection = router({
         await prisma.applicationCollection.update({
           where: { id },
           data: {
-            FollowedByUsers: {
+            Followers: {
               connect: {
                 id: session.user.id,
               },
@@ -245,7 +245,7 @@ export const protectedAppApplicationCollection = router({
         await prisma.applicationCollection.update({
           where: { id },
           data: {
-            OwnedByUsers: {
+            Owners: {
               connect: {
                 id: session.user.id,
               },

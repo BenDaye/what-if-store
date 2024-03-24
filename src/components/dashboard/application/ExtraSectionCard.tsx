@@ -1,4 +1,4 @@
-import { useNotice } from '@/hooks';
+import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
 import { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
@@ -20,7 +20,7 @@ import { LocalesAutoComplete } from './LocaleAutoComplete';
 import { TagsAutoComplete } from './TagsAutoComplete';
 
 type ExtraSectionCardProps = OverridesCardProps & {
-  defaultValues?: ApplicationUpdateInputSchema;
+  defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
 export const ExtraSectionCard = ({
@@ -91,7 +91,7 @@ export const ExtraSectionCard = ({
               onChange={(value) =>
                 setValue('countries', value, { shouldDirty: true })
               }
-              defaultValue={defaultValues?.countries}
+              defaultValue={defaultValues.countries}
               error={formState.errors.countries}
               disabled={isPending}
             />
@@ -106,7 +106,7 @@ export const ExtraSectionCard = ({
               onChange={(value) =>
                 setValue('locales', value, { shouldDirty: true })
               }
-              defaultValue={defaultValues?.locales}
+              defaultValue={defaultValues.locales}
               error={formState.errors.locales}
               disabled={isPending}
             />
@@ -121,7 +121,7 @@ export const ExtraSectionCard = ({
               onChange={(value) =>
                 setValue('tags', value, { shouldDirty: true })
               }
-              defaultValue={defaultValues?.tags}
+              defaultValue={defaultValues.tags}
               error={formState.errors.tags}
               disabled={isPending}
             />

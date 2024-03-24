@@ -23,6 +23,7 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   id: true,
   providerId: true,
   name: true,
+  description: true,
   category: true,
   price: true,
   status: true,
@@ -30,12 +31,13 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   updatedAt: true,
   _count: {
     select: {
-      FollowedByUsers: true,
-      OwnedByUsers: true,
+      Followers: true,
+      Owners: true,
       Collections: true,
       Groups: true,
       Tags: true,
       VersionHistories: true,
+      Assets: true,
     },
   },
 });
@@ -43,9 +45,6 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
 const fullSelect = {
   ...defaultSelect,
   ...Prisma.validator<Prisma.ApplicationSelect>()({
-    platforms: true,
-    countries: true,
-    ageRating: true,
     Provider: {
       select: {
         id: true,
@@ -53,15 +52,12 @@ const fullSelect = {
     },
     Information: {
       select: {
-        description: true,
-        website: true,
-        logo: true,
-        screenshots: true,
+        platforms: true,
         compatibility: true,
+        ageRating: true,
+        countries: true,
         locales: true,
-        copyright: true,
-        privacyPolicy: true,
-        termsOfUse: true,
+        website: true,
         github: true,
       },
     },
@@ -76,10 +72,10 @@ const fullSelect = {
         preview: true,
       },
     },
-    FollowedByUsers: {
+    Followers: {
       select: { id: true },
     },
-    OwnedByUsers: {
+    Owners: {
       select: { id: true },
     },
     Collections: {
@@ -95,6 +91,16 @@ const fullSelect = {
     Tags: {
       select: {
         id: true,
+      },
+    },
+    Assets: {
+      select: {
+        id: true,
+        type: true,
+        name: true,
+        isPrimary: true,
+        isLocal: true,
+        url: true,
       },
     },
   }),
@@ -154,11 +160,9 @@ export const publicAppApplication = router({
                       },
                     },
                     {
-                      Information: {
-                        description: {
-                          contains: query,
-                          mode: 'insensitive',
-                        },
+                      description: {
+                        contains: query,
+                        mode: 'insensitive',
                       },
                     },
                   ],
@@ -248,11 +252,9 @@ export const protectedAppApplication = router({
                       },
                     },
                     {
-                      Information: {
-                        description: {
-                          contains: query,
-                          mode: 'insensitive',
-                        },
+                      description: {
+                        contains: query,
+                        mode: 'insensitive',
                       },
                     },
                   ],
@@ -315,40 +317,26 @@ export const protectedAppApplication = router({
           data: {
             providerId: session.user.id,
             name: input.name,
+            description: input.description,
             category: input.category,
-            platforms: input.platforms,
-            countries: input.countries,
-            ageRating: input.ageRating,
             price: input.price,
             Information: {
               create: {
-                description: input.description,
-                website: input.website,
-                logo: input.logo,
-                screenshots: input.screenshots,
-                compatibility: input.compatibility,
+                platforms: input.platforms,
+                compatibility: input.compatibility || Prisma.JsonNull,
+                ageRating: input.ageRating,
+                countries: input.countries,
                 locales: input.locales,
-                privacyPolicy: input.privacyPolicy,
-                termsOfUse: input.termsOfUse,
+                website: input.website,
                 github: input.github,
               },
             },
-            VersionHistories: {
-              create: {
-                version: input.version ?? '1.0.0',
-                releaseDate: input.releaseDate,
-                changelog: input.changelog,
-                latest: input.latest,
-                deprecated: input.deprecated,
-                preview: input.preview,
-              },
-            },
-            OwnedByUsers: {
+            Owners: {
               connect: {
                 id: session.user.id,
               },
             },
-            FollowedByUsers: {
+            Followers: {
               connect: {
                 id: session.user.id,
               },
@@ -419,21 +407,17 @@ export const protectedAppApplication = router({
           },
           data: {
             name: input.name,
+            description: input.description,
             category: input.category,
-            platforms: input.platforms,
-            countries: input.countries,
-            ageRating: input.ageRating,
             price: input.price,
             Information: {
               update: {
-                description: input.description,
-                website: input.website,
-                logo: input.logo,
-                screenshots: input.screenshots,
-                compatibility: input.compatibility,
+                platforms: input.platforms,
+                compatibility: input.compatibility || Prisma.JsonNull,
+                ageRating: input.ageRating,
+                countries: input.countries,
                 locales: input.locales,
-                privacyPolicy: input.privacyPolicy,
-                termsOfUse: input.termsOfUse,
+                website: input.website,
                 github: input.github,
               },
             },
@@ -478,7 +462,7 @@ export const protectedAppApplication = router({
         await prisma.application.update({
           where: { id, status: ApplicationStatus.Published },
           data: {
-            FollowedByUsers: {
+            Followers: {
               connect: {
                 id: session.user.id,
               },
@@ -499,7 +483,7 @@ export const protectedAppApplication = router({
         await prisma.application.update({
           where: { id },
           data: {
-            FollowedByUsers: {
+            Followers: {
               disconnect: {
                 id: session.user.id,
               },
@@ -521,7 +505,7 @@ export const protectedAppApplication = router({
         await prisma.application.update({
           where: { id, status: ApplicationStatus.Published },
           data: {
-            OwnedByUsers: {
+            Owners: {
               connect: {
                 id: session.user.id,
               },
@@ -594,11 +578,9 @@ export const protectedDashboardApplication = router({
                       },
                     },
                     {
-                      Information: {
-                        description: {
-                          contains: query,
-                          mode: 'insensitive',
-                        },
+                      description: {
+                        contains: query,
+                        mode: 'insensitive',
                       },
                     },
                   ],
@@ -669,21 +651,17 @@ export const protectedDashboardApplication = router({
           where: { id },
           data: {
             name: input.name,
+            description: input.description,
             category: input.category,
-            platforms: input.platforms,
-            countries: input.countries,
-            ageRating: input.ageRating,
             price: input.price,
             Information: {
               update: {
-                description: input.description,
-                website: input.website,
-                logo: input.logo,
-                screenshots: input.screenshots,
-                compatibility: input.compatibility,
+                platforms: input.platforms,
+                compatibility: input.compatibility || Prisma.JsonNull,
+                ageRating: input.ageRating,
+                countries: input.countries,
                 locales: input.locales,
-                privacyPolicy: input.privacyPolicy,
-                termsOfUse: input.termsOfUse,
+                website: input.website,
                 github: input.github,
               },
             },
@@ -708,7 +686,7 @@ export const protectedDashboardApplication = router({
             id,
           },
           data: {
-            FollowedByUsers: {
+            Followers: {
               set: [],
             },
           },
@@ -727,7 +705,7 @@ export const protectedDashboardApplication = router({
         await prisma.application.update({
           where: { id },
           data: {
-            OwnedByUsers: {
+            Owners: {
               set: [],
             },
           },

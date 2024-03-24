@@ -55,8 +55,8 @@ export const ApplicationCard = ({
           avatarText,
           latestVersion,
           providerId: provider?.id,
-          OwnedByUsers: data?._count.OwnedByUsers,
-          FollowedByUsers: data?._count.FollowedByUsers,
+          Owners: data?._count.Owners,
+          Followers: data?._count.Followers,
           description: description,
         }}
         overrides={{
@@ -78,8 +78,8 @@ type ApplicationCardHeaderProps = {
     avatarText: string;
     latestVersion: string;
     providerId?: string;
-    OwnedByUsers?: number;
-    FollowedByUsers?: number;
+    Owners?: number;
+    Followers?: number;
     description: string;
   };
   overrides?: {
@@ -94,8 +94,8 @@ const ApplicationCardHeader = ({
     avatarText,
     latestVersion,
     providerId,
-    OwnedByUsers,
-    FollowedByUsers,
+    Owners,
+    Followers,
     description,
   },
   overrides,
@@ -135,7 +135,7 @@ const ApplicationCardHeader = ({
                   fontSize: (theme) => theme.typography.overline.fontSize,
                 }}
               />
-              <Typography>{OwnedByUsers}</Typography>
+              <Typography>{Owners}</Typography>
             </Stack>
             <Stack direction="row" alignItems="baseline">
               <FollowIcon
@@ -144,7 +144,7 @@ const ApplicationCardHeader = ({
                   fontSize: (theme) => theme.typography.overline.fontSize,
                 }}
               />
-              <Typography>{FollowedByUsers}</Typography>
+              <Typography>{Followers}</Typography>
             </Stack>
           </Stack>
           <Typography variant="body2">{description}</Typography>

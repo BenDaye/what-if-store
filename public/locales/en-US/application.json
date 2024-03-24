@@ -127,6 +127,7 @@
     "Version": "Version"
   },
   "Status": {
+    "Achieved": "Achieved",
     "Approved": "Approved",
     "Banned": "Banned",
     "Deleted": "Deleted",

@@ -1,4 +1,7 @@
-import { useDashboardUser } from '@/hooks';
+import {
+  UseDashboardApplicationHookDataSchema,
+  useDashboardUser,
+} from '@/hooks';
 import { IdSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import {
@@ -15,13 +18,23 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 type UserSectionCardProps = OverridesCardProps & {
-  userId: IdSchema;
+  defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
 export const UserSectionCard = ({
   overrides,
-  userId,
+  defaultValues,
 }: UserSectionCardProps) => {
+  const userId = defaultValues.provider?.id;
+  if (!userId) return null;
+  return <SectionCard userId={userId} overrides={overrides} />;
+};
+
+type SectionCardProps = OverridesCardProps & {
+  userId: IdSchema;
+};
+
+const SectionCard = ({ overrides, userId }: SectionCardProps) => {
   const { push } = useRouter();
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
