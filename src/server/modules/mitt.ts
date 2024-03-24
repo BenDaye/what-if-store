@@ -14,6 +14,8 @@ const mittGlobal = global as typeof global & {
   applicationGroupEmitter?: Emitter<BaseEvents>;
   applicationCollectionEmitter?: Emitter<BaseEvents>;
   applicationTagEmitter?: Emitter<BaseEvents>;
+  applicationVersionEmitter?: Emitter<BaseEvents>;
+  applicationAssetEmitter?: Emitter<BaseEvents>;
 };
 
 // NOTE: User
@@ -30,6 +32,10 @@ export const applicationCollectionEmitter =
   mittGlobal?.applicationCollectionEmitter ?? mitt<BaseEvents>();
 export const applicationTagEmitter =
   mittGlobal?.applicationTagEmitter ?? mitt<BaseEvents>();
+export const applicationVersionEmitter =
+  mittGlobal?.applicationVersionEmitter ?? mitt<BaseEvents>();
+export const applicationAssetEmitter =
+  mittGlobal?.applicationAssetEmitter ?? mitt<BaseEvents>();
 
 if (env.NODE_ENV !== 'production') {
   mittGlobal.userEmitter = userEmitter;
@@ -38,4 +44,6 @@ if (env.NODE_ENV !== 'production') {
   mittGlobal.applicationGroupEmitter = applicationGroupEmitter;
   mittGlobal.applicationCollectionEmitter = applicationCollectionEmitter;
   mittGlobal.applicationTagEmitter = applicationTagEmitter;
+  mittGlobal.applicationVersionEmitter = applicationVersionEmitter;
+  mittGlobal.applicationAssetEmitter = applicationAssetEmitter;
 }

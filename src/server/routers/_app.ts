@@ -9,6 +9,12 @@ import {
   publicDashboardApplication,
 } from './application';
 import {
+  protectedAppApplicationAsset,
+  protectedDashboardApplicationAsset,
+  publicAppApplicationAsset,
+  publicDashboardApplicationAsset,
+} from './application_asset';
+import {
   protectedAppApplicationCollection,
   protectedDashboardApplicationCollection,
   publicAppApplicationCollection,
@@ -26,6 +32,12 @@ import {
   publicAppApplicationTag,
   publicDashboardApplicationTag,
 } from './application_tag';
+import {
+  protectedAppApplicationVersion,
+  protectedDashboardApplicationVersion,
+  publicAppApplicationVersion,
+  publicDashboardApplicationVersion,
+} from './application_version';
 import {
   protectedAppAuth,
   protectedDashboardAuth,
@@ -92,6 +104,16 @@ export const appRouter = router({
   protectedDashboardApplicationTag,
   publicAppApplicationTag,
   publicDashboardApplicationTag,
+  // NOTE: ApplicationVersion
+  protectedAppApplicationVersion,
+  protectedDashboardApplicationVersion,
+  publicAppApplicationVersion,
+  publicDashboardApplicationVersion,
+  // NOTE: ApplicationAsset
+  protectedAppApplicationAsset,
+  protectedDashboardApplicationAsset,
+  publicAppApplicationAsset,
+  publicDashboardApplicationAsset,
 });
 
 export type AppRouter = typeof appRouter;

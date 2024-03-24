@@ -25,7 +25,7 @@ export const IconSectionCard = ({
 }: IconSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
-    keyPrefix: 'General',
+    keyPrefix: 'Media',
   });
   const { handleSubmit, reset, control, formState, setValue } =
     useForm<ApplicationUpdateInputSchema>({
@@ -77,7 +77,7 @@ export const IconSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplication('Extra', 'Extra')}
+        title={tApplication('Icons', 'Icons')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}></CardContent>
