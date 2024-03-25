@@ -1,14 +1,9 @@
 import { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { OverridesCardProps } from '@/types/overrides';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Typography,
-} from '@mui/material';
+import { Card, CardContent, CardHeader } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTranslation } from 'next-i18next';
+import { AssetCard } from './AssetCard';
 
 type MediaSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
@@ -30,42 +25,19 @@ export const MediaSectionCard = ({
       />
       <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={2}>
-          <Grid xs={12} lg={6} xl={4}>
-            <MediaCard defaultValues={defaultValues.primaryIcon} />
-          </Grid>
-          <Grid xs={12} lg={6} xl={4}>
-            <MediaCard defaultValues={defaultValues.primaryBackground} />
-          </Grid>
-          <Grid xs={12} lg={6} xl={4}>
-            <MediaCard defaultValues={defaultValues.primaryBanner} />
-          </Grid>
+          {[
+            defaultValues.primaryIcon,
+            defaultValues.primaryBackground,
+            defaultValues.primaryBanner,
+          ]
+            .filter(Boolean)
+            .map((asset) => (
+              <Grid key={asset?.id} xs={12} lg={6} xl={4}>
+                <AssetCard asset={asset} />
+              </Grid>
+            ))}
         </Grid>
       </CardContent>
     </Card>
   );
-};
-
-type MediaCardProps = OverridesCardProps & {
-  defaultValues?: UseDashboardApplicationHookDataSchema['assets'][number];
-};
-const MediaCard = ({ defaultValues, overrides }: MediaCardProps) => {
-  return defaultValues ? (
-    <Card {...overrides?.CardProps}>
-      <CardMedia
-        sx={{ height: 128, backgroundSize: 'contain' }}
-        image={defaultValues.url}
-        title={defaultValues.type}
-        {...overrides?.CardMediaProps}
-      />
-      <CardContent {...overrides?.CardContentProps}>
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          sx={{ textAlign: 'center' }}
-        >
-          {defaultValues.type}
-        </Typography>
-      </CardContent>
-    </Card>
-  ) : null;
 };
