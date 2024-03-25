@@ -21,7 +21,7 @@ export const DangerZoneSectionCard = ({
   overrides,
   defaultValues: { id: applicationId, status },
 }: DangerZoneSectionCardProps) => {
-  const { t: tDangerZone } = useTranslation('application', {
+  const { t: tApplicationGeneralDangerZone } = useTranslation('application', {
     keyPrefix: 'General.DangerZone',
   });
 
@@ -34,7 +34,7 @@ export const DangerZoneSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tDangerZone('_', 'Danger Zone')}
+        title={tApplicationGeneralDangerZone('_', 'Danger Zone')}
         titleTypographyProps={{
           color: 'error',
         }}
@@ -43,11 +43,11 @@ export const DangerZoneSectionCard = ({
       <CardContent component={List} {...overrides?.CardContentProps}>
         <ListItem divider sx={{ gap: 1 }}>
           <ListItemText
-            primary={tDangerZone(
+            primary={tApplicationGeneralDangerZone(
               'ChangeStatus.Title',
               'Change application status',
             )}
-            secondary={tDangerZone(
+            secondary={tApplicationGeneralDangerZone(
               'ChangeStatus.Description',
               'Changing the status is a queued task.\nThis operation will wait for some dependent tasks to align with the new status before it is completed.',
             )}
@@ -68,8 +68,11 @@ export const DangerZoneSectionCard = ({
         </ListItem>
         <ListItem divider sx={{ gap: 1 }}>
           <ListItemText
-            primary={tDangerZone('Transfer.Title', 'Transfer ownership')}
-            secondary={tDangerZone(
+            primary={tApplicationGeneralDangerZone(
+              'Transfer.Title',
+              'Transfer ownership',
+            )}
+            secondary={tApplicationGeneralDangerZone(
               'Transfer.Description',
               'Transfer this application to another provider.',
             )}
@@ -83,13 +86,16 @@ export const DangerZoneSectionCard = ({
             sx={{ flexShrink: 0 }}
             disableElevation
           >
-            {tDangerZone('Transfer.Button', 'Transfer')}
+            {tApplicationGeneralDangerZone('Transfer.Button', 'Transfer')}
           </Button>
         </ListItem>
         <ListItem sx={{ gap: 1 }}>
           <ListItemText
-            primary={tDangerZone('Delete.Title', 'Delete this application')}
-            secondary={tDangerZone(
+            primary={tApplicationGeneralDangerZone(
+              'Delete.Title',
+              'Delete this application',
+            )}
+            secondary={tApplicationGeneralDangerZone(
               'Delete.Description',
               'Once you delete a application, there is no going back. Please be certain.\nThis operation is higher priority than change application status to "Deleted".',
             )}
@@ -103,7 +109,7 @@ export const DangerZoneSectionCard = ({
             sx={{ flexShrink: 0 }}
             disableElevation
           >
-            {tDangerZone('Delete.Button', 'Delete')}
+            {tApplicationGeneralDangerZone('Delete.Button', 'Delete')}
           </Button>
         </ListItem>
       </CardContent>

@@ -28,7 +28,7 @@ export const ExtraSectionCard = ({
   defaultValues,
 }: ExtraSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application', {
+  const { t: tApplicationGeneral } = useTranslation('application', {
     keyPrefix: 'General',
   });
   const { handleSubmit, reset, control, formState, setValue } =
@@ -81,7 +81,7 @@ export const ExtraSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplication('Extra', 'Extra')}
+        title={tApplicationGeneral('Extra', 'Extra')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

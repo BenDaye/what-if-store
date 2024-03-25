@@ -1,7 +1,6 @@
 import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
 import { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
-import { shimmerSvg } from '@/utils/shimmer';
 import { trpc } from '@/utils/trpc';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -11,25 +10,26 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  ImageList,
-  ImageListItem,
 } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTranslation } from 'next-i18next';
-import Image from 'next/image';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { CountriesAutoComplete } from './CountriesAutoComplete';
+import { LocalesAutoComplete } from './LocaleAutoComplete';
+import { TagsAutoComplete } from './TagsAutoComplete';
 
-type BackgroundSectionCardProps = OverridesCardProps & {
+type CompatibilitySectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const BackgroundSectionCard = ({
+export const CompatibilitySectionCard = ({
   overrides,
   defaultValues,
-}: BackgroundSectionCardProps) => {
+}: CompatibilitySectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application', {
-    keyPrefix: 'Media',
+    keyPrefix: 'General',
   });
   const { handleSubmit, reset, control, formState, setValue } =
     useForm<ApplicationUpdateInputSchema>({
@@ -81,24 +81,53 @@ export const BackgroundSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplication('Backgrounds', 'Backgrounds')}
+        title={tApplication('Extra', 'Extra')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
-        <ImageList cols={3} rowHeight={240}>
-          {defaultValues.backgrounds.map((item) => (
-            <ImageListItem key={item.id}>
-              <Image
-                alt="background"
-                src={item.url}
-                width={240}
-                height={240}
-                placeholder={shimmerSvg(240, 240)}
-                style={{ maxWidth: '100%', height: 'auto' }}
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+        <Grid container spacing={1}>
+          <Grid xs={12}>
+            <CountriesAutoComplete
+              onChange={(value) =>
+                setValue('countries', value, { shouldDirty: true })
+              }
+              defaultValue={defaultValues.countries}
+              error={formState.errors.countries}
+              disabled={isPending}
+            />
+            <Controller
+              control={control}
+              name="countries"
+              render={() => <Box />}
+            />
+          </Grid>
+          <Grid xs={12}>
+            <LocalesAutoComplete
+              onChange={(value) =>
+                setValue('locales', value, { shouldDirty: true })
+              }
+              defaultValue={defaultValues.locales}
+              error={formState.errors.locales}
+              disabled={isPending}
+            />
+            <Controller
+              control={control}
+              name="locales"
+              render={() => <Box />}
+            />
+          </Grid>
+          <Grid xs={12}>
+            <TagsAutoComplete
+              onChange={(value) =>
+                setValue('tags', value, { shouldDirty: true })
+              }
+              defaultValue={defaultValues.tags}
+              error={formState.errors.tags}
+              disabled={isPending}
+            />
+            <Controller control={control} name="tags" render={() => <Box />} />
+          </Grid>
+        </Grid>
       </CardContent>
       <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />

@@ -40,9 +40,12 @@ export const ChangeStatusButton = ({
   const { t: tApplicationStatus } = useTranslation('application', {
     keyPrefix: 'Status',
   });
-  const { t: tDangerZone } = useTranslation('application', {
-    keyPrefix: 'General.DangerZone.ChangeStatus',
-  });
+  const { t: tApplicationGeneralDangerZoneChangeStatus } = useTranslation(
+    'application',
+    {
+      keyPrefix: 'General.DangerZone.ChangeStatus',
+    },
+  );
   const anchorRef = useRef<HTMLButtonElement>(null);
   const {
     value: menuVisible,
@@ -104,18 +107,27 @@ export const ChangeStatusButton = ({
               <Tooltip
                 title={
                   <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
-                    {tDangerZone(`${status}.Description`, status)}
+                    {tApplicationGeneralDangerZoneChangeStatus(
+                      `${status}.Description`,
+                      status,
+                    )}
                   </Typography>
                 }
                 arrow
                 placement="left"
               >
                 <ListItemText
-                  primary={tDangerZone(`${status}.Button`, status)}
+                  primary={tApplicationGeneralDangerZoneChangeStatus(
+                    `${status}.Button`,
+                    status,
+                  )}
                   primaryTypographyProps={{
                     color: 'error',
                   }}
-                  secondary={tDangerZone(`${status}.Title`, status)}
+                  secondary={tApplicationGeneralDangerZoneChangeStatus(
+                    `${status}.Title`,
+                    status,
+                  )}
                   secondaryTypographyProps={{
                     noWrap: true,
                   }}

@@ -28,7 +28,7 @@ export const GeneralSectionCard = ({
   defaultValues,
 }: GeneralSectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application', {
+  const { t: tApplicationGeneral } = useTranslation('application', {
     keyPrefix: 'General',
   });
   const { t: tApplicationCategory } = useTranslation('application', {
@@ -84,7 +84,7 @@ export const GeneralSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplication('_', 'General')}
+        title={tApplicationGeneral('_', 'General')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
@@ -102,8 +102,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplication('Name', 'Name')}
-                  placeholder={tApplication('Name', 'Name')}
+                  label={tApplicationGeneral('Name', 'Name')}
+                  placeholder={tApplicationGeneral('Name', 'Name')}
                   required
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
@@ -124,8 +124,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplication('Category', 'Category')}
-                  placeholder={tApplication('Category', 'Category')}
+                  label={tApplicationGeneral('Category', 'Category')}
+                  placeholder={tApplicationGeneral('Category', 'Category')}
                   required
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
@@ -153,8 +153,11 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplication('Description', 'Description')}
-                  placeholder={tApplication('Description', 'Description')}
+                  label={tApplicationGeneral('Description', 'Description')}
+                  placeholder={tApplicationGeneral(
+                    'Description',
+                    'Description',
+                  )}
                   required
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
@@ -178,8 +181,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplication('Website', 'Home Page')}
-                  placeholder={tApplication('Website', 'Home Page')}
+                  label={tApplicationGeneral('Website', 'Home Page')}
+                  placeholder={tApplicationGeneral('Website', 'Home Page')}
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
                 />
@@ -199,8 +202,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplication('Github', 'Github')}
-                  placeholder={tApplication('Github', 'Github')}
+                  label={tApplicationGeneral('Github', 'Github')}
+                  placeholder={tApplicationGeneral('Github', 'Github')}
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
                 />

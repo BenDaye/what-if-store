@@ -19,14 +19,14 @@ export const VersionHistorySectionCard = ({
   overrides,
   defaultValues,
 }: VersionHistorySectionCardProps) => {
-  const { t: tApplication } = useTranslation('application', {
+  const { t: tApplicationVersion } = useTranslation('application', {
     keyPrefix: 'Version',
   });
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplication('_', 'Version')}
+        title={tApplicationVersion('_', 'Version')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

@@ -18,7 +18,7 @@ export const CountriesAutoComplete = ({
   error,
   disabled = false,
 }: CountriesAutoCompleteProps) => {
-  const { t: tApplication } = useTranslation('application', {
+  const { t: tApplicationGeneral } = useTranslation('application', {
     keyPrefix: 'General',
   });
 
@@ -69,7 +69,7 @@ export const CountriesAutoComplete = ({
         <TextField
           {...params}
           error={!!error}
-          label={tApplication('Countries', 'Countries')}
+          label={tApplicationGeneral('Countries', 'Countries')}
           helperText={error?.message ?? ' '}
           disabled={disabled}
           {...overrides?.TextFieldProps}
