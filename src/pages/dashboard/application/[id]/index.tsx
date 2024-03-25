@@ -31,7 +31,7 @@ const Page: NextPageWithLayout<
       hasHeader
       header={
         <>
-          <RouterBreadcrumbs lastText={id} />
+          <RouterBreadcrumbs />
         </>
       }
     >

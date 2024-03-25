@@ -1,41 +1,43 @@
+import { OverridesProps } from '@/types/overrides';
 import { toPascalCase } from '@/utils/formatter';
 import { Breadcrumbs, BreadcrumbsProps, Link, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-export type RouterBreadcrumbsProps = {
-  overrides?: { BreadcrumbsProps?: BreadcrumbsProps };
-  lastText?: string;
+export type RouterBreadcrumbsProps = OverridesProps<{
+  BreadcrumbsProps?: BreadcrumbsProps;
+}> & {
+  label?: string;
 };
 
 export const RouterBreadcrumbs = ({
   overrides,
-  lastText,
+  label,
 }: RouterBreadcrumbsProps) => {
-  const { pathname } = useRouter();
-  const routes = useMemo(() => pathname.split('/').slice(1), [pathname]);
+  const { pathname, asPath } = useRouter();
+  const asPathArray = useMemo(() => asPath.split('/').slice(1), [asPath]);
+  const pathnameArray = useMemo(() => pathname.split('/').slice(1), [pathname]);
   const { t: tRouter } = useTranslation('router');
   return (
     <Breadcrumbs {...overrides?.BreadcrumbsProps}>
-      {routes.map((route, index) => {
-        const last = index === routes.length - 1;
+      {asPathArray.map((route, index, self) => {
+        const isDynamic = route !== pathnameArray[index];
+        const last = index === self.length - 1;
         const href = last
           ? undefined
-          : `/${routes.slice(0, index + 1).join('/')}`;
+          : `/${self.slice(0, index + 1).join('/')}`;
         const text =
           index === 0
-            ? tRouter(`${toPascalCase(route)}._`)
-            : tRouter(
-                routes
-                  .slice(0, index + 1)
-                  .map((r) => toPascalCase(r))
-                  .join('.'),
-              );
+            ? `${toPascalCase(route)}._`
+            : self
+                .slice(0, index + 1)
+                .map((r) => toPascalCase(r))
+                .join('.');
         if (last) {
           return (
             <Typography key={route} color="text.primary" variant="subtitle2">
-              {lastText ?? text}
+              {label ? label : isDynamic ? route : tRouter(text)}
             </Typography>
           );
         }
@@ -47,7 +49,7 @@ export const RouterBreadcrumbs = ({
             href={href}
             variant="subtitle2"
           >
-            {text}
+            {isDynamic ? route : tRouter(text)}
           </Link>
         );
       })}

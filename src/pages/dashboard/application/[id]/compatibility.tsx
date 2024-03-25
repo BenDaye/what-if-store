@@ -16,19 +16,23 @@ import { ApplicationCategory } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import SuperJSON from 'superjson';
 
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
+  const { t: tRouter } = useTranslation('router', { keyPrefix: 'Dashboard' });
   const { data } = useDashboardApplication(id);
   return (
     <PageContainer
       hasHeader
       header={
         <>
-          <RouterBreadcrumbs lastText={id} />
+          <RouterBreadcrumbs
+            label={tRouter('Compatibility', 'Compatibility')}
+          />
         </>
       }
     >
