@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { ApplicationStatus, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationVersionEmitter } from '../modules';
 import {
@@ -75,27 +75,13 @@ export const publicAppApplicationVersion = router({
       };
     });
   }),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
-      try {
-        return await prisma.applicationVersion.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
-});
-
-export const protectedAppApplicationVersion = router({
   list: protectedProviderProcedure
     .input(applicationVersionListInputSchema)
     .query(
-      async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
+      async ({
+        ctx: { prisma },
+        input: { limit, skip, cursor, query, ...rest },
+      }) => {
         try {
           const where: Prisma.ApplicationVersionWhereInput = {
             ...(query
@@ -116,6 +102,97 @@ export const protectedAppApplicationVersion = router({
                   ],
                 }
               : {}),
+            applicationId: rest.applicationId,
+            Application: {
+              status: {
+                in: [
+                  ApplicationStatus.Published,
+                  ApplicationStatus.Suspended,
+                  ApplicationStatus.Achieved,
+                ],
+              },
+            },
+          };
+
+          const [items, total] = await prisma.$transaction([
+            prisma.applicationVersion.findMany({
+              where,
+              ...formatListArgs(limit, skip, cursor),
+              orderBy: [
+                {
+                  createdAt: 'asc',
+                },
+              ],
+              select: defaultSelect,
+            }),
+            prisma.applicationVersion.count({ where }),
+          ]);
+          return formatListResponse(items, limit, total);
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
+  getById: publicProcedure
+    .input(idSchema)
+    .query(async ({ ctx: { prisma }, input: id }) => {
+      try {
+        return await prisma.applicationVersion.findUniqueOrThrow({
+          where: {
+            id,
+            Application: {
+              status: {
+                in: [
+                  ApplicationStatus.Published,
+                  ApplicationStatus.Suspended,
+                  ApplicationStatus.Achieved,
+                ],
+              },
+            },
+          },
+          select: fullSelect,
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+});
+
+export const protectedAppApplicationVersion = router({
+  list: protectedProviderProcedure
+    .input(applicationVersionListInputSchema)
+    .query(
+      async ({
+        ctx: { prisma, session },
+        input: { limit, skip, cursor, query, ...rest },
+      }) => {
+        try {
+          const where: Prisma.ApplicationVersionWhereInput = {
+            ...(query
+              ? {
+                  OR: [
+                    {
+                      version: {
+                        contains: query,
+                        mode: 'insensitive',
+                      },
+                    },
+                    {
+                      changelog: {
+                        contains: query,
+                        mode: 'insensitive',
+                      },
+                    },
+                  ],
+                }
+              : {}),
+            applicationId: rest.applicationId,
+            Application: {
+              providerId: session.user.id,
+              status: {
+                not: ApplicationStatus.Deleted,
+              },
+            },
           };
 
           const [items, total] = await prisma.$transaction([
@@ -194,7 +271,10 @@ export const protectedDashboardApplicationVersion = router({
   list: protectedAdminProcedure
     .input(applicationVersionListInputSchema)
     .query(
-      async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
+      async ({
+        ctx: { prisma },
+        input: { limit, skip, cursor, query, ...rest },
+      }) => {
         try {
           const where: Prisma.ApplicationVersionWhereInput = {
             ...(query
@@ -215,6 +295,7 @@ export const protectedDashboardApplicationVersion = router({
                   ],
                 }
               : {}),
+            applicationId: rest.applicationId,
           };
 
           const [items, total] = await prisma.$transaction([

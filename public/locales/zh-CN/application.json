@@ -1,4 +1,12 @@
 {
+  "Asset": {
+    "Type": {
+      "Background": "背景",
+      "Banner": "横幅",
+      "Icon": "图标",
+      "Screenshot": "截图"
+    }
+  },
   "Category": {
     "AR": "AR",
     "Books": "图书",
@@ -91,6 +99,11 @@
     },
     "_": "应用分组"
   },
+  "Media": {
+    "Icons": "图标",
+    "Screenshots": "截图",
+    "_": "图片"
+  },
   "Nav": {
     "Collection": "合集",
     "Compatibility": "兼容性",
@@ -121,6 +134,13 @@
   },
   "Tag": {
     "_": "应用标签"
+  },
+  "Version": {
+    "Deprecated": "已弃用",
+    "Latest": "最新版",
+    "Preview": "预览版",
+    "ReleasedAt": "发布于 {{releaseDate}}.",
+    "_": "版本"
   },
   "_": "应用"
 }

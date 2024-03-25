@@ -1,4 +1,12 @@
 {
+  "Asset": {
+    "Type": {
+      "Background": "Background",
+      "Banner": "Banner",
+      "Icon": "Icon",
+      "Screenshot": "Screenshot"
+    }
+  },
   "Category": {
     "AR": "AR",
     "Books": "Books",
@@ -110,6 +118,11 @@
     },
     "_": "Application Group"
   },
+  "Media": {
+    "Icons": "Icons",
+    "Screenshots": "Screenshots",
+    "_": "Media"
+  },
   "Nav": {
     "Collection": "Collection",
     "Compatibility": "Compatibility",
@@ -140,6 +153,13 @@
   },
   "Tag": {
     "_": "Application Tag"
+  },
+  "Version": {
+    "Deprecated": "Deprecated",
+    "Latest": "Latest",
+    "Preview": "Preview",
+    "ReleasedAt": "Released at {{releaseDate}}.",
+    "_": "Version"
   },
   "_": "Application"
 }

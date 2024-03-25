@@ -190,7 +190,11 @@ export const publicAppApplication = router({
                 }
               : {}),
             status: {
-              in: [ApplicationStatus.Published, ApplicationStatus.Suspended],
+              in: [
+                ApplicationStatus.Published,
+                ApplicationStatus.Suspended,
+                ApplicationStatus.Achieved,
+              ],
             },
           };
 
@@ -221,7 +225,11 @@ export const publicAppApplication = router({
           where: {
             id,
             status: {
-              in: [ApplicationStatus.Published, ApplicationStatus.Suspended],
+              in: [
+                ApplicationStatus.Published,
+                ApplicationStatus.Suspended,
+                ApplicationStatus.Achieved,
+              ],
             },
           },
           select: fullSelect,
@@ -399,6 +407,7 @@ export const protectedAppApplication = router({
     .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
+        // TODO: It should be checked if the application is editable.
         await prisma.application.update({
           where: {
             id,
@@ -460,7 +469,16 @@ export const protectedAppApplication = router({
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         await prisma.application.update({
-          where: { id, status: ApplicationStatus.Published },
+          where: {
+            id,
+            status: {
+              in: [
+                ApplicationStatus.Published,
+                ApplicationStatus.Suspended,
+                ApplicationStatus.Achieved,
+              ],
+            },
+          },
           data: {
             Followers: {
               connect: {
@@ -503,7 +521,7 @@ export const protectedAppApplication = router({
       try {
         // TODO: It should be checked if the user can pay for the application
         await prisma.application.update({
-          where: { id, status: ApplicationStatus.Published },
+          where: { id, status: { equals: ApplicationStatus.Published } },
           data: {
             Owners: {
               connect: {

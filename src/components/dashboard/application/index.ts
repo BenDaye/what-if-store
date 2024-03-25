@@ -1,3 +1,4 @@
+export * from './AssetCard';
 export * from './BackgroundSectionCard';
 export * from './BannerSectionCard';
 export * from './ChangeStatusButton';
@@ -18,6 +19,7 @@ export * from './Page';
 export * from './ScreenshotSectionCard';
 export * from './TagsAutoComplete';
 export * from './UserSectionCard';
+export * from './VersionHistorySectionCard';
 export * from './collection';
 export * from './group';
 export * from './tag';

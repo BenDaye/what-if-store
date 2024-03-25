@@ -70,24 +70,7 @@ export const publicAppApplicationTag = router({
       };
     });
   }),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
-      try {
-        return await prisma.applicationTag.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
-});
-
-export const protectedAppApplicationTag = router({
-  list: protectedProviderProcedure
+  list: publicProcedure
     .input(applicationTagListInputSchema)
     .query(
       async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
@@ -126,6 +109,23 @@ export const protectedAppApplicationTag = router({
         }
       },
     ),
+  getById: publicProcedure
+    .input(idSchema)
+    .query(async ({ ctx: { prisma }, input: id }) => {
+      try {
+        return await prisma.applicationTag.findUniqueOrThrow({
+          where: {
+            id,
+          },
+          select: fullSelect,
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+});
+
+export const protectedAppApplicationTag = router({
   create: protectedProviderProcedure
     .input(applicationTagCreateInputSchema)
     .output(mutationOutputSchema)

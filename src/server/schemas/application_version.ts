@@ -2,7 +2,11 @@ import { z } from 'zod';
 import { idSchema } from './id';
 import { listInputSchema } from './list';
 
-export const applicationVersionListInputSchema = listInputSchema.partial();
+export const applicationVersionListInputSchema = listInputSchema
+  .partial()
+  .extend({
+    applicationId: idSchema,
+  });
 export type ApplicationVersionListInputSchema = z.infer<
   typeof applicationVersionListInputSchema
 >;
