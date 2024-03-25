@@ -1,5 +1,6 @@
 export * from './AssetCard';
 export * from './ChangeStatusButton';
+export * from './CompatibilitySectionCard';
 export * from './CountriesAutoComplete';
 export * from './DangerZoneSectionCard';
 export * from './DataGrid';

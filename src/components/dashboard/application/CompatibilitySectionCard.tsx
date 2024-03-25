@@ -1,7 +1,12 @@
 import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
-import { ApplicationUpdateInputSchema } from '@/server/schemas';
+import {
+  ApplicationUpdateInputSchema,
+  applicationUpdateInputSchema,
+} from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
+import { ErrorMessage } from '@hookform/error-message';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
@@ -10,14 +15,18 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Checkbox,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  TextField,
+  Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { ApplicationPlatform } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { CountriesAutoComplete } from './CountriesAutoComplete';
-import { LocalesAutoComplete } from './LocaleAutoComplete';
-import { TagsAutoComplete } from './TagsAutoComplete';
 
 type CompatibilitySectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
@@ -28,13 +37,14 @@ export const CompatibilitySectionCard = ({
   defaultValues,
 }: CompatibilitySectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application', {
-    keyPrefix: 'General',
+  const { t: tApplicationDeclaration } = useTranslation('application', {
+    keyPrefix: 'Declaration',
   });
-  const { handleSubmit, reset, control, formState, setValue } =
+  const { handleSubmit, reset, control, formState, setValue, getValues } =
     useForm<ApplicationUpdateInputSchema>({
       defaultValues,
       mode: 'all',
+      resolver: zodResolver(applicationUpdateInputSchema),
     });
 
   useEffect(() => {
@@ -70,6 +80,48 @@ export const CompatibilitySectionCard = ({
     };
   }, [formState, tCommon]);
 
+  const [compatibility, setCompatibility] = useState<
+    Record<ApplicationPlatform, string>
+  >({
+    Other: '',
+    iOS: '',
+    Android: '',
+    Web: '',
+    Mac: '',
+    Windows: '',
+    Linux: '',
+  });
+
+  useEffect(() => {
+    if (!Array.isArray(defaultValues.compatibility)) return;
+    const _compatibility: Record<ApplicationPlatform, string> = {
+      Other: '',
+      iOS: '',
+      Android: '',
+      Web: '',
+      Mac: '',
+      Windows: '',
+      Linux: '',
+    };
+    for (const { platform, requirement } of defaultValues.compatibility) {
+      _compatibility[platform] = requirement;
+    }
+    setCompatibility(_compatibility);
+  }, [defaultValues]);
+
+  useEffect(() => {
+    setValue(
+      'compatibility',
+      Object.entries(compatibility)
+        .map(([platform, requirement]) => ({
+          platform: platform as ApplicationPlatform,
+          requirement: requirement || platform,
+        }))
+        .filter(({ platform }) => getValues('platforms')?.includes(platform)),
+      { shouldDirty: true },
+    );
+  }, [compatibility, setValue, getValues]);
+
   return (
     <Card
       variant="outlined"
@@ -81,53 +133,81 @@ export const CompatibilitySectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplication('Extra', 'Extra')}
+        title={tApplicationDeclaration('Compatibility', 'Compatibility')}
         {...overrides?.CardHeaderProps}
       />
-      <CardContent {...overrides?.CardContentProps}>
-        <Grid container spacing={1}>
-          <Grid xs={12}>
-            <CountriesAutoComplete
-              onChange={(value) =>
-                setValue('countries', value, { shouldDirty: true })
+      <CardContent component={List} {...overrides?.CardContentProps}>
+        <Controller control={control} name="platforms" render={() => <Box />} />
+        <Controller
+          control={control}
+          name="compatibility"
+          render={() => <Box />}
+        />
+        {Object.values(ApplicationPlatform).map((platform) => (
+          <ListItem key={platform}>
+            <ListItemIcon>
+              <Checkbox
+                edge="start"
+                checked={getValues('platforms')?.includes(platform)}
+                onChange={(ev, checked) =>
+                  setValue(
+                    'platforms',
+                    checked
+                      ? getValues('platforms')?.concat([platform])
+                      : getValues('platforms')?.filter((p) => p !== platform),
+                    { shouldDirty: true },
+                  )
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <TextField
+                  value={compatibility[platform]}
+                  onChange={(ev) =>
+                    setCompatibility({
+                      ...compatibility,
+                      [platform]: ev.target.value,
+                    })
+                  }
+                  label={platform}
+                  placeholder={tApplicationDeclaration(
+                    'Compatibility.Requirement',
+                    'Requirement',
+                  )}
+                  disabled={!getValues('platforms')?.includes(platform)}
+                  size="small"
+                  multiline
+                  maxRows={8}
+                />
               }
-              defaultValue={defaultValues.countries}
-              error={formState.errors.countries}
-              disabled={isPending}
             />
-            <Controller
-              control={control}
-              name="countries"
-              render={() => <Box />}
-            />
-          </Grid>
-          <Grid xs={12}>
-            <LocalesAutoComplete
-              onChange={(value) =>
-                setValue('locales', value, { shouldDirty: true })
-              }
-              defaultValue={defaultValues.locales}
-              error={formState.errors.locales}
-              disabled={isPending}
-            />
-            <Controller
-              control={control}
-              name="locales"
-              render={() => <Box />}
-            />
-          </Grid>
-          <Grid xs={12}>
-            <TagsAutoComplete
-              onChange={(value) =>
-                setValue('tags', value, { shouldDirty: true })
-              }
-              defaultValue={defaultValues.tags}
-              error={formState.errors.tags}
-              disabled={isPending}
-            />
-            <Controller control={control} name="tags" render={() => <Box />} />
-          </Grid>
-        </Grid>
+          </ListItem>
+        ))}
+        <ErrorMessage
+          errors={formState.errors}
+          name="platforms"
+          render={({ messages }) =>
+            messages &&
+            Object.entries(messages).map(([type, message]) => (
+              <Typography variant="body2" color="error" key={type} paragraph>
+                {message}
+              </Typography>
+            ))
+          }
+        />
+        <ErrorMessage
+          errors={formState.errors}
+          name="compatibility"
+          render={({ messages }) =>
+            messages &&
+            Object.entries(messages).map(([type, message]) => (
+              <Typography variant="body2" color="error" key={type} paragraph>
+                {message}
+              </Typography>
+            ))
+          }
+        />
       </CardContent>
       <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />

@@ -331,7 +331,7 @@ export const protectedAppApplication = router({
             Information: {
               create: {
                 platforms: input.platforms,
-                compatibility: input.compatibility || Prisma.JsonNull,
+                compatibility: input.compatibility,
                 ageRating: input.ageRating,
                 countries: input.countries,
                 locales: input.locales,
@@ -422,7 +422,7 @@ export const protectedAppApplication = router({
             Information: {
               update: {
                 platforms: input.platforms,
-                compatibility: input.compatibility || Prisma.JsonNull,
+                compatibility: input.compatibility,
                 ageRating: input.ageRating,
                 countries: input.countries,
                 locales: input.locales,
@@ -675,7 +675,7 @@ export const protectedDashboardApplication = router({
             Information: {
               update: {
                 platforms: input.platforms,
-                compatibility: input.compatibility || Prisma.JsonNull,
+                compatibility: input.compatibility,
                 ageRating: input.ageRating,
                 countries: input.countries,
                 locales: input.locales,

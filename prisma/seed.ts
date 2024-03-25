@@ -99,7 +99,10 @@ const main = async () => {
       Information: {
         create: {
           platforms: getRandomApplicationPlatforms(),
-          compatibility: getRandomApplicationPlatforms(),
+          compatibility: getRandomApplicationPlatforms().map((platform) => ({
+            platform,
+            requirement: platform,
+          })),
           ageRating: getRandomApplicationAgeRating(),
           countries: getRandomApplicationCountries(),
           locales: getRandomApplicationLanguages(),

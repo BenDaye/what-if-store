@@ -5,7 +5,6 @@ import {
 } from '@prisma/client';
 import { z } from 'zod';
 import { idSchema } from './id';
-import { jsonSchema } from './json';
 import { listInputSchema } from './list';
 
 export const applicationListInputSchema = listInputSchema
@@ -26,7 +25,12 @@ export const applicationCreateInputSchema = z.object({
   price: z.number().nonnegative(),
 
   platforms: z.nativeEnum(ApplicationPlatform).array().min(1),
-  compatibility: jsonSchema,
+  compatibility: z
+    .object({
+      platform: z.nativeEnum(ApplicationPlatform),
+      requirement: z.string(),
+    })
+    .array(),
   ageRating: z.string().regex(/^\d+\+$/),
   countries: z.string().array().min(1),
   locales: z.string().array().min(1),
