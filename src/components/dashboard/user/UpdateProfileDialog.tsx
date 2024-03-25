@@ -1,5 +1,9 @@
 import { useAuth, useDashboardUserMy } from '@/hooks';
-import { UserUpdateProfileInputSchema } from '@/server/schemas/user';
+import {
+  UserUpdateProfileInputSchema,
+  userUpdateProfileInputSchema,
+} from '@/server/schemas/user';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -43,6 +47,8 @@ export const DashboardUserUpdateProfileDialog = (
         avatar: session?.user?.avatar ?? '',
         bio: session?.user?.bio ?? '',
       },
+      mode: 'all',
+      resolver: zodResolver(userUpdateProfileInputSchema),
     });
   useEffect(() => {
     if (session?.user?.nickname) setValue('nickname', session.user.nickname);

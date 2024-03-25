@@ -55,6 +55,7 @@ export const SignUpDialog = ({
       password: '',
       confirmPassword: '',
     },
+    mode: 'all',
     resolver: zodResolver(signUpForm),
   });
   const { value: showPassword, toggle: toggleShowPassword } = useBoolean(false);

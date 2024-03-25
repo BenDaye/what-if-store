@@ -45,6 +45,7 @@ export const SignInDialog = ({
       username: '',
       password: '',
     },
+    mode: 'all',
     resolver: zodResolver(signInSchema),
   });
   const { value: showPassword, toggle: toggleShowPassword } = useBoolean(false);

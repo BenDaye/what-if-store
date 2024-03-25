@@ -1,7 +1,11 @@
 import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
-import { ApplicationUpdateInputSchema } from '@/server/schemas';
+import {
+  ApplicationUpdateInputSchema,
+  applicationUpdateInputSchema,
+} from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
 import {
   Box,
@@ -38,6 +42,7 @@ export const GeneralSectionCard = ({
     useForm<ApplicationUpdateInputSchema>({
       defaultValues,
       mode: 'all',
+      resolver: zodResolver(applicationUpdateInputSchema),
     });
 
   useEffect(() => {
