@@ -37,9 +37,12 @@ export const CompatibilitySectionCard = ({
   defaultValues,
 }: CompatibilitySectionCardProps) => {
   const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationDeclaration } = useTranslation('application', {
-    keyPrefix: 'Declaration',
-  });
+  const { t: tApplicationDeclarationCompatibility } = useTranslation(
+    'application',
+    {
+      keyPrefix: 'Declaration.Compatibility',
+    },
+  );
   const { handleSubmit, reset, control, formState, setValue, getValues } =
     useForm<ApplicationUpdateInputSchema>({
       defaultValues,
@@ -133,7 +136,7 @@ export const CompatibilitySectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplicationDeclaration('Compatibility', 'Compatibility')}
+        title={tApplicationDeclarationCompatibility('_', 'Compatibility')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent component={List} {...overrides?.CardContentProps}>
@@ -171,8 +174,8 @@ export const CompatibilitySectionCard = ({
                     })
                   }
                   label={platform}
-                  placeholder={tApplicationDeclaration(
-                    'Compatibility.Requirement',
+                  placeholder={tApplicationDeclarationCompatibility(
+                    'Requirement',
                     'Requirement',
                   )}
                   disabled={!getValues('platforms')?.includes(platform)}

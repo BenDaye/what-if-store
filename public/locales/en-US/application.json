@@ -70,6 +70,13 @@
       "Name": "Name"
     }
   },
+  "Declaration": {
+    "Compatibility": {
+      "Requirement": "Requirement",
+      "_": "Compatibility"
+    },
+    "_": "Declaration"
+  },
   "General": {
     "Category": "Category",
     "Countries": "Countries",
