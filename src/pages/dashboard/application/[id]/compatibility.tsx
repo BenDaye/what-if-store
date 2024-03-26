@@ -23,7 +23,9 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const { t: tRouter } = useTranslation('router', { keyPrefix: 'Dashboard' });
+  const { t: tApplicationNav } = useTranslation('application', {
+    keyPrefix: 'Nav',
+  });
   const { data } = useDashboardApplication(id);
   return (
     <PageContainer
@@ -31,7 +33,7 @@ const Page: NextPageWithLayout<
       header={
         <>
           <RouterBreadcrumbs
-            label={tRouter('Compatibility', 'Compatibility')}
+            label={tApplicationNav('Compatibility', 'Compatibility')}
           />
         </>
       }

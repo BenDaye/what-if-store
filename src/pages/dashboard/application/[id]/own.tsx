@@ -2,7 +2,7 @@ import nextI18NextConfig from '@/../next-i18next.config';
 import { PageContainer, RouterBreadcrumbs } from '@/components/common';
 import {
   Page as ApplicationPage,
-  VersionHistorySectionCard,
+  OwnSectionCard,
 } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { useDashboardApplication } from '@/hooks';
@@ -32,13 +32,13 @@ const Page: NextPageWithLayout<
       hasHeader
       header={
         <>
-          <RouterBreadcrumbs label={tApplicationNav('Version', 'Version')} />
+          <RouterBreadcrumbs label={tApplicationNav('Own', 'Own')} />
         </>
       }
     >
       <Container>
         <ApplicationPage applicationId={id}>
-          <VersionHistorySectionCard defaultValues={data} />
+          <OwnSectionCard defaultValues={data} />
         </ApplicationPage>
       </Container>
     </PageContainer>

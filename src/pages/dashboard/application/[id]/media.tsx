@@ -24,14 +24,16 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const { t: tRouter } = useTranslation('router', { keyPrefix: 'Dashboard' });
+  const { t: tApplicationNav } = useTranslation('application', {
+    keyPrefix: 'Nav',
+  });
   const { data } = useDashboardApplication(id);
   return (
     <PageContainer
       hasHeader
       header={
         <>
-          <RouterBreadcrumbs label={tRouter('Media', 'Media')} />
+          <RouterBreadcrumbs label={tApplicationNav('Media', 'Media')} />
         </>
       }
     >
