@@ -1,3 +1,4 @@
+import '@/components/common/lexical/themes/PlaygroundEditorTheme.css';
 import '@/theme/global.css';
 import '@fontsource/roboto-mono/300.css';
 import '@fontsource/roboto-mono/400.css';

@@ -146,6 +146,10 @@
     "TermsOfUse": "Terms Of Use",
     "Version": "Version"
   },
+  "PrivacyPolicy": {
+    "Placeholder": "Enter this application privacy policy here...",
+    "_": "Privacy Policy"
+  },
   "Status": {
     "Achieved": "Achieved",
     "Approved": "Approved",
