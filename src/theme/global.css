@@ -31,3 +31,11 @@
     }
   }
 }
+
+.bn-container[data-blocknote] {
+  height: 100%;
+  & .bn-editor {
+    height: 100%;
+    padding-block: 1rem;
+  }
+}

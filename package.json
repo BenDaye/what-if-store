@@ -30,6 +30,8 @@
     "trailingComma": "all"
   },
   "dependencies": {
+    "@blocknote/core": "0.12.3",
+    "@blocknote/react": "0.12.3",
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.3",
     "@emotion/server": "11.11.0",
