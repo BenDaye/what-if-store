@@ -1,3 +1,4 @@
+import { PartialBlock } from '@blocknote/core';
 import { ApplicationAssetType } from '@prisma/client';
 import { z } from 'zod';
 import { idSchema } from './id';
@@ -19,6 +20,7 @@ export const applicationAssetCreateInputSchema = z
     url: z.string(),
     name: z.string().nullable(),
     description: z.string().nullable(),
+    content: z.custom<PartialBlock>().array(),
     isPrimary: z.boolean(),
     isLocal: z.boolean(),
   })

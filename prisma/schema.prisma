@@ -254,6 +254,7 @@ model ApplicationAsset {
   url           String
   name          String?
   description   String?
+  content       Json?
   isPrimary     Boolean              @default(false)
   isLocal       Boolean              @default(false)
   applicationId String

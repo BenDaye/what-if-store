@@ -1,5 +1,7 @@
-import { Prisma } from '@prisma/client';
+import { ApplicationAssetType, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
+import { readFile } from 'fs/promises';
+import path from 'path';
 import { applicationAssetEmitter } from '../modules';
 import {
   IdSchema,
@@ -15,10 +17,11 @@ import {
   publicProcedure,
   router,
 } from '../trpc';
-import { formatListArgs, formatListResponse, onError } from '../utils';
+import { access, formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.ApplicationAssetSelect>()({
   id: true,
+  applicationId: true,
   type: true,
   url: true,
   name: true,
@@ -28,8 +31,9 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationAssetSelect>()({
 const fullSelect = {
   ...defaultSelect,
   ...Prisma.validator<Prisma.ApplicationAssetSelect>()({
-    name: true,
-    description: true,
+    content: true,
+    isPrimary: true,
+    isLocal: true,
     Application: {
       select: {
         id: true,
@@ -287,6 +291,52 @@ export const protectedDashboardApplicationAsset = router({
         });
         applicationAssetEmitter.emit('remove', id);
         return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  getFileById: protectedAdminProcedure
+    .input(idSchema)
+    .query(async ({ ctx: { prisma }, input: id }) => {
+      try {
+        const { url } = await prisma.applicationAsset.findUniqueOrThrow({
+          where: {
+            id,
+            type: ApplicationAssetType.File,
+          },
+          select: {
+            url: true,
+          },
+        });
+        const filePath = path.join(process.cwd(), url);
+        await access(filePath, true);
+        const file = await readFile(filePath, {
+          encoding: 'utf8',
+        });
+        return file;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  updateFileById: protectedAdminProcedure
+    .input(idSchema)
+    .query(async ({ ctx: { prisma }, input: id }) => {
+      try {
+        const { url } = await prisma.applicationAsset.findUniqueOrThrow({
+          where: {
+            id,
+            type: ApplicationAssetType.File,
+          },
+          select: {
+            url: true,
+          },
+        });
+        const filePath = path.join(process.cwd(), url);
+        await access(filePath, true);
+        const file = await readFile(filePath, {
+          encoding: 'utf8',
+        });
+        return file;
       } catch (err) {
         throw onError(err);
       }

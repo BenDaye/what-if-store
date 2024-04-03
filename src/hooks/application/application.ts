@@ -1,4 +1,5 @@
 import {
+  ApplicationCreateInputSchema,
   ApplicationListInputSchema,
   IdSchema,
   applicationCreateInputSchema,
@@ -110,7 +111,10 @@ export const useDashboardApplication = (id: IdSchema) => {
       },
       provider: data?.Provider,
       platforms: data?.Information?.platforms ?? [],
-      compatibility: data?.Information?.compatibility ?? '[]',
+      compatibility:
+        (data?.Information
+          ?.compatibility as ApplicationCreateInputSchema['compatibility']) ??
+        [],
       ageRating: data?.Information?.ageRating ?? '-',
       countries: data?.Information?.countries ?? [],
       locales: data?.Information?.locales ?? [],
@@ -159,19 +163,19 @@ export const useDashboardApplication = (id: IdSchema) => {
       privacyPolicy: data?.Assets?.find(
         ({ type, name }) =>
           type === ApplicationAssetType.File && name === 'PrivacyPolicy',
-      )?.url,
+      )?.id,
       termsOfUse: data?.Assets?.find(
         ({ type, name }) =>
           type === ApplicationAssetType.File && name === 'TermsOfUse',
-      )?.url,
+      )?.id,
       copyright: data?.Assets?.find(
         ({ type, name }) =>
           type === ApplicationAssetType.File && name === 'Copyright',
-      )?.url,
+      )?.id,
       readme: data?.Assets?.find(
         ({ type, name }) =>
           type === ApplicationAssetType.File && name === 'Readme',
-      )?.url,
+      )?.id,
     };
   }, [id, data]);
 
