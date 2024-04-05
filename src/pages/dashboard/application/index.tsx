@@ -99,7 +99,7 @@ export const getServerSideProps = async (
         category: [item],
       }),
     ),
-    helpers.protectedDashboardApplication.list.prefetchInfinite({ limit: 20 }),
+    helpers.protectedDashboardApplication.list.prefetch({ limit: 20 }),
   ]);
 
   return {

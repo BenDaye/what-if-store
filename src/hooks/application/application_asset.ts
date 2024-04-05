@@ -49,7 +49,7 @@ export const useDashboardApplicationAsset = (id: IdSchema) => {
       url: data?.url ?? '',
       name: data?.name ?? '-',
       description: data?.description ?? '-',
-      content: (data?.content as PartialBlock[]) ?? [],
+      content: data?.content as PartialBlock[] | undefined,
       isPrimary: data?.isPrimary ?? false,
       isLocal: data?.isLocal ?? false,
     };
