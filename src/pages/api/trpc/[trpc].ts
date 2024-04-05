@@ -25,9 +25,7 @@ export default trpcNext.createNextApiHandler<AppRouter>({
   /**
    * Enable query batching
    */
-  batching: {
-    enabled: true,
-  },
+  allowBatching: true,
 
   experimental_contentTypeHandlers: [
     nodeHTTPFormDataContentTypeHandler(),

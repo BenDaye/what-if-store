@@ -86,7 +86,10 @@ export const trpc = createTRPCNext<AppRouter>({
        */
       queryClientConfig: {
         defaultOptions: {
-          queries: { staleTime: 2 * 1000, refetchOnWindowFocus: false },
+          queries: {
+            staleTime: 2 * 1000,
+            refetchOnWindowFocus: false,
+          },
         },
       },
       abortOnUnmount: true,
