@@ -1,2 +1,2 @@
+export * from './MainProvider';
 export * from './NavDrawer';
-export * from './Provider';
