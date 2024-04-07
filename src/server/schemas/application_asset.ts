@@ -41,3 +41,17 @@ export const applicationAssetUpdateInputSchema =
 export type ApplicationAssetUpdateInputSchema = z.infer<
   typeof applicationAssetUpdateInputSchema
 >;
+
+export const applicationAssetUpsertFileContentInputSchema =
+  applicationAssetCreateInputSchema
+    .pick({
+      applicationId: true,
+      content: true,
+    })
+    .extend({
+      name: z.enum(['PrivacyPolicy', 'TermsOfUse', 'Copyright', 'Readme']),
+    });
+
+export type ApplicationAssetUpsertFileContentInputSchema = z.infer<
+  typeof applicationAssetUpsertFileContentInputSchema
+>;

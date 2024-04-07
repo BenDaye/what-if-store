@@ -25,6 +25,7 @@
     "trpc",
     "ulidx",
     "unfollow",
+    "upsert",
     "usehooks"
   ],
   "editor.formatOnType": true,

@@ -259,4 +259,6 @@ model ApplicationAsset {
   isLocal       Boolean              @default(false)
   applicationId String
   Application   Application          @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, type, name])
 }

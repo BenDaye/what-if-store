@@ -1,4 +1,8 @@
-import { ApplicationStatus, Prisma } from '@prisma/client';
+import {
+  ApplicationAssetType,
+  ApplicationStatus,
+  Prisma,
+} from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationChangeStatusQueue, applicationEmitter } from '../modules';
 import {
@@ -351,6 +355,33 @@ export const protectedAppApplication = router({
             },
             Tags: {
               connect: input.tags,
+            },
+            Assets: {
+              createMany: {
+                skipDuplicates: true,
+                data: [
+                  {
+                    type: ApplicationAssetType.File,
+                    url: '',
+                    name: 'PrivacyPolicy',
+                  },
+                  {
+                    type: ApplicationAssetType.File,
+                    url: '',
+                    name: 'TermsOfUse',
+                  },
+                  {
+                    type: ApplicationAssetType.File,
+                    url: '',
+                    name: 'Copyright',
+                  },
+                  {
+                    type: ApplicationAssetType.File,
+                    url: '',
+                    name: 'Readme',
+                  },
+                ],
+              },
             },
           },
           select: defaultSelect,

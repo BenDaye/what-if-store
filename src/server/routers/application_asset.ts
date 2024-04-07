@@ -8,6 +8,7 @@ import {
   applicationAssetCreateInputSchema,
   applicationAssetListInputSchema,
   applicationAssetUpdateInputSchema,
+  applicationAssetUpsertFileContentInputSchema,
   idSchema,
   mutationOutputSchema,
 } from '../schemas';
@@ -279,6 +280,37 @@ export const protectedDashboardApplicationAsset = router({
         throw onError(err);
       }
     }),
+  upsertFileContent: protectedAdminProcedure
+    .input(applicationAssetUpsertFileContentInputSchema)
+    .output(mutationOutputSchema)
+    .mutation(
+      async ({ ctx: { prisma }, input: { applicationId, name, content } }) => {
+        try {
+          await prisma.applicationAsset.upsert({
+            where: {
+              applicationId_type_name: {
+                applicationId,
+                name,
+                type: ApplicationAssetType.File,
+              },
+            },
+            create: {
+              applicationId,
+              type: ApplicationAssetType.File,
+              name,
+              url: '',
+              content,
+            },
+            update: {
+              content,
+            },
+          });
+          return true;
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
   removeById: protectedAdminProcedure
     .input(idSchema)
     .output(mutationOutputSchema)

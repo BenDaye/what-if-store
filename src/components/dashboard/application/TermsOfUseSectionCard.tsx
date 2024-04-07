@@ -21,9 +21,8 @@ type TermsOfUseSectionCardProps = OverridesCardProps & {
 
 export const TermsOfUseSectionCard = ({
   overrides,
-  defaultValues: { termsOfUse },
+  defaultValues: { id: applicationId, termsOfUse: id },
 }: TermsOfUseSectionCardProps) => {
-  const { t: tCommon } = useTranslation('common');
   const { t: tApplicationTermsOfUse } = useTranslation('application', {
     keyPrefix: 'TermsOfUse',
   });
@@ -31,19 +30,20 @@ export const TermsOfUseSectionCard = ({
   const {
     data,
     router: { isError, isFetching },
-  } = useDashboardApplicationAsset(termsOfUse ?? '');
-  const { showSuccess, showError } = useNotice();
-  const { mutateAsync: update, isPending } =
-    trpc.protectedDashboardApplicationAsset.updateById.useMutation({
+  } = useDashboardApplicationAsset(id ?? '');
+  const { showError } = useNotice();
+  const { mutateAsync: upsert } =
+    trpc.protectedDashboardApplicationAsset.upsertFileContent.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(tCommon('Updated', 'Updated')),
     });
 
   const onChange = useCallback(
     async (content: PartialBlock[]) => {
-      await update({ ...data, content }).catch(() => null);
+      await upsert({ applicationId, name: 'TermsOfUse', content }).catch(
+        () => null,
+      );
     },
-    [update, data],
+    [upsert, applicationId],
   );
 
   return (
@@ -55,7 +55,7 @@ export const TermsOfUseSectionCard = ({
       <CardContent {...overrides?.CardContentProps}>
         <Editor
           initialContent={data.content}
-          editable={!isError && !isFetching && !isPending}
+          editable={!isError && !isFetching}
           onChange={onChange}
         />
       </CardContent>

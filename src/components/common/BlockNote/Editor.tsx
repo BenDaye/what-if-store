@@ -33,7 +33,6 @@ export const BlockNoteEditor = ({
   return (
     <Box
       sx={{
-        // position: 'relative',
         minHeight,
         outline: 0,
         overflow: 'auto',
