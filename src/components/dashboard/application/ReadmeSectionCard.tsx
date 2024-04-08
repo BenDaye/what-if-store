@@ -16,16 +16,16 @@ const Editor = dynamic(() => import('../../common/BlockNote/Editor'), {
   ssr: false,
 });
 
-type PrivacyPolicySectionCardProps = OverridesCardProps & {
+type ReadmeSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const PrivacyPolicySectionCard = ({
+export const ReadmeSectionCard = ({
   overrides,
-  defaultValues: { id: applicationId, privacyPolicy: id },
-}: PrivacyPolicySectionCardProps) => {
-  const { t: tApplicationPrivacyPolicy } = useTranslation('application', {
-    keyPrefix: 'PrivacyPolicy',
+  defaultValues: { id: applicationId, readme: id },
+}: ReadmeSectionCardProps) => {
+  const { t: tApplicationReadme } = useTranslation('application', {
+    keyPrefix: 'Readme',
   });
 
   const {
@@ -40,7 +40,7 @@ export const PrivacyPolicySectionCard = ({
 
   const onChange = useCallback(
     async (content: PartialBlock[]) => {
-      await upsert({ applicationId, name: 'PrivacyPolicy', content }).catch(
+      await upsert({ applicationId, name: 'Readme', content }).catch(
         () => null,
       );
     },
@@ -50,13 +50,13 @@ export const PrivacyPolicySectionCard = ({
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationPrivacyPolicy('_', 'Privacy Policy')}
+        title={tApplicationReadme('_', 'Readme')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
         {/* <Lexical
-          namespace="PrivacyPolicy"
-          placeholderText={tApplicationPrivacyPolicy('Placeholder', '')}
+          namespace="Readme"
+          placeholderText={tApplicationReadme('Placeholder', '')}
         /> */}
         <Editor
           initialContent={data.content}

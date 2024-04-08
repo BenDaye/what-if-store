@@ -107,6 +107,7 @@
   "Nav": {
     "Collection": "合集",
     "Compatibility": "兼容性",
+    "Copyright": "版权",
     "Declaration": "声明",
     "Follow": "收藏",
     "General": "设置",
@@ -114,6 +115,7 @@
     "Media": "图片",
     "Own": "安装",
     "PrivacyPolicy": "隐私政策",
+    "Readme": "自述",
     "Relation": "关系",
     "Review": "审核",
     "Stat": "分析",

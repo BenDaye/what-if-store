@@ -2,12 +2,14 @@ import { IdSchema } from '@/server/schemas';
 import {
   Link as CollectionIcon,
   Support as CompatibilityIcon,
+  Copyright as CopyrightIcon,
   Favorite as FollowIcon,
   Settings as GeneralIcon,
   ListAlt as GroupIcon,
   PermMedia as MediaIcon,
   CloudDownload as OwnIcon,
   PrivacyTip as PrivacyPolicyIcon,
+  Article as ReadmeIcon,
   Gavel as TermsOfUseIcon,
   LocalOffer as VersionIcon,
 } from '@mui/icons-material';
@@ -96,6 +98,20 @@ export const NavList = ({
         pathnameSuffix="/terms_of_use"
         text={tApplicationNav('TermsOfUse', 'Terms Of Use')}
         icon={<TermsOfUseIcon />}
+        {...overrides?.ListItemButtonProps}
+      />
+      <ApplicationNavListItemButton
+        applicationId={applicationId}
+        pathnameSuffix="/copyright"
+        text={tApplicationNav('Copyright', 'Copyright')}
+        icon={<CopyrightIcon />}
+        {...overrides?.ListItemButtonProps}
+      />
+      <ApplicationNavListItemButton
+        applicationId={applicationId}
+        pathnameSuffix="/readme"
+        text={tApplicationNav('Readme', 'Readme')}
+        icon={<ReadmeIcon />}
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}

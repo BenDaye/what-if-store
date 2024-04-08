@@ -133,6 +133,7 @@
   "Nav": {
     "Collection": "Collection",
     "Compatibility": "Compatibility",
+    "Copyright": "Copyright",
     "Declaration": "Declaration",
     "Follow": "Follow",
     "General": "General",
@@ -140,6 +141,7 @@
     "Media": "Media",
     "Own": "Own",
     "PrivacyPolicy": "Privacy Policy",
+    "Readme": "Readme",
     "Relation": "Relation",
     "Review": "Review",
     "Stat": "Stat",

@@ -16,16 +16,16 @@ const Editor = dynamic(() => import('../../common/BlockNote/Editor'), {
   ssr: false,
 });
 
-type PrivacyPolicySectionCardProps = OverridesCardProps & {
+type CopyrightSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const PrivacyPolicySectionCard = ({
+export const CopyrightSectionCard = ({
   overrides,
-  defaultValues: { id: applicationId, privacyPolicy: id },
-}: PrivacyPolicySectionCardProps) => {
-  const { t: tApplicationPrivacyPolicy } = useTranslation('application', {
-    keyPrefix: 'PrivacyPolicy',
+  defaultValues: { id: applicationId, copyright: id },
+}: CopyrightSectionCardProps) => {
+  const { t: tApplicationCopyright } = useTranslation('application', {
+    keyPrefix: 'Copyright',
   });
 
   const {
@@ -40,7 +40,7 @@ export const PrivacyPolicySectionCard = ({
 
   const onChange = useCallback(
     async (content: PartialBlock[]) => {
-      await upsert({ applicationId, name: 'PrivacyPolicy', content }).catch(
+      await upsert({ applicationId, name: 'Copyright', content }).catch(
         () => null,
       );
     },
@@ -50,13 +50,13 @@ export const PrivacyPolicySectionCard = ({
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationPrivacyPolicy('_', 'Privacy Policy')}
+        title={tApplicationCopyright('_', 'Copyright')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
         {/* <Lexical
-          namespace="PrivacyPolicy"
-          placeholderText={tApplicationPrivacyPolicy('Placeholder', '')}
+          namespace="Copyright"
+          placeholderText={tApplicationCopyright('Placeholder', '')}
         /> */}
         <Editor
           initialContent={data.content}

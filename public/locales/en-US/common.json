@@ -9,6 +9,10 @@
     "_": "Theme"
   },
   "Dashboard": "Dashboard",
+  "DataGridHeaderName": {
+    "CreatedAt": "CreatedAt",
+    "UpdatedAt": "UpdatedAt"
+  },
   "Import": "Import",
   "Imported": "Imported",
   "Language": {
