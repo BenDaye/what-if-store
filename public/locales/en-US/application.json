@@ -38,7 +38,7 @@
     "Weather": "Weather"
   },
   "Collection": {
-    "_": "Application Collection"
+    "_": "Application Collections"
   },
   "DataGridHeaderName": {
     "Category": "Category",
@@ -76,6 +76,9 @@
       "_": "Compatibility"
     },
     "_": "Declaration"
+  },
+  "Follow": {
+    "_": "Application Followers"
   },
   "General": {
     "Category": "Category",
@@ -123,7 +126,7 @@
       "Persistent": "Persistent",
       "Temporary": "Temporary"
     },
-    "_": "Application Group"
+    "_": "Application Groups"
   },
   "Media": {
     "Icons": "Icons",
@@ -147,6 +150,9 @@
     "Stat": "Stat",
     "TermsOfUse": "Terms Of Use",
     "Version": "Version"
+  },
+  "Own": {
+    "_": "Application Owners"
   },
   "PrivacyPolicy": {
     "Placeholder": "Enter this application privacy policy here...",

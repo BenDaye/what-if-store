@@ -70,6 +70,9 @@
       "Name": "标签名称"
     }
   },
+  "Follow": {
+    "_": "收藏者"
+  },
   "General": {
     "Category": "应用类型",
     "Countries": "地区支持",
@@ -121,6 +124,9 @@
     "Stat": "分析",
     "TermsOfUse": "使用条款",
     "Version": "版本"
+  },
+  "Own": {
+    "_": "持有者"
   },
   "Status": {
     "Achieved": "已归档",
