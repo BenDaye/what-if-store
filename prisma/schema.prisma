@@ -33,6 +33,7 @@ model User {
   ProvidingCollections  ApplicationCollection[] @relation()
   OwningCollections     ApplicationCollection[] @relation("CollectionOwns")
   FollowingCollections  ApplicationCollection[] @relation("CollectionFollows")
+  Files                 File[]
 }
 
 model UserProfile {
@@ -261,4 +262,16 @@ model ApplicationAsset {
   Application   Application          @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@unique([applicationId, type, name])
+}
+
+model File {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  md5       String   @unique
+  name      String   @unique
+  path      String   @unique
+  size      Int
+  mimeType  String
+  Users     User[]
 }

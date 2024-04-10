@@ -3,6 +3,7 @@ import {
   Widgets as ApplicationsIcon,
   Dashboard as DashboardIcon,
   Engineering as ProvidersIcon,
+  UploadFile as UploadIcon,
   Person as UsersIcon,
 } from '@mui/icons-material';
 import { Box, Drawer, DrawerProps } from '@mui/material';
@@ -66,6 +67,12 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
           icon={<UsersIcon />}
           onClick={() => push('/dashboard/user')}
           active={pathname.startsWith('/dashboard/user')}
+        />
+        <IconButtonWithTooltip
+          title={tCommon('Upload')}
+          icon={<UploadIcon />}
+          onClick={() => push('/dashboard/upload')}
+          active={pathname.startsWith('/dashboard/upload')}
         />
       </Box>
       <Box

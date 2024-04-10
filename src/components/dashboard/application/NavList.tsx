@@ -148,7 +148,7 @@ export const NavList = ({
       />
       {divider && <Divider sx={{ mt: 1 }} />}
       <ListSubheader {...overrides?.ListSubheaderProps}>
-        {tApplicationNav('Stat', 'Stat')} (TODO)
+        {tApplicationNav('Stat', 'Stat')}
       </ListSubheader>
     </List>
   );

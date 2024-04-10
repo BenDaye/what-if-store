@@ -10,6 +10,11 @@
 
 import { AuthRole } from '@prisma/client';
 import { initTRPC } from '@trpc/server';
+import {
+  experimental_createMemoryUploadHandler,
+  experimental_isMultipartFormDataRequest,
+  experimental_parseMultipartFormData,
+} from '@trpc/server/adapters/node-http/content-type/form-data';
 import SuperJSON from 'superjson';
 import { ZodError } from 'zod';
 import { Context } from './context';
@@ -60,7 +65,7 @@ const isAuthorized = t.middleware(async ({ ctx, next }) => {
   });
 });
 
-const isAuthorizedUser = t.middleware(async ({ ctx, next }) => {
+const isAuthorizedUserOrProvider = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || typeof ctx.session?.user?.role === undefined)
     throw new CommonTRPCError('UNAUTHORIZED');
   if (
@@ -102,8 +107,24 @@ const isAuthorizedAdmin = t.middleware(async ({ ctx, next }) => {
   });
 });
 
+export const formDataMiddleware = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.req) throw new CommonTRPCError('INVALID_PARAMS');
+  if (!experimental_isMultipartFormDataRequest(ctx.req)) {
+    return next();
+  }
+  const formData = await experimental_parseMultipartFormData(
+    ctx.req,
+    experimental_createMemoryUploadHandler(),
+  );
+  return next({
+    getRawInput: async () => formData,
+  });
+});
+
 export const protectedProcedure = t.procedure.use(isAuthorized);
-export const protectedUserProcedure = t.procedure.use(isAuthorizedUser);
+export const protectedUserProcedure = t.procedure.use(
+  isAuthorizedUserOrProvider,
+);
 export const protectedProviderProcedure = t.procedure.use(isAuthorizedProvider);
 export const protectedAdminProcedure = t.procedure.use(isAuthorizedAdmin);
 

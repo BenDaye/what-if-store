@@ -57,6 +57,12 @@ import {
   publicDashboardProvider,
 } from './provider';
 import {
+  protectedAppUpload,
+  protectedDashboardUpload,
+  publicAppUpload,
+  publicDashboardUpload,
+} from './upload';
+import {
   protectedAppUser,
   protectedDashboardUser,
   publicAppUser,
@@ -114,6 +120,11 @@ export const appRouter = router({
   protectedDashboardApplicationAsset,
   publicAppApplicationAsset,
   publicDashboardApplicationAsset,
+  // NOTE: Upload
+  protectedAppUpload,
+  protectedDashboardUpload,
+  publicAppUpload,
+  publicDashboardUpload,
 });
 
 export type AppRouter = typeof appRouter;

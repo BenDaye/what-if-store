@@ -8,7 +8,7 @@ import superjson from 'superjson';
 // ℹ️ Type-only import:
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 import type { AppRouter } from '@/server/routers/_app';
-import { TRPCLink } from '@trpc/client';
+import { TRPCLink, experimental_formDataLink, splitLink } from '@trpc/client';
 import type { inferRouterOutputs } from '@trpc/server';
 
 let client: ReturnType<typeof createWSClient> | null = null;
@@ -79,7 +79,14 @@ export const trpc = createTRPCNext<AppRouter>({
               typeof window !== 'undefined') ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
-        getEndingLink(ctx),
+        splitLink({
+          condition: (opts) => opts.input instanceof FormData,
+          true: experimental_formDataLink({
+            url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
+            transformer: superjson,
+          }),
+          false: getEndingLink(ctx),
+        }),
       ],
       /**
        * @link https://tanstack.com/query/v4/docs/react/reference/QueryClient
@@ -100,6 +107,14 @@ export const trpc = createTRPCNext<AppRouter>({
    */
   ssr: false,
   transformer: superjson,
+  overrides: {
+    useMutation: {
+      async onSuccess(opts) {
+        await opts.originalFn();
+        await opts.queryClient.invalidateQueries();
+      },
+    },
+  },
 });
 
 export type RouterOutput = inferRouterOutputs<AppRouter>;

@@ -12,4 +12,5 @@ export * from './list';
 export * from './meta';
 export * from './output';
 export * from './provider';
+export * from './upload';
 export * from './user';
