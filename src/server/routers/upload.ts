@@ -184,6 +184,7 @@ export const protectedDashboardUpload = router({
     .input(uploadFormDataSchema)
     .mutation(async ({ ctx: { session, prisma }, input }) => {
       const data = await write(input.file);
+
       await prisma.$transaction(async (tx) => {
         const existedFile = await tx.file.findFirst({
           where: {

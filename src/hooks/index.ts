@@ -6,4 +6,5 @@ export * from './darkMode';
 export * from './meta';
 export * from './notice';
 export * from './provider';
+export * from './upload';
 export * from './user';

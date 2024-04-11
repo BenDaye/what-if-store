@@ -1,5 +1,6 @@
 import nextI18NextConfig from '@/../next-i18next.config';
 import { PageContainer, RouterBreadcrumbs } from '@/components/common';
+import { UploadListSectionCard } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
@@ -22,7 +23,9 @@ const Page: NextPageWithLayout<
           <RouterBreadcrumbs />
         </>
       }
-    ></PageContainer>
+    >
+      <UploadListSectionCard />
+    </PageContainer>
   );
 };
 

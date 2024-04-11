@@ -6,11 +6,11 @@ export const uploadFormDataSchema = zfd.formData({
   name: zfd.text(),
   file: zfd.file(),
 });
-export type UploadFormData = z.infer<typeof uploadFormDataSchema>;
+export type UploadFormDataSchema = z.infer<typeof uploadFormDataSchema>;
 
 export const uploadListInputSchema = listInputSchema
   .extend({
     mimeType: z.string(),
   })
   .partial();
-export type UploadListInput = z.infer<typeof uploadListInputSchema>;
+export type UploadListInputSchema = z.infer<typeof uploadListInputSchema>;

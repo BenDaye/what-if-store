@@ -107,14 +107,6 @@ export const trpc = createTRPCNext<AppRouter>({
    */
   ssr: false,
   transformer: superjson,
-  overrides: {
-    useMutation: {
-      async onSuccess(opts) {
-        await opts.originalFn();
-        await opts.queryClient.invalidateQueries();
-      },
-    },
-  },
 });
 
 export type RouterOutput = inferRouterOutputs<AppRouter>;

@@ -57,7 +57,6 @@ export const write = async (
   for await (const chunk of fileStream) {
     fd.write(chunk);
   }
-  await new Promise((resolve) => fd.on('finish', resolve));
   fd.end();
 
   const fileMD5 = await calculateFileMD5(filePath);
