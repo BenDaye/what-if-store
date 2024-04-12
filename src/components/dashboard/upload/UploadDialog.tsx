@@ -30,6 +30,7 @@ type UploadDialogProps = OverridesProps<{
   DialogProps;
 
 export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
+  const { t: tCommon } = useTranslation('common');
   const { t: tUpload } = useTranslation('upload');
 
   const { showSuccess, showError } = useNotice();
@@ -39,7 +40,7 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
     isPending,
   } = trpc.protectedDashboardUpload.upload.useMutation({
     onError: (err) => showError(err.message),
-    onSuccess: () => showSuccess(tUpload('Uploaded', 'Uploaded')),
+    onSuccess: () => showSuccess(tCommon('Uploaded', 'Uploaded')),
   });
 
   const { handleSubmit, watch, formState, setValue, reset } =

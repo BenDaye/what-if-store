@@ -1,6 +1,9 @@
 {
   "Dashboard": {
     "Application": "Application",
+    "Provider": "Provider",
+    "Upload": "Upload",
+    "User": "User",
     "_": "Dashboard"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "DataGridHeaderName": {
+    "MIMEType": "MIME Type",
+    "Name": "Name",
+    "Path": "Path",
+    "Size": "Size"
+  },
+  "File": "File",
+  "_": "Upload"
+}

@@ -1,3 +1,4 @@
+export * from './AuthIconButton';
 export * from './SignInButton';
 export * from './SignInDialog';
 export * from './SignUpButton';

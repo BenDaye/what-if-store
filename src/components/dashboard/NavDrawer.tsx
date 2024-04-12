@@ -9,6 +9,7 @@ import {
 import { Box, Drawer, DrawerProps } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { DashboardAuthIconButton } from './auth';
 import { DashboardSettingsIconButton } from './settings/SettingsIconButton';
 
 export const DashboardNavDrawer = (props: DrawerProps) => {
@@ -86,6 +87,7 @@ export const DashboardNavDrawer = (props: DrawerProps) => {
           py: 2,
         }}
       >
+        <DashboardAuthIconButton />
         <DashboardSettingsIconButton />
       </Box>
     </Drawer>
