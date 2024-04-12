@@ -50,13 +50,42 @@ export const theme = createTheme(
       },
       MuiAppBar: {
         defaultProps: {
+          position: 'static',
           elevation: 1,
+          enableColorOnDark: true,
         },
       },
       MuiTextField: {
         defaultProps: {
           variant: 'filled',
           fullWidth: true,
+        },
+      },
+      MuiDrawer: {
+        defaultProps: {
+          variant: 'persistent',
+          ModalProps: { keepMounted: true },
+        },
+      },
+      MuiChip: {
+        defaultProps: {
+          sx: {
+            borderRadius: 1,
+          },
+          size: 'small',
+        },
+      },
+      MuiListItemText: {
+        defaultProps: {
+          primaryTypographyProps: {
+            noWrap: true,
+            textOverflow: 'ellipsis',
+          },
+        },
+      },
+      MuiAvatar: {
+        defaultProps: {
+          variant: 'rounded',
         },
       },
     },

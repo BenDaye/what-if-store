@@ -5,6 +5,11 @@ import {
   CardHeaderProps,
   CardMediaProps,
   CardProps,
+  DialogActionsProps,
+  DialogContentProps,
+  DialogProps,
+  DialogTitleProps,
+  DrawerProps,
   TextFieldProps,
 } from '@mui/material';
 import { FieldError, Merge } from 'react-hook-form';
@@ -19,6 +24,18 @@ export type OverridesCardProps = OverridesProps<{
   CardContentProps?: CardContentProps;
   CardActionsProps?: CardActionsProps;
   CardMediaProps?: CardMediaProps;
+}>;
+
+export type OverridesDialogProps = OverridesProps<{
+  DialogTitleProps?: DialogTitleProps;
+  DialogContentProps?: DialogContentProps;
+  DialogActionsProps?: DialogActionsProps;
+}> & {
+  DialogProps: DialogProps;
+};
+
+export type OverridesDrawerProps = OverridesProps<{
+  DrawerProps?: DrawerProps;
 }>;
 
 export type MultipleAutoCompleteProps<

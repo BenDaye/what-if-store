@@ -1,8 +1,8 @@
 import { IconButtonWithTooltip } from '@/components/common';
 import {
-  Widgets as ApplicationsIcon,
+  Apps as ApplicationsIcon,
   Dashboard as DashboardIcon,
-  Engineering as ProvidersIcon,
+  DeveloperBoard as ProvidersIcon,
   UploadFile as UploadIcon,
   Person as UsersIcon,
 } from '@mui/icons-material';
