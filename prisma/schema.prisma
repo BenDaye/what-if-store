@@ -34,6 +34,7 @@ model User {
   OwningCollections     ApplicationCollection[] @relation("CollectionOwns")
   FollowingCollections  ApplicationCollection[] @relation("CollectionFollows")
   Files                 File[]
+  ApiKeys               UserApiKey[]
 }
 
 model UserProfile {
@@ -46,6 +47,16 @@ model UserProfile {
   avatar    String?
   country   String?
   userId    String   @unique
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserApiKey {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  key       String   @unique @default(uuid())
+  remark    String
+  userId    String
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

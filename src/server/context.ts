@@ -20,13 +20,14 @@ export const createContext = async (
   opts: CreateNextContextOptions | CreateWSSContextFnOptions,
 ) => {
   const session = await getSession(opts);
+  const sessionFromApiKey = await getSessionFromApiKey(opts);
 
   appLogger
     .child({}, { msgPrefix: '[TRPC] ' })
     .debug(session || 'Create Context For Guest', 'Create Context');
 
   return {
-    session,
+    session: session || sessionFromApiKey,
     prisma,
     redis,
     req: opts.req,
@@ -41,3 +42,47 @@ export type Context = Omit<Awaited<ReturnType<typeof createContext>>, 'req'> & {
 //   prisma: PrismaClient;
 //   redis: Redis;
 // };
+export const getSessionFromApiKey = async (
+  opts: CreateNextContextOptions | CreateWSSContextFnOptions,
+): Promise<CreateContextOptions['session']> => {
+  const apiKey = opts.req.headers['x-api-key'];
+  if (!apiKey) {
+    return null;
+  }
+  const key = Array.isArray(apiKey) ? apiKey[0] : apiKey;
+  const user = await prisma.userApiKey.findUnique({
+    where: { key },
+    select: {
+      User: {
+        select: {
+          id: true,
+          username: true,
+          role: true,
+          UserProfile: {
+            select: {
+              nickname: true,
+              avatar: true,
+              bio: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!user) return null;
+  return {
+    expires: new Date(Date.now() + 1000 * 60 * 60).toISOString(),
+    user: {
+      id: user.User.id,
+      role: user.User.role,
+      username: user.User.username,
+      nickname: user.User.UserProfile?.nickname,
+      avatar: user.User.UserProfile?.avatar,
+      bio: user.User.UserProfile?.bio,
+      email: user.User.UserProfile?.email,
+      name: undefined,
+      image: undefined,
+    },
+  };
+};
