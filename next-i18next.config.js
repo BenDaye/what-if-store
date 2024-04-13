@@ -14,6 +14,7 @@ module.exports = {
     'router',
     'errorMessage',
     'meta',
+    'upload',
     'auth',
     'user',
     'provider',

@@ -18,11 +18,11 @@
     "db:migrate:dev": "dotenv -e .env.development.local -- prisma migrate dev --skip-seed",
     "db:seed:dev": "dotenv -e .env.development.local -- prisma db seed",
     "db:reset:dev": "dotenv -e .env.development.local -- prisma migrate reset --force --skip-seed",
-    "db:studio:dev": "dotenv -e .env.development.local -- prisma studio -b none",
+    "db:studio:dev": "dotenv -e .env.development.local -- prisma studio -b none -p 3205",
     "db:migrate:prod": "dotenv -e .env.production.local -- prisma migrate deploy",
     "db:seed:prod": "dotenv -e .env.production.local -- prisma db seed",
     "db:reset:prod": "dotenv -e .env.production.local -- prisma migrate reset --force --skip-seed",
-    "db:studio:prod": "dotenv -e .env.production.local -- prisma studio -b none",
+    "db:studio:prod": "dotenv -e .env.production.local -- prisma studio -b none -p 3205",
     "locize:format": "locize format ./public/locales"
   },
   "prettier": {
