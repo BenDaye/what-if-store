@@ -17,12 +17,13 @@ export const UserLink = ({
   withProvider = false,
   overrides,
 }: UserLinkProps) => {
-  const { data, nickname } = useDashboardUser(userId);
+  const {
+    data: { nickname, providerId },
+  } = useDashboardUser(userId);
   return (
     <Stack direction="row" alignItems="center" spacing={1}>
       {withUser && (
         <Link
-          underline="hover"
           href={`/dashboard/user/${userId}`}
           color="text.primary"
           {...overrides?.LinkProps}
@@ -30,9 +31,7 @@ export const UserLink = ({
           {nickname}
         </Link>
       )}
-      {withProvider && data?.ProviderProfile && (
-        <ProviderLink providerId={data.ProviderProfile.id} />
-      )}
+      {withProvider && providerId && <ProviderLink providerId={providerId} />}
     </Stack>
   );
 };

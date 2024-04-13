@@ -36,7 +36,7 @@ export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
 
   return (
     <Dialog {...props}>
-      <AppBar position="static" enableColorOnDark elevation={0}>
+      <AppBar elevation={0}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
           <Typography variant="subtitle1">
             {tCommon('Language.Update')}

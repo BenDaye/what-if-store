@@ -34,7 +34,6 @@ export const ProviderTypeChip = ({
         borderRadius: 1,
       }}
       size="small"
-      variant="filled"
       color={color}
       {...overrides?.ChipProps}
     />

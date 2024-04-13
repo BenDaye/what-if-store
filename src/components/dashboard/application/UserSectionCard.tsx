@@ -46,7 +46,9 @@ const SectionCard = ({ overrides, userId }: SectionCardProps) => {
   const { t: tProviderGeneral } = useTranslation('provider', {
     keyPrefix: 'General',
   });
-  const { nickname, provider } = useDashboardUser(userId);
+  const {
+    data: { nickname, providerName },
+  } = useDashboardUser(userId);
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
@@ -63,16 +65,15 @@ const SectionCard = ({ overrides, userId }: SectionCardProps) => {
               disabled
             />
           </Grid>
-          {provider && (
-            <Grid md={12} xl={6}>
-              <TextField
-                value={provider.name}
-                label={tProviderGeneral('Name', 'Provider Name')}
-                placeholder={tProviderGeneral('Name', 'Provider Name')}
-                disabled
-              />
-            </Grid>
-          )}
+
+          <Grid md={12} xl={6}>
+            <TextField
+              value={providerName}
+              label={tProviderGeneral('Name', 'Provider Name')}
+              placeholder={tProviderGeneral('Name', 'Provider Name')}
+              disabled
+            />
+          </Grid>
         </Grid>
       </CardContent>
       <CardActions {...overrides?.CardActionsProps}>

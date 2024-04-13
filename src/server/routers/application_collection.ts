@@ -27,6 +27,8 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationCollectionSelect>()({
 const fullSelect = {
   ...defaultSelect,
   ...Prisma.validator<Prisma.ApplicationCollectionSelect>()({
+    price: true,
+    providerId: true,
     Applications: {
       select: {
         id: true,

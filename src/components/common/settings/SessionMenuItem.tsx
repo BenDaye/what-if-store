@@ -1,14 +1,12 @@
 import { useAuth } from '@/hooks';
-import { NOOP } from '@/utils/noop';
+import { OverridesMenuItemProps } from '@/types/overrides';
 import { Avatar, ListItemAvatar, ListItemText, MenuItem } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 
-type SessionMenuItemProps = {
-  onClick?: () => void;
-};
+type SessionMenuItemProps = OverridesMenuItemProps;
 
-export const SessionMenuItem = ({ onClick = NOOP }: SessionMenuItemProps) => {
+export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
   const { t: tAuth } = useTranslation('auth');
   const { data: session, status } = useSession();
   const { signIn } = useAuth();
@@ -17,15 +15,16 @@ export const SessionMenuItem = ({ onClick = NOOP }: SessionMenuItemProps) => {
     <MenuItem
       sx={{ mb: 1 }}
       selected
-      onClick={() => {
+      onClick={(ev) => {
         if (status !== 'authenticated') {
           signIn();
           return;
         }
-        onClick();
+        overrides?.MenuItemProps?.onClick?.(ev);
       }}
+      {...overrides?.MenuItemProps}
     >
-      <ListItemAvatar>
+      <ListItemAvatar {...overrides?.ListItemAvatarProps}>
         <Avatar
           variant="rounded"
           sx={{
@@ -36,6 +35,7 @@ export const SessionMenuItem = ({ onClick = NOOP }: SessionMenuItemProps) => {
             fontWeight: 700,
           }}
           src={session?.user?.avatar || undefined}
+          {...overrides?.AvatarProps}
         >
           {session?.user?.nickname?.charAt(0) ??
             session?.user?.nickname?.charAt(0) ??
@@ -53,6 +53,7 @@ export const SessionMenuItem = ({ onClick = NOOP }: SessionMenuItemProps) => {
           noWrap: true,
           textOverflow: 'ellipsis',
         }}
+        {...overrides?.ListItemTextProps}
       />
     </MenuItem>
   );

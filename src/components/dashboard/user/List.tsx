@@ -33,7 +33,7 @@ type UserCollapseListProps = {
   role: AuthRole;
 };
 const UserCollapseList = ({ role, input }: UserCollapseListProps) => {
-  const { flattedData } = useDashboardUsers(true, {
+  const { data } = useDashboardUsers({
     ...input,
     role: [role],
   });
@@ -45,10 +45,10 @@ const UserCollapseList = ({ role, input }: UserCollapseListProps) => {
     <CollapseList
       localStorageKey={`user-role:${role}`}
       primaryText={primaryText}
-      secondaryText={`(${flattedData.length})`}
+      secondaryText={`(${data.length})`}
       defaultExpandMore={true}
     >
-      {flattedData.map((item) => (
+      {data.map((item) => (
         <UserListItemButton key={item.id} itemId={item.id} />
       ))}
     </CollapseList>

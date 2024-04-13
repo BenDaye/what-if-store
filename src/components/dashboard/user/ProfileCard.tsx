@@ -1,4 +1,4 @@
-import { RouterOutput } from '@/utils/trpc';
+import { UseDashboardUserHookDataSchema } from '@/hooks';
 import { Edit as EditIcon } from '@mui/icons-material';
 import {
   Avatar,
@@ -15,10 +15,12 @@ import {
 } from '@mui/material';
 
 type UserProfileCardProps = {
-  data?: RouterOutput['protectedDashboardUser']['getById'];
+  data: UseDashboardUserHookDataSchema;
 };
 
-export const UserProfileCard = ({ data }: UserProfileCardProps) => {
+export const UserProfileCard = ({
+  data: { id, avatarSrc, avatarText, nickname, email, bio },
+}: UserProfileCardProps) => {
   return (
     <Card
       sx={{
@@ -42,8 +44,8 @@ export const UserProfileCard = ({ data }: UserProfileCardProps) => {
       <ListItem sx={{ gap: 2, mb: 1, alignItems: 'stretch' }}>
         <ListItemAvatar>
           <Avatar
-            alt={`Avatar${data?.id}`}
-            src={data?.UserProfile?.avatar || undefined}
+            alt={`Avatar${id}`}
+            src={avatarSrc || undefined}
             sx={{
               height: 120,
               width: 120,
@@ -51,7 +53,7 @@ export const UserProfileCard = ({ data }: UserProfileCardProps) => {
             }}
             variant="rounded"
           >
-            {data?.UserProfile?.nickname?.charAt(0) ?? '-'}
+            {avatarText}
           </Avatar>
         </ListItemAvatar>
         <Box
@@ -62,12 +64,12 @@ export const UserProfileCard = ({ data }: UserProfileCardProps) => {
           }}
         >
           <ListItemText
-            primary={data?.UserProfile?.nickname ?? '-'}
+            primary={nickname}
             primaryTypographyProps={{
               variant: 'h6',
               letterSpacing: 0.5,
             }}
-            secondary={data?.UserProfile?.email ?? '-'}
+            secondary={email}
             secondaryTypographyProps={{
               variant: 'body2',
             }}
@@ -81,7 +83,7 @@ export const UserProfileCard = ({ data }: UserProfileCardProps) => {
             component={'div'}
             sx={{ flex: 1, mb: 0.8 }}
           >
-            {data?.UserProfile?.bio ?? '-'}
+            {bio}
           </Typography>
         </Box>
       </ListItem>
@@ -89,11 +91,7 @@ export const UserProfileCard = ({ data }: UserProfileCardProps) => {
       <Stack
         direction="row"
         divider={
-          <Divider
-            orientation="vertical"
-            sx={{ opacity: 0.6, height: 64 }}
-            variant="fullWidth"
-          />
+          <Divider orientation="vertical" sx={{ opacity: 0.6, height: 64 }} />
         }
         sx={{
           flex: 1,

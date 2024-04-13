@@ -86,7 +86,6 @@ export const VersionCard = ({ overrides, version }: VersionCardProps) => {
               <Chip
                 label={tApplicationVersion('Deprecated', 'Deprecated')}
                 color="error"
-                variant="filled"
               />
             )}
           </Stack>

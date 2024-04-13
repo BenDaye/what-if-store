@@ -1,47 +1,40 @@
+import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
   applicationAssetCreateInputSchema,
   idSchema,
 } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { PartialBlock } from '@blocknote/core';
-import { ApplicationAssetType, AuthRole } from '@prisma/client';
-import { useSession } from 'next-auth/react';
+import { ApplicationAssetType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
-import { useNotice } from '../notice';
 
-type DashboardApplicationAssetRouterOutput =
-  RouterOutput['protectedDashboardApplicationAsset']['getById'];
-export const useDashboardApplicationAssetHookDataSchema =
+// type AppApplicationAssetRouterOutput =
+//   RouterOutput['publicAppApplicationAsset']['getById'];
+export const useAppApplicationAssetHookDataSchema =
   applicationAssetCreateInputSchema
     .extend({
       id: idSchema,
     })
     .strict();
-export type UseDashboardApplicationAssetHookDataSchema = z.infer<
-  typeof useDashboardApplicationAssetHookDataSchema
+export type UseAppApplicationAssetHookDataSchema = z.infer<
+  typeof useAppApplicationAssetHookDataSchema
 >;
 
-export const useDashboardApplicationAsset = (id: IdSchema) => {
-  const { data: session, status } = useSession();
-  const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
-    [status, session],
-  );
+export const useAppApplicationAsset = (id: IdSchema) => {
   const { data, refetch, isFetching, error, isError } =
-    trpc.protectedDashboardApplicationAsset.getById.useQuery(id, {
-      enabled: !!id && authenticated,
+    trpc.publicAppApplicationAsset.getById.useQuery(id, {
+      enabled: !!id,
     });
-  trpc.protectedDashboardApplicationAsset.subscribe.useSubscription(undefined, {
-    enabled: authenticated,
+  trpc.publicAppApplicationAsset.subscribe.useSubscription(undefined, {
     onData: (_id) => {
       if (_id === id) refetch();
     },
   });
 
-  const memoData = useMemo((): UseDashboardApplicationAssetHookDataSchema => {
+  const memoData = useMemo((): UseAppApplicationAssetHookDataSchema => {
     return {
       id,
       applicationId: data?.applicationId ?? '',

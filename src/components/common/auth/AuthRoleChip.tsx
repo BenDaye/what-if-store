@@ -1,12 +1,12 @@
+import { OverridesProps } from '@/types/overrides';
 import { Chip, ChipProps } from '@mui/material';
 import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { PropsWithChildren, useMemo } from 'react';
 
-type AuthRoleChipProps = {
-  overrides?: {
-    ChipProps?: ChipProps;
-  };
+type AuthRoleChipProps = OverridesProps<{
+  ChipProps?: ChipProps;
+}> & {
   role: AuthRole;
 };
 
@@ -34,7 +34,6 @@ export const AuthRoleChip = ({
         borderRadius: 1,
       }}
       size="small"
-      variant="filled"
       color={color}
       {...overrides?.ChipProps}
     />

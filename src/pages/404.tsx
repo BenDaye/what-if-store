@@ -60,12 +60,7 @@ const Page: NextPageWithLayout<
           <Typography variant="h4" paragraph>
             Page Not Found
           </Typography>
-          <Link
-            onClick={() => back()}
-            underline="hover"
-            variant="h6"
-            sx={{ cursor: 'pointer' }}
-          >
+          <Link onClick={() => back()} variant="h6" sx={{ cursor: 'pointer' }}>
             Go Back {count > 0 ? `(${count})` : null}
           </Link>
         </Box>

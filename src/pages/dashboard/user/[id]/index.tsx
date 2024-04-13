@@ -1,6 +1,6 @@
 import nextI18NextConfig from '@/../next-i18next.config';
-import { PageContainer } from '@/components/common';
-import { AuthRoleChip, UserProfileCard } from '@/components/dashboard';
+import { AuthRoleChip, PageContainer } from '@/components/common';
+import { UserProfileCard } from '@/components/dashboard';
 import { DashboardLayout } from '@/components/layouts';
 import { useDashboardUser } from '@/hooks';
 import { NextPageWithLayout } from '@/pages/_app';
@@ -19,15 +19,15 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const { data, username, role } = useDashboardUser(id);
+  const { data } = useDashboardUser(id);
 
   return (
     <PageContainer
       hasHeader
       header={
         <>
-          <AuthRoleChip role={role} />
-          <Typography variant="subtitle1">{username}</Typography>
+          <AuthRoleChip role={data.role} />
+          <Typography variant="subtitle1">{data.username}</Typography>
         </>
       }
     >

@@ -42,13 +42,7 @@ export const RouterBreadcrumbs = ({
           );
         }
         return (
-          <Link
-            key={route}
-            underline="hover"
-            color="inherit"
-            href={href}
-            variant="subtitle2"
-          >
+          <Link key={route} color="inherit" href={href} variant="subtitle2">
             {isDynamic ? route : tRouter(text)}
           </Link>
         );

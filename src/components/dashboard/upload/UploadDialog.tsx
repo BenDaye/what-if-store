@@ -82,7 +82,7 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
         encType="multipart/form-data"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <AppBar position="static" enableColorOnDark elevation={0}>
+        <AppBar elevation={0}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
             <Typography variant="subtitle1">{tUpload('_')}</Typography>
             <Box sx={{ flexGrow: 1 }} />
@@ -113,7 +113,6 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
               />
             </label>
             <TextField
-              fullWidth
               value={watch('file')?.name ?? ''}
               error={!!formState.errors.file}
               helperText={formState.errors.file?.message ?? ' '}

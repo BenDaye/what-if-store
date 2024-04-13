@@ -1,6 +1,6 @@
+import { useNotice } from '@/hooks/notice';
 import {
   ApplicationCreateInputSchema,
-  ApplicationListInputSchema,
   IdSchema,
   applicationCreateInputSchema,
   applicationVersionCreateInputSchema,
@@ -16,10 +16,8 @@ import {
 import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
-import { useInterval } from 'usehooks-ts';
+import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
-import { useGridPagination, useNotice } from '..';
 
 type DashboardApplicationRouterOutput =
   RouterOutput['protectedDashboardApplication']['getById'];
@@ -190,114 +188,5 @@ export const useDashboardApplication = (id: IdSchema) => {
   return {
     router: { data, refetch, isFetching, error, isError },
     data: memoData,
-  };
-};
-
-export const useDashboardApplications = (
-  notify = true,
-  query?: ApplicationListInputSchema,
-) => {
-  const { data: session, status } = useSession();
-  const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
-    [status, session],
-  );
-  const { showWarning } = useNotice();
-  const [flattedData, setFlattedData] = useState<
-    RouterOutput['protectedDashboardApplication']['list']['items']
-  >([]);
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetched,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.protectedDashboardApplication.list.useInfiniteQuery(
-    {
-      limit: 20,
-      ...query,
-    },
-    {
-      enabled: authenticated,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
-
-  useEffect(() => {
-    if (!notify) return;
-    if (!isError) return;
-
-    showWarning(error.message);
-  }, [error, isError, showWarning, notify]);
-
-  useEffect(() => {
-    setFlattedData(data?.pages.flatMap((page) => page.items) ?? []);
-  }, [data]);
-
-  trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
-    enabled: authenticated,
-    onData: (id) => {
-      if (flattedData.some((v) => v.id === id)) refetch();
-    },
-    onError: (err) => {
-      if (notify) showWarning(err.message);
-    },
-  });
-
-  useInterval(fetchNextPage, hasNextPage && !isFetching ? 1000 : null);
-
-  return {
-    data,
-    flattedData,
-    isFetched,
-    isFetching,
-    error,
-  };
-};
-
-export const useDashboardApplicationsWithPagination = (
-  input?: ApplicationListInputSchema,
-) => {
-  const {
-    pagination: { page, pageSize },
-    setPaginationModel,
-    skip,
-  } = useGridPagination();
-  const { data: session, status } = useSession();
-  const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
-    [status, session],
-  );
-  const { data, isFetching, refetch } =
-    trpc.protectedDashboardApplication.list.useQuery(
-      {
-        limit: pageSize,
-        skip,
-        query: input?.query,
-      },
-      { enabled: authenticated },
-    );
-
-  trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
-    enabled: authenticated,
-    onData: (id) => {
-      if (data?.items.findIndex((item) => item.id === id) !== -1) refetch();
-    },
-  });
-
-  return {
-    data,
-    isFetching,
-    refetch,
-    total: data?.total ?? 0,
-    items: data?.items ?? [],
-    pagination: {
-      page,
-      pageSize,
-      setPaginationModel,
-    },
   };
 };

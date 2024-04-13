@@ -1,5 +1,7 @@
 import {
+  AppBarProps,
   AutocompleteProps,
+  AvatarProps,
   CardActionsProps,
   CardContentProps,
   CardHeaderProps,
@@ -10,6 +12,10 @@ import {
   DialogProps,
   DialogTitleProps,
   DrawerProps,
+  ListItemAvatarProps,
+  ListItemIconProps,
+  ListItemTextProps,
+  MenuItemProps,
   TextFieldProps,
 } from '@mui/material';
 import { FieldError, Merge } from 'react-hook-form';
@@ -30,12 +36,21 @@ export type OverridesDialogProps = OverridesProps<{
   DialogTitleProps?: DialogTitleProps;
   DialogContentProps?: DialogContentProps;
   DialogActionsProps?: DialogActionsProps;
+  AppBarProps?: AppBarProps;
 }> & {
   DialogProps: DialogProps;
 };
 
 export type OverridesDrawerProps = OverridesProps<{
   DrawerProps?: DrawerProps;
+}>;
+
+export type OverridesMenuItemProps = OverridesProps<{
+  MenuItemProps?: MenuItemProps;
+  ListItemIconProps?: ListItemIconProps;
+  ListItemTextProps?: ListItemTextProps;
+  ListItemAvatarProps?: ListItemAvatarProps;
+  AvatarProps?: AvatarProps;
 }>;
 
 export type MultipleAutoCompleteProps<

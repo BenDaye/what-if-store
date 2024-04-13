@@ -75,11 +75,9 @@ export const DashboardProviderUpdateProfileDialog = (
         props?.onClose?.(ev, reason);
       }}
     >
-      <AppBar position="static" enableColorOnDark elevation={0}>
+      <AppBar elevation={0}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1" color="text.primary">
-            {tAuth('Profile.Update')}
-          </Typography>
+          <Typography variant="subtitle1">{tAuth('Profile.Update')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"
@@ -91,6 +89,7 @@ export const DashboardProviderUpdateProfileDialog = (
               props?.onClose?.({}, 'backdropClick');
             }}
             disabled={status === 'loading'}
+            color="inherit"
           >
             <CloseIcon />
           </IconButton>
@@ -102,13 +101,10 @@ export const DashboardProviderUpdateProfileDialog = (
           name="nickname"
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
-              variant="filled"
               value={value}
               onChange={onChange}
-              fullWidth
               error={!!error}
               helperText={error?.message ?? ' '}
-              margin="normal"
               label={tAuth('Profile.Nickname')}
               placeholder={tAuth('Profile.Nickname')}
               autoFocus
@@ -121,12 +117,9 @@ export const DashboardProviderUpdateProfileDialog = (
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
               value={value}
-              variant="filled"
               onChange={onChange}
-              fullWidth
               error={!!error}
               helperText={error?.message ?? ' '}
-              margin="normal"
               type="email"
               label={tAuth('Profile.Email')}
               placeholder={tAuth('Profile.Email')}

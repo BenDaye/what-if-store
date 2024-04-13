@@ -91,20 +91,18 @@ export const AuthProvider = ({
     >
       {children}
       <SignInDialog
-        open={signInDialog && !disableSignIn}
-        onClose={() => closeSignInDialog()}
-        fullWidth
-        maxWidth="xs"
-        disableEscapeKeyDown
+        DialogProps={{
+          open: signInDialog && !disableSignIn,
+          onClose: closeSignInDialog,
+        }}
         disableSignIn={disableSignIn}
         disableSignUp={disableSignUp}
       />
       <SignUpDialog
-        open={signUpDialog && !disableSignUp}
-        onClose={() => closeSignUpDialog()}
-        fullWidth
-        maxWidth="xs"
-        disableEscapeKeyDown
+        DialogProps={{
+          open: signUpDialog && !disableSignUp,
+          onClose: closeSignUpDialog,
+        }}
         disableSignIn={disableSignIn}
         disableSignUp={disableSignUp}
       />

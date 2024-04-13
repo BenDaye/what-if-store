@@ -41,11 +41,20 @@ export const theme = createTheme(
       MuiDialog: {
         defaultProps: {
           disableEscapeKeyDown: true,
+          fullWidth: true,
+          maxWidth: 'xs',
         },
       },
       MuiDialogContent: {
         defaultProps: {
           dividers: true,
+        },
+      },
+      MuiDialogActions: {
+        defaultProps: {
+          sx: {
+            gap: 1,
+          },
         },
       },
       MuiAppBar: {
@@ -86,6 +95,11 @@ export const theme = createTheme(
       MuiAvatar: {
         defaultProps: {
           variant: 'rounded',
+        },
+      },
+      MuiLink: {
+        defaultProps: {
+          underline: 'hover',
         },
       },
     },

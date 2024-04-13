@@ -89,11 +89,7 @@ export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
       <Stack
         direction="row"
         divider={
-          <Divider
-            orientation="vertical"
-            sx={{ opacity: 0.6, height: 64 }}
-            variant="fullWidth"
-          />
+          <Divider orientation="vertical" sx={{ opacity: 0.6, height: 64 }} />
         }
         sx={{
           flex: 1,

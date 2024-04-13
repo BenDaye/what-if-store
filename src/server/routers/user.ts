@@ -175,6 +175,7 @@ export const protectedAppUser = router({
   }),
   update: protectedUserProcedure
     .input(userUpdateProfileInputSchema)
+    .output(userUpdateProfileInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         await prisma.user.update({
@@ -295,6 +296,7 @@ export const protectedDashboardUser = router({
   }),
   update: protectedAdminProcedure
     .input(userUpdateProfileInputSchema)
+    .output(userUpdateProfileInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         await prisma.user.update({

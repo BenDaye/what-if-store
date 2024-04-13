@@ -154,8 +154,6 @@ export const SettingsIconButton = (
       <UpdateLocaleDialog
         open={updateLocaleDialogVisible}
         onClose={() => closeUpdateLocaleDialog()}
-        fullWidth
-        maxWidth="xs"
         {...props.overrides?.LocaleDialogProps}
       />
       {props.children}

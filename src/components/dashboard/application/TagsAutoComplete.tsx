@@ -38,15 +38,13 @@ export const TagsAutoComplete = ({
     keyPrefix: 'General',
   });
 
-  const { flattedData } = useDashboardApplicationTags();
+  const { data } = useDashboardApplicationTags();
 
   const getTagData = useCallback(
-    ({
-      id,
-    }: (typeof defaultValue)[number]): (typeof flattedData)[number] | false => {
-      return flattedData.find((data) => data.id === id) || false;
+    ({ id }: (typeof defaultValue)[number]): (typeof data)[number] | false => {
+      return data.find((data) => data.id === id) || false;
     },
-    [flattedData],
+    [data],
   );
 
   const [tags, setTags] = useState<ITagData[]>(
@@ -77,7 +75,7 @@ export const TagsAutoComplete = ({
       limitTags={12}
       clearOnEscape
       disableCloseOnSelect
-      options={flattedData}
+      options={data}
       getOptionKey={(option) => option.id}
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.id === value.id}

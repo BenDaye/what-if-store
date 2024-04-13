@@ -1,5 +1,6 @@
 import { AuthProps, useNotice } from '@/hooks';
 import { SignInSchema, signInSchema } from '@/server/schemas/auth';
+import { OverridesDialogProps } from '@/types/overrides';
 import { resetTRPCClient } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -14,7 +15,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogProps,
   IconButton,
   TextField,
   Toolbar,
@@ -29,12 +29,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
 import { SignUpButton } from './SignUpButton';
 
-type SignInDialogProps = DialogProps & AuthProps;
+type SignInDialogProps = OverridesDialogProps & AuthProps;
 
 export const SignInDialog = ({
   disableSignIn,
   disableSignUp,
-  ...props
+  overrides,
+  DialogProps,
 }: SignInDialogProps) => {
   const { query, pathname, push } = useRouter();
   const { showError, showSuccess, showWarning } = useNotice();
@@ -78,7 +79,7 @@ export const SignInDialog = ({
             }
           },
         });
-        props?.onClose?.({}, 'backdropClick');
+        DialogProps?.onClose?.({}, 'backdropClick');
       } catch (error) {
         if (error instanceof Error) {
           showError(tAuth(error.message));
@@ -94,7 +95,7 @@ export const SignInDialog = ({
       tAuth,
       updateSession,
       showSuccess,
-      props,
+      DialogProps,
       pathname,
       push,
       showError,
@@ -110,16 +111,15 @@ export const SignInDialog = ({
       nextAuthError.forEach((err) => showError(tAuth(err)));
   }, [query, showError, tAuth]);
 
+  const onClose = useCallback(() => {
+    reset();
+    DialogProps.onClose?.({}, 'backdropClick');
+  }, [reset, DialogProps]);
+
   return (
     <>
-      <Dialog
-        {...props}
-        onClose={(ev, reason) => {
-          reset();
-          props?.onClose?.(ev, reason);
-        }}
-      >
-        <AppBar position="static" enableColorOnDark elevation={0}>
+      <Dialog onClose={onClose} {...DialogProps}>
+        <AppBar elevation={0} {...overrides?.AppBarProps}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
             <Typography variant="subtitle1">
               {tAuth('SignIn._')}
@@ -129,10 +129,7 @@ export const SignInDialog = ({
             {!pathname.startsWith('/auth/signin') && (
               <IconButton
                 edge="end"
-                onClick={() => {
-                  reset();
-                  props?.onClose?.({}, 'backdropClick');
-                }}
+                onClick={onClose}
                 disabled={status === 'loading'}
                 color="inherit"
               >
@@ -141,19 +138,16 @@ export const SignInDialog = ({
             )}
           </Toolbar>
         </AppBar>
-        <DialogContent dividers>
+        <DialogContent {...overrides?.DialogContentProps}>
           <Controller
             control={control}
             name="username"
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                variant="filled"
                 value={value}
                 onChange={onChange}
-                fullWidth
                 error={!!error}
                 helperText={error?.message ?? ' '}
-                margin="normal"
                 label={tAuth('Account')}
                 placeholder={tAuth('Account')}
                 autoFocus
@@ -168,13 +162,10 @@ export const SignInDialog = ({
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
                 value={value}
-                variant="filled"
                 onChange={onChange}
-                fullWidth
                 error={!!error}
                 helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
-                margin="normal"
                 label={tAuth('Password')}
                 placeholder={tAuth('Password')}
                 required
@@ -198,7 +189,7 @@ export const SignInDialog = ({
             )}
           />
         </DialogContent>
-        <DialogActions sx={{ gap: 1 }}>
+        <DialogActions {...overrides?.DialogActionsProps}>
           <SignUpButton
             color="secondary"
             onClick={() => reset()}

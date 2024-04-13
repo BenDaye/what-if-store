@@ -1,16 +1,11 @@
-import {
-  AppBar,
-  Drawer,
-  DrawerProps,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { OverridesDrawerProps } from '@/types/overrides';
+import { AppBar, Drawer, Toolbar, Typography } from '@mui/material';
 import { ProviderList } from './List';
 
-export const ProviderDrawer = (props: DrawerProps) => {
+export const ProviderDrawer = ({ overrides }: OverridesDrawerProps) => {
   return (
-    <Drawer {...props}>
-      <AppBar color="inherit" position="static" elevation={1}>
+    <Drawer {...overrides?.DrawerProps}>
+      <AppBar color="inherit">
         <Toolbar
           sx={{ flexShrink: 0, gap: 1, px: 2 }}
           variant="dense"

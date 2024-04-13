@@ -39,8 +39,6 @@ export const UploadButton = ({
           closeUploadDialog();
           onClose();
         }}
-        fullWidth
-        maxWidth="xs"
       />
     </>
   );

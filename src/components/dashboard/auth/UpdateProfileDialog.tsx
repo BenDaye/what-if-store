@@ -1,19 +1,19 @@
-import { useAuth, useDashboardUserMy } from '@/hooks';
+import { useDashboardUserMy } from '@/hooks';
 import {
   UserUpdateProfileInputSchema,
   userUpdateProfileInputSchema,
 } from '@/server/schemas/user';
+import { OverridesDialogProps } from '@/types/overrides';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   AppBar,
+  Avatar,
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogProps,
   IconButton,
   TextField,
   Toolbar,
@@ -22,15 +22,17 @@ import {
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useDebounceValue } from 'usehooks-ts';
 
-type DashboardUserUpdateProfileDialogProps = DialogProps;
-export const DashboardUserUpdateProfileDialog = (
-  props: DashboardUserUpdateProfileDialogProps,
-) => {
+type DashboardAuthUpdateProfileDialogProps = OverridesDialogProps;
+
+export const DashboardAuthUpdateProfileDialog = ({
+  overrides,
+  DialogProps,
+}: DashboardAuthUpdateProfileDialogProps) => {
   const { t: tCommon } = useTranslation('common');
-  const { t: tAuth } = useTranslation('auth');
   const { t: tUser } = useTranslation('user');
 
   const { data: session, status } = useSession();
@@ -39,13 +41,13 @@ export const DashboardUserUpdateProfileDialog = (
     [session, status],
   );
   const { update: updateProfile } = useDashboardUserMy();
-  const { handleSubmit, control, reset, setValue } =
+  const { handleSubmit, control, reset, setValue, getValues, watch } =
     useForm<UserUpdateProfileInputSchema>({
       defaultValues: {
-        nickname: session?.user?.nickname ?? '',
-        email: session?.user?.email ?? '',
-        avatar: session?.user?.avatar ?? '',
-        bio: session?.user?.bio ?? '',
+        nickname: session?.user?.nickname ?? null,
+        email: session?.user?.email ?? null,
+        avatar: session?.user?.avatar ?? null,
+        bio: session?.user?.bio ?? null,
       },
       mode: 'all',
       resolver: zodResolver(userUpdateProfileInputSchema),
@@ -64,55 +66,77 @@ export const DashboardUserUpdateProfileDialog = (
       avatar: data.avatar ?? null,
       bio: data.bio ?? null,
     })
-      .then(() => props?.onClose?.({}, 'backdropClick'))
+      .then(() => DialogProps?.onClose?.({}, 'backdropClick'))
       .catch(() => null);
   };
-  const { signOut } = useAuth();
+
+  const [avatarSrc, setAvatarSrc] = useDebounceValue(
+    session?.user?.avatar,
+    1500,
+  );
+
+  useEffect(() => {
+    setAvatarSrc(watch('avatar'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watch('avatar'), setAvatarSrc]);
+
+  const onClose = useCallback(() => {
+    reset(session?.user ?? {});
+    DialogProps?.onClose?.({}, 'backdropClick');
+  }, [reset, DialogProps, session]);
+
   return (
-    <Dialog
-      {...props}
-      onClose={(ev, reason) => {
-        reset({
-          nickname: session?.user?.name ?? '',
-          email: session?.user?.email ?? '',
-        });
-        props?.onClose?.(ev, reason);
-      }}
-    >
-      <AppBar position="static" enableColorOnDark elevation={0}>
+    <Dialog onClose={onClose} {...DialogProps}>
+      <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1" color="text.primary">
-            {tUser('Profile.Update')}
-          </Typography>
+          <Typography variant="subtitle1">{tUser('Profile.Update')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"
-            onClick={() => {
-              reset({
-                nickname: session?.user?.name ?? '',
-                email: session?.user?.email ?? '',
-              });
-              props?.onClose?.({}, 'backdropClick');
-            }}
+            onClick={onClose}
             disabled={status === 'loading'}
+            color="inherit"
           >
             <CloseIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <DialogContent dividers>
+      <DialogContent {...overrides?.DialogContentProps}>
+        <Box
+          sx={{
+            mb: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Avatar src={avatarSrc || undefined} sx={{ height: 128, width: 128 }}>
+            {getValues('nickname')?.charAt(0) ?? '-'}
+          </Avatar>
+        </Box>
+        <Controller
+          control={control}
+          name="avatar"
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error?.message ?? ' '}
+              label={tUser('Profile.Avatar')}
+              placeholder={tUser('Profile.Avatar')}
+            />
+          )}
+        />
         <Controller
           control={control}
           name="nickname"
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
-              variant="filled"
               value={value}
               onChange={onChange}
-              fullWidth
               error={!!error}
               helperText={error?.message ?? ' '}
-              margin="normal"
               label={tUser('Profile.Nickname')}
               placeholder={tUser('Profile.Nickname')}
               autoFocus
@@ -125,29 +149,33 @@ export const DashboardUserUpdateProfileDialog = (
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <TextField
               value={value}
-              variant="filled"
               onChange={onChange}
-              fullWidth
               error={!!error}
               helperText={error?.message ?? ' '}
-              margin="normal"
               type="email"
               label={tUser('Profile.Email')}
               placeholder={tUser('Profile.Email')}
             />
           )}
         />
+        <Controller
+          control={control}
+          name="bio"
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <TextField
+              value={value}
+              onChange={onChange}
+              error={!!error}
+              helperText={error?.message ?? ' '}
+              label={tUser('Profile.Bio')}
+              placeholder={tUser('Profile.Bio')}
+              multiline
+              maxRows={3}
+            />
+          )}
+        />
       </DialogContent>
       <DialogActions sx={{ gap: 1 }}>
-        <Button
-          color="error"
-          disabled={status !== 'authenticated'}
-          onClick={() =>
-            signOut().then(() => props.onClose?.({}, 'backdropClick'))
-          }
-        >
-          {tAuth('SignOut._')}
-        </Button>
         <Box sx={{ flexGrow: 1 }}></Box>
         <LoadingButton
           loading={status === 'loading'}

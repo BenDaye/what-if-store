@@ -120,66 +120,75 @@ export const DashboardLayout = ({
           }}
         />
         <DashboardNavDrawer
-          variant="permanent"
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            width: navDrawerWidth + 1,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
-              zIndex: (theme) => theme.zIndex.drawer + 10,
-              width: navDrawerWidth + 1,
-              boxSizing: 'border-box',
+          overrides={{
+            DrawerProps: {
+              variant: 'permanent',
+              sx: {
+                width: navDrawerWidth + 1,
+                flexShrink: 0,
+                [`& .MuiDrawer-paper`]: {
+                  zIndex: (theme) => theme.zIndex.drawer + 10,
+                  width: navDrawerWidth + 1,
+                  boxSizing: 'border-box',
+                },
+                height: '100vh',
+              },
             },
-            height: '100vh',
           }}
         />
         <ApplicationDrawer
-          open={openApplicationListDrawer}
-          variant="persistent"
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            width: listDrawerWidth + 1,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
-              width: listDrawerWidth + 1,
-              boxSizing: 'border-box',
-              left: navDrawerWidth + 1,
+          overrides={{
+            DrawerProps: {
+              open: openApplicationListDrawer,
+              sx: {
+                width: listDrawerWidth + 1,
+                flexShrink: 0,
+                [`& .MuiDrawer-paper`]: {
+                  width: listDrawerWidth + 1,
+                  boxSizing: 'border-box',
+                  left: navDrawerWidth + 1,
+                },
+                height: '100vh',
+              },
+              transitionDuration: 0,
             },
-            height: '100vh',
           }}
-          transitionDuration={0}
         />
         <UserDrawer
-          open={openUserListDrawer}
-          variant="persistent"
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            width: listDrawerWidth + 1,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
-              width: listDrawerWidth + 1,
-              boxSizing: 'border-box',
-              left: navDrawerWidth + 1,
+          overrides={{
+            DrawerProps: {
+              open: openUserListDrawer,
+              sx: {
+                width: listDrawerWidth + 1,
+                flexShrink: 0,
+                [`& .MuiDrawer-paper`]: {
+                  width: listDrawerWidth + 1,
+                  boxSizing: 'border-box',
+                  left: navDrawerWidth + 1,
+                },
+                height: '100vh',
+              },
+              transitionDuration: 0,
             },
-            height: '100vh',
           }}
-          transitionDuration={0}
         />
         <ProviderDrawer
-          open={openProviderListDrawer}
-          variant="persistent"
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            width: listDrawerWidth + 1,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
-              width: listDrawerWidth + 1,
-              boxSizing: 'border-box',
-              left: navDrawerWidth + 1,
+          overrides={{
+            DrawerProps: {
+              open: openProviderListDrawer,
+              sx: {
+                width: listDrawerWidth + 1,
+                flexShrink: 0,
+                [`& .MuiDrawer-paper`]: {
+                  width: listDrawerWidth + 1,
+                  boxSizing: 'border-box',
+                  left: navDrawerWidth + 1,
+                },
+                height: '100vh',
+              },
+              transitionDuration: 0,
             },
-            height: '100vh',
           }}
-          transitionDuration={0}
         />
 
         <Main

@@ -24,7 +24,6 @@ export const IdRenderCell = ({
   return (
     <Link
       href={`/dashboard/application/${applicationId}`}
-      underline="hover"
       {...overrides?.LinkProps}
     >
       {name}

@@ -17,7 +17,6 @@ export const ProviderLink = ({ providerId, overrides }: ProviderLinkProps) => {
   const { name, verified } = useDashboardProvider(providerId);
   return (
     <Link
-      underline="hover"
       href={`/dashboard/provider/${providerId}`}
       sx={{ display: 'flex', alignItems: 'center' }}
       color={verified ? 'primary.main' : 'text.secondary'}

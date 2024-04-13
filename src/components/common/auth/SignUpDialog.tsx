@@ -1,5 +1,6 @@
 import { AuthProps, useAuth, useNotice } from '@/hooks';
 import { signUpSchema } from '@/server/schemas/auth';
+import { OverridesDialogProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -14,7 +15,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogProps,
   IconButton,
   TextField,
   Toolbar,
@@ -28,7 +28,7 @@ import { useBoolean } from 'usehooks-ts';
 import { z } from 'zod';
 import { SignInButton } from './SignInButton';
 
-type SignUpDialogProps = DialogProps & AuthProps;
+type SignUpDialogProps = OverridesDialogProps & AuthProps;
 
 const signUpForm = signUpSchema
   .extend({
@@ -43,7 +43,8 @@ type SignUpForm = z.infer<typeof signUpForm>;
 export const SignUpDialog = ({
   disableSignIn,
   disableSignUp,
-  ...props
+  overrides,
+  DialogProps,
 }: SignUpDialogProps) => {
   const { signIn } = useAuth();
   const { showError, showSuccess, showWarning } = useNotice();
@@ -64,7 +65,7 @@ export const SignUpDialog = ({
     onSuccess: () => {
       showSuccess(tAuth('SignUp.Succeeded'));
       reset();
-      props.onClose?.({}, 'backdropClick');
+      DialogProps.onClose?.({}, 'backdropClick');
       signIn();
     },
   });
@@ -80,16 +81,15 @@ export const SignUpDialog = ({
     [disableSignUp, signUp, showWarning, tAuth],
   );
 
+  const onClose = useCallback(() => {
+    reset();
+    DialogProps?.onClose?.({}, 'backdropClick');
+  }, [reset, DialogProps]);
+
   return (
     <>
-      <Dialog
-        {...props}
-        onClose={(ev, reason) => {
-          reset();
-          props?.onClose?.(ev, reason);
-        }}
-      >
-        <AppBar position="static" enableColorOnDark elevation={0}>
+      <Dialog onClose={onClose} {...DialogProps}>
+        <AppBar elevation={0} {...overrides?.AppBarProps}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
             <Typography variant="subtitle1">
               {tAuth('SignUp._')}
@@ -98,10 +98,7 @@ export const SignUpDialog = ({
             <Box sx={{ flexGrow: 1 }} />
             <IconButton
               edge="end"
-              onClick={() => {
-                reset();
-                props?.onClose?.({}, 'backdropClick');
-              }}
+              onClick={onClose}
               disabled={status === 'loading'}
               color="inherit"
             >
@@ -109,19 +106,16 @@ export const SignUpDialog = ({
             </IconButton>
           </Toolbar>
         </AppBar>
-        <DialogContent dividers>
+        <DialogContent {...overrides?.DialogContentProps}>
           <Controller
             control={control}
             name="username"
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                variant="filled"
                 value={value}
                 onChange={onChange}
-                fullWidth
                 error={!!error}
                 helperText={error?.message ?? ' '}
-                margin="normal"
                 label={tAuth('Account')}
                 placeholder={tAuth('Account')}
                 autoFocus
@@ -137,13 +131,10 @@ export const SignUpDialog = ({
               <TextField
                 label={tAuth('Password')}
                 value={value}
-                variant="filled"
                 onChange={onChange}
-                fullWidth
                 error={!!error}
                 helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
-                margin="normal"
                 placeholder={tAuth('Password')}
                 required
                 InputProps={{
@@ -172,13 +163,10 @@ export const SignUpDialog = ({
               <TextField
                 label={tAuth('ConfirmPassword')}
                 value={value}
-                variant="filled"
                 onChange={onChange}
-                fullWidth
                 error={!!error}
                 helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
-                margin="normal"
                 placeholder={tAuth('Confirm Password')}
                 required
                 InputProps={{
@@ -201,7 +189,7 @@ export const SignUpDialog = ({
             )}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions {...overrides?.DialogActionsProps}>
           <SignInButton
             color="secondary"
             onClick={() => reset()}

@@ -39,7 +39,7 @@ const ApplicationCollapseList = ({
   category,
   input,
 }: ApplicationCollapseListProps) => {
-  const { flattedData } = useDashboardApplications(true, {
+  const { data } = useDashboardApplications({
     ...input,
     category: [category],
   });
@@ -51,10 +51,10 @@ const ApplicationCollapseList = ({
     <CollapseList
       localStorageKey={`application-category:${category}`}
       primaryText={primaryText}
-      secondaryText={`(${flattedData.length})`}
+      secondaryText={`(${data.length})`}
       defaultExpandMore={false}
     >
-      {flattedData.map((item) => (
+      {data.map((item) => (
         <ApplicationListItemButton key={item.id} itemId={item.id} />
       ))}
     </CollapseList>

@@ -8,18 +8,15 @@ type IdRenderCellProps = {
 };
 
 export const IdRenderCell = ({ providerId, overrides }: IdRenderCellProps) => {
-  const { data } = useDashboardUser(providerId);
-  const providerProfile = data?.ProviderProfile;
-  if (!providerProfile) {
+  const {
+    data: { provider, providerName },
+  } = useDashboardUser(providerId);
+  if (!provider) {
     return <Typography>{providerId}</Typography>;
   }
   return (
-    <Link
-      href={`/dashboard/provider/${providerProfile.id}`}
-      underline="hover"
-      {...overrides?.LinkProps}
-    >
-      {providerProfile.name}
+    <Link href={`/dashboard/provider/${providerId}`} {...overrides?.LinkProps}>
+      {providerName}
     </Link>
   );
 };

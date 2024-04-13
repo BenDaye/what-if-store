@@ -21,9 +21,6 @@ const Page: NextPageWithLayout<
       <SignInDialog
         open
         onClose={() => back()}
-        fullWidth
-        maxWidth="xs"
-        disableEscapeKeyDown
         disableSignIn={disableSignIn}
         disableSignUp={disableSignUp}
       />
