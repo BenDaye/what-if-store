@@ -33,7 +33,7 @@ type ProviderCollapseListProps = {
   type: ProviderType;
 };
 const ProviderCollapseList = ({ type, input }: ProviderCollapseListProps) => {
-  const { flattedData } = useDashboardProviders(true, {
+  const { data } = useDashboardProviders({
     ...input,
     type: [type],
   });
@@ -45,10 +45,10 @@ const ProviderCollapseList = ({ type, input }: ProviderCollapseListProps) => {
     <CollapseList
       localStorageKey={`provider-type:${type}`}
       primaryText={primaryText}
-      secondaryText={`(${flattedData.length})`}
+      secondaryText={`(${data.length})`}
       defaultExpandMore={true}
     >
-      {flattedData.map((item) => (
+      {data.map((item) => (
         <ProviderListItemButton key={item.id} itemId={item.id} />
       ))}
     </CollapseList>
