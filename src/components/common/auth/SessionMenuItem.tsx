@@ -15,6 +15,7 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
     <MenuItem
       sx={{ mb: 1 }}
       selected
+      {...overrides?.MenuItemProps}
       onClick={(ev) => {
         if (status !== 'authenticated') {
           signIn();
@@ -22,7 +23,6 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
         }
         overrides?.MenuItemProps?.onClick?.(ev);
       }}
-      {...overrides?.MenuItemProps}
     >
       <ListItemAvatar {...overrides?.ListItemAvatarProps}>
         <Avatar

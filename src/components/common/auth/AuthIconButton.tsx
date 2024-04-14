@@ -82,7 +82,10 @@ export const AuthIconButton = ({
           <SessionMenuItem
             overrides={{
               MenuItemProps: {
-                onClick: openUpdateProfileDialog,
+                onClick:
+                  status === 'authenticated'
+                    ? openUpdateProfileDialog
+                    : undefined,
               },
             }}
           />
