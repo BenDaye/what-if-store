@@ -9,7 +9,7 @@ import {
   IconButtonWithTooltip,
   IconButtonWithTooltipProps,
 } from '../IconButtonWithTooltip';
-import { SessionMenuItem } from '../settings';
+import { SessionMenuItem } from './SessionMenuItem';
 import { SignOutMenuItem } from './SignOutMenuItem';
 import { AuthUpdateProfileDialog } from './UpdateProfileDialog';
 
