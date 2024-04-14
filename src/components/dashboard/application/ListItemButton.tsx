@@ -52,7 +52,7 @@ export const ApplicationListItemButton = ({
           noWrap: true,
           textOverflow: 'ellipsis',
         }}
-        secondary={isError ? error?.message : provider?.id ?? description}
+        secondary={isError ? error?.message : description ?? provider?.id}
         secondaryTypographyProps={{
           noWrap: true,
           textOverflow: 'ellipsis',
