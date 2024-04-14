@@ -45,7 +45,7 @@ const UserCollapseList = ({ role, input }: UserCollapseListProps) => {
     <CollapseList
       localStorageKey={`user-role:${role}`}
       primaryText={primaryText}
-      secondaryText={`(${data.length})`}
+      secondaryText={`${data.length}`}
       defaultExpandMore={true}
     >
       {data.map((item) => (

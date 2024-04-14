@@ -51,7 +51,7 @@ const ApplicationCollapseList = ({
     <CollapseList
       localStorageKey={`application-category:${category}`}
       primaryText={primaryText}
-      secondaryText={`(${data.length})`}
+      secondaryText={`${data.length}`}
       defaultExpandMore={false}
     >
       {data.map((item) => (

@@ -45,7 +45,7 @@ const ProviderCollapseList = ({ type, input }: ProviderCollapseListProps) => {
     <CollapseList
       localStorageKey={`provider-type:${type}`}
       primaryText={primaryText}
-      secondaryText={`(${data.length})`}
+      secondaryText={`${data.length}`}
       defaultExpandMore={true}
     >
       {data.map((item) => (
