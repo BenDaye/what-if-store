@@ -4,6 +4,8 @@ import { RouterOutput, trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
 
+export type UseAppApplicationGroupsDataSchema =
+  RouterOutput['publicAppApplicationGroup']['list']['items'];
 export const useAppApplicationGroups = (
   query?: ApplicationGroupListInputSchema,
   notify = true,
@@ -48,7 +50,7 @@ export const useAppApplicationGroups = (
   );
 
   const memoData = useMemo(
-    (): RouterOutput['publicAppApplicationGroup']['list']['items'] =>
+    (): UseAppApplicationGroupsDataSchema =>
       data?.pages.flatMap((page) => page.items) ?? [],
     [data],
   );

@@ -5,9 +5,7 @@ import {
   updatedAtColumn,
 } from '@/utils/dataGridColumn';
 import { RouterOutput } from '@/utils/trpc';
-import { AddBox as CreateIcon } from '@mui/icons-material';
 import {
-  Button,
   Card,
   CardContent,
   CardContentProps,
@@ -28,6 +26,8 @@ import {
 import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
+import { ApplicationGroupCreateButton } from './CreateButton';
+import { ApplicationGroupNameRenderCell } from './NameRenderCell';
 
 type ApplicationGroupDataGridProps = {
   overrides?: {
@@ -47,9 +47,9 @@ export const ApplicationGroupDataGrid = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application');
   const {
+    router: { isFetching },
     items,
     total,
-    isFetching,
     pagination: { page, pageSize, setPaginationModel },
   } = useDashboardApplicationGroupsWithPagination();
   const setFilterModel = useCallback((filterMode: GridFilterModel) => {
@@ -78,7 +78,8 @@ export const ApplicationGroupDataGrid = ({
     {
       field: 'name',
       headerName: tApplication('DataGridHeaderName.Group.Name', 'Name'),
-      flex: 4,
+      flex: 3,
+      renderCell: ({ row }) => <ApplicationGroupNameRenderCell row={row} />,
     },
     {
       field: 'type',
@@ -98,17 +99,17 @@ export const ApplicationGroupDataGrid = ({
         'DataGridHeaderName.Group.Description',
         'Description',
       ),
-      flex: 3,
-      editable: false,
+      flex: 2,
     },
     {
-      field: '_count.applications',
+      field: '_count.Applications',
       headerName: tApplication(
         'DataGridHeaderName.Group.Count.Application',
         'Applications',
       ),
       flex: 1,
       type: 'number',
+      valueGetter: (params) => params.row._count.Applications,
     },
   ];
   const processRowUpdate = useCallback(
@@ -133,14 +134,7 @@ export const ApplicationGroupDataGrid = ({
         titleTypographyProps={{
           variant: 'subtitle1',
         }}
-        action={
-          <Button
-            startIcon={<CreateIcon />}
-            href="/dashboard/application_group/create"
-          >
-            {tCommon('Create')}
-          </Button>
-        }
+        action={<ApplicationGroupCreateButton />}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

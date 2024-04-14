@@ -1,7 +1,12 @@
+import {
+  PermanentPresetGroupNames,
+  PersistentPresetGroupNames,
+} from '@/constants/group';
 import { faker } from '@faker-js/faker';
 import {
   ApplicationAssetType,
   ApplicationCategory,
+  ApplicationGroupType,
   ApplicationPlatform,
   ApplicationStatus,
   AuthRole,
@@ -196,6 +201,38 @@ const main = async () => {
   });
 
   console.log({ genesisTags });
+
+  for await (const name of Object.values(PermanentPresetGroupNames)) {
+    try {
+      const group = await prisma.applicationGroup.create({
+        data: {
+          name,
+          description: name,
+          type: ApplicationGroupType.Permanent,
+        },
+      });
+      console.log({ group });
+    } catch (error) {
+      console.error(error);
+      continue;
+    }
+  }
+
+  for await (const name of Object.values(PersistentPresetGroupNames)) {
+    try {
+      const group = await prisma.applicationGroup.create({
+        data: {
+          name,
+          description: name,
+          type: ApplicationGroupType.Persistent,
+        },
+      });
+      console.log({ group });
+    } catch (error) {
+      console.error(error);
+      continue;
+    }
+  }
 };
 
 main()

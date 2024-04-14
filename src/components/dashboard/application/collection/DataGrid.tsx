@@ -47,9 +47,9 @@ export const ApplicationCollectionDataGrid = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application');
   const {
+    router: { isFetching },
     items,
     total,
-    isFetching,
     pagination: { page, pageSize, setPaginationModel },
   } = useDashboardApplicationCollectionsWithPagination();
   const setFilterModel = useCallback((filterMode: GridFilterModel) => {

@@ -6,6 +6,8 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
 
+export type UseDashboardApplicationGroupsDataSchema =
+  RouterOutput['protectedDashboardApplicationGroup']['list']['items'];
 export const useDashboardApplicationGroups = (
   query?: ApplicationGroupListInputSchema,
   notify = true,
@@ -57,7 +59,7 @@ export const useDashboardApplicationGroups = (
   );
 
   const memoData = useMemo(
-    (): RouterOutput['protectedDashboardApplicationGroup']['list']['items'] =>
+    (): UseDashboardApplicationGroupsDataSchema =>
       data?.pages.flatMap((page) => page.items) ?? [],
     [data],
   );

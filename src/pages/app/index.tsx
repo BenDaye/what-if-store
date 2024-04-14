@@ -1,10 +1,13 @@
 import nextI18NextConfig from '@/../next-i18next.config';
+import { PermanentSectionCard } from '@/components/app';
+import { PageContainer } from '@/components/common';
 import { AppLayout } from '@/components/layouts';
+import { useAppApplicationGroups } from '@/hooks';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
-import { ApplicationCategory } from '@prisma/client';
+import { ApplicationCategory, ApplicationGroupType } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
@@ -14,7 +17,14 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = () => {
-  return <>App Page</>;
+  const { data: permanent } = useAppApplicationGroups({
+    type: ApplicationGroupType.Permanent,
+  });
+  return (
+    <PageContainer>
+      <PermanentSectionCard data={permanent} />
+    </PageContainer>
+  );
 };
 
 Page.getLayout = (page) => <AppLayout>{page}</AppLayout>;
@@ -35,14 +45,20 @@ export const getServerSideProps = async (
   });
 
   await helpers.publicAppMeta.get.prefetch();
-  await Promise.all(
-    Object.values(ApplicationCategory).map((item) =>
+  await Promise.all([
+    ...Object.values(ApplicationCategory).map((item) =>
       helpers.publicAppApplication.list.prefetchInfinite({
         limit: 20,
         category: [item],
       }),
     ),
-  );
+    ...Object.values(ApplicationGroupType).map((item) =>
+      helpers.publicAppApplicationGroup.list.prefetchInfinite({
+        limit: 20,
+        type: item,
+      }),
+    ),
+  ]);
 
   return {
     props: {

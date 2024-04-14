@@ -18,6 +18,11 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationGroupSelect>()({
   description: true,
   type: true,
   priority: true,
+  _count: {
+    select: {
+      Applications: true,
+    },
+  },
 });
 
 const fullSelect = {
@@ -244,10 +249,15 @@ export const protectedDashboardApplicationGroup = router({
   create: protectedAdminProcedure
     .input(applicationGroupCreateInputSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma }, input }) => {
+    .mutation(async ({ ctx: { prisma }, input: { applications, ...data } }) => {
       try {
         const result = await prisma.applicationGroup.create({
-          data: input,
+          data: {
+            ...data,
+            Applications: {
+              connect: applications,
+            },
+          },
           select: defaultSelect,
         });
         applicationGroupEmitter.emit('create', result.id);
@@ -273,20 +283,27 @@ export const protectedDashboardApplicationGroup = router({
   updateById: protectedAdminProcedure
     .input(applicationGroupUpdateInputSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
-      try {
-        await prisma.applicationGroup.update({
-          where: {
-            id,
-          },
-          data: input,
-        });
-        applicationGroupEmitter.emit('update', id);
-        return true;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+    .mutation(
+      async ({ ctx: { prisma }, input: { id, applications, ...data } }) => {
+        try {
+          await prisma.applicationGroup.update({
+            where: {
+              id,
+            },
+            data: {
+              ...data,
+              Applications: {
+                set: applications,
+              },
+            },
+          });
+          applicationGroupEmitter.emit('update', id);
+          return true;
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
   removeById: protectedAdminProcedure
     .input(idSchema)
     .output(mutationOutputSchema)

@@ -11,7 +11,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 
-type DashboardApplicationGroupRouterOutput =
+export type DashboardApplicationGroupRouterOutput =
   RouterOutput['protectedDashboardApplicationGroup']['getById'];
 export const useDashboardApplicationGroupHookDataSchema =
   applicationGroupCreateInputSchema

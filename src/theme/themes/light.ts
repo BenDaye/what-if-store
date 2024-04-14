@@ -100,6 +100,9 @@ export const theme = createTheme(
       MuiLink: {
         defaultProps: {
           underline: 'hover',
+          sx: {
+            cursor: 'pointer',
+          },
         },
       },
     },
