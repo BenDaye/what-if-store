@@ -1,12 +1,12 @@
 import { useGridPagination } from '@/hooks/common';
-import { UserListInputSchema } from '@/server/schemas';
+import { UserApiKeyListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
-export const useDashboardUsersWithPagination = (
-  input?: UserListInputSchema,
+export const useAppUserApiKeysWithPagination = (
+  input?: UserApiKeyListInputSchema,
 ) => {
   const {
     pagination: { page, pageSize },
@@ -15,11 +15,14 @@ export const useDashboardUsersWithPagination = (
   } = useGridPagination();
   const { data: session, status } = useSession();
   const authenticated = useMemo(
-    () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
+    () =>
+      status === 'authenticated' &&
+      (session.user?.role === AuthRole.User ||
+        session.user?.role === AuthRole.Provider),
     [status, session],
   );
   const { data, isFetching, refetch, error, isError } =
-    trpc.protectedDashboardUser.list.useQuery(
+    trpc.protectedAppUserApiKey.list.useQuery(
       {
         limit: pageSize,
         skip,
@@ -28,11 +31,9 @@ export const useDashboardUsersWithPagination = (
       { enabled: authenticated },
     );
 
-  trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
+  trpc.protectedAppUserApiKey.subscribe.useSubscription(undefined, {
     enabled: authenticated,
-    onData: (id) => {
-      if (data?.items.findIndex((item) => item.id === id) !== -1) refetch();
-    },
+    onData: () => refetch(),
   });
 
   return {

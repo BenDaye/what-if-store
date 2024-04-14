@@ -21,9 +21,7 @@ export const useAppProvidersWithPagination = (
     });
 
   trpc.publicAppProvider.subscribe.useSubscription(undefined, {
-    onData: (id) => {
-      if (data?.items.findIndex((item) => item.id === id) !== -1) refetch();
-    },
+    onData: () => refetch(),
   });
 
   const { showWarning } = useNotice();

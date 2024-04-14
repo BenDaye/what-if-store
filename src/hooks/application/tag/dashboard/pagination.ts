@@ -18,7 +18,7 @@ export const useDashboardApplicationTagsWithPagination = (
     () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
-  const { data, isFetching, refetch } =
+  const { data, isFetching, refetch, error, isError } =
     trpc.protectedDashboardApplicationTag.list.useQuery(
       {
         limit: pageSize,
@@ -30,15 +30,11 @@ export const useDashboardApplicationTagsWithPagination = (
 
   trpc.protectedDashboardApplicationTag.subscribe.useSubscription(undefined, {
     enabled: authenticated,
-    onData: (id) => {
-      if (data?.items.findIndex((item) => item.id === id) !== -1) refetch();
-    },
+    onData: () => refetch(),
   });
 
   return {
-    data,
-    isFetching,
-    refetch,
+    router: { data, refetch, isFetching, error, isError },
     total: data?.total ?? 0,
     items: data?.items ?? [],
     pagination: {

@@ -10,7 +10,7 @@ export const useAppApplicationTagsWithPagination = (
     setPaginationModel,
     skip,
   } = useGridPagination();
-  const { data, isFetching, refetch } =
+  const { data, isFetching, refetch, error, isError } =
     trpc.publicAppApplicationTag.list.useQuery({
       limit: pageSize,
       skip,
@@ -18,15 +18,11 @@ export const useAppApplicationTagsWithPagination = (
     });
 
   trpc.publicAppApplicationTag.subscribe.useSubscription(undefined, {
-    onData: (id) => {
-      if (data?.items.findIndex((item) => item.id === id) !== -1) refetch();
-    },
+    onData: () => refetch(),
   });
 
   return {
-    data,
-    isFetching,
-    refetch,
+    router: { data, refetch, isFetching, error, isError },
     total: data?.total ?? 0,
     items: data?.items ?? [],
     pagination: {

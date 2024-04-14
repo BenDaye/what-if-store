@@ -9,6 +9,8 @@ import {
   IconButtonWithTooltip,
   IconButtonWithTooltipProps,
 } from '../IconButtonWithTooltip';
+import { AuthApiKeyDialog } from './ApiKeyDialog';
+import { ApiKeyMenuItem } from './ApiKeyMenuItem';
 import { SessionMenuItem } from './SessionMenuItem';
 import { SignOutMenuItem } from './SignOutMenuItem';
 import { AuthUpdateProfileDialog } from './UpdateProfileDialog';
@@ -34,6 +36,11 @@ export const AuthIconButton = ({
     value: updateProfileDialogVisible,
     setTrue: openUpdateProfileDialog,
     setFalse: closeUpdateProfileDialog,
+  } = useBoolean(false);
+  const {
+    value: apiKeyDialogVisible,
+    setTrue: openApiKeyDialog,
+    setFalse: closeApiKeyDialog,
   } = useBoolean(false);
 
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -80,10 +87,28 @@ export const AuthIconButton = ({
             }}
           />
           {MenuItems?.map((item) => item)}
+          {status === 'authenticated' && (
+            <ApiKeyMenuItem
+              overrides={{
+                MenuItemProps: {
+                  onClick: openApiKeyDialog,
+                },
+              }}
+            />
+          )}
           {status === 'authenticated' && <SignOutMenuItem />}
         </Menu>
       )}
       {children}
+      {status === 'authenticated' && (
+        <AuthApiKeyDialog
+          DialogProps={{
+            open: apiKeyDialogVisible,
+            onClose: closeApiKeyDialog,
+            maxWidth: 'md',
+          }}
+        />
+      )}
       {status === 'authenticated' && (
         <AuthUpdateProfileDialog
           DialogProps={{

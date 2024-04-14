@@ -1,7 +1,11 @@
 import { useNotice } from '@/hooks';
-import { UserUpdateProfileInputSchema } from '@/server/schemas/user';
+import {
+  UserUpdateProfileInputSchema,
+  userUpdateProfileInputSchema,
+} from '@/server/schemas/user';
 import { OverridesDialogProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -33,7 +37,7 @@ export const AuthUpdateProfileDialog = ({
   const { t: tUser } = useTranslation('user');
 
   const { data: session, status, update: updateSession } = useSession();
-  const isUserOrProvider = useMemo(
+  const isUser = useMemo(
     () =>
       session?.user?.role === AuthRole.User ||
       session?.user?.role === AuthRole.Provider,
@@ -52,12 +56,14 @@ export const AuthUpdateProfileDialog = ({
         avatar: session?.user?.avatar ?? null,
         bio: session?.user?.bio ?? null,
       },
+      mode: 'all',
+      resolver: zodResolver(userUpdateProfileInputSchema),
     });
   useEffect(() => {
     if (session?.user) reset(session.user, { keepDefaultValues: false });
   }, [session, reset]);
 
-  const { mutateAsync: updateUserOrProviderProfile } =
+  const { mutateAsync: updateUserProfile } =
     trpc.protectedAppUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: (res) => {
@@ -78,8 +84,8 @@ export const AuthUpdateProfileDialog = ({
 
   const onSubmit = useCallback(
     async (data: UserUpdateProfileInputSchema) => {
-      if (isUserOrProvider) {
-        await updateUserOrProviderProfile({
+      if (isUser) {
+        await updateUserProfile({
           nickname: data.nickname ?? null,
           email: data.email ?? null,
           avatar: data.avatar ?? null,
@@ -95,12 +101,7 @@ export const AuthUpdateProfileDialog = ({
         }).catch(() => null);
       }
     },
-    [
-      isUserOrProvider,
-      isAdmin,
-      updateUserOrProviderProfile,
-      updateAdminProfile,
-    ],
+    [isUser, isAdmin, updateUserProfile, updateAdminProfile],
   );
 
   const [avatarSrc, setAvatarSrc] = useDebounceValue(
@@ -212,7 +213,7 @@ export const AuthUpdateProfileDialog = ({
         <Box sx={{ flexGrow: 1 }}></Box>
         <LoadingButton
           loading={status === 'loading'}
-          disabled={!isAdmin && !isUserOrProvider}
+          disabled={!isAdmin && !isUser}
           onClick={() => handleSubmit(onSubmit)()}
         >
           {tCommon('Submit')}

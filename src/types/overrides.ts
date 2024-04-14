@@ -2,6 +2,7 @@ import {
   AppBarProps,
   AutocompleteProps,
   AvatarProps,
+  ButtonProps,
   CardActionsProps,
   CardContentProps,
   CardHeaderProps,
@@ -43,6 +44,10 @@ export type OverridesDialogProps = OverridesProps<{
 
 export type OverridesDrawerProps = OverridesProps<{
   DrawerProps?: DrawerProps;
+}>;
+
+export type OverridesButtonProps = OverridesProps<{
+  ButtonProps?: ButtonProps;
 }>;
 
 export type OverridesMenuItemProps = OverridesProps<{

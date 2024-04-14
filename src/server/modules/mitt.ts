@@ -9,6 +9,7 @@ type BaseEvents = {
 
 const mittGlobal = global as typeof global & {
   userEmitter?: Emitter<BaseEvents>;
+  userApiKeyEmitter?: Emitter<BaseEvents>;
   providerEmitter?: Emitter<BaseEvents>;
   applicationEmitter?: Emitter<BaseEvents>;
   applicationGroupEmitter?: Emitter<BaseEvents>;
@@ -20,6 +21,8 @@ const mittGlobal = global as typeof global & {
 
 // NOTE: User
 export const userEmitter = mittGlobal?.userEmitter ?? mitt<BaseEvents>();
+export const userApiKeyEmitter =
+  mittGlobal?.userApiKeyEmitter ?? mitt<BaseEvents>();
 // NOTE: Provider
 export const providerEmitter =
   mittGlobal?.providerEmitter ?? mitt<BaseEvents>();
@@ -39,6 +42,7 @@ export const applicationAssetEmitter =
 
 if (env.NODE_ENV !== 'production') {
   mittGlobal.userEmitter = userEmitter;
+  mittGlobal.userApiKeyEmitter = userApiKeyEmitter;
   mittGlobal.providerEmitter = providerEmitter;
   mittGlobal.applicationEmitter = applicationEmitter;
   mittGlobal.applicationGroupEmitter = applicationGroupEmitter;

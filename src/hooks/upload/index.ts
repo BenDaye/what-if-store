@@ -17,7 +17,7 @@ export const useDashboardUploadWithPagination = (
     () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
-  const { data, isFetching, refetch } =
+  const { data, isFetching, refetch, error, isError } =
     trpc.protectedDashboardUpload.list.useQuery(
       {
         limit: pageSize,
@@ -28,9 +28,7 @@ export const useDashboardUploadWithPagination = (
     );
 
   return {
-    data,
-    isFetching,
-    refetch,
+    router: { data, refetch, isFetching, error, isError },
     total: data?.total ?? 0,
     items: data?.items ?? [],
     pagination: {

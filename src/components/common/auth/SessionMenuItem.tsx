@@ -53,6 +53,13 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
           noWrap: true,
           textOverflow: 'ellipsis',
         }}
+        secondary={
+          status !== 'authenticated' ? ' ' : session?.user?.email ?? ''
+        }
+        secondaryTypographyProps={{
+          noWrap: true,
+          textOverflow: 'ellipsis',
+        }}
         {...overrides?.ListItemTextProps}
       />
     </MenuItem>

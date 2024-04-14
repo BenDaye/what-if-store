@@ -65,7 +65,7 @@ const isAuthorized = t.middleware(async ({ ctx, next }) => {
   });
 });
 
-const isAuthorizedUserOrProvider = t.middleware(async ({ ctx, next }) => {
+const isAuthorizedUser = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || typeof ctx.session?.user?.role === undefined)
     throw new CommonTRPCError('UNAUTHORIZED');
   if (
@@ -122,9 +122,7 @@ export const formDataMiddleware = t.middleware(async ({ ctx, next }) => {
 });
 
 export const protectedProcedure = t.procedure.use(isAuthorized);
-export const protectedUserProcedure = t.procedure.use(
-  isAuthorizedUserOrProvider,
-);
+export const protectedUserProcedure = t.procedure.use(isAuthorizedUser);
 export const protectedProviderProcedure = t.procedure.use(isAuthorizedProvider);
 export const protectedAdminProcedure = t.procedure.use(isAuthorizedAdmin);
 

@@ -68,6 +68,12 @@ import {
   publicAppUser,
   publicDashboardUser,
 } from './user';
+import {
+  protectedAppUserApiKey,
+  protectedDashboardUserApiKey,
+  publicAppUserApiKey,
+  publicDashboardUserApiKey,
+} from './user_key';
 
 export const appRouter = router({
   // NOTE: Meta
@@ -125,6 +131,11 @@ export const appRouter = router({
   protectedDashboardUpload,
   publicAppUpload,
   publicDashboardUpload,
+  // NOTE: UserApiKey
+  protectedAppUserApiKey,
+  protectedDashboardUserApiKey,
+  publicAppUserApiKey,
+  publicDashboardUserApiKey,
 });
 
 export type AppRouter = typeof appRouter;

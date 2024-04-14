@@ -55,6 +55,7 @@ const fullSelect = {
         FollowingCollections: true,
         FollowingUsers: true,
         Followers: true,
+        ApiKeys: true,
       },
     },
   }),

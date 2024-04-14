@@ -1,12 +1,12 @@
 import { useGridPagination } from '@/hooks/common';
-import { ApplicationCollectionListInputSchema } from '@/server/schemas';
+import { UserApiKeyListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
-export const useDashboardApplicationCollectionsWithPagination = (
-  input?: ApplicationCollectionListInputSchema,
+export const useDashboardUserApiKeysWithPagination = (
+  input?: UserApiKeyListInputSchema,
 ) => {
   const {
     pagination: { page, pageSize },
@@ -19,7 +19,7 @@ export const useDashboardApplicationCollectionsWithPagination = (
     [status, session],
   );
   const { data, isFetching, refetch, error, isError } =
-    trpc.protectedDashboardApplicationCollection.list.useQuery(
+    trpc.protectedDashboardUserApiKey.list.useQuery(
       {
         limit: pageSize,
         skip,
@@ -28,13 +28,10 @@ export const useDashboardApplicationCollectionsWithPagination = (
       { enabled: authenticated },
     );
 
-  trpc.protectedDashboardApplicationCollection.subscribe.useSubscription(
-    undefined,
-    {
-      enabled: authenticated,
-      onData: () => refetch(),
-    },
-  );
+  trpc.protectedDashboardUserApiKey.subscribe.useSubscription(undefined, {
+    enabled: authenticated,
+    onData: () => refetch(),
+  });
 
   return {
     router: { data, refetch, isFetching, error, isError },

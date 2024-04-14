@@ -1,21 +1,19 @@
-import { useAuth } from '@/hooks';
 import { OverridesMenuItemProps } from '@/types/overrides';
-import { Logout as SignOutIcon } from '@mui/icons-material';
+import { Key as ApiKeyIcon } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 
-export const SignOutMenuItem = ({ overrides }: OverridesMenuItemProps) => {
+export const ApiKeyMenuItem = ({ overrides }: OverridesMenuItemProps) => {
   const { t: tAuth } = useTranslation('auth');
   const { status } = useSession();
-  const { signOut } = useAuth();
   return (
-    <MenuItem onClick={() => signOut()} dense {...overrides?.MenuItemProps}>
+    <MenuItem dense {...overrides?.MenuItemProps}>
       <ListItemIcon {...overrides?.ListItemIconProps}>
-        <SignOutIcon />
+        <ApiKeyIcon />
       </ListItemIcon>
       <ListItemText
-        primary={tAuth('SignOut._')}
+        primary={tAuth('ApiKey._', 'Api Key')}
         primaryTypographyProps={{
           color: status === 'authenticated' ? 'text.primary' : 'text.disabled',
           noWrap: true,
