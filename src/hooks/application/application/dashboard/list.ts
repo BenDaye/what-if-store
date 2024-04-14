@@ -45,9 +45,7 @@ export const useDashboardApplications = (
 
   trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
     enabled: authenticated,
-    onData: (id) => {
-      if (memoData.some((v) => v.id === id)) refetch();
-    },
+    onData: () => refetch(),
     onError: (err) => {
       if (notify) showWarning(err.message);
     },

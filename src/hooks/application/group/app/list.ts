@@ -36,9 +36,7 @@ export const useAppApplicationGroups = (
   }, [error, isError, showWarning, notify]);
 
   trpc.publicAppApplicationGroup.subscribe.useSubscription(undefined, {
-    onData: (id) => {
-      if (memoData.some((v) => v.id === id)) refetch();
-    },
+    onData: () => refetch(),
     onError: (err) => {
       if (notify) showWarning(err.message);
     },

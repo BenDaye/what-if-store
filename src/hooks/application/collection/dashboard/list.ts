@@ -47,9 +47,7 @@ export const useDashboardApplicationCollections = (
     undefined,
     {
       enabled: authenticated,
-      onData: (id) => {
-        if (memoData.some((v) => v.id === id)) refetch();
-      },
+      onData: () => refetch(),
       onError: (err) => {
         if (notify) showWarning(err.message);
       },
