@@ -1,7 +1,6 @@
 export * from './MainProvider';
 export * from './NavDrawer';
 export * from './application';
-export * from './auth';
 export * from './provider';
 export * from './settings';
 export * from './upload';

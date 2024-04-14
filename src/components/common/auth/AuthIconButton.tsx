@@ -1,6 +1,7 @@
 import { OverridesProps } from '@/types/overrides';
 import { AccountCircle as AuthIcon } from '@mui/icons-material';
 import { IconButtonProps, Menu, MenuProps } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { PropsWithChildren, useRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
@@ -8,13 +9,16 @@ import {
   IconButtonWithTooltip,
   IconButtonWithTooltipProps,
 } from '../IconButtonWithTooltip';
+import { SessionMenuItem } from '../settings';
+import { SignOutMenuItem } from './SignOutMenuItem';
+import { AuthUpdateProfileDialog } from './UpdateProfileDialog';
 
 type AuthIconButtonProps = OverridesProps<{
   IconButtonProps?: IconButtonProps;
   IconButtonWithTooltipProps?: IconButtonWithTooltipProps;
   MenuProps?: MenuProps;
 }> & {
-  MenuItems: React.ReactNode[];
+  MenuItems?: React.ReactNode[];
 };
 
 export const AuthIconButton = ({
@@ -23,6 +27,15 @@ export const AuthIconButton = ({
   children,
 }: PropsWithChildren<AuthIconButtonProps>) => {
   const { t: tAuth } = useTranslation('auth');
+
+  const { status } = useSession();
+
+  const {
+    value: updateProfileDialogVisible,
+    setTrue: openUpdateProfileDialog,
+    setFalse: closeUpdateProfileDialog,
+  } = useBoolean(false);
+
   const anchorRef = useRef<HTMLButtonElement>(null);
   const {
     value: menuVisible,
@@ -41,7 +54,7 @@ export const AuthIconButton = ({
           ref: anchorRef,
         }}
         {...overrides?.IconButtonWithTooltipProps}
-      ></IconButtonWithTooltip>
+      />
       {anchorRef.current && (
         <Menu
           open={menuVisible}
@@ -59,10 +72,26 @@ export const AuthIconButton = ({
           onClick={() => closeMenu()}
           {...overrides?.MenuProps}
         >
-          {MenuItems.map((item) => item)}
+          <SessionMenuItem
+            overrides={{
+              MenuItemProps: {
+                onClick: openUpdateProfileDialog,
+              },
+            }}
+          />
+          {MenuItems?.map((item) => item)}
+          {status === 'authenticated' && <SignOutMenuItem />}
         </Menu>
       )}
       {children}
+      {status === 'authenticated' && (
+        <AuthUpdateProfileDialog
+          DialogProps={{
+            open: updateProfileDialogVisible,
+            onClose: closeUpdateProfileDialog,
+          }}
+        />
+      )}
     </>
   );
 };

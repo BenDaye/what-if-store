@@ -1,4 +1,4 @@
-import { IconButtonWithTooltip } from '@/components/common';
+import { AuthIconButton, IconButtonWithTooltip } from '@/components/common';
 import { OverridesDrawerProps } from '@/types/overrides';
 import {
   Apps as ApplicationsIcon,
@@ -10,7 +10,6 @@ import {
 import { Box, Drawer } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { DashboardAuthIconButton } from './auth';
 import { DashboardSettingsIconButton } from './settings/SettingsIconButton';
 
 type DashboardNavDrawerProps = OverridesDrawerProps;
@@ -74,7 +73,7 @@ export const DashboardNavDrawer = ({ overrides }: DashboardNavDrawerProps) => {
           py: 2,
         }}
       >
-        <DashboardAuthIconButton />
+        <AuthIconButton />
         <DashboardSettingsIconButton />
       </Box>
     </Drawer>

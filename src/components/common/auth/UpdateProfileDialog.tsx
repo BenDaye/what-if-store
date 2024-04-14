@@ -1,10 +1,7 @@
-import { useDashboardUserMy } from '@/hooks';
-import {
-  UserUpdateProfileInputSchema,
-  userUpdateProfileInputSchema,
-} from '@/server/schemas/user';
+import { useNotice } from '@/hooks';
+import { UserUpdateProfileInputSchema } from '@/server/schemas/user';
 import { OverridesDialogProps } from '@/types/overrides';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { trpc } from '@/utils/trpc';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -26,22 +23,28 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 
-type DashboardAuthUpdateProfileDialogProps = OverridesDialogProps;
-
-export const DashboardAuthUpdateProfileDialog = ({
+type AuthUpdateProfileDialogProps = OverridesDialogProps;
+export const AuthUpdateProfileDialog = ({
   overrides,
   DialogProps,
-}: DashboardAuthUpdateProfileDialogProps) => {
+}: AuthUpdateProfileDialogProps) => {
+  const { showError, showSuccess } = useNotice();
   const { t: tCommon } = useTranslation('common');
   const { t: tUser } = useTranslation('user');
 
-  const { data: session, status } = useSession();
-  const unauthenticated = useMemo(
-    () => status !== 'authenticated' || session.user?.role !== AuthRole.Admin,
-    [session, status],
+  const { data: session, status, update: updateSession } = useSession();
+  const isUserOrProvider = useMemo(
+    () =>
+      session?.user?.role === AuthRole.User ||
+      session?.user?.role === AuthRole.Provider,
+    [session?.user?.role],
   );
-  const { update: updateProfile } = useDashboardUserMy();
-  const { handleSubmit, control, reset, setValue, getValues, watch } =
+  const isAdmin = useMemo(
+    () => session?.user?.role === AuthRole.Admin,
+    [session?.user?.role],
+  );
+
+  const { handleSubmit, control, reset, getValues, watch } =
     useForm<UserUpdateProfileInputSchema>({
       defaultValues: {
         nickname: session?.user?.nickname ?? null,
@@ -49,26 +52,56 @@ export const DashboardAuthUpdateProfileDialog = ({
         avatar: session?.user?.avatar ?? null,
         bio: session?.user?.bio ?? null,
       },
-      mode: 'all',
-      resolver: zodResolver(userUpdateProfileInputSchema),
     });
   useEffect(() => {
-    if (session?.user?.nickname) setValue('nickname', session.user.nickname);
-    if (session?.user?.email) setValue('email', session.user.email);
-    if (session?.user?.avatar) setValue('avatar', session.user.avatar);
-    if (session?.user?.bio) setValue('bio', session.user.bio);
-  }, [session, setValue]);
+    if (session?.user) reset(session.user, { keepDefaultValues: false });
+  }, [session, reset]);
 
-  const onSubmit = async (data: UserUpdateProfileInputSchema) => {
-    await updateProfile({
-      nickname: data.nickname ?? null,
-      email: data.email ?? null,
-      avatar: data.avatar ?? null,
-      bio: data.bio ?? null,
-    })
-      .then(() => DialogProps?.onClose?.({}, 'backdropClick'))
-      .catch(() => null);
-  };
+  const { mutateAsync: updateUserOrProviderProfile } =
+    trpc.protectedAppUser.update.useMutation({
+      onError: (err) => showError(err.message),
+      onSuccess: (res) => {
+        showSuccess(tUser('Profile.Updated'));
+        updateSession(res);
+        DialogProps.onClose?.({}, 'backdropClick');
+      },
+    });
+  const { mutateAsync: updateAdminProfile } =
+    trpc.protectedDashboardUser.update.useMutation({
+      onError: (err) => showError(err.message),
+      onSuccess: (res) => {
+        showSuccess(tUser('Profile.Updated'));
+        updateSession(res);
+        DialogProps.onClose?.({}, 'backdropClick');
+      },
+    });
+
+  const onSubmit = useCallback(
+    async (data: UserUpdateProfileInputSchema) => {
+      if (isUserOrProvider) {
+        await updateUserOrProviderProfile({
+          nickname: data.nickname ?? null,
+          email: data.email ?? null,
+          avatar: data.avatar ?? null,
+          bio: data.bio ?? null,
+        }).catch(() => null);
+      }
+      if (isAdmin) {
+        await updateAdminProfile({
+          nickname: data.nickname ?? null,
+          email: data.email ?? null,
+          avatar: data.avatar ?? null,
+          bio: data.bio ?? null,
+        }).catch(() => null);
+      }
+    },
+    [
+      isUserOrProvider,
+      isAdmin,
+      updateUserOrProviderProfile,
+      updateAdminProfile,
+    ],
+  );
 
   const [avatarSrc, setAvatarSrc] = useDebounceValue(
     session?.user?.avatar,
@@ -81,7 +114,7 @@ export const DashboardAuthUpdateProfileDialog = ({
   }, [watch('avatar'), setAvatarSrc]);
 
   const onClose = useCallback(() => {
-    reset(session?.user ?? {});
+    if (session?.user) reset(session.user, { keepDefaultValues: false });
     DialogProps?.onClose?.({}, 'backdropClick');
   }, [reset, DialogProps, session]);
 
@@ -175,11 +208,11 @@ export const DashboardAuthUpdateProfileDialog = ({
           )}
         />
       </DialogContent>
-      <DialogActions sx={{ gap: 1 }}>
+      <DialogActions {...overrides?.DialogActionsProps}>
         <Box sx={{ flexGrow: 1 }}></Box>
         <LoadingButton
           loading={status === 'loading'}
-          disabled={unauthenticated}
+          disabled={!isAdmin && !isUserOrProvider}
           onClick={() => handleSubmit(onSubmit)()}
         >
           {tCommon('Submit')}

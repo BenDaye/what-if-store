@@ -1,10 +1,9 @@
-import { IconButtonWithTooltip } from '@/components/common';
+import { AuthIconButton, IconButtonWithTooltip } from '@/components/common';
 import { OverridesDrawerProps } from '@/types/overrides';
 import { Home as HomeIcon } from '@mui/icons-material';
 import { Box, Drawer } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { AppAuthIconButton } from './auth';
 import { AppSettingsIconButton } from './settings/SettingsIconButton';
 
 type AppNavDrawerProps = OverridesDrawerProps;
@@ -56,7 +55,7 @@ export const AppNavDrawer = ({ overrides }: AppNavDrawerProps) => {
           py: 2,
         }}
       >
-        <AppAuthIconButton />
+        <AuthIconButton />
         <AppSettingsIconButton />
       </Box>
     </Drawer>
