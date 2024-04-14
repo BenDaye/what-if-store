@@ -2,8 +2,8 @@ import { IconButtonWithTooltip } from '@/components/common';
 import { OverridesDrawerProps } from '@/types/overrides';
 import {
   Apps as ApplicationsIcon,
-  Dashboard as DashboardIcon,
-  DeveloperBoard as ProvidersIcon,
+  Store as DashboardIcon,
+  Dns as ProvidersIcon,
   UploadFile as UploadIcon,
   Person as UsersIcon,
 } from '@mui/icons-material';
