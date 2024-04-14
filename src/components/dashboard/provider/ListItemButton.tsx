@@ -18,8 +18,10 @@ export const ProviderListItemButton = ({
   itemId,
   ...props
 }: ProviderListItemButtonProps) => {
-  const { avatarSrc, avatarText, name, bio, error, isError } =
-    useDashboardProvider(itemId);
+  const {
+    data: { avatarSrc, avatarText, name, bio },
+    router: { error, isError },
+  } = useDashboardProvider(itemId);
 
   const { pathname, query, push } = useRouter();
   const selected = useMemo(
@@ -35,7 +37,11 @@ export const ProviderListItemButton = ({
       {...props}
     >
       <ListItemAvatar>
-        <Avatar alt={`Avatar:${itemId}`} src={avatarSrc} variant="rounded">
+        <Avatar
+          alt={`Avatar:${itemId}`}
+          src={avatarSrc || undefined}
+          variant="rounded"
+        >
           {avatarText}
         </Avatar>
       </ListItemAvatar>
