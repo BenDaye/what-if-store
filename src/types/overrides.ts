@@ -4,6 +4,7 @@ import {
   AutocompleteProps,
   AvatarProps,
   ButtonProps,
+  CardActionAreaProps,
   CardActionsProps,
   CardContentProps,
   CardHeaderProps,
@@ -14,6 +15,7 @@ import {
   DialogProps,
   DialogTitleProps,
   DrawerProps,
+  IconButtonProps,
   ListItemAvatarProps,
   ListItemIconProps,
   ListItemTextProps,
@@ -32,6 +34,7 @@ export type OverridesCardProps = OverridesProps<{
   CardContentProps?: CardContentProps;
   CardActionsProps?: CardActionsProps;
   CardMediaProps?: CardMediaProps;
+  CardActionAreaProps?: CardActionAreaProps;
 }>;
 
 export type OverridesDialogProps = OverridesProps<{
@@ -49,6 +52,10 @@ export type OverridesDrawerProps = OverridesProps<{
 
 export type OverridesButtonProps = OverridesProps<{
   ButtonProps?: ButtonProps;
+}>;
+
+export type OverridesIconButtonProps = OverridesProps<{
+  IconButtonProps?: IconButtonProps;
 }>;
 
 export type OverridesMenuItemProps = OverridesProps<{

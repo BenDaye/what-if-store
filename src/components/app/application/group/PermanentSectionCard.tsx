@@ -28,6 +28,7 @@ export const PermanentSectionCard = ({
       <CardContent {...overrides?.CardContentProps}>
         <Stack direction={'column'} spacing={2} alignItems={'stretch'}>
           {recommendedGroup && <RecommendSection data={recommendedGroup} />}
+          {recommendedGroup && <CommonSection data={recommendedGroup} />}
           {newGroup && <CommonSection data={newGroup} />}
         </Stack>
       </CardContent>

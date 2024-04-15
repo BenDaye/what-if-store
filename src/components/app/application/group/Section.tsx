@@ -3,8 +3,10 @@ import {
   useAppApplicationGroup,
 } from '@/hooks';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
+import { SimpleApplicationCard } from '../Card';
 
 type CommonSectionProps = {
   data: UseAppApplicationGroupsDataSchema[number];
@@ -21,13 +23,18 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
   return (
     <Box
       component={'section'}
-      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+      }}
     >
       <Divider />
       <Stack
         direction={'row'}
         alignItems={'baseline'}
         justifyContent={'space-between'}
+        sx={{ mt: 1, mb: 2 }}
       >
         <Typography variant="h6">
           {type === ApplicationGroupType.Temporary
@@ -36,40 +43,13 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
         </Typography>
         <Button>{tCommon('View')}</Button>
       </Stack>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'wrap',
-          height: 240,
-        }}
-      >
-        <Box
-          sx={{ width: 100, flexGrow: 0, flexShrink: 0, flexBasis: '33.33%' }}
-        >
-          1
-        </Box>
-        <Box
-          sx={{ width: 100, flexGrow: 0, flexShrink: 0, flexBasis: '33.33%' }}
-        >
-          2
-        </Box>
-        <Box
-          sx={{ width: 100, flexGrow: 0, flexShrink: 0, flexBasis: '33.33%' }}
-        >
-          3
-        </Box>
-        <Box
-          sx={{ width: 100, flexGrow: 0, flexShrink: 0, flexBasis: '33.33%' }}
-        >
-          4
-        </Box>
-        <Box
-          sx={{ width: 100, flexGrow: 0, flexShrink: 0, flexBasis: '33.33%' }}
-        >
-          5
-        </Box>
-      </Box>
+      <Grid container spacing={2}>
+        {applications.map((item) => (
+          <Grid key={item.id} xs={12} sm={6} md={4} lg={3} xl={2}>
+            <SimpleApplicationCard data={item} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };

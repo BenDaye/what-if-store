@@ -85,6 +85,7 @@ const ApplicationView = ({
               elevation: 4,
             },
           }}
+          mode="detailed"
         />
       </Box>
     </CardActionArea>
