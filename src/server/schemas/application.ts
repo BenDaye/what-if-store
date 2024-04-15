@@ -12,6 +12,7 @@ export const applicationListInputSchema = listInputSchema
     category: z.nativeEnum(ApplicationCategory).array(),
     platform: z.nativeEnum(ApplicationPlatform),
     language: z.string(),
+    status: z.nativeEnum(ApplicationStatus).array(),
   })
   .partial();
 export type ApplicationListInputSchema = z.infer<

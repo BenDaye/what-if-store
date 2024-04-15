@@ -1,3 +1,4 @@
+import { ApplicationListInputSchema } from '@/server/schemas';
 import {
   AppBarProps,
   AutocompleteProps,
@@ -62,6 +63,7 @@ export type MultipleAutoCompleteProps<
   AutoCompleteValueType = string,
   ValueType = string[],
   ErrorType = Merge<FieldError, (FieldError | undefined)[]>,
+  RouterInput = ApplicationListInputSchema,
 > = OverridesProps<{
   AutoCompleteProps?: AutocompleteProps<
     AutoCompleteValueType,
@@ -75,4 +77,5 @@ export type MultipleAutoCompleteProps<
   onChange?: (value: ValueType) => void;
   error?: ErrorType;
   disabled?: boolean;
+  routerInput?: RouterInput;
 };

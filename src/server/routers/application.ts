@@ -193,13 +193,26 @@ export const publicAppApplication = router({
                   },
                 }
               : {}),
-            status: {
-              in: [
-                ApplicationStatus.Published,
-                ApplicationStatus.Suspended,
-                ApplicationStatus.Achieved,
-              ],
-            },
+            ...(rest.status?.length
+              ? {
+                  status: {
+                    in: rest.status.filter(
+                      (status) =>
+                        status === ApplicationStatus.Published ||
+                        status === ApplicationStatus.Suspended ||
+                        status === ApplicationStatus.Achieved,
+                    ),
+                  },
+                }
+              : {
+                  status: {
+                    in: [
+                      ApplicationStatus.Published,
+                      ApplicationStatus.Suspended,
+                      ApplicationStatus.Achieved,
+                    ],
+                  },
+                }),
           };
 
           const [items, total] = await prisma.$transaction([
@@ -653,6 +666,13 @@ export const protectedDashboardApplication = router({
               ? {
                   locales: {
                     has: rest.language,
+                  },
+                }
+              : {}),
+            ...(rest.status?.length
+              ? {
+                  status: {
+                    in: rest.status,
                   },
                 }
               : {}),

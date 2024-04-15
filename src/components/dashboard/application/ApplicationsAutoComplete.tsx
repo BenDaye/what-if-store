@@ -1,3 +1,4 @@
+import { ApplicationStatusChip } from '@/components/common';
 import { useDashboardApplications, useDashboardUser } from '@/hooks';
 import { idSchema } from '@/server/schemas';
 import { MultipleAutoCompleteProps, OverridesProps } from '@/types/overrides';
@@ -5,6 +6,7 @@ import { RouterOutput } from '@/utils/trpc';
 import {
   Autocomplete,
   ListItem,
+  ListItemSecondaryAction,
   ListItemText,
   ListItemTextProps,
   TextField,
@@ -42,10 +44,11 @@ export const ApplicationsAutoComplete = ({
   onChange = () => null,
   error,
   disabled = false,
+  routerInput,
 }: ApplicationsAutoCompleteProps) => {
   const { t: tApplication } = useTranslation('application');
 
-  const { data } = useDashboardApplications();
+  const { data } = useDashboardApplications(routerInput);
 
   const getTagData = useCallback(
     ({ id }: (typeof defaultValue)[number]): (typeof data)[number] | false => {
@@ -98,7 +101,7 @@ export const ApplicationsAutoComplete = ({
       )}
       renderOption={(props, option) => (
         <ListItem dense {...props}>
-          <ApplicationListItemText option={option} />
+          <ApplicationListItemInner option={option} />
         </ListItem>
       )}
       {...overrides?.AutoCompleteProps}
@@ -106,7 +109,7 @@ export const ApplicationsAutoComplete = ({
   );
 };
 
-const ApplicationListItemText = ({
+const ApplicationListItemInner = ({
   overrides,
   option,
 }: OverridesProps<{
@@ -118,18 +121,23 @@ const ApplicationListItemText = ({
     data: { providerName },
   } = useDashboardUser(option.providerId);
   return (
-    <ListItemText
-      primary={option.name}
-      primaryTypographyProps={{
-        noWrap: true,
-        textOverflow: 'ellipsis',
-      }}
-      secondary={providerName}
-      secondaryTypographyProps={{
-        noWrap: true,
-        textOverflow: 'ellipsis',
-      }}
-      {...overrides?.ListItemTextProps}
-    />
+    <>
+      <ListItemText
+        primary={option.name}
+        primaryTypographyProps={{
+          noWrap: true,
+          textOverflow: 'ellipsis',
+        }}
+        secondary={providerName}
+        secondaryTypographyProps={{
+          noWrap: true,
+          textOverflow: 'ellipsis',
+        }}
+        {...overrides?.ListItemTextProps}
+      />
+      <ListItemSecondaryAction>
+        <ApplicationStatusChip status={option.status} />
+      </ListItemSecondaryAction>
+    </>
   );
 };
