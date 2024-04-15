@@ -1,2 +1,2 @@
 export * from './PermanentSectionCard';
-export * from './RecommendSectionCard';
+export * from './RecommendSection';

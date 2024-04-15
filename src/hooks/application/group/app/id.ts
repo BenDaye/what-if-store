@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 
-type AppApplicationGroupRouterOutput =
+export type AppApplicationGroupRouterOutput =
   RouterOutput['publicAppApplicationGroup']['getById'];
 export const useAppApplicationGroupHookDataSchema =
   applicationGroupCreateInputSchema
