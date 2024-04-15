@@ -204,10 +204,16 @@ const main = async () => {
 
   for await (const name of Object.values(PermanentPresetGroupNames)) {
     try {
-      const group = await prisma.applicationGroup.create({
-        data: {
+      const group = await prisma.applicationGroup.upsert({
+        where: {
+          name,
+        },
+        create: {
           name,
           description: name,
+          type: ApplicationGroupType.Permanent,
+        },
+        update: {
           type: ApplicationGroupType.Permanent,
         },
       });
@@ -220,10 +226,16 @@ const main = async () => {
 
   for await (const name of Object.values(PersistentPresetGroupNames)) {
     try {
-      const group = await prisma.applicationGroup.create({
-        data: {
+      const group = await prisma.applicationGroup.upsert({
+        where: {
+          name,
+        },
+        create: {
           name,
           description: name,
+          type: ApplicationGroupType.Persistent,
+        },
+        update: {
           type: ApplicationGroupType.Persistent,
         },
       });
