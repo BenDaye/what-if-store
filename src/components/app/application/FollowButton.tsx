@@ -5,7 +5,7 @@ import {
   FavoriteBorder as FollowIcon,
   Favorite as FollowedIcon,
 } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
@@ -13,11 +13,13 @@ import { useCallback, useMemo } from 'react';
 type FollowApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;
   followers: UseAppApplicationHookDataSchema['followers'];
+  showText?: boolean;
 };
 export const FollowApplicationButton = ({
   overrides,
   applicationId,
   followers,
+  showText = false,
 }: FollowApplicationButtonProps) => {
   const { t: tApplicationFollow } = useTranslation('application', {
     keyPrefix: 'Follow',
@@ -46,7 +48,7 @@ export const FollowApplicationButton = ({
     await follow(applicationId).catch(() => null);
   }, [status, signIn, follow, applicationId]);
 
-  return (
+  return showText ? (
     <Button
       size="small"
       color={followed ? 'error' : 'inherit'}
@@ -56,5 +58,19 @@ export const FollowApplicationButton = ({
     >
       {tApplicationFollow(followed ? 'Followed' : 'Follow')}
     </Button>
+  ) : (
+    <IconButton
+      color={followed ? 'error' : 'inherit'}
+      sx={{
+        fontSize: (theme) => theme.typography.body1.fontSize,
+      }}
+      onClick={onClick}
+    >
+      {followed ? (
+        <FollowedIcon sx={{ fontSize: 'inherit' }} />
+      ) : (
+        <FollowIcon sx={{ fontSize: 'inherit' }} />
+      )}
+    </IconButton>
   );
 };

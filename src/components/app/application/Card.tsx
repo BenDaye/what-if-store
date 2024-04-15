@@ -68,7 +68,6 @@ export const SimpleApplicationCard = ({
   const { data: application } = useAppApplication(data.id);
   const { data: provider } = useAppUser(data.providerId);
 
-  const { t: tApplication } = useTranslation('application');
   const { t: tApplicationCategory } = useTranslation('application', {
     keyPrefix: 'Category',
   });

@@ -123,6 +123,20 @@
     "_": "General"
   },
   "Group": {
+    "Name": {
+      "MostFollowersOfAllTime": "MostFollowersOfAllTime",
+      "MostFollowersOfThisMonth": "MostFollowersOfThisMonth",
+      "MostFollowersOfThisWeek": "MostFollowersOfThisWeek",
+      "MostFollowersOfToday": "MostFollowersOfToday",
+      "MostOwnersOfAllTime": "MostOwnersOfAllTime",
+      "MostOwnersOfThisMonth": "MostOwnersOfThisMonth",
+      "MostOwnersOfThisWeek": "MostOwnersOfThisWeek",
+      "MostOwnersOfToday": "MostOwnersOfToday",
+      "New": "New",
+      "Promotional": "Promotional",
+      "Recommended": "Recommended",
+      "Updated": "Updated"
+    },
     "Type": {
       "Permanent": "Permanent",
       "Persistent": "Persistent",

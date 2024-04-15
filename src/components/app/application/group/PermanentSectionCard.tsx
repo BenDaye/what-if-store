@@ -22,14 +22,24 @@ export const PermanentSectionCard = ({
     () => data.find((item) => item.name === PermanentPresetGroupNames.New),
     [data],
   );
+  const updatedGroup = useMemo(
+    () => data.find((item) => item.name === PermanentPresetGroupNames.Updated),
+    [data],
+  );
+  const promotionalGroup = useMemo(
+    () =>
+      data.find((item) => item.name === PermanentPresetGroupNames.Promotional),
+    [data],
+  );
 
   return (
     <Card {...overrides?.CardProps}>
       <CardContent {...overrides?.CardContentProps}>
         <Stack direction={'column'} spacing={2} alignItems={'stretch'}>
           {recommendedGroup && <RecommendSection data={recommendedGroup} />}
-          {recommendedGroup && <CommonSection data={recommendedGroup} />}
           {newGroup && <CommonSection data={newGroup} />}
+          {updatedGroup && <CommonSection data={updatedGroup} />}
+          {promotionalGroup && <CommonSection data={promotionalGroup} />}
         </Stack>
       </CardContent>
     </Card>

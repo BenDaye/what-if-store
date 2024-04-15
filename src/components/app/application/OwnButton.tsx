@@ -5,7 +5,7 @@ import {
   GetApp as OwnIcon,
   DownloadDone as OwnedIcon,
 } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
@@ -13,11 +13,13 @@ import { useCallback, useMemo } from 'react';
 type OwnApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;
   owners: UseAppApplicationHookDataSchema['owners'];
+  showText?: boolean;
 };
 export const OwnApplicationButton = ({
   overrides,
   applicationId,
   owners,
+  showText = false,
 }: OwnApplicationButtonProps) => {
   const { t: tApplicationOwn } = useTranslation('application', {
     keyPrefix: 'Own',
@@ -47,15 +49,29 @@ export const OwnApplicationButton = ({
     await own(applicationId).catch(() => null);
   }, [status, signIn, own, applicationId]);
 
-  return (
+  return showText ? (
     <Button
       size="small"
-      color={owned ? 'error' : 'inherit'}
+      color={owned ? 'primary' : 'inherit'}
       startIcon={owned ? <OwnedIcon /> : <OwnIcon />}
       onClick={onClick}
       {...overrides?.ButtonProps}
     >
       {tApplicationOwn(owned ? 'Owned' : 'Own')}
     </Button>
+  ) : (
+    <IconButton
+      color={owned ? 'primary' : 'inherit'}
+      sx={{
+        fontSize: (theme) => theme.typography.body1.fontSize,
+      }}
+      onClick={onClick}
+    >
+      {owned ? (
+        <OwnedIcon sx={{ fontSize: 'inherit' }} />
+      ) : (
+        <OwnIcon sx={{ fontSize: 'inherit' }} />
+      )}
+    </IconButton>
   );
 };
