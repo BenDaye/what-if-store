@@ -27,6 +27,7 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
+        pb: 1,
       }}
     >
       <Divider />
@@ -34,7 +35,10 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
         direction={'row'}
         alignItems={'baseline'}
         justifyContent={'space-between'}
-        sx={{ mt: 1, mb: 2 }}
+        sx={{
+          mt: 1,
+          mb: 2,
+        }}
       >
         <Typography variant="h6">
           {type === ApplicationGroupType.Temporary

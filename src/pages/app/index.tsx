@@ -1,5 +1,5 @@
 import nextI18NextConfig from '@/../next-i18next.config';
-import { PermanentSectionCard } from '@/components/app';
+import { PermanentSectionCard, PersistentSectionCard } from '@/components/app';
 import { PageContainer } from '@/components/common';
 import { AppLayout } from '@/components/layouts';
 import { useAppApplicationGroups } from '@/hooks';
@@ -20,9 +20,13 @@ const Page: NextPageWithLayout<
   const { data: permanent } = useAppApplicationGroups({
     type: ApplicationGroupType.Permanent,
   });
+  const { data: persistent } = useAppApplicationGroups({
+    type: ApplicationGroupType.Persistent,
+  });
   return (
     <PageContainer>
       <PermanentSectionCard data={permanent} />
+      <PersistentSectionCard data={persistent} />
     </PageContainer>
   );
 };
