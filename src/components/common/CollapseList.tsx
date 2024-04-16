@@ -18,7 +18,7 @@ import {
   OverlayScrollbarsComponent,
   OverlayScrollbarsComponentProps,
 } from 'overlayscrollbars-react';
-import { HTMLAttributes, PropsWithChildren, ReactNode, useMemo } from 'react';
+import { HTMLAttributes, PropsWithChildren, ReactNode } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 type CollapseListItemButtonProps = {
@@ -33,6 +33,7 @@ type CollapseListItemButtonProps = {
   primaryText?: string;
   secondaryText?: string;
   expandMore?: boolean;
+  onClick?: ListItemButtonProps['onClick'];
 };
 
 export const CollapseListItemButton = ({
@@ -40,6 +41,7 @@ export const CollapseListItemButton = ({
   primaryText,
   secondaryText,
   expandMore,
+  onClick,
 }: CollapseListItemButtonProps) => {
   return (
     <ListItemButton
@@ -54,6 +56,7 @@ export const CollapseListItemButton = ({
             : 'rgba(0, 0, 0, 0.05)',
       }}
       divider
+      onClick={onClick}
       {...overrides?.ListItemButtonProps}
     >
       <ListItemIcon
@@ -162,13 +165,11 @@ export const InnerCollapseList = ({
 
 type CollapseListProps = {
   overrides?: {
-    CollapseListItemButtonProps?: CollapseListItemButtonProps;
-    InnerCollapseListProps?: InnerCollapseListProps;
-    expandMore?: boolean;
+    CollapseListItemButtonProps?: CollapseListItemButtonProps['overrides'];
+    InnerCollapseListProps?: InnerCollapseListProps['overrides'];
   };
   primaryText: string;
   secondaryText?: string;
-  expandMore?: boolean;
   minHeight?: number;
   localStorageKey?: string;
   defaultExpandMore?: boolean;
@@ -190,33 +191,22 @@ export const CollapseList = ({
       initializeWithValue: false,
     },
   );
-  const _expandMore = useMemo(
-    () =>
-      typeof overrides?.expandMore === 'boolean'
-        ? overrides.expandMore
-        : expandMore,
-    [overrides?.expandMore, expandMore],
-  );
 
   return (
     <>
       <CollapseListItemButton
         primaryText={primaryText}
         secondaryText={secondaryText}
-        expandMore={_expandMore}
-        overrides={{
-          ListItemButtonProps: {
-            onClick: () => {
-              if (typeof overrides?.expandMore === 'boolean') return;
-              setExpandMode(!_expandMore);
-            },
-          },
+        expandMore={expandMore}
+        overrides={overrides?.CollapseListItemButtonProps}
+        onClick={() => {
+          setExpandMode(!expandMore);
         }}
       />
       <InnerCollapseList
-        expandMore={_expandMore}
+        expandMore={expandMore}
         minHeight={minHeight}
-        overrides={{}}
+        overrides={overrides?.InnerCollapseListProps}
       >
         {children}
       </InnerCollapseList>

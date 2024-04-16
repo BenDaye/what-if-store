@@ -1,13 +1,11 @@
 import nextI18NextConfig from '@/../next-i18next.config';
-import { PermanentSectionCard, PersistentSectionCard } from '@/components/app';
 import { PageContainer } from '@/components/common';
 import { AppLayout } from '@/components/layouts';
-import { useAppApplicationGroups } from '@/hooks';
 import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
-import { ApplicationGroupType } from '@prisma/client';
+import { IdSchema } from '@/server/schemas';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
@@ -16,26 +14,15 @@ import SuperJSON from 'superjson';
 
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = () => {
-  const { data: permanent } = useAppApplicationGroups({
-    type: ApplicationGroupType.Permanent,
-  });
-  const { data: persistent } = useAppApplicationGroups({
-    type: ApplicationGroupType.Persistent,
-  });
-  return (
-    <PageContainer>
-      <PermanentSectionCard data={permanent} />
-      <PersistentSectionCard data={persistent} />
-    </PageContainer>
-  );
+> = ({ id }) => {
+  return <PageContainer></PageContainer>;
 };
 
 Page.getLayout = (page) => <AppLayout>{page}</AppLayout>;
 
 // NOTE: 如果trpc开启了ssr，那下面这个方法将无法正确的返回数据 (https://trpc.io/docs/client/nextjs/ssr)
 export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
+  context: GetServerSidePropsContext<{ id: IdSchema }>,
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
   const helpers = createServerSideHelpers({
@@ -49,14 +36,9 @@ export const getServerSideProps = async (
   });
 
   await helpers.publicAppMeta.get.prefetch();
-  await Promise.all([
-    ...Object.values(ApplicationGroupType).map((item) =>
-      helpers.publicAppApplicationGroup.list.prefetchInfinite({
-        limit: 20,
-        type: item,
-      }),
-    ),
-  ]);
+
+  const id = context.params!.id;
+  if (id) await helpers.publicAppApplication.getById.prefetch(id);
 
   return {
     props: {
@@ -66,6 +48,7 @@ export const getServerSideProps = async (
         nextI18NextConfig,
       )),
       trpcState: helpers.dehydrate(),
+      id,
     },
   };
 };

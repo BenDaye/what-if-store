@@ -1,4 +1,11 @@
 {
+  "App": {
+    "Application": "Application",
+    "Provider": "Provider",
+    "Upload": "Upload",
+    "User": "User",
+    "_": "App"
+  },
   "Dashboard": {
     "Application": "Application",
     "Provider": "Provider",

@@ -10,8 +10,8 @@ import { listInputSchema } from './list';
 export const applicationListInputSchema = listInputSchema
   .extend({
     category: z.nativeEnum(ApplicationCategory).array(),
-    platform: z.nativeEnum(ApplicationPlatform),
-    language: z.string(),
+    platforms: z.nativeEnum(ApplicationPlatform).array(),
+    locales: z.string().array(),
     status: z.nativeEnum(ApplicationStatus).array(),
   })
   .partial();

@@ -25,7 +25,7 @@ import {
   GridToolbar,
   zhCN,
 } from '@mui/x-data-grid';
-import { ApplicationCategory, ApplicationStatus } from '@prisma/client';
+// import { ApplicationCategory, ApplicationStatus } from '@prisma/client';
 import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
@@ -49,6 +49,15 @@ export const ApplicationDataGrid = ({
 }: ApplicationDataGridProps) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tApplication } = useTranslation('application');
+  const { t: tApplicationCategoryName } = useTranslation('application', {
+    keyPrefix: 'Category.Name',
+  });
+  const { t: tApplicationStatusText } = useTranslation('application', {
+    keyPrefix: 'Status.Text',
+  });
+  const { t: tApplicationDataGridHeaderName } = useTranslation('application', {
+    keyPrefix: 'DataGridHeaderName',
+  });
   const {
     router: { isFetching },
     items,
@@ -80,7 +89,7 @@ export const ApplicationDataGrid = ({
     },
     {
       field: 'name',
-      headerName: tApplication('DataGridHeaderName.Name', 'Name'),
+      headerName: tApplicationDataGridHeaderName('Name', 'Name'),
       flex: 4,
       renderCell: ({ row }) => (
         <ApplicationIdRenderCell applicationId={row.id} />
@@ -88,39 +97,39 @@ export const ApplicationDataGrid = ({
     },
     {
       field: 'providerId',
-      headerName: tApplication('DataGridHeaderName.Provider', 'Provider'),
+      headerName: tApplicationDataGridHeaderName('Provider', 'Provider'),
       flex: 3,
       renderCell: ({ value }) => <ProviderIdRenderCell providerId={value} />,
     },
     {
       field: 'category',
-      headerName: tApplication('DataGridHeaderName.Category', 'Category'),
+      headerName: tApplicationDataGridHeaderName('Category', 'Category'),
       flex: 2,
-      valueFormatter: ({ value }) => tApplication(`Category.${value}`, value),
-      editable: true,
-      type: 'singleSelect',
-      valueOptions: () =>
-        Object.values(ApplicationCategory).map((category) => ({
-          value: category,
-          label: tApplication(`Category.${category}`, category),
-        })),
+      valueFormatter: ({ value }) => tApplicationCategoryName(value, value),
+      // editable: true,
+      // type: 'singleSelect',
+      // valueOptions: () =>
+      //   Object.values(ApplicationCategory).map((category) => ({
+      //     value: category,
+      //     label: tApplicationCategoryName(category, category),
+      //   })),
     },
     {
       field: 'status',
-      headerName: tApplication('DataGridHeaderName.Status', 'Status'),
+      headerName: tApplicationDataGridHeaderName('Status', 'Status'),
       flex: 2,
-      valueFormatter: ({ value }) => tApplication(`Status.${value}`, value),
-      editable: true,
-      type: 'singleSelect',
-      valueOptions: () =>
-        Object.values(ApplicationStatus).map((status) => ({
-          value: status,
-          label: tApplication(`Status.${status}`, status),
-        })),
+      valueFormatter: ({ value }) => tApplicationStatusText(value, value),
+      // editable: true,
+      // type: 'singleSelect',
+      // valueOptions: () =>
+      //   Object.values(ApplicationStatus).map((status) => ({
+      //     value: status,
+      //     label: tApplicationStatusText(status, status),
+      //   })),
     },
     {
       field: 'price',
-      headerName: tApplication('DataGridHeaderName.Price', 'Price'),
+      headerName: tApplicationDataGridHeaderName('Price', 'Price'),
       flex: 1,
       type: 'number',
       valueFormatter: ({ value }) => currency(value),

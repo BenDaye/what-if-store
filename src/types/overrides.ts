@@ -17,8 +17,13 @@ import {
   DrawerProps,
   IconButtonProps,
   ListItemAvatarProps,
+  ListItemButtonProps,
   ListItemIconProps,
+  ListItemProps,
+  ListItemSecondaryActionProps,
   ListItemTextProps,
+  ListProps,
+  ListSubheaderProps,
   MenuItemProps,
   TextFieldProps,
 } from '@mui/material';
@@ -35,6 +40,17 @@ export type OverridesCardProps = OverridesProps<{
   CardActionsProps?: CardActionsProps;
   CardMediaProps?: CardMediaProps;
   CardActionAreaProps?: CardActionAreaProps;
+}>;
+
+export type OverridesListProps = OverridesProps<{
+  ListProps?: ListProps;
+  ListItemProps?: ListItemProps;
+  ListItemButtonProps?: ListItemButtonProps;
+  ListItemTextProps?: ListItemTextProps;
+  ListItemIconProps?: ListItemIconProps;
+  ListItemSecondaryActionProps?: ListItemSecondaryActionProps;
+  ListItemAvatarProps?: ListItemAvatarProps;
+  ListSubheaderProps?: ListSubheaderProps;
 }>;
 
 export type OverridesDialogProps = OverridesProps<{

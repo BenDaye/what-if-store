@@ -179,17 +179,21 @@ export const publicAppApplication = router({
                   },
                 }
               : {}),
-            ...(rest.platform
+            ...(rest.platforms?.length
               ? {
-                  platforms: {
-                    has: rest.platform,
+                  Information: {
+                    platforms: {
+                      hasSome: rest.platforms,
+                    },
                   },
                 }
               : {}),
-            ...(rest.language
+            ...(rest.locales?.length
               ? {
-                  locales: {
-                    has: rest.language,
+                  Information: {
+                    locales: {
+                      hasSome: rest.locales,
+                    },
                   },
                 }
               : {}),
@@ -292,17 +296,21 @@ export const protectedAppApplication = router({
                   },
                 }
               : {}),
-            ...(rest.platform
+            ...(rest.platforms?.length
               ? {
-                  platforms: {
-                    has: rest.platform,
+                  Information: {
+                    platforms: {
+                      hasSome: rest.platforms,
+                    },
                   },
                 }
               : {}),
-            ...(rest.language
+            ...(rest.locales
               ? {
-                  locales: {
-                    has: rest.language,
+                  Information: {
+                    locales: {
+                      hasSome: rest.locales,
+                    },
                   },
                 }
               : {}),
@@ -655,17 +663,21 @@ export const protectedDashboardApplication = router({
                   },
                 }
               : {}),
-            ...(rest.platform
+            ...(rest.platforms?.length
               ? {
-                  platforms: {
-                    has: rest.platform,
+                  Information: {
+                    platforms: {
+                      hasSome: rest.platforms,
+                    },
                   },
                 }
               : {}),
-            ...(rest.language
+            ...(rest.locales?.length
               ? {
-                  locales: {
-                    has: rest.language,
+                  Information: {
+                    locales: {
+                      hasSome: rest.locales,
+                    },
                   },
                 }
               : {}),

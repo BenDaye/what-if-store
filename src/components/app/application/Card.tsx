@@ -68,8 +68,8 @@ export const SimpleApplicationCard = ({
   const { data: application } = useAppApplication(data.id);
   const { data: provider } = useAppUser(data.providerId);
 
-  const { t: tApplicationCategory } = useTranslation('application', {
-    keyPrefix: 'Category',
+  const { t: tApplicationCategoryName } = useTranslation('application', {
+    keyPrefix: 'Category.Name',
   });
   const secondary = useMemo((): ReactNode => {
     switch (secondaryInfo) {
@@ -78,13 +78,13 @@ export const SimpleApplicationCard = ({
       case 'latestVersionText':
         return application.latestVersionText;
       case 'category':
-        return tApplicationCategory(application.category);
+        return tApplicationCategoryName(application.category);
       case 'description':
         return application.description;
       default:
         return application.description;
     }
-  }, [secondaryInfo, application, provider, tApplicationCategory]);
+  }, [secondaryInfo, application, provider, tApplicationCategoryName]);
 
   const { push } = useRouter();
 
@@ -137,8 +137,8 @@ export const DetailedApplicationCard = ({
   const { data: application } = useAppApplication(data.id);
   const { data: provider } = useAppUser(data.providerId);
 
-  const { t: tApplicationCategory } = useTranslation('application', {
-    keyPrefix: 'Category',
+  const { t: tApplicationCategoryName } = useTranslation('application', {
+    keyPrefix: 'Category.Name',
   });
   const secondary = useMemo((): ReactNode => {
     switch (secondaryInfo) {
@@ -147,13 +147,13 @@ export const DetailedApplicationCard = ({
       case 'latestVersionText':
         return application.latestVersionText;
       case 'category':
-        return tApplicationCategory(application.category);
+        return tApplicationCategoryName(application.category);
       case 'description':
         return application.description;
       default:
         return application.description;
     }
-  }, [secondaryInfo, application, provider, tApplicationCategory]);
+  }, [secondaryInfo, application, provider, tApplicationCategoryName]);
 
   return (
     <Card {...overrides?.CardProps}>
