@@ -14,7 +14,7 @@ export const ProviderTypeChip = ({
   overrides,
   type,
 }: PropsWithChildren<ProviderTypeChipProps>) => {
-  const { t: tProvider } = useTranslation('provider');
+  const { t } = useTranslation();
   const color = useMemo<ChipProps['color']>(() => {
     switch (type) {
       case ProviderType.IndependentDeveloper:
@@ -29,7 +29,7 @@ export const ProviderTypeChip = ({
   }, [type]);
   return (
     <Chip
-      label={tProvider(`Type.${type}._`, type)}
+      label={t(`provider:Type.${type}._`, type)}
       sx={{
         borderRadius: 1,
       }}

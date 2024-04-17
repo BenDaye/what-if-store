@@ -1,0 +1,10 @@
+{
+  "DataGridHeaderName": {
+    "MIMEType": "文件类型",
+    "Name": "名称",
+    "Path": "路径",
+    "Size": "大小"
+  },
+  "File": "文件",
+  "_": "上传"
+}

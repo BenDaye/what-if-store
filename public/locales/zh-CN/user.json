@@ -3,6 +3,8 @@
     "Name": "昵称"
   },
   "Profile": {
+    "Avatar": "头像",
+    "Bio": "简介",
     "Email": "邮箱",
     "Nickname": "昵称",
     "Update": "编辑账号信息",

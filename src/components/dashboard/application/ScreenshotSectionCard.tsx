@@ -13,14 +13,12 @@ export const ScreenshotSectionCard = ({
   overrides,
   defaultValues,
 }: ScreenshotSectionCardProps) => {
-  const { t: tApplicationMedia } = useTranslation('application', {
-    keyPrefix: 'Media',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationMedia('Screenshots', 'Screenshots')}
+        title={t('application:Media.Screenshots')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

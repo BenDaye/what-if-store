@@ -18,7 +18,7 @@ export const RouterBreadcrumbs = ({
   const { pathname, asPath } = useRouter();
   const asPathArray = useMemo(() => asPath.split('/').slice(1), [asPath]);
   const pathnameArray = useMemo(() => pathname.split('/').slice(1), [pathname]);
-  const { t: tRouter } = useTranslation('router');
+  const { t } = useTranslation();
   return (
     <Breadcrumbs {...overrides?.BreadcrumbsProps}>
       {asPathArray.map((route, index, self) => {
@@ -37,13 +37,13 @@ export const RouterBreadcrumbs = ({
         if (last) {
           return (
             <Typography key={route} color="text.primary" variant="subtitle2">
-              {label ? label : isDynamic ? route : tRouter(text)}
+              {label ? label : isDynamic ? route : t(`router:${text}`)}
             </Typography>
           );
         }
         return (
           <Link key={route} color="inherit" href={href} variant="subtitle2">
-            {isDynamic ? route : tRouter(text)}
+            {isDynamic ? route : t(`router:${text}`)}
           </Link>
         );
       })}

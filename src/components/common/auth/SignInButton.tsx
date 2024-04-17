@@ -7,7 +7,7 @@ type SignInButtonProps = ButtonProps;
 
 export const SignInButton = (props: SignInButtonProps) => {
   const { status } = useSession();
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
   const { signIn } = useAuth();
 
   return (
@@ -16,7 +16,7 @@ export const SignInButton = (props: SignInButtonProps) => {
       onClick={() => signIn()}
       {...props}
     >
-      {props?.children ?? tAuth('SignIn._')}
+      {props?.children ?? t('auth:SignIn._')}
     </Button>
   );
 };

@@ -113,12 +113,7 @@ export const ApplicationCategoryFilter = ({
   },
   setInput = () => null,
 }: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
-  const { t: tApplicationCategory } = useTranslation('application', {
-    keyPrefix: 'Category',
-  });
-  const { t: tApplicationCategoryName } = useTranslation('application', {
-    keyPrefix: 'Category.Name',
-  });
+  const { t } = useTranslation();
   const handleSelect = (category: ApplicationCategory) => {
     const currentIndex = selected.indexOf(category);
     const newSelected = [...selected];
@@ -135,13 +130,13 @@ export const ApplicationCategoryFilter = ({
   return (
     <CollapseList
       localStorageKey={`app-application-category-filter`}
-      primaryText={tApplicationCategory('_')}
+      primaryText={t('application:Category._')}
       secondaryText={`${selected.length}`}
       defaultExpandMore={true}
     >
       {Object.values(ApplicationCategory).map((item) => (
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
-          <ListItemText primary={tApplicationCategoryName(item)} />
+          <ListItemText primary={t(`application:Category.Name.${item}`)} />
           <ListItemSecondaryAction>
             <Checkbox
               size="small"
@@ -164,9 +159,7 @@ export const ApplicationPlatformFilter = ({
   },
   setInput = () => null,
 }: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
-  const { t: tApplicationPlatform } = useTranslation('application', {
-    keyPrefix: 'Platform',
-  });
+  const { t } = useTranslation();
   const handleSelect = (platforms: ApplicationPlatform) => {
     const currentIndex = selected.indexOf(platforms);
     const newSelected = [...selected];
@@ -183,7 +176,7 @@ export const ApplicationPlatformFilter = ({
   return (
     <CollapseList
       localStorageKey={`app-application-platforms-filter`}
-      primaryText={tApplicationPlatform('_')}
+      primaryText={t('application:Platform.Platforms')}
       secondaryText={`${selected.length}`}
       defaultExpandMore={true}
     >

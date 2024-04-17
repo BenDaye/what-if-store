@@ -31,13 +31,7 @@ export const GeneralSectionCard = ({
   overrides,
   defaultValues,
 }: GeneralSectionCardProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationGeneral } = useTranslation('application', {
-    keyPrefix: 'General',
-  });
-  const { t: tApplicationCategory } = useTranslation('application', {
-    keyPrefix: 'Category',
-  });
+  const { t } = useTranslation();
   const { handleSubmit, reset, control, formState } =
     useForm<ApplicationUpdateInputSchema>({
       defaultValues,
@@ -54,7 +48,7 @@ export const GeneralSectionCard = ({
   const { mutateAsync: update, isPending } =
     trpc.protectedDashboardApplication.updateById.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(tCommon('Updated', 'Updated')),
+      onSuccess: () => showSuccess(t('common:Updated')),
     });
 
   const onSubmit = async (data: ApplicationUpdateInputSchema) =>
@@ -66,17 +60,14 @@ export const GeneralSectionCard = ({
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (formState.isDirty) {
         event.preventDefault();
-        event.returnValue = tCommon(
-          'UnsavedFormAlert',
-          'Unsaved changes will be lost.',
-        );
+        event.returnValue = t('common:UnsavedFormAlert');
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [formState, tCommon]);
+  }, [formState, t]);
 
   return (
     <Card
@@ -89,7 +80,7 @@ export const GeneralSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplicationGeneral('_', 'General')}
+        title={t('application:General._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
@@ -107,8 +98,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplicationGeneral('Name', 'Name')}
-                  placeholder={tApplicationGeneral('Name', 'Name')}
+                  label={t('application:General.Name')}
+                  placeholder={t('application:General.Name')}
                   required
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
@@ -129,8 +120,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplicationGeneral('Category', 'Category')}
-                  placeholder={tApplicationGeneral('Category', 'Category')}
+                  label={t('application:Category._')}
+                  placeholder={t('application:Category._')}
                   required
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
@@ -138,7 +129,7 @@ export const GeneralSectionCard = ({
                 >
                   {Object.values(ApplicationCategory).map((category) => (
                     <MenuItem key={category} value={category}>
-                      {tApplicationCategory(category, category)}
+                      {t(`application:Category.Name.${category}`)}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -158,11 +149,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplicationGeneral('Description', 'Description')}
-                  placeholder={tApplicationGeneral(
-                    'Description',
-                    'Description',
-                  )}
+                  label={t('application:General.Description')}
+                  placeholder={t('application:General.Description')}
                   required
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
@@ -186,8 +174,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplicationGeneral('Website', 'Home Page')}
-                  placeholder={tApplicationGeneral('Website', 'Home Page')}
+                  label={t('application:General.Website')}
+                  placeholder={t('application:General.Website')}
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
                 />
@@ -207,8 +195,8 @@ export const GeneralSectionCard = ({
                   onChange={onChange}
                   onBlur={onBlur}
                   error={!!error}
-                  label={tApplicationGeneral('Github', 'Github')}
-                  placeholder={tApplicationGeneral('Github', 'Github')}
+                  label={t('application:General.Github')}
+                  placeholder={t('application:General.Github')}
                   helperText={error?.message ?? ' '}
                   disabled={isPending}
                 />
@@ -225,7 +213,7 @@ export const GeneralSectionCard = ({
           onClick={() => reset(defaultValues, { keepDefaultValues: false })}
           disabled={isPending || !formState.isDirty}
         >
-          {tCommon('Reset', 'Reset')}
+          {t('common:Reset')}
         </Button>
         <LoadingButton
           size="small"
@@ -234,7 +222,7 @@ export const GeneralSectionCard = ({
           disabled={!formState.isDirty}
           loading={isPending}
         >
-          {tCommon('Submit', 'Submit')}
+          {t('common:Submit')}
         </LoadingButton>
       </CardActions>
     </Card>

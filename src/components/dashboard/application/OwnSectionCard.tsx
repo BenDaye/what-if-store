@@ -11,14 +11,12 @@ export const OwnSectionCard = ({
   overrides,
   defaultValues,
 }: OwnSectionCardProps) => {
-  const { t: tApplicationOwn } = useTranslation('application', {
-    keyPrefix: 'Own',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationOwn('_', 'Own')}
+        title={t('application:Own._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}></CardContent>

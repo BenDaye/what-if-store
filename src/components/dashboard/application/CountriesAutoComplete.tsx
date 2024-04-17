@@ -18,9 +18,7 @@ export const CountriesAutoComplete = ({
   error,
   disabled = false,
 }: CountriesAutoCompleteProps) => {
-  const { t: tApplicationGeneral } = useTranslation('application', {
-    keyPrefix: 'General',
-  });
+  const { t } = useTranslation();
 
   const _getCountryData = (code: string): ICountryData | false => {
     try {
@@ -69,7 +67,7 @@ export const CountriesAutoComplete = ({
         <TextField
           {...params}
           error={!!error}
-          label={tApplicationGeneral('Countries', 'Countries')}
+          label={t('application:General.Countries')}
           helperText={error?.message ?? ' '}
           disabled={disabled}
           {...overrides?.TextFieldProps}

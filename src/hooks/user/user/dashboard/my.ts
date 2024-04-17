@@ -24,18 +24,17 @@ export const useDashboardUserMy = () => {
   });
 
   const { showWarning, showSuccess, showError } = useNotice();
-  const { t: tError } = useTranslation('errorMessage');
-  const { t: tUser } = useTranslation('user');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isError) return;
-    showWarning(tError(error.message));
-  }, [isError, error, showWarning, tError]);
+    showWarning(t(`errorMessage:${error.message}`));
+  }, [isError, error, showWarning, t]);
 
   const { mutateAsync: update } =
     trpc.protectedDashboardUser.update.useMutation({
       onSuccess: async (response) => {
-        showSuccess(tUser('Profile.Updated'));
+        showSuccess(t('user:Profile.Updated'));
         await updateSession(response);
         refetch();
       },

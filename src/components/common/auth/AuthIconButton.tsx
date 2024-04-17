@@ -28,7 +28,7 @@ export const AuthIconButton = ({
   MenuItems,
   children,
 }: PropsWithChildren<AuthIconButtonProps>) => {
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
 
   const { status } = useSession();
 
@@ -53,7 +53,7 @@ export const AuthIconButton = ({
   return (
     <>
       <IconButtonWithTooltip
-        title={tAuth('Profile._', 'Profile')}
+        title={t('auth:Profile._')}
         icon={<AuthIcon />}
         active={false}
         onClick={openMenu}

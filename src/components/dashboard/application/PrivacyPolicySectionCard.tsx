@@ -24,9 +24,7 @@ export const PrivacyPolicySectionCard = ({
   overrides,
   defaultValues: { id: applicationId, privacyPolicy: id },
 }: PrivacyPolicySectionCardProps) => {
-  const { t: tApplicationPrivacyPolicy } = useTranslation('application', {
-    keyPrefix: 'PrivacyPolicy',
-  });
+  const { t } = useTranslation();
 
   const {
     data,
@@ -50,7 +48,7 @@ export const PrivacyPolicySectionCard = ({
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationPrivacyPolicy('_', 'Privacy Policy')}
+        title={t('application:PrivacyPolicy._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

@@ -33,13 +33,11 @@ type RowModel =
 export const UploadListSectionCard = ({
   overrides,
 }: UploadListSectionCardProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tUpload } = useTranslation('upload');
+  const { t } = useTranslation();
   const {
+    router: { refetch, isFetching },
     items,
     total,
-    refetch,
-    isFetching,
     pagination: { page, pageSize, setPaginationModel },
   } = useDashboardUploadWithPagination();
   const setFilterModel = useCallback((filterMode: GridFilterModel) => {
@@ -57,28 +55,28 @@ export const UploadListSectionCard = ({
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
     },
     {
       field: 'name',
-      headerName: tUpload('DataGridHeaderName.Name', 'Name'),
+      headerName: t('upload:DataGridHeaderName.Name'),
       flex: 4,
       renderCell: ({ row }) => <PreviewLink name={row.name} path={row.path} />,
     },
     {
       field: 'mimeType',
-      headerName: tUpload('DataGridHeaderName.MIMEType', 'MIME Type'),
+      headerName: t('upload:DataGridHeaderName.MIMEType'),
       flex: 1,
     },
     {
       field: 'size',
-      headerName: tUpload('DataGridHeaderName.Size', 'Size'),
+      headerName: t('upload:DataGridHeaderName.Size'),
       flex: 1,
     },
   ];
@@ -100,7 +98,7 @@ export const UploadListSectionCard = ({
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
-        title={tUpload('_')}
+        title={t('upload:_')}
         titleTypographyProps={{
           variant: 'subtitle1',
         }}

@@ -16,7 +16,7 @@ export const UploadButton = ({
   overrides,
   onClose = NOOPAsync,
 }: UploadButtonProps) => {
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
   const {
     value: uploadDialogVisible,
     setTrue: openUploadDialog,
@@ -31,7 +31,7 @@ export const UploadButton = ({
         disabled={uploadDialogVisible}
         {...overrides?.ButtonProps}
       >
-        {tCommon('Create')}
+        {t('common:Create')}
       </Button>
       <UploadDialog
         open={uploadDialogVisible}

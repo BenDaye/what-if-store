@@ -46,7 +46,7 @@ export const ApplicationsAutoComplete = ({
   disabled = false,
   routerInput,
 }: ApplicationsAutoCompleteProps) => {
-  const { t: tApplication } = useTranslation('application');
+  const { t } = useTranslation();
 
   const { data } = useDashboardApplications(routerInput);
 
@@ -93,7 +93,7 @@ export const ApplicationsAutoComplete = ({
         <TextField
           {...params}
           error={!!error}
-          label={tApplication('_')}
+          label={t('application:_')}
           helperText={error?.message ?? ' '}
           disabled={disabled}
           {...overrides?.TextFieldProps}

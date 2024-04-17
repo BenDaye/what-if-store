@@ -23,7 +23,6 @@ import {
   GridToolbar,
   zhCN,
 } from '@mui/x-data-grid';
-import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
 import { ApplicationGroupCreateButton } from './CreateButton';
@@ -44,8 +43,7 @@ type RowModel =
 export const ApplicationGroupDataGrid = ({
   overrides,
 }: ApplicationGroupDataGridProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application');
+  const { t } = useTranslation();
   const {
     router: { isFetching },
     items,
@@ -67,46 +65,40 @@ export const ApplicationGroupDataGrid = ({
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
     },
     {
       field: 'name',
-      headerName: tApplication('DataGridHeaderName.Group.Name', 'Name'),
+      headerName: t('application:DataGridHeaderName.Group.Name'),
       flex: 3,
       renderCell: ({ row }) => <ApplicationGroupNameRenderCell row={row} />,
     },
     {
       field: 'type',
-      headerName: tApplication('DataGridHeaderName.Group.Type', 'Type'),
+      headerName: t('application:DataGridHeaderName.Group.Type'),
       flex: 1,
-      valueFormatter: ({ value }) => tApplication(`Group.Type.${value}`, value),
-      type: 'singleSelect',
-      valueOptions: () =>
-        Object.values(ApplicationGroupType).map((value) => ({
-          value,
-          label: tApplication(`Group.Type.${value}`, value),
-        })),
+      valueFormatter: ({ value }) => t(`application:Group.Type.${value}`),
+      // type: 'singleSelect',
+      // valueOptions: () =>
+      //   Object.values(ApplicationGroupType).map((value) => ({
+      //     value,
+      //     label: t(`application:Group.Type.${value}`, value),
+      //   })),
     },
     {
       field: 'description',
-      headerName: tApplication(
-        'DataGridHeaderName.Group.Description',
-        'Description',
-      ),
+      headerName: t('application:DataGridHeaderName.Group.Description'),
       flex: 2,
     },
     {
       field: '_count.Applications',
-      headerName: tApplication(
-        'DataGridHeaderName.Group.Count.Application',
-        'Applications',
-      ),
+      headerName: t('application:DataGridHeaderName.Group.Count.Application'),
       flex: 1,
       type: 'number',
       valueGetter: (params) => params.row._count.Applications,
@@ -130,7 +122,7 @@ export const ApplicationGroupDataGrid = ({
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
-        title={tApplication('Group._')}
+        title={t('application:Group._')}
         titleTypographyProps={{
           variant: 'subtitle1',
         }}

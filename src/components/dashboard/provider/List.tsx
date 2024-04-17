@@ -38,8 +38,8 @@ const ProviderCollapseList = ({ type, input }: ProviderCollapseListProps) => {
     type: [type],
   });
 
-  const { t } = useTranslation('provider');
-  const primaryText = t(`Type.${type}`, type);
+  const { t } = useTranslation();
+  const primaryText = t(`provider:Type.${type}`, type);
 
   return (
     <CollapseList

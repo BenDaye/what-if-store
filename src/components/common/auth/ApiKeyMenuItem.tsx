@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 
 export const ApiKeyMenuItem = ({ overrides }: OverridesMenuItemProps) => {
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
   const { status } = useSession();
   return (
     <MenuItem dense {...overrides?.MenuItemProps}>
@@ -13,7 +13,7 @@ export const ApiKeyMenuItem = ({ overrides }: OverridesMenuItemProps) => {
         <ApiKeyIcon />
       </ListItemIcon>
       <ListItemText
-        primary={tAuth('ApiKey._', 'Api Key')}
+        primary={t('auth:ApiKey._')}
         primaryTypographyProps={{
           color: status === 'authenticated' ? 'text.primary' : 'text.disabled',
           noWrap: true,

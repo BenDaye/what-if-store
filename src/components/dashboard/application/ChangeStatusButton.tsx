@@ -36,16 +36,7 @@ export const ChangeStatusButton = ({
   defaultValue,
   role,
 }: ChangeStatusButtonProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationStatus } = useTranslation('application', {
-    keyPrefix: 'Status',
-  });
-  const { t: tApplicationGeneralDangerZoneChangeStatus } = useTranslation(
-    'application',
-    {
-      keyPrefix: 'General.DangerZone.ChangeStatus',
-    },
-  );
+  const { t } = useTranslation();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const {
     value: menuVisible,
@@ -61,7 +52,7 @@ export const ChangeStatusButton = ({
   const { mutateAsync: update, isPending } =
     trpc.protectedDashboardApplication.changeStatusById.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(tCommon('Updated', 'Updated')),
+      onSuccess: () => showSuccess(t('common:Updated')),
     });
 
   const onSubmit = async (status: ApplicationStatus) =>
@@ -79,7 +70,7 @@ export const ChangeStatusButton = ({
         disabled={isPending}
         {...overrides?.ButtonProps}
       >
-        {tApplicationStatus(defaultValue, defaultValue)}
+        {t(`application:Status.Text.${defaultValue}`)}
       </Button>
       {anchorRef.current && (
         <Menu
@@ -107,9 +98,8 @@ export const ChangeStatusButton = ({
               <Tooltip
                 title={
                   <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
-                    {tApplicationGeneralDangerZoneChangeStatus(
-                      `${status}.Description`,
-                      status,
+                    {t(
+                      `application.DangerZone.ChangeStatus.${status}.Description`,
                     )}
                   </Typography>
                 }
@@ -117,16 +107,14 @@ export const ChangeStatusButton = ({
                 placement="left"
               >
                 <ListItemText
-                  primary={tApplicationGeneralDangerZoneChangeStatus(
-                    `${status}.Button`,
-                    status,
+                  primary={t(
+                    `application.DangerZone.ChangeStatus.${status}.Button`,
                   )}
                   primaryTypographyProps={{
                     color: 'error',
                   }}
-                  secondary={tApplicationGeneralDangerZoneChangeStatus(
-                    `${status}.Title`,
-                    status,
+                  secondary={t(
+                    `application.DangerZone.ChangeStatus.${status}.Title`,
                   )}
                   secondaryTypographyProps={{
                     noWrap: true,

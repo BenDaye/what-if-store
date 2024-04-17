@@ -1,6 +1,10 @@
 {
-  "App Description": "假如应用商店的是 BenDaye 写的?",
-  "App Title": "应用商店 - 假如...?",
-  "Dashboard Description": "假如应用商店的是 BenDaye 写的?",
-  "Dashboard Title": "应用商店 - 假如...?"
+  "App": {
+    "Description": "假如应用商店的是 BenDaye 写的?",
+    "Title": "应用商店 - 假如...?"
+  },
+  "Dashboard": {
+    "Description": "假如应用商店的是 BenDaye 写的?",
+    "Title": "应用商店 - 假如...?"
+  }
 }

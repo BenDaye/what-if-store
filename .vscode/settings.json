@@ -66,5 +66,20 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "prisma.fileWatcher": true
+  "prisma.fileWatcher": true,
+  "i18n-ally.localesPaths": ["public/locales"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.namespace": true,
+  "i18n-ally.sourceLanguage": "en-US",
+  "i18n-ally.displayLanguage": "en-US",
+  "i18n-ally.extract.ignored": [
+    "Roboto Mono",
+    "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 320px"
+  ],
+  "i18n-ally.extract.ignoredByFiles": {
+    "src/components/dashboard/application/CopyrightSectionCard.tsx": [
+      "Copyright"
+    ],
+    "src/components/dashboard/application/ReadmeSectionCard.tsx": ["Readme"]
+  }
 }

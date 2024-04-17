@@ -1,5 +1,6 @@
 {
   "Applications": "Applications",
+  "Copy": "Copy",
   "Create": "Create",
   "Created": "Created",
   "DarkMode": {
@@ -10,9 +11,11 @@
   },
   "Dashboard": "Dashboard",
   "DataGridHeaderName": {
+    "Actions": "Actions",
     "CreatedAt": "CreatedAt",
     "UpdatedAt": "UpdatedAt"
   },
+  "Home": "Home",
   "Import": "Import",
   "Imported": "Imported",
   "Language": {
@@ -30,6 +33,7 @@
   "Reset": "Reset",
   "Settings": "Settings",
   "Submit": "Submit",
+  "UnsavedFormAlert": "Unsaved changes will be lost.",
   "Update": "Update",
   "Updated": "Updated",
   "Upload": "Upload",

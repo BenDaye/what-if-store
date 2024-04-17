@@ -19,14 +19,12 @@ export const VersionHistorySectionCard = ({
   overrides,
   defaultValues,
 }: VersionHistorySectionCardProps) => {
-  const { t: tApplicationVersion } = useTranslation('application', {
-    keyPrefix: 'Version',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationVersion('_', 'Version')}
+        title={t('application:Version._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
@@ -45,9 +43,7 @@ type VersionCardProps = OverridesCardProps & {
 };
 
 export const VersionCard = ({ overrides, version }: VersionCardProps) => {
-  const { t: tApplicationVersion } = useTranslation('application', {
-    keyPrefix: 'Version',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card {...overrides?.CardProps}>
@@ -56,13 +52,9 @@ export const VersionCard = ({ overrides, version }: VersionCardProps) => {
         titleTypographyProps={{
           letterSpacing: 1,
         }}
-        subheader={tApplicationVersion(
-          'ReleasedAt',
-          'Released at {{releaseDate}}.',
-          {
-            releaseDate: format(version.releaseDate, 'yyyy/MM/dd'),
-          },
-        )}
+        subheader={t('application:Version.ReleasedAt', {
+          releaseDate: format(version.releaseDate, 'yyyy/MM/dd'),
+        })}
         subheaderTypographyProps={{
           variant: 'subtitle2',
         }}
@@ -70,23 +62,20 @@ export const VersionCard = ({ overrides, version }: VersionCardProps) => {
           <Stack direction="row" spacing={1}>
             {version.latest && (
               <Chip
-                label={tApplicationVersion('Latest', 'Latest')}
+                label={t('application:Version.Latest')}
                 color="success"
                 variant="outlined"
               />
             )}
             {version.preview && (
               <Chip
-                label={tApplicationVersion('Preview', 'Preview')}
+                label={t('application:Version.Preview')}
                 color="warning"
                 variant="outlined"
               />
             )}
             {version.deprecated && (
-              <Chip
-                label={tApplicationVersion('Deprecated', 'Deprecated')}
-                color="error"
-              />
+              <Chip label={t('application:Version.Deprecated')} color="error" />
             )}
           </Stack>
         }

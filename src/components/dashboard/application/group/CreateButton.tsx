@@ -8,7 +8,7 @@ import { ApplicationGroupDialog } from './Dialog';
 export const ApplicationGroupCreateButton = ({
   overrides,
 }: OverridesButtonProps) => {
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
   const {
     value: groupDialogVisible,
     setTrue: openGroupDialog,
@@ -21,7 +21,7 @@ export const ApplicationGroupCreateButton = ({
         startIcon={<CreateIcon />}
         {...overrides?.ButtonProps}
       >
-        {tCommon('Create')}
+        {t('common:Create')}
       </Button>
       <ApplicationGroupDialog
         DialogProps={{

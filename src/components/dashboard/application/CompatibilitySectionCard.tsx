@@ -36,13 +36,7 @@ export const CompatibilitySectionCard = ({
   overrides,
   defaultValues,
 }: CompatibilitySectionCardProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationDeclarationCompatibility } = useTranslation(
-    'application',
-    {
-      keyPrefix: 'Declaration.Compatibility',
-    },
-  );
+  const { t } = useTranslation();
   const { handleSubmit, reset, control, formState, setValue, getValues } =
     useForm<ApplicationUpdateInputSchema>({
       defaultValues,
@@ -59,7 +53,7 @@ export const CompatibilitySectionCard = ({
   const { mutateAsync: update, isPending } =
     trpc.protectedDashboardApplication.updateById.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(tCommon('Updated', 'Updated')),
+      onSuccess: () => showSuccess(t('common:Updated')),
     });
 
   const onSubmit = async (data: ApplicationUpdateInputSchema) =>
@@ -71,17 +65,14 @@ export const CompatibilitySectionCard = ({
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (formState.isDirty) {
         event.preventDefault();
-        event.returnValue = tCommon(
-          'UnsavedFormAlert',
-          'Unsaved changes will be lost.',
-        );
+        event.returnValue = t('common:UnsavedFormAlert');
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [formState, tCommon]);
+  }, [formState, t]);
 
   const [compatibility, setCompatibility] = useState<
     Record<ApplicationPlatform, string>
@@ -136,7 +127,7 @@ export const CompatibilitySectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplicationDeclarationCompatibility('_', 'Compatibility')}
+        title={t('application:Declaration.Compatibility._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent component={List} {...overrides?.CardContentProps}>
@@ -174,9 +165,8 @@ export const CompatibilitySectionCard = ({
                     })
                   }
                   label={platform}
-                  placeholder={tApplicationDeclarationCompatibility(
-                    'Requirement',
-                    'Requirement',
+                  placeholder={t(
+                    'application.Declaration.Compatibility.Requirement',
                   )}
                   disabled={!getValues('platforms')?.includes(platform)}
                   size="small"
@@ -220,7 +210,7 @@ export const CompatibilitySectionCard = ({
           onClick={() => reset(defaultValues, { keepDefaultValues: false })}
           disabled={isPending || !formState.isDirty}
         >
-          {tCommon('Reset', 'Reset')}
+          {t('common:Reset')}
         </Button>
         <LoadingButton
           size="small"
@@ -229,7 +219,7 @@ export const CompatibilitySectionCard = ({
           disabled={!formState.isDirty}
           loading={isPending}
         >
-          {tCommon('Submit', 'Submit')}
+          {t('common:Submit')}
         </LoadingButton>
       </CardActions>
     </Card>

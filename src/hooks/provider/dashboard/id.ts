@@ -38,17 +38,16 @@ export const useDashboardProvider = (id: IdSchema) => {
   });
 
   const { showWarning, showSuccess, showError } = useNotice();
-  const { t: tError } = useTranslation('errorMessage');
-  const { t: tProvider } = useTranslation('provider');
+  const { t } = useTranslation();
   useEffect(() => {
     if (!isError) return;
-    showWarning(tError(error.message));
-  }, [isError, error, showWarning, tError]);
+    showWarning(t(`errorMessage:${error.message}`));
+  }, [isError, error, showWarning, t]);
 
   const { mutateAsync: update } =
     trpc.protectedDashboardProvider.updateById.useMutation({
       onSuccess: () => {
-        showSuccess(tProvider('Profile.Updated'));
+        showSuccess(t('user:Profile.Updated'));
         refetch();
       },
       onError: (err) => showError(err.message),

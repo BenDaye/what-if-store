@@ -15,7 +15,7 @@ import { DashboardSettingsIconButton } from './settings/SettingsIconButton';
 type DashboardNavDrawerProps = OverridesDrawerProps;
 export const DashboardNavDrawer = ({ overrides }: DashboardNavDrawerProps) => {
   const { pathname, push } = useRouter();
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
   return (
     <Drawer variant="permanent" {...overrides?.DrawerProps}>
       <Box
@@ -32,31 +32,31 @@ export const DashboardNavDrawer = ({ overrides }: DashboardNavDrawerProps) => {
         }}
       >
         <IconButtonWithTooltip
-          title={tCommon('Dashboard')}
+          title={t('common:Dashboard')}
           icon={<DashboardIcon />}
           onClick={() => push('/dashboard')}
           active={pathname === '/dashboard' || pathname === '/dashboard/'}
         />
         <IconButtonWithTooltip
-          title={tCommon('Applications')}
+          title={t('common:Applications')}
           icon={<ApplicationsIcon />}
           onClick={() => push('/dashboard/application')}
           active={pathname.startsWith('/dashboard/application')}
         />
         <IconButtonWithTooltip
-          title={tCommon('Providers')}
+          title={t('common:Providers')}
           icon={<ProvidersIcon />}
           onClick={() => push('/dashboard/provider')}
           active={pathname.startsWith('/dashboard/provider')}
         />
         <IconButtonWithTooltip
-          title={tCommon('Users')}
+          title={t('common:Users')}
           icon={<UsersIcon />}
           onClick={() => push('/dashboard/user')}
           active={pathname.startsWith('/dashboard/user')}
         />
         <IconButtonWithTooltip
-          title={tCommon('Upload')}
+          title={t('common:Upload')}
           icon={<UploadIcon />}
           onClick={() => push('/dashboard/upload')}
           active={pathname.startsWith('/dashboard/upload')}

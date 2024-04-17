@@ -58,8 +58,7 @@ export const ApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
 };
 
 const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tAuthApiKey } = useTranslation('auth', { keyPrefix: 'ApiKey' });
+  const { t } = useTranslation();
   const {
     router: { isFetching },
     items,
@@ -87,24 +86,24 @@ const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     },
     {
       field: 'key',
-      headerName: tAuthApiKey('DataGridHeaderName.Key', 'Key'),
+      headerName: t('auth:ApiKey.DataGridHeaderName.Key'),
       flex: 4,
     },
     {
       field: 'remark',
-      headerName: tAuthApiKey('DataGridHeaderName.Remark', 'Remark'),
+      headerName: t('auth:ApiKey.DataGridHeaderName.Remark'),
       flex: 1,
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
       headerAlign: 'right',
       align: 'right',
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
       headerAlign: 'right',
       align: 'right',
@@ -112,13 +111,13 @@ const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     {
       field: 'actions',
       type: 'actions',
-      headerName: tCommon('DataGridHeaderName.Actions', 'Actions'),
+      headerName: t('common:DataGridHeaderName.Actions'),
       headerAlign: 'right',
       align: 'right',
       getActions: (params: GridRowParams) => [
         <GridActionsCellItem
           key="delete"
-          label={tCommon('Remove')}
+          label={t('common:Remove')}
           icon={<RemoveIcon />}
           showInMenu={false}
           onClick={() => remove(params.row.id)}
@@ -175,8 +174,7 @@ const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
 };
 
 const DashboardApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tAuthApiKey } = useTranslation('auth', { keyPrefix: 'ApiKey' });
+  const { t } = useTranslation();
   const {
     router: { isFetching },
     items,
@@ -204,25 +202,25 @@ const DashboardApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     },
     {
       field: 'key',
-      headerName: tAuthApiKey('DataGridHeaderName.Key', 'Key'),
+      headerName: t('auth:ApiKey.DataGridHeaderName.Key'),
       flex: 4,
       valueFormatter: () => `********-****-****-****-************`,
     },
     {
       field: 'remark',
-      headerName: tAuthApiKey('DataGridHeaderName.Remark', 'Remark'),
+      headerName: t('auth:ApiKey.DataGridHeaderName.Remark'),
       flex: 1,
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
       headerAlign: 'right',
       align: 'right',
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
       headerAlign: 'right',
       align: 'right',
@@ -230,13 +228,13 @@ const DashboardApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     {
       field: 'actions',
       type: 'actions',
-      headerName: tCommon('DataGridHeaderName.Actions', 'Actions'),
+      headerName: t('common:DataGridHeaderName.Actions'),
       headerAlign: 'right',
       align: 'right',
       getActions: (params: GridRowParams) => [
         <GridActionsCellItem
           key="delete"
-          label={tCommon('Remove')}
+          label={t('common:Remove')}
           icon={<RemoveIcon />}
           showInMenu={false}
           onClick={() => remove(params.row.id)}

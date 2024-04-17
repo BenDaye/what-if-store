@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 
 export const SignOutMenuItem = ({ overrides }: OverridesMenuItemProps) => {
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
   const { status } = useSession();
   const { signOut } = useAuth();
   return (
@@ -15,7 +15,7 @@ export const SignOutMenuItem = ({ overrides }: OverridesMenuItemProps) => {
         <SignOutIcon />
       </ListItemIcon>
       <ListItemText
-        primary={tAuth('SignOut._')}
+        primary={t('auth:SignOut._')}
         primaryTypographyProps={{
           color: status === 'authenticated' ? 'text.primary' : 'text.disabled',
           noWrap: true,

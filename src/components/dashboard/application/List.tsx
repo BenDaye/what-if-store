@@ -44,8 +44,8 @@ const ApplicationCollapseList = ({
     category: [category],
   });
 
-  const { t } = useTranslation('application');
-  const primaryText = t(`Category.${category}`, category);
+  const { t } = useTranslation();
+  const primaryText = t(`application:Category.Name.${category}`);
 
   return (
     <CollapseList

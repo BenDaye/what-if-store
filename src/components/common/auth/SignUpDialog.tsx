@@ -49,7 +49,7 @@ export const SignUpDialog = ({
   const { signIn } = useAuth();
   const { showError, showSuccess, showWarning } = useNotice();
   const { status } = useSession();
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
   const { handleSubmit, control, reset } = useForm<SignUpForm>({
     defaultValues: {
       username: '',
@@ -63,7 +63,7 @@ export const SignUpDialog = ({
   const { mutateAsync: signUp } = trpc.publicAppAuth.signUp.useMutation({
     onError: (err) => showError(err.message),
     onSuccess: () => {
-      showSuccess(tAuth('SignUp.Succeeded'));
+      showSuccess(t('auth:SignUp.Succeeded'));
       reset();
       DialogProps.onClose?.({}, 'backdropClick');
       signIn();
@@ -73,12 +73,12 @@ export const SignUpDialog = ({
   const onSubmit = useCallback(
     async (data: SignUpForm) => {
       if (disableSignUp) {
-        showWarning(tAuth('SignUp.Disabled'));
+        showWarning(t('auth:SignUp.Disabled'));
         return;
       }
       await signUp(data).catch(() => null);
     },
-    [disableSignUp, signUp, showWarning, tAuth],
+    [disableSignUp, signUp, showWarning, t],
   );
 
   const onClose = useCallback(() => {
@@ -92,8 +92,8 @@ export const SignUpDialog = ({
         <AppBar elevation={0} {...overrides?.AppBarProps}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
             <Typography variant="subtitle1">
-              {tAuth('SignUp._')}
-              {disableSignUp && ` (${tAuth('SignUp.Disabled')})`}
+              {t('auth:SignUp._')}
+              {disableSignUp && ` (${t('auth:SignUp.Disabled')})`}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <IconButton
@@ -116,8 +116,8 @@ export const SignUpDialog = ({
                 onChange={onChange}
                 error={!!error}
                 helperText={error?.message ?? ' '}
-                label={tAuth('Account')}
-                placeholder={tAuth('Account')}
+                label={t('auth:Account')}
+                placeholder={t('auth:Account')}
                 autoFocus
                 required
                 disabled={disableSignUp}
@@ -129,21 +129,17 @@ export const SignUpDialog = ({
             name="password"
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label={tAuth('Password')}
+                label={t('auth:Password')}
                 value={value}
                 onChange={onChange}
                 error={!!error}
                 helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
-                placeholder={tAuth('Password')}
+                placeholder={t('auth:Password')}
                 required
                 InputProps={{
                   endAdornment: (
-                    <IconButton
-                      aria-label="Toggle Password visibility"
-                      onClick={toggleShowPassword}
-                      edge="end"
-                    >
+                    <IconButton onClick={toggleShowPassword} edge="end">
                       {showPassword ? (
                         <Visibility color="primary" />
                       ) : (
@@ -161,21 +157,17 @@ export const SignUpDialog = ({
             name="confirmPassword"
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label={tAuth('ConfirmPassword')}
+                label={t('auth:ConfirmPassword')}
                 value={value}
                 onChange={onChange}
                 error={!!error}
                 helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
-                placeholder={tAuth('Confirm Password')}
+                placeholder={t('auth:ConfirmPassword')}
                 required
                 InputProps={{
                   endAdornment: (
-                    <IconButton
-                      aria-label="Toggle Password visibility"
-                      onClick={toggleShowPassword}
-                      edge="end"
-                    >
+                    <IconButton onClick={toggleShowPassword} edge="end">
                       {showPassword ? (
                         <Visibility color="primary" />
                       ) : (
@@ -201,7 +193,7 @@ export const SignUpDialog = ({
             disabled={status === 'loading'}
             onClick={() => handleSubmit(onSubmit)()}
           >
-            {tAuth('SignUp._')}
+            {t('auth:SignUp._')}
           </LoadingButton>
         </DialogActions>
       </Dialog>

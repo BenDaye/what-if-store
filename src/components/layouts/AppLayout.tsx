@@ -20,7 +20,7 @@ export const AppLayout = ({
   hasSecondaryDrawer = false,
   children,
 }: AppLayoutProps): ReactElement<AppLayoutProps> => {
-  const { t: tMeta } = useTranslation('meta');
+  const { t } = useTranslation();
   const { title, description } = useHeadMeta('App');
   const [primaryDrawerWidth] = useLocalStorage<number>(
     APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
@@ -49,10 +49,10 @@ export const AppLayout = ({
   return (
     <AppProvider>
       <Head key="app">
-        <title>{tMeta('App Title', title ?? 'App Title')}</title>
+        <title>{t('meta:App.Title', title ?? 'App Title')}</title>
         <meta
           name="description"
-          content={tMeta('App Description', description ?? 'App Description')}
+          content={t('meta:App.Description', description ?? 'App Description')}
         />
       </Head>
       <Box

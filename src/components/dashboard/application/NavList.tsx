@@ -45,110 +45,108 @@ export const NavList = ({
   overrides,
   divider = true,
 }: NavListProps) => {
-  const { t: tApplicationNav } = useTranslation('application', {
-    keyPrefix: 'Nav',
-  });
+  const { t } = useTranslation();
   return (
     <List dense {...overrides?.ListProps}>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix=""
-        text={tApplicationNav('General', 'General')}
+        text={t('application:Nav.General')}
         icon={<GeneralIcon />}
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
       <ListSubheader {...overrides?.ListSubheaderProps}>
-        {tApplicationNav('Review', 'Review')}
+        {t('application:Nav.Review')}
       </ListSubheader>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/media"
-        text={tApplicationNav('Media', 'Media')}
+        text={t('application:Nav.Media')}
         icon={<MediaIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/version"
-        text={tApplicationNav('Version', 'Version')}
+        text={t('application:Nav.Version')}
         icon={<VersionIcon />}
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
       <ListSubheader {...overrides?.ListSubheaderProps}>
-        {tApplicationNav('Declaration', 'Declaration')}
+        {t('application:Nav.Declaration')}
       </ListSubheader>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/compatibility"
-        text={tApplicationNav('Compatibility', 'Compatibility')}
+        text={t('application:Nav.Compatibility')}
         icon={<CompatibilityIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/privacy_policy"
-        text={tApplicationNav('PrivacyPolicy', 'Privacy Policy')}
+        text={t('application:Nav.PrivacyPolicy')}
         icon={<PrivacyPolicyIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/terms_of_use"
-        text={tApplicationNav('TermsOfUse', 'Terms Of Use')}
+        text={t('application:Nav.TermsOfUse')}
         icon={<TermsOfUseIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/copyright"
-        text={tApplicationNav('Copyright', 'Copyright')}
+        text={t('application:Nav.Copyright')}
         icon={<CopyrightIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/readme"
-        text={tApplicationNav('Readme', 'Readme')}
+        text={t('application:Nav.Readme')}
         icon={<ReadmeIcon />}
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
       <ListSubheader {...overrides?.ListSubheaderProps}>
-        {tApplicationNav('Relation', 'Relation')}
+        {t('application:Nav.Relation')}
       </ListSubheader>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/follow"
-        text={tApplicationNav('Follow', 'Follow')}
+        text={t('application:Nav.Follow')}
         icon={<FollowIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/own"
-        text={tApplicationNav('Own', 'Own')}
+        text={t('application:Nav.Own')}
         icon={<OwnIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/collection"
-        text={tApplicationNav('Collection', 'Collection')}
+        text={t('application:Nav.Collection')}
         icon={<CollectionIcon />}
         {...overrides?.ListItemButtonProps}
       />
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/group"
-        text={tApplicationNav('Group', 'Group')}
+        text={t('application:Nav.Group')}
         icon={<GroupIcon />}
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
       <ListSubheader {...overrides?.ListSubheaderProps}>
-        {tApplicationNav('Stat', 'Stat')}
+        {t('application:Nav.Stat')}
       </ListSubheader>
     </List>
   );

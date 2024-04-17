@@ -27,16 +27,15 @@ export const useAppProviderMy = () => {
   });
 
   const { showWarning, showSuccess, showError } = useNotice();
-  const { t: tError } = useTranslation('errorMessage');
-  const { t: tProvider } = useTranslation('user');
+  const { t } = useTranslation();
   useEffect(() => {
     if (!isError) return;
-    showWarning(tError(error.message));
-  }, [isError, error, showWarning, tError]);
+    showWarning(t(`errorMessage:${error.message}`));
+  }, [isError, error, showWarning, t]);
 
   const { mutateAsync: update } = trpc.protectedAppProvider.update.useMutation({
     onSuccess: async (response) => {
-      showSuccess(tProvider('Profile.Updated'));
+      showSuccess(t('user:Profile.Updated'));
       await updateSession(response);
       refetch();
     },

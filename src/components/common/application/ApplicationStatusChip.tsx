@@ -13,9 +13,7 @@ export const ApplicationStatusChip = ({
   overrides,
   status,
 }: ApplicationStatusChipProps) => {
-  const { t: tApplicationStatus } = useTranslation('application', {
-    keyPrefix: 'Status',
-  });
+  const { t } = useTranslation();
   const color = useMemo<ChipProps['color']>(() => {
     switch (status) {
       case ApplicationStatus.Draft:
@@ -44,7 +42,7 @@ export const ApplicationStatusChip = ({
   }, [status]);
   return (
     <Chip
-      label={tApplicationStatus(status)}
+      label={t(`application:Status.Text.${status}`)}
       size="small"
       color={color}
       variant="outlined"

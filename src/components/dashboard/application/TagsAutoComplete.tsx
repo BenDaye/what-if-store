@@ -34,9 +34,7 @@ export const TagsAutoComplete = ({
   error,
   disabled = false,
 }: TagsAutoCompleteProps) => {
-  const { t: tApplicationGeneral } = useTranslation('application', {
-    keyPrefix: 'General',
-  });
+  const { t } = useTranslation();
 
   const { data } = useDashboardApplicationTags();
 
@@ -83,7 +81,7 @@ export const TagsAutoComplete = ({
         <TextField
           {...params}
           error={!!error}
-          label={tApplicationGeneral('Tags', 'Tags')}
+          label={t('application:General.Tags')}
           helperText={error?.message ?? ' '}
           disabled={disabled}
           {...overrides?.TextFieldProps}

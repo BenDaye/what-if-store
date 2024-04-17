@@ -21,9 +21,7 @@ export const FollowApplicationButton = ({
   followers,
   showText = false,
 }: FollowApplicationButtonProps) => {
-  const { t: tApplicationFollow } = useTranslation('application', {
-    keyPrefix: 'Follow',
-  });
+  const { t } = useTranslation();
 
   const { status, data: session } = useSession();
   const followed = useMemo(
@@ -56,7 +54,9 @@ export const FollowApplicationButton = ({
       onClick={onClick}
       {...overrides?.ButtonProps}
     >
-      {tApplicationFollow(followed ? 'Followed' : 'Follow')}
+      {followed
+        ? t('application:Follow.Followed')
+        : t('application:Follow.Follow')}
     </Button>
   ) : (
     <IconButton

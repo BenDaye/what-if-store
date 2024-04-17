@@ -23,15 +23,15 @@ type UpdateLocaleDialogProps = DialogProps;
 export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
   const router = useRouter();
   const { showSuccess } = useNotice();
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
 
   const updateLocale = useCallback(
     async (locale: string) => {
       const { pathname, asPath, query } = router;
       await router.push({ pathname, query }, asPath, { locale });
-      showSuccess(tCommon('Language.Updated'));
+      showSuccess(t('common:Language.Updated'));
     },
-    [router, showSuccess, tCommon],
+    [router, showSuccess, t],
   );
 
   return (
@@ -39,7 +39,7 @@ export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
       <AppBar elevation={0}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
           <Typography variant="subtitle1">
-            {tCommon('Language.Update')}
+            {t('common:Language.Update')}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
@@ -62,14 +62,14 @@ export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
               onClick={() => updateLocale(locale)}
             >
               <ListItemText
-                primary={tCommon(`Language.${locale}`, {
+                primary={t(`common:Language.${locale}`, {
                   defaultValue: locale,
                 })}
               />
               {locale === router.locale && (
                 <Chip
                   size="small"
-                  label={tCommon('Language.Activated')}
+                  label={t('common:Language.Activated')}
                   sx={{ borderRadius: 1 }}
                   color="primary"
                   variant="outlined"

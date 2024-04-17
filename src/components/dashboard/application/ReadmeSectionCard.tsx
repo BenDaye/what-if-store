@@ -24,9 +24,7 @@ export const ReadmeSectionCard = ({
   overrides,
   defaultValues: { id: applicationId, readme: id },
 }: ReadmeSectionCardProps) => {
-  const { t: tApplicationReadme } = useTranslation('application', {
-    keyPrefix: 'Readme',
-  });
+  const { t } = useTranslation();
 
   const {
     data,
@@ -50,7 +48,7 @@ export const ReadmeSectionCard = ({
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationReadme('_', 'Readme')}
+        title={t('application:Readme._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

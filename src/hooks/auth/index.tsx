@@ -40,13 +40,13 @@ export const AuthProvider = ({
   const { push } = useRouter();
   const { update: updateSession } = useSession();
   const { showError, showSuccess, showWarning } = useNotice();
-  const { t } = useTranslation('auth');
+  const { t } = useTranslation();
   const signOut = async () => {
     try {
       await signOutNextAuth({ redirect: false });
       await updateSession();
       resetTRPCClient();
-      showSuccess(t('SignOut.Succeeded'), {
+      showSuccess(t('auth:SignOut.Succeeded'), {
         autoHideDuration: 1000,
         onClose: () => push('/app'),
       });
@@ -70,13 +70,13 @@ export const AuthProvider = ({
   } = useBoolean(false);
 
   const signIn = useCallback(() => {
-    if (disableSignIn) return showWarning(t('SignIn.Disabled'));
+    if (disableSignIn) return showWarning(t('auth:SignIn.Disabled'));
     closeSignUpDialog();
     openSignInDialog();
   }, [closeSignUpDialog, disableSignIn, openSignInDialog, showWarning, t]);
 
   const signUp = useCallback(() => {
-    if (disableSignUp) return showWarning(t('SignUp.Disabled'));
+    if (disableSignUp) return showWarning(t('auth:SignUp.Disabled'));
     closeSignInDialog();
     openSignUpDialog();
   }, [closeSignInDialog, disableSignUp, openSignUpDialog, showWarning, t]);

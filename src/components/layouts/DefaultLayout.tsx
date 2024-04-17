@@ -7,19 +7,19 @@ import { PropsWithChildren, ReactElement } from 'react';
 export const DefaultLayout = ({
   children,
 }: PropsWithChildren): ReactElement<PropsWithChildren> => {
-  const { t: tMeta } = useTranslation('meta');
+  const { t } = useTranslation();
   const { title, description } = useHeadMeta('Default');
   return (
     <>
       <Head key="default-layout">
         <title>
-          {tMeta('App Title', {
+          {t('meta:App.Title', {
             defaultValue: title ?? 'App Title',
           })}
         </title>
         <meta
           name="description"
-          content={tMeta('App Description', description ?? 'App Description')}
+          content={t('meta:App.Description', description ?? 'App Description')}
         />
       </Head>
       <Container

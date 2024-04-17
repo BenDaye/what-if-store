@@ -58,10 +58,7 @@ export const UpdateApplicationGroupDialog = ({
   DialogProps,
   defaultValues,
 }: ApplicationGroupDialogProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationGroup } = useTranslation('application', {
-    keyPrefix: 'Group',
-  });
+  const { t } = useTranslation();
 
   const { handleSubmit, control, reset, setValue, formState } =
     useForm<ApplicationGroupUpdateInputSchema>({
@@ -79,7 +76,7 @@ export const UpdateApplicationGroupDialog = ({
     trpc.protectedDashboardApplicationGroup.updateById.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: () => {
-        showSuccess(tApplicationGroup('Updated'));
+        showSuccess(t('common:Updated'));
         DialogProps.onClose?.({}, 'backdropClick');
       },
     });
@@ -100,9 +97,7 @@ export const UpdateApplicationGroupDialog = ({
     <Dialog onClose={onClose} {...DialogProps}>
       <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">
-            {tApplicationGroup('Update')}
-          </Typography>
+          <Typography variant="subtitle1">{t('common:Update')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"
@@ -128,8 +123,8 @@ export const UpdateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Name')}
-              placeholder={tApplicationGroup('Form.Name')}
+              label={t('application:Group.Form.Name')}
+              placeholder={t('application:Group.Form.Name')}
               required
               disabled={isPending}
             />
@@ -148,8 +143,8 @@ export const UpdateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Description')}
-              placeholder={tApplicationGroup('Form.Description')}
+              label={t('application:Group.Form.Description')}
+              placeholder={t('application:Group.Form.Description')}
               disabled={isPending}
             />
           )}
@@ -167,15 +162,15 @@ export const UpdateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Type')}
-              placeholder={tApplicationGroup('Form.Type')}
+              label={t('application:Group.Form.Type')}
+              placeholder={t('application:Group.Form.Type')}
               required
               select
               disabled={isPending}
             >
               {Object.values(ApplicationGroupType).map((type) => (
                 <MenuItem key={type} value={type}>
-                  {tApplicationGroup(`Type.${type}`, type)}
+                  {t(`application:Group.Type.${type}`, type)}
                 </MenuItem>
               ))}
             </TextField>
@@ -194,8 +189,8 @@ export const UpdateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Priority')}
-              placeholder={tApplicationGroup('Form.Priority')}
+              label={t('application:Group.Form.Priority')}
+              placeholder={t('application:Group.Form.Priority')}
               type="number"
               required
               disabled={isPending}
@@ -222,7 +217,7 @@ export const UpdateApplicationGroupDialog = ({
           loading={isPending}
           onClick={() => handleSubmit(onSubmit)()}
         >
-          {tCommon('Submit')}
+          {t('common:Submit')}
         </LoadingButton>
       </DialogActions>
     </Dialog>
@@ -242,10 +237,7 @@ export const CreateApplicationGroupDialog = ({
 }: Omit<ApplicationGroupDialogProps, 'defaultValues'> & {
   defaultValues?: ApplicationGroupCreateInputSchema;
 }) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationGroup } = useTranslation('application', {
-    keyPrefix: 'Group.Form',
-  });
+  const { t } = useTranslation();
 
   const { handleSubmit, control, reset, setValue, formState } =
     useForm<ApplicationGroupCreateInputSchema>({
@@ -259,7 +251,7 @@ export const CreateApplicationGroupDialog = ({
     trpc.protectedDashboardApplicationGroup.create.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: () => {
-        showSuccess(tApplicationGroup('Created'));
+        showSuccess(t('common:Created'));
         DialogProps.onClose?.({}, 'backdropClick');
       },
     });
@@ -280,9 +272,7 @@ export const CreateApplicationGroupDialog = ({
     <Dialog onClose={onClose} {...DialogProps}>
       <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">
-            {tApplicationGroup('Create')}
-          </Typography>
+          <Typography variant="subtitle1">{t('common:Create')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"
@@ -309,8 +299,8 @@ export const CreateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Name')}
-              placeholder={tApplicationGroup('Form.Name')}
+              label={t('application:Group.Form.Name')}
+              placeholder={t('application:Group.Form.Name')}
               required
               disabled={isPending}
             />
@@ -329,8 +319,8 @@ export const CreateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Description')}
-              placeholder={tApplicationGroup('Form.Description')}
+              label={t('application:Group.Form.Description')}
+              placeholder={t('application:Group.Form.Description')}
               disabled={isPending}
             />
           )}
@@ -348,15 +338,15 @@ export const CreateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Type')}
-              placeholder={tApplicationGroup('Form.Type')}
+              label={t('application:Group.Form.Type')}
+              placeholder={t('application:Group.Form.Type')}
               required
               select
               disabled={isPending}
             >
               {Object.values(ApplicationGroupType).map((type) => (
                 <MenuItem key={type} value={type}>
-                  {tApplicationGroup(`Type.${type}`, type)}
+                  {t(`application:Group.Type.${type}`, type)}
                 </MenuItem>
               ))}
             </TextField>
@@ -375,8 +365,8 @@ export const CreateApplicationGroupDialog = ({
               onBlur={onBlur}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tApplicationGroup('Form.Priority')}
-              placeholder={tApplicationGroup('Form.Priority')}
+              label={t('application:Group.Form.Priority')}
+              placeholder={t('application:Group.Form.Priority')}
               type="number"
               required
               disabled={isPending}
@@ -403,7 +393,7 @@ export const CreateApplicationGroupDialog = ({
           loading={isPending}
           onClick={() => handleSubmit(onSubmit)()}
         >
-          {tCommon('Submit')}
+          {t('common:Submit')}
         </LoadingButton>
       </DialogActions>
     </Dialog>

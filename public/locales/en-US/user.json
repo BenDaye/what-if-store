@@ -3,6 +3,8 @@
     "Name": "User Nickname"
   },
   "Profile": {
+    "Avatar": "Avatar",
+    "Bio": "Bio",
     "Email": "Email",
     "Nickname": "Nickname",
     "Update": "Update Profile",

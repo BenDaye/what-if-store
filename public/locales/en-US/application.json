@@ -43,6 +43,9 @@
   "Collection": {
     "_": "Application Collections"
   },
+  "Copyright": {
+    "_": "Copyright"
+  },
   "DataGridHeaderName": {
     "Category": "Category",
     "Collection": {
@@ -126,6 +129,12 @@
     "_": "General"
   },
   "Group": {
+    "Form": {
+      "Description": "Description",
+      "Name": "Name",
+      "Priority": "Priority",
+      "Type": "Type"
+    },
     "Name": {
       "MostFollowersOfAllTime": "MostFollowersOfAllTime",
       "MostFollowersOfThisMonth": "MostFollowersOfThisMonth",
@@ -175,9 +184,15 @@
     "Owned": "Owned",
     "_": "Application Owners"
   },
+  "Platform": {
+    "Platforms": "Platforms"
+  },
   "PrivacyPolicy": {
     "Placeholder": "Enter this application privacy policy here...",
     "_": "Privacy Policy"
+  },
+  "Readme": {
+    "_": "Readme"
   },
   "Status": {
     "Text": {

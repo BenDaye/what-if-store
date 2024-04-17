@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 type SessionMenuItemProps = OverridesMenuItemProps;
 
 export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
   const { data: session, status } = useSession();
   const { signIn } = useAuth();
 
@@ -45,7 +45,7 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
       <ListItemText
         primary={
           status !== 'authenticated'
-            ? tAuth('Unauthenticated')
+            ? t('auth:Unauthenticated')
             : session?.user?.nickname ?? ''
         }
         primaryTypographyProps={{

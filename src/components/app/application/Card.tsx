@@ -68,9 +68,7 @@ export const SimpleApplicationCard = ({
   const { data: application } = useAppApplication(data.id);
   const { data: provider } = useAppUser(data.providerId);
 
-  const { t: tApplicationCategoryName } = useTranslation('application', {
-    keyPrefix: 'Category.Name',
-  });
+  const { t } = useTranslation();
   const secondary = useMemo((): ReactNode => {
     switch (secondaryInfo) {
       case 'providerName':
@@ -78,13 +76,13 @@ export const SimpleApplicationCard = ({
       case 'latestVersionText':
         return application.latestVersionText;
       case 'category':
-        return tApplicationCategoryName(application.category);
+        return t(`application:Category.Name.${application.category}`);
       case 'description':
         return application.description;
       default:
         return application.description;
     }
-  }, [secondaryInfo, application, provider, tApplicationCategoryName]);
+  }, [secondaryInfo, application, provider, t]);
 
   const { push } = useRouter();
 
@@ -137,9 +135,7 @@ export const DetailedApplicationCard = ({
   const { data: application } = useAppApplication(data.id);
   const { data: provider } = useAppUser(data.providerId);
 
-  const { t: tApplicationCategoryName } = useTranslation('application', {
-    keyPrefix: 'Category.Name',
-  });
+  const { t } = useTranslation();
   const secondary = useMemo((): ReactNode => {
     switch (secondaryInfo) {
       case 'providerName':
@@ -147,13 +143,13 @@ export const DetailedApplicationCard = ({
       case 'latestVersionText':
         return application.latestVersionText;
       case 'category':
-        return tApplicationCategoryName(application.category);
+        return t(`application:Category.Name.${application.category}`);
       case 'description':
         return application.description;
       default:
         return application.description;
     }
-  }, [secondaryInfo, application, provider, tApplicationCategoryName]);
+  }, [secondaryInfo, application, provider, t]);
 
   return (
     <Card {...overrides?.CardProps}>

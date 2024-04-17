@@ -21,7 +21,7 @@ import { AppSettingsIconButton } from './settings/SettingsIconButton';
 type AppNavDrawerProps = OverridesDrawerProps;
 export const AppNavDrawer = ({ overrides }: AppNavDrawerProps) => {
   const { pathname, push } = useRouter();
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
   const [primaryDrawerWidth] = useLocalStorage<number>(
     APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
     APP_PRIMARY_DRAWER_WIDTH,
@@ -57,13 +57,13 @@ export const AppNavDrawer = ({ overrides }: AppNavDrawerProps) => {
           }}
         >
           <IconButtonWithTooltip
-            title={tCommon('Home')}
+            title={t('common:Home')}
             icon={<HomeIcon />}
             onClick={() => push('/app')}
             active={pathname === '/app' || pathname === '/app/'}
           />
           <IconButtonWithTooltip
-            title={tCommon('Applications')}
+            title={t('common:Applications')}
             icon={<ApplicationsIcon />}
             onClick={() => push('/app/application')}
             active={pathname.startsWith('/app/application')}

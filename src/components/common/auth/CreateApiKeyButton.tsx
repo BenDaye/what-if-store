@@ -29,7 +29,7 @@ import { useBoolean } from 'usehooks-ts';
 
 type CreateApiKeyButtonProps = OverridesButtonProps;
 export const CreateApiKeyButton = ({ overrides }: CreateApiKeyButtonProps) => {
-  const { t: tAuthApiKey } = useTranslation('auth', { keyPrefix: 'ApiKey' });
+  const { t } = useTranslation();
   const {
     value: apiKeyDialogVisible,
     setTrue: openApiKeyDialog,
@@ -42,7 +42,7 @@ export const CreateApiKeyButton = ({ overrides }: CreateApiKeyButtonProps) => {
         disabled={apiKeyDialogVisible}
         {...overrides?.ButtonProps}
       >
-        {tAuthApiKey('Create', 'Create API Key')}
+        {t('auth:ApiKey.Create')}
       </Button>
       <CreateApiKeyDialog
         DialogProps={{
@@ -59,8 +59,7 @@ export const CreateApiKeyDialog = ({
   DialogProps,
 }: OverridesDialogProps) => {
   const { showError, showSuccess } = useNotice();
-  const { t: tCommon } = useTranslation('common');
-  const { t: tAuthApiKey } = useTranslation('auth', { keyPrefix: 'ApiKey' });
+  const { t } = useTranslation();
 
   const { data: session } = useSession();
   const isUser = useMemo(
@@ -95,7 +94,7 @@ export const CreateApiKeyDialog = ({
   } = trpc.protectedAppUserApiKey.create.useMutation({
     onError: (err) => showError(err.message),
     onSuccess: (res) => {
-      showSuccess(tCommon('Created'), { onClose: () => copy(res.key) });
+      showSuccess(t('auth:ApiKey.Created'), { onClose: () => copy(res.key) });
     },
   });
 
@@ -108,7 +107,7 @@ export const CreateApiKeyDialog = ({
   } = trpc.protectedDashboardUserApiKey.create.useMutation({
     onError: (err) => showError(err.message),
     onSuccess: (res) => {
-      showSuccess(tCommon('Created'), { onClose: () => copy(res.key) });
+      showSuccess(t('auth:ApiKey.Created'), { onClose: () => copy(res.key) });
     },
   });
 
@@ -134,9 +133,7 @@ export const CreateApiKeyDialog = ({
     <Dialog onClose={onClose} {...DialogProps}>
       <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">
-            {tAuthApiKey('Create', 'Create API Key')}
-          </Typography>
+          <Typography variant="subtitle1">{t('auth:ApiKey.Create')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"
@@ -164,7 +161,7 @@ export const CreateApiKeyDialog = ({
               {adminData.key}
             </Typography>
             <Typography variant="caption" color="error">
-              {tAuthApiKey('SaveThisKey')}
+              {t('auth:ApiKey.SaveThisKey')}
             </Typography>
           </>
         ) : isUserSuccess ? (
@@ -182,7 +179,7 @@ export const CreateApiKeyDialog = ({
               {userData.key}
             </Typography>
             <Typography variant="caption" color="error">
-              {tAuthApiKey('SaveThisKey')}
+              {t('auth:ApiKey.SaveThisKey')}
             </Typography>
           </>
         ) : (
@@ -195,8 +192,8 @@ export const CreateApiKeyDialog = ({
                 onChange={onChange}
                 error={!!error}
                 helperText={error?.message ?? ' '}
-                label={tAuthApiKey('Remark')}
-                placeholder={tAuthApiKey('Remark')}
+                label={t('auth:ApiKey.Remark')}
+                placeholder={t('auth:ApiKey.Remark')}
                 autoFocus
               />
             )}
@@ -207,11 +204,11 @@ export const CreateApiKeyDialog = ({
         <Box sx={{ flexGrow: 1 }}></Box>
         {isAdminSuccess ? (
           <Button color="success" onClick={() => copy(adminData.key)}>
-            {tCommon('Copy')}
+            {t('common:Copy')}
           </Button>
         ) : isUserSuccess ? (
           <Button color="success" onClick={() => copy(userData.key)}>
-            {tCommon('Copy')}
+            {t('common:Copy')}
           </Button>
         ) : (
           <LoadingButton
@@ -219,7 +216,7 @@ export const CreateApiKeyDialog = ({
             disabled={!isUser && !isAdmin}
             onClick={() => handleSubmit(onSubmit)()}
           >
-            {tCommon('Submit')}
+            {t('common:Submit')}
           </LoadingButton>
         )}
       </DialogActions>

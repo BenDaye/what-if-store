@@ -20,7 +20,7 @@ export const AuthApiKeyDialog = ({
   overrides,
   DialogProps,
 }: AuthApiKeyDialogProps) => {
-  const { t: tAuthApiKey } = useTranslation('auth', { keyPrefix: 'ApiKey' });
+  const { t } = useTranslation();
 
   const onClose = useCallback(() => {
     DialogProps?.onClose?.({}, 'backdropClick');
@@ -30,7 +30,7 @@ export const AuthApiKeyDialog = ({
     <Dialog onClose={onClose} {...DialogProps}>
       <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">{tAuthApiKey('_')}</Typography>
+          <Typography variant="subtitle1">{t('auth:ApiKey._')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton edge="end" onClick={onClose} color="inherit">
             <CloseIcon />

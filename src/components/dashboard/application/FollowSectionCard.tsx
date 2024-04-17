@@ -11,14 +11,12 @@ export const FollowSectionCard = ({
   overrides,
   defaultValues,
 }: FollowSectionCardProps) => {
-  const { t: tApplicationFollow } = useTranslation('application', {
-    keyPrefix: 'Follow',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationFollow('_', 'Follow')}
+        title={t('application:Follow._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}></CardContent>

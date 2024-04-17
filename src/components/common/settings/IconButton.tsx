@@ -35,7 +35,7 @@ export const SettingsIconButton = (
   props: PropsWithChildren<SettingsIconButtonProps>,
 ) => {
   const router = useRouter();
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation();
   const anchorRef = useRef<HTMLButtonElement>(null);
   const {
     value: menuVisible,
@@ -51,7 +51,7 @@ export const SettingsIconButton = (
   return (
     <>
       <IconButtonWithTooltip
-        title={tCommon('Settings')}
+        title={t('common:Settings')}
         icon={<SettingsIcon />}
         active={false}
         onClick={openMenu}
@@ -86,7 +86,7 @@ export const SettingsIconButton = (
               }}
             >
               <ListItemText
-                primary={tCommon('DarkMode._')}
+                primary={t('common:DarkMode._')}
                 primaryTypographyProps={{ color: 'text.secondary' }}
               />
               <ButtonGroup
@@ -102,7 +102,7 @@ export const SettingsIconButton = (
                     ternaryDarkMode === 'light' ? 'contained' : undefined
                   }
                 >
-                  {tCommon('DarkMode.Off')}
+                  {t('common:DarkMode.Off')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -110,7 +110,7 @@ export const SettingsIconButton = (
                   }}
                   variant={ternaryDarkMode === 'dark' ? 'contained' : undefined}
                 >
-                  {tCommon('DarkMode.On')}
+                  {t('common:DarkMode.On')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -120,7 +120,7 @@ export const SettingsIconButton = (
                     ternaryDarkMode === 'system' ? 'contained' : undefined
                   }
                 >
-                  {tCommon('DarkMode.Auto')}
+                  {t('common:DarkMode.Auto')}
                 </Button>
               </ButtonGroup>
             </ListItem>
@@ -128,7 +128,7 @@ export const SettingsIconButton = (
           {props.enableCommonMenuItems && (
             <MenuItem dense onClick={() => openUpdateLocaleDialog()}>
               <ListItemText
-                primary={tCommon('Language._')}
+                primary={t('common:Language._')}
                 primaryTypographyProps={{ color: 'text.secondary' }}
               />
               <Box
@@ -141,7 +141,7 @@ export const SettingsIconButton = (
                 }}
               >
                 <Typography variant="body2">
-                  {tCommon(`Language.${router.locale}`, {
+                  {t(`common:Language.${router.locale}`, {
                     defaultValue: router.locale,
                   })}
                 </Typography>

@@ -11,14 +11,12 @@ export const GroupSectionCard = ({
   overrides,
   defaultValues,
 }: GroupSectionCardProps) => {
-  const { t: tApplicationGroup } = useTranslation('application', {
-    keyPrefix: 'Group',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationGroup('_', 'Group')}
+        title={t('application:Group._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}></CardContent>

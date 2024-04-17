@@ -21,9 +21,7 @@ type AssetCardProps = OverridesCardProps & {
   asset?: UseDashboardApplicationHookDataSchema['assets'][number];
 };
 export const AssetCard = ({ asset, overrides }: AssetCardProps) => {
-  const { t: tApplicationAssetType } = useTranslation('application', {
-    keyPrefix: 'Asset.Type',
-  });
+  const { t } = useTranslation();
 
   const [{ width, height }, setSize] = useState({ width: 0, height: 0 });
 
@@ -44,7 +42,7 @@ export const AssetCard = ({ asset, overrides }: AssetCardProps) => {
           alt={asset.type}
           src={asset.url}
           fill
-          sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 320px"
+          sizes={'(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 320px'}
           priority
           style={{ objectFit: 'contain' }}
         />
@@ -55,7 +53,7 @@ export const AssetCard = ({ asset, overrides }: AssetCardProps) => {
           gutterBottom
           sx={{ textAlign: 'center' }}
         >
-          {tApplicationAssetType(asset.type, asset.type)}
+          {t(`application:Asset.Type.${asset.url}`)}
           {asset.type === ApplicationAssetType.Screenshot && asset.name
             ? `-${asset.name}`
             : ''}

@@ -43,8 +43,7 @@ type RowModel =
 export const ApplicationTagDataGrid = ({
   overrides,
 }: ApplicationTagDataGridProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application');
+  const { t } = useTranslation();
   const {
     router: { isFetching },
     items,
@@ -66,25 +65,22 @@ export const ApplicationTagDataGrid = ({
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
     },
     {
       field: 'name',
-      headerName: tApplication('DataGridHeaderName.Tag.Name', 'Name'),
+      headerName: t('application:DataGridHeaderName.Tag.Name'),
       flex: 2,
     },
     {
       field: '_count.applications',
-      headerName: tApplication(
-        'DataGridHeaderName.Tag.Count.Application',
-        'Applications',
-      ),
+      headerName: t('application:DataGridHeaderName.Tag.Count.Application'),
       flex: 1,
       type: 'number',
     },
@@ -107,7 +103,7 @@ export const ApplicationTagDataGrid = ({
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
-        title={tApplication('Tag._')}
+        title={t('application:Tag._')}
         titleTypographyProps={{
           variant: 'subtitle1',
         }}
@@ -116,7 +112,7 @@ export const ApplicationTagDataGrid = ({
             startIcon={<CreateIcon />}
             href="/dashboard/application_tag/create"
           >
-            {tCommon('Create')}
+            {t('common:Create')}
           </Button>
         }
         {...overrides?.CardHeaderProps}

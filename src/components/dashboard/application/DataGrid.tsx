@@ -47,17 +47,7 @@ type RowModel =
 export const ApplicationDataGrid = ({
   overrides,
 }: ApplicationDataGridProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application');
-  const { t: tApplicationCategoryName } = useTranslation('application', {
-    keyPrefix: 'Category.Name',
-  });
-  const { t: tApplicationStatusText } = useTranslation('application', {
-    keyPrefix: 'Status.Text',
-  });
-  const { t: tApplicationDataGridHeaderName } = useTranslation('application', {
-    keyPrefix: 'DataGridHeaderName',
-  });
+  const { t } = useTranslation();
   const {
     router: { isFetching },
     items,
@@ -79,17 +69,17 @@ export const ApplicationDataGrid = ({
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
     },
     {
       field: 'name',
-      headerName: tApplicationDataGridHeaderName('Name', 'Name'),
+      headerName: t('application:DataGridHeaderName.Name'),
       flex: 4,
       renderCell: ({ row }) => (
         <ApplicationIdRenderCell applicationId={row.id} />
@@ -97,39 +87,39 @@ export const ApplicationDataGrid = ({
     },
     {
       field: 'providerId',
-      headerName: tApplicationDataGridHeaderName('Provider', 'Provider'),
+      headerName: t('application:DataGridHeaderName.Provider'),
       flex: 3,
       renderCell: ({ value }) => <ProviderIdRenderCell providerId={value} />,
     },
     {
       field: 'category',
-      headerName: tApplicationDataGridHeaderName('Category', 'Category'),
+      headerName: t('application:DataGridHeaderName.Category'),
       flex: 2,
-      valueFormatter: ({ value }) => tApplicationCategoryName(value, value),
+      valueFormatter: ({ value }) => t(`application:Category.Name.${value}`),
       // editable: true,
       // type: 'singleSelect',
       // valueOptions: () =>
       //   Object.values(ApplicationCategory).map((category) => ({
       //     value: category,
-      //     label: tApplicationCategoryName(category, category),
+      //     label: t(`application:Category.Name.${value}`),
       //   })),
     },
     {
       field: 'status',
-      headerName: tApplicationDataGridHeaderName('Status', 'Status'),
+      headerName: t('application:DataGridHeaderName.Status'),
       flex: 2,
-      valueFormatter: ({ value }) => tApplicationStatusText(value, value),
+      valueFormatter: ({ value }) => t(`application:Status.Text.${value}`),
       // editable: true,
       // type: 'singleSelect',
       // valueOptions: () =>
       //   Object.values(ApplicationStatus).map((status) => ({
       //     value: status,
-      //     label: tApplicationStatusText(status, status),
+      //     label: t(`application:Status.Text.${value}`),
       //   })),
     },
     {
       field: 'price',
-      headerName: tApplicationDataGridHeaderName('Price', 'Price'),
+      headerName: t('application:DataGridHeaderName.Price'),
       flex: 1,
       type: 'number',
       valueFormatter: ({ value }) => currency(value),
@@ -153,7 +143,7 @@ export const ApplicationDataGrid = ({
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
-        title={tApplication('_')}
+        title={t('application:_')}
         titleTypographyProps={{
           variant: 'subtitle1',
         }}
@@ -162,7 +152,7 @@ export const ApplicationDataGrid = ({
             startIcon={<CreateIcon />}
             href="/dashboard/application/create"
           >
-            {tCommon('Create')}
+            {t('common:Create')}
           </Button>
         }
         {...overrides?.CardHeaderProps}

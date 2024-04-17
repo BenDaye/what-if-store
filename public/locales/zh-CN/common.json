@@ -1,5 +1,6 @@
 {
   "Applications": "应用",
+  "Copy": "复制",
   "Create": "创建",
   "Created": "已创建",
   "DarkMode": {
@@ -10,9 +11,11 @@
   },
   "Dashboard": "仪表盘",
   "DataGridHeaderName": {
+    "Actions": "操作",
     "CreatedAt": "创建时间",
     "UpdatedAt": "更新时间"
   },
+  "Home": "首页",
   "Import": "导入",
   "Imported": "已导入",
   "Language": {
@@ -23,14 +26,18 @@
     "en-US": "English",
     "zh-CN": "简体中文"
   },
+  "NoData": "暂无数据",
   "Providers": "作者",
   "Remove": "删除",
   "Removed": "已删除",
   "Reset": "重置",
   "Settings": "设置",
   "Submit": "提交",
+  "UnsavedFormAlert": "存在已编辑但未保存的数据，请确认。",
   "Update": "修改",
   "Updated": "已修改",
+  "Upload": "上传",
+  "Uploaded": "已上传",
   "Users": "用户",
   "View": "查看"
 }

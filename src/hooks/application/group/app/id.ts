@@ -38,12 +38,12 @@ export const useAppApplicationGroup = (id: IdSchema) => {
   });
 
   const { showWarning } = useNotice();
-  const { t: tError } = useTranslation('errorMessage');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isError) return;
-    showWarning(tError(error.message));
-  }, [isError, error, showWarning, tError]);
+    showWarning(t(`errorMessage:${error.message}`));
+  }, [isError, error, showWarning, t]);
 
   const memoData = useMemo((): UseAppApplicationGroupHookDataSchema => {
     return {

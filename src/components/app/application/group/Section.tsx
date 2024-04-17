@@ -12,10 +12,7 @@ type CommonSectionProps = {
   data: UseAppApplicationGroupsDataSchema[number];
 };
 export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationGroupName } = useTranslation('application', {
-    keyPrefix: 'Group.Name',
-  });
+  const { t } = useTranslation();
   const {
     data: { name, type, applications },
   } = useAppApplicationGroup(id);
@@ -43,9 +40,9 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
         <Typography variant="h6">
           {type === ApplicationGroupType.Temporary
             ? name
-            : tApplicationGroupName(name)}
+            : t(`application:Group.Name.${name}`)}
         </Typography>
-        <Button>{tCommon('View')}</Button>
+        <Button>{t('common:View')}</Button>
       </Stack>
       <Grid container spacing={2}>
         {applications.map((item) => (
@@ -64,7 +61,7 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
           }}
         >
           <Typography variant="caption" color="text.disabled">
-            {tCommon('NoData')}
+            {t('common:NoData')}
           </Typography>
         </Box>
       )}

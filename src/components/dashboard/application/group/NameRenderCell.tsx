@@ -21,15 +21,13 @@ export const ApplicationGroupNameRenderCell = ({
   row,
   overrides,
 }: ApplicationGroupNameRenderCellProps) => {
-  const { t: tApplicationGroupName } = useTranslation('application', {
-    keyPrefix: 'Group.Name',
-  });
+  const { t } = useTranslation();
   const name = useMemo(
     () =>
       row.type === ApplicationGroupType.Temporary
         ? row.name
-        : tApplicationGroupName(row.name, row.name),
-    [row, tApplicationGroupName],
+        : t(`application:Group.Name.${row.name}`),
+    [row, t],
   );
 
   const {

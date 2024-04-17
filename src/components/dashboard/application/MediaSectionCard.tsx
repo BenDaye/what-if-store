@@ -13,14 +13,12 @@ export const MediaSectionCard = ({
   overrides,
   defaultValues,
 }: MediaSectionCardProps) => {
-  const { t: tApplicationMedia } = useTranslation('application', {
-    keyPrefix: 'Media',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationMedia('_', 'Media')}
+        title={t('application:Media._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

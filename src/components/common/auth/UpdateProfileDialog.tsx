@@ -33,8 +33,7 @@ export const AuthUpdateProfileDialog = ({
   DialogProps,
 }: AuthUpdateProfileDialogProps) => {
   const { showError, showSuccess } = useNotice();
-  const { t: tCommon } = useTranslation('common');
-  const { t: tUser } = useTranslation('user');
+  const { t } = useTranslation();
 
   const { data: session, status, update: updateSession } = useSession();
   const isUser = useMemo(
@@ -67,7 +66,7 @@ export const AuthUpdateProfileDialog = ({
     trpc.protectedAppUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: (res) => {
-        showSuccess(tUser('Profile.Updated'));
+        showSuccess(t('user:Profile.Updated'));
         updateSession(res);
         DialogProps.onClose?.({}, 'backdropClick');
       },
@@ -76,7 +75,7 @@ export const AuthUpdateProfileDialog = ({
     trpc.protectedDashboardUser.update.useMutation({
       onError: (err) => showError(err.message),
       onSuccess: (res) => {
-        showSuccess(tUser('Profile.Updated'));
+        showSuccess(t('user:Profile.Updated'));
         updateSession(res);
         DialogProps.onClose?.({}, 'backdropClick');
       },
@@ -123,7 +122,9 @@ export const AuthUpdateProfileDialog = ({
     <Dialog onClose={onClose} {...DialogProps}>
       <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">{tUser('Profile.Update')}</Typography>
+          <Typography variant="subtitle1">
+            {t('user:Profile.Update')}
+          </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"
@@ -157,8 +158,8 @@ export const AuthUpdateProfileDialog = ({
               onChange={onChange}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tUser('Profile.Avatar')}
-              placeholder={tUser('Profile.Avatar')}
+              label={t('user:Profile.Avatar')}
+              placeholder={t('user:Profile.Avatar')}
             />
           )}
         />
@@ -171,8 +172,8 @@ export const AuthUpdateProfileDialog = ({
               onChange={onChange}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tUser('Profile.Nickname')}
-              placeholder={tUser('Profile.Nickname')}
+              label={t('user:Profile.Nickname')}
+              placeholder={t('user:Profile.Nickname')}
               autoFocus
             />
           )}
@@ -187,8 +188,8 @@ export const AuthUpdateProfileDialog = ({
               error={!!error}
               helperText={error?.message ?? ' '}
               type="email"
-              label={tUser('Profile.Email')}
-              placeholder={tUser('Profile.Email')}
+              label={t('user:Profile.Email')}
+              placeholder={t('user:Profile.Email')}
             />
           )}
         />
@@ -201,8 +202,8 @@ export const AuthUpdateProfileDialog = ({
               onChange={onChange}
               error={!!error}
               helperText={error?.message ?? ' '}
-              label={tUser('Profile.Bio')}
-              placeholder={tUser('Profile.Bio')}
+              label={t('user:Profile.Bio')}
+              placeholder={t('user:Profile.Bio')}
               multiline
               maxRows={3}
             />
@@ -216,7 +217,7 @@ export const AuthUpdateProfileDialog = ({
           disabled={!isAdmin && !isUser}
           onClick={() => handleSubmit(onSubmit)()}
         >
-          {tCommon('Submit')}
+          {t('common:Submit')}
         </LoadingButton>
       </DialogActions>
     </Dialog>

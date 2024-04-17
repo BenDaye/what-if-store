@@ -17,9 +17,7 @@ export const LocalesAutoComplete = ({
   error,
   disabled = false,
 }: LocalesAutoCompleteProps) => {
-  const { t: tApplicationGeneral } = useTranslation('application', {
-    keyPrefix: 'General',
-  });
+  const { t } = useTranslation();
 
   const [locales, setLocales] = useState<ILocaleData[]>(
     () =>
@@ -58,7 +56,7 @@ export const LocalesAutoComplete = ({
         <TextField
           {...params}
           error={!!error}
-          label={tApplicationGeneral('Locales', 'Locales')}
+          label={t('application:General.Locales')}
           helperText={error?.message ?? ' '}
           disabled={disabled}
           {...overrides?.TextFieldProps}

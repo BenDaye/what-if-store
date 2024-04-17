@@ -1,8 +1,15 @@
 {
-  "App": {},
+  "App": {
+    "Application": "应用",
+    "Provider": "作者",
+    "Upload": "上传",
+    "User": "用户",
+    "_": "首页"
+  },
   "Dashboard": {
     "Application": "应用管理",
     "Provider": "作者管理",
+    "Upload": "上传",
     "User": "用户管理",
     "_": "仪表盘"
   }

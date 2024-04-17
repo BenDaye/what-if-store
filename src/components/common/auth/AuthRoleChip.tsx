@@ -14,7 +14,7 @@ export const AuthRoleChip = ({
   overrides,
   role,
 }: PropsWithChildren<AuthRoleChipProps>) => {
-  const { t: tUser } = useTranslation('user', { keyPrefix: 'Role' });
+  const { t } = useTranslation();
   const color = useMemo<ChipProps['color']>(() => {
     switch (role) {
       case AuthRole.User:
@@ -29,7 +29,7 @@ export const AuthRoleChip = ({
   }, [role]);
   return (
     <Chip
-      label={tUser(`${role}._`, role)}
+      label={t(`auth:Role.${role}`)}
       size="small"
       color={color}
       {...overrides?.ChipProps}

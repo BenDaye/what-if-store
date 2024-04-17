@@ -21,9 +21,7 @@ export const OwnApplicationButton = ({
   owners,
   showText = false,
 }: OwnApplicationButtonProps) => {
-  const { t: tApplicationOwn } = useTranslation('application', {
-    keyPrefix: 'Own',
-  });
+  const { t } = useTranslation();
 
   const { status, data: session } = useSession();
   const owned = useMemo(
@@ -57,7 +55,7 @@ export const OwnApplicationButton = ({
       onClick={onClick}
       {...overrides?.ButtonProps}
     >
-      {tApplicationOwn(owned ? 'Owned' : 'Own')}
+      {owned ? t('application:Own.Owned') : t('application:Own.Own')}
     </Button>
   ) : (
     <IconButton

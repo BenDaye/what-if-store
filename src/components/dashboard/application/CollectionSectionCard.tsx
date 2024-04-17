@@ -11,14 +11,12 @@ export const CollectionSectionCard = ({
   overrides,
   defaultValues,
 }: CollectionSectionCardProps) => {
-  const { t: tApplicationCollection } = useTranslation('application', {
-    keyPrefix: 'Collection',
-  });
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationCollection('_', 'Collection')}
+        title={t('application:Collection._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}></CardContent>

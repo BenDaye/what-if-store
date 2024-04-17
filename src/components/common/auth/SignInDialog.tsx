@@ -40,7 +40,7 @@ export const SignInDialog = ({
   const { query, pathname, push } = useRouter();
   const { showError, showSuccess, showWarning } = useNotice();
   const { status, update: updateSession } = useSession();
-  const { t: tAuth } = useTranslation('auth');
+  const { t } = useTranslation();
   const { handleSubmit, control, reset } = useForm<SignInSchema>({
     defaultValues: {
       username: '',
@@ -53,7 +53,7 @@ export const SignInDialog = ({
   const onSubmit = useCallback(
     async (data: SignInSchema) => {
       if (disableSignIn) {
-        showWarning(tAuth('SignIn.Disabled'));
+        showWarning(t('auth:SignIn.Disabled'));
         return;
       }
       try {
@@ -66,7 +66,7 @@ export const SignInDialog = ({
         }
         await updateSession();
         resetTRPCClient();
-        showSuccess(tAuth('SignIn.Succeeded'), {
+        showSuccess(t('auth:SignIn.Succeeded'), {
           autoHideDuration: 1000,
           onClose: async () => {
             const _session = await getSession();
@@ -81,9 +81,7 @@ export const SignInDialog = ({
         });
         DialogProps?.onClose?.({}, 'backdropClick');
       } catch (error) {
-        if (error instanceof Error) {
-          showError(tAuth(error.message));
-        }
+        showError(t('auth:SignIn.Failed'));
         console.error(error);
       } finally {
         reset();
@@ -92,7 +90,7 @@ export const SignInDialog = ({
     [
       disableSignIn,
       showWarning,
-      tAuth,
+      t,
       updateSession,
       showSuccess,
       DialogProps,
@@ -106,10 +104,11 @@ export const SignInDialog = ({
   useEffect(() => {
     const { error: nextAuthError } = query;
     if (!nextAuthError) return;
-    if (typeof nextAuthError === 'string') showError(tAuth(nextAuthError));
+    if (typeof nextAuthError === 'string')
+      showError(t(`errorMessage:${nextAuthError}`));
     if (Array.isArray(nextAuthError))
-      nextAuthError.forEach((err) => showError(tAuth(err)));
-  }, [query, showError, tAuth]);
+      nextAuthError.forEach((err) => showError(t(`errorMessage:${err}`)));
+  }, [query, showError, t]);
 
   const onClose = useCallback(() => {
     reset();
@@ -122,8 +121,8 @@ export const SignInDialog = ({
         <AppBar elevation={0} {...overrides?.AppBarProps}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
             <Typography variant="subtitle1">
-              {tAuth('SignIn._')}
-              {disableSignIn && ` (${tAuth('SignIn.Disabled')})`}
+              {t('auth:SignIn._')}
+              {disableSignIn && ` (${t('auth:SignIn.Disabled')})`}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             {!pathname.startsWith('/auth/signin') && (
@@ -148,8 +147,8 @@ export const SignInDialog = ({
                 onChange={onChange}
                 error={!!error}
                 helperText={error?.message ?? ' '}
-                label={tAuth('Account')}
-                placeholder={tAuth('Account')}
+                label={t('auth:Account')}
+                placeholder={t('auth:Account')}
                 autoFocus
                 required
                 disabled={disableSignIn}
@@ -166,16 +165,12 @@ export const SignInDialog = ({
                 error={!!error}
                 helperText={error?.message ?? ' '}
                 type={showPassword ? 'text' : 'password'}
-                label={tAuth('Password')}
-                placeholder={tAuth('Password')}
+                label={t('auth:Password')}
+                placeholder={t('auth:Password')}
                 required
                 InputProps={{
                   endAdornment: (
-                    <IconButton
-                      aria-label="Toggle Password visibility"
-                      onClick={toggleShowPassword}
-                      edge="end"
-                    >
+                    <IconButton onClick={toggleShowPassword} edge="end">
                       {showPassword ? (
                         <Visibility color="primary" />
                       ) : (
@@ -201,7 +196,7 @@ export const SignInDialog = ({
             disabled={status === 'loading'}
             onClick={() => handleSubmit(onSubmit)()}
           >
-            {tAuth('SignIn._')}
+            {t('auth:SignIn._')}
           </LoadingButton>
         </DialogActions>
       </Dialog>

@@ -36,23 +36,14 @@ type SectionCardProps = OverridesCardProps & {
 
 const SectionCard = ({ overrides, userId }: SectionCardProps) => {
   const { push } = useRouter();
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationGeneral } = useTranslation('application', {
-    keyPrefix: 'General',
-  });
-  const { t: tUserGeneral } = useTranslation('user', {
-    keyPrefix: 'General',
-  });
-  const { t: tProviderGeneral } = useTranslation('provider', {
-    keyPrefix: 'General',
-  });
+  const { t } = useTranslation();
   const {
     data: { nickname, providerName },
   } = useDashboardUser(userId);
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationGeneral('User', 'User General')}
+        title={t('application:General.User')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
@@ -60,8 +51,8 @@ const SectionCard = ({ overrides, userId }: SectionCardProps) => {
           <Grid md={12} xl>
             <TextField
               value={nickname}
-              label={tUserGeneral('Name', 'User Nickname')}
-              placeholder={tUserGeneral('Name', 'User Nickname')}
+              label={t('user:General.Name')}
+              placeholder={t('user:General.Name')}
               disabled
             />
           </Grid>
@@ -69,8 +60,8 @@ const SectionCard = ({ overrides, userId }: SectionCardProps) => {
           <Grid md={12} xl={6}>
             <TextField
               value={providerName}
-              label={tProviderGeneral('Name', 'Provider Name')}
-              placeholder={tProviderGeneral('Name', 'Provider Name')}
+              label={t('provider:General.Name')}
+              placeholder={t('provider:General.Name')}
               disabled
             />
           </Grid>
@@ -79,7 +70,7 @@ const SectionCard = ({ overrides, userId }: SectionCardProps) => {
       <CardActions {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
         <Button onClick={() => push(`/dashboard/user/${userId}`)}>
-          {tCommon('View', 'View')}
+          {t('common:View')}
         </Button>
       </CardActions>
     </Card>

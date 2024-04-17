@@ -1,6 +1,10 @@
 {
-  "App Description": "What if the application store was designed by BenDaye?",
-  "App Title": "AppStore - What If...?",
-  "Dashboard Description": "What if the application store was designed by BenDaye?",
-  "Dashboard Title": "AppStore - What If...?"
+  "App": {
+    "Description": "What if the application store was designed by BenDaye?",
+    "Title": "AppStore - What If...?"
+  },
+  "Dashboard": {
+    "Description": "What if the application store was designed by BenDaye?",
+    "Title": "AppStore - What If...?"
+  }
 }

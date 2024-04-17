@@ -31,10 +31,7 @@ export const ExtraSectionCard = ({
   overrides,
   defaultValues,
 }: ExtraSectionCardProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplicationGeneral } = useTranslation('application', {
-    keyPrefix: 'General',
-  });
+  const { t } = useTranslation();
   const { handleSubmit, reset, control, formState, setValue } =
     useForm<ApplicationUpdateInputSchema>({
       defaultValues,
@@ -51,7 +48,7 @@ export const ExtraSectionCard = ({
   const { mutateAsync: update, isPending } =
     trpc.protectedDashboardApplication.updateById.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(tCommon('Updated', 'Updated')),
+      onSuccess: () => showSuccess(t('common:Updated')),
     });
 
   const onSubmit = async (data: ApplicationUpdateInputSchema) =>
@@ -63,17 +60,14 @@ export const ExtraSectionCard = ({
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (formState.isDirty) {
         event.preventDefault();
-        event.returnValue = tCommon(
-          'UnsavedFormAlert',
-          'Unsaved changes will be lost.',
-        );
+        event.returnValue = t('common:UnsavedFormAlert');
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [formState, tCommon]);
+  }, [formState, t]);
 
   return (
     <Card
@@ -86,7 +80,7 @@ export const ExtraSectionCard = ({
       {...overrides?.CardProps}
     >
       <CardHeader
-        title={tApplicationGeneral('Extra', 'Extra')}
+        title={t('application:General.Extra')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
@@ -142,7 +136,7 @@ export const ExtraSectionCard = ({
           onClick={() => reset(defaultValues, { keepDefaultValues: false })}
           disabled={isPending || !formState.isDirty}
         >
-          {tCommon('Reset', 'Reset')}
+          {t('common:Reset')}
         </Button>
         <LoadingButton
           size="small"
@@ -151,7 +145,7 @@ export const ExtraSectionCard = ({
           disabled={!formState.isDirty}
           loading={isPending}
         >
-          {tCommon('Submit', 'Submit')}
+          {t('common:Submit')}
         </LoadingButton>
       </CardActions>
     </Card>

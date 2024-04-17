@@ -20,7 +20,7 @@ const navDrawerWidth = 48;
 export const DashboardLayout = ({
   children,
 }: PropsWithChildren): ReactElement<PropsWithChildren> => {
-  const { t: tMeta } = useTranslation('meta');
+  const { t } = useTranslation();
   const { title, description } = useHeadMeta('Dashboard');
   const { pathname } = useRouter();
   const openApplicationListDrawer = useMemo(
@@ -62,11 +62,11 @@ export const DashboardLayout = ({
   return (
     <DashboardProvider>
       <Head key="dashboard">
-        <title>{tMeta('Dashboard Title', title ?? 'Dashboard Title')}</title>
+        <title>{t('meta:Dashboard.Title', title ?? 'Dashboard Title')}</title>
         <meta
           name="description"
-          content={tMeta(
-            'Dashboard Description',
+          content={t(
+            'meta.Dashboard.Description',
             description ?? 'Dashboard Description',
           )}
         />

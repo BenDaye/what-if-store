@@ -8,37 +8,43 @@
     }
   },
   "Category": {
-    "AR": "AR",
-    "Books": "图书",
-    "Business": "商务",
-    "DeveloperTools": "开发工具",
-    "Education": "教育",
-    "Entertainment": "娱乐",
-    "Extensions": "扩展",
-    "Finance": "财务",
-    "FoodDrink": "美食",
-    "GraphicsDesign": "图形设计",
-    "HealthFitness": "健康",
-    "Kids": "儿童",
-    "Lifestyle": "生活方式",
-    "MagazinesNewspapers": "杂志",
-    "Medical": "医疗",
-    "Music": "音乐",
-    "Navigation": "导航",
-    "News": "新闻",
-    "Other": "其他",
-    "PhotoVideo": "摄影",
-    "Productivity": "效率",
-    "Reference": "参考",
-    "Shopping": "购物",
-    "SocialNetworking": "社交",
-    "Sports": "体育",
-    "Travel": "旅行",
-    "Utilities": "工具",
-    "Weather": "天气"
+    "Name": {
+      "AR": "AR",
+      "Books": "图书",
+      "Business": "商务",
+      "DeveloperTools": "开发工具",
+      "Education": "教育",
+      "Entertainment": "娱乐",
+      "Extensions": "扩展",
+      "Finance": "财务",
+      "FoodDrink": "美食",
+      "GraphicsDesign": "图形设计",
+      "HealthFitness": "健康",
+      "Kids": "儿童",
+      "Lifestyle": "生活方式",
+      "MagazinesNewspapers": "杂志",
+      "Medical": "医疗",
+      "Music": "音乐",
+      "Navigation": "导航",
+      "News": "新闻",
+      "Other": "其他",
+      "PhotoVideo": "摄影",
+      "Productivity": "效率",
+      "Reference": "参考",
+      "Shopping": "购物",
+      "SocialNetworking": "社交",
+      "Sports": "体育",
+      "Travel": "旅行",
+      "Utilities": "工具",
+      "Weather": "天气"
+    },
+    "_": "类别"
   },
   "Collection": {
     "_": "应用合集"
+  },
+  "Copyright": {
+    "_": "版权"
   },
   "DataGridHeaderName": {
     "Category": "类别",
@@ -70,18 +76,46 @@
       "Name": "标签名称"
     }
   },
+  "Declaration": {
+    "Compatibility": {
+      "Requirement": "版本要求",
+      "_": "兼容性"
+    },
+    "_": "定义"
+  },
   "Follow": {
+    "Follow": "收藏",
+    "Followed": "已收藏",
     "_": "收藏者"
   },
   "General": {
     "Category": "应用类型",
     "Countries": "地区支持",
     "DangerZone": {
-      "ChangeStatus": "修改应用状态",
-      "CurrentStatus": "当前应用状态为 {{status}}.",
-      "DeleteButton": "删除",
-      "DeleteDescription": "一旦删除应用, 操作将无法撤回. 请确认是否继续?",
-      "DeleteTitle": "删除此应用",
+      "ChangeStatus": {
+        "Banned": {
+          "Button": "禁用",
+          "Description": "一旦禁用，用户将无法在商店内查看到此应用。\n\n该应用的作者可以访问应用页面面并删除应用。\n\n此操作仅管理员有权限执行。",
+          "Title": "禁用此应用"
+        },
+        "Description": "修改应用状态的操作是一个队列任务。\n在状态修改完成前，将执行一系列关联修改，以确保应用状态符合要求。",
+        "Hidden": {
+          "Button": "隐藏",
+          "Description": "一旦隐藏，仅先前已购买应用的用户可访问该应用页面。\n\nT此操作仅管理员有权限执行。",
+          "Title": "隐藏此应用"
+        },
+        "Title": "修改应用状态"
+      },
+      "Delete": {
+        "Button": "移除",
+        "Description": "一旦删除，操作将不可撤回，请确认。\n此操作优先级高于修改应用状态为“已删除”。",
+        "Title": "Delete this application"
+      },
+      "Transfer": {
+        "Button": "转移",
+        "Description": "转移此应用的所有权",
+        "Title": "转移此应用"
+      },
       "_": "风险操作"
     },
     "Description": "应用简述",
@@ -95,6 +129,26 @@
     "_": "基础信息"
   },
   "Group": {
+    "Form": {
+      "Description": "描述",
+      "Name": "名称",
+      "Priority": "优先级",
+      "Type": "类型"
+    },
+    "Name": {
+      "MostFollowersOfAllTime": "收藏总榜",
+      "MostFollowersOfThisMonth": "收藏月榜",
+      "MostFollowersOfThisWeek": "收藏周榜",
+      "MostFollowersOfToday": "收藏日榜",
+      "MostOwnersOfAllTime": "购买总榜",
+      "MostOwnersOfThisMonth": "购买月榜",
+      "MostOwnersOfThisWeek": "购买周榜",
+      "MostOwnersOfToday": "购买日榜",
+      "New": "最新上架",
+      "Promotional": "限时促销",
+      "Recommended": "编辑推荐",
+      "Updated": "近期更新"
+    },
     "Type": {
       "Permanent": "固定",
       "Persistent": "常驻",
@@ -126,22 +180,39 @@
     "Version": "版本"
   },
   "Own": {
+    "Own": "购买",
+    "Owned": "已购买",
     "_": "持有者"
   },
+  "Platform": {
+    "Platforms": "支持平台"
+  },
+  "PrivacyPolicy": {
+    "Placeholder": "隐私条款",
+    "_": "隐私条款"
+  },
+  "Readme": {
+    "_": "应用说明"
+  },
   "Status": {
-    "Achieved": "已归档",
-    "Approved": "已批准",
-    "Banned": "已禁用",
-    "Deleted": "已删除",
-    "Draft": "起稿中",
-    "Hidden": "已隐藏",
-    "Pending": "审核中",
-    "Published": "已发布",
-    "Rejected": "已拒绝",
-    "Suspended": "已暂停"
+    "Text": {
+      "Achieved": "已归档",
+      "Approved": "已批准",
+      "Banned": "已禁用",
+      "Deleted": "已删除",
+      "Draft": "起稿中",
+      "Hidden": "已隐藏",
+      "Pending": "审核中",
+      "Published": "已发布",
+      "Rejected": "已拒绝",
+      "Suspended": "已暂停"
+    }
   },
   "Tag": {
     "_": "应用标签"
+  },
+  "TermsOfUse": {
+    "_": "使用条款"
   },
   "Version": {
     "Deprecated": "已弃用",

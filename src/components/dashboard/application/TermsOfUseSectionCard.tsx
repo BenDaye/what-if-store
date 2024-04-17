@@ -23,9 +23,7 @@ export const TermsOfUseSectionCard = ({
   overrides,
   defaultValues: { id: applicationId, termsOfUse: id },
 }: TermsOfUseSectionCardProps) => {
-  const { t: tApplicationTermsOfUse } = useTranslation('application', {
-    keyPrefix: 'TermsOfUse',
-  });
+  const { t } = useTranslation();
 
   const {
     data,
@@ -49,7 +47,7 @@ export const TermsOfUseSectionCard = ({
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationTermsOfUse('_', 'Terms Of Use')}
+        title={t('application:TermsOfUse._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>

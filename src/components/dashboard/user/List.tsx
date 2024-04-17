@@ -38,8 +38,8 @@ const UserCollapseList = ({ role, input }: UserCollapseListProps) => {
     role: [role],
   });
 
-  const { t } = useTranslation('user');
-  const primaryText = t(`Role.${role}`, role);
+  const { t } = useTranslation();
+  const primaryText = t(`user:Role.${role}`, role);
 
   return (
     <CollapseList

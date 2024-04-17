@@ -30,8 +30,7 @@ type UploadDialogProps = OverridesProps<{
   DialogProps;
 
 export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tUpload } = useTranslation('upload');
+  const { t } = useTranslation();
 
   const { showSuccess, showError } = useNotice();
   const {
@@ -40,7 +39,7 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
     isPending,
   } = trpc.protectedDashboardUpload.upload.useMutation({
     onError: (err) => showError(err.message),
-    onSuccess: () => showSuccess(tCommon('Uploaded', 'Uploaded')),
+    onSuccess: () => showSuccess(t('common:Uploaded')),
   });
 
   const { handleSubmit, watch, formState, setValue, reset } =
@@ -84,7 +83,7 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
       >
         <AppBar elevation={0}>
           <Toolbar variant="dense" sx={{ gap: 1 }}>
-            <Typography variant="subtitle1">{tUpload('_')}</Typography>
+            <Typography variant="subtitle1">{t('upload:_')}</Typography>
             <Box sx={{ flexGrow: 1 }} />
             <IconButton edge="end" onClick={() => onClose()} color="inherit">
               <CloseIcon />
@@ -116,8 +115,8 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
               value={watch('file')?.name ?? ''}
               error={!!formState.errors.file}
               helperText={formState.errors.file?.message ?? ' '}
-              label={tUpload('File', 'File')}
-              placeholder={tUpload('File', 'File')}
+              label={t('upload:File')}
+              placeholder={t('upload:File')}
               inputProps={{
                 readOnly: true,
               }}
@@ -127,7 +126,7 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
         <DialogActions sx={{ gap: 1 }} {...overrides?.DialogActionsProps}>
           <Box sx={{ flexGrow: 1 }} />
           <LoadingButton type="submit" loading={isPending}>
-            {tUpload('_')}
+            {t('upload:_')}
           </LoadingButton>
         </DialogActions>
       </form>

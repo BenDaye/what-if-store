@@ -44,8 +44,7 @@ type RowModel =
 export const ApplicationCollectionDataGrid = ({
   overrides,
 }: ApplicationCollectionDataGridProps) => {
-  const { t: tCommon } = useTranslation('common');
-  const { t: tApplication } = useTranslation('application');
+  const { t } = useTranslation();
   const {
     router: { isFetching },
     items,
@@ -67,41 +66,37 @@ export const ApplicationCollectionDataGrid = ({
     },
     {
       field: 'createdAt',
-      headerName: tCommon('DataGridHeaderName.CreatedAt', 'CreatedAt'),
+      headerName: t('common:DataGridHeaderName.CreatedAt'),
       ...createdAtColumn,
     },
     {
       field: 'updatedAt',
-      headerName: tCommon('DataGridHeaderName.UpdatedAt', 'UpdatedAt'),
+      headerName: t('common:DataGridHeaderName.UpdatedAt'),
       ...updatedAtColumn,
     },
     {
       field: 'name',
-      headerName: tApplication('DataGridHeaderName.Collection.Name', 'Name'),
+      headerName: t('application:DataGridHeaderName.Collection.Name'),
       flex: 4,
       editable: true,
     },
     {
       field: 'description',
-      headerName: tApplication(
-        'DataGridHeaderName.Collection.Description',
-        'Description',
-      ),
+      headerName: t('application:DataGridHeaderName.Collection.Description'),
       flex: 3,
       editable: true,
     },
     {
       field: 'price',
-      headerName: tApplication('DataGridHeaderName.Collection.Price', 'Price'),
+      headerName: t('application:DataGridHeaderName.Collection.Price'),
       flex: 1,
       type: 'number',
       valueFormatter: ({ value }) => currency(value),
     },
     {
       field: '_count.applications',
-      headerName: tApplication(
-        'DataGridHeaderName.Collection.Count.Application',
-        'Applications',
+      headerName: t(
+        'application.DataGridHeaderName.Collection.Count.Application',
       ),
       flex: 1,
       type: 'number',
@@ -125,7 +120,7 @@ export const ApplicationCollectionDataGrid = ({
   return (
     <Card {...overrides?.CardProps}>
       <CardHeader
-        title={tApplication('Collection._')}
+        title={t('application:Collection._')}
         titleTypographyProps={{
           variant: 'subtitle1',
         }}
@@ -134,7 +129,7 @@ export const ApplicationCollectionDataGrid = ({
             startIcon={<CreateIcon />}
             href="/dashboard/application_collection/create"
           >
-            {tCommon('Create')}
+            {t('common:Create')}
           </Button>
         }
         {...overrides?.CardHeaderProps}

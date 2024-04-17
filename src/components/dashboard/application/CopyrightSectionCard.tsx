@@ -24,9 +24,7 @@ export const CopyrightSectionCard = ({
   overrides,
   defaultValues: { id: applicationId, copyright: id },
 }: CopyrightSectionCardProps) => {
-  const { t: tApplicationCopyright } = useTranslation('application', {
-    keyPrefix: 'Copyright',
-  });
+  const { t } = useTranslation();
 
   const {
     data,
@@ -50,7 +48,7 @@ export const CopyrightSectionCard = ({
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
       <CardHeader
-        title={tApplicationCopyright('_', 'Copyright')}
+        title={t('application:Copyright._')}
         {...overrides?.CardHeaderProps}
       />
       <CardContent {...overrides?.CardContentProps}>
