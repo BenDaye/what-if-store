@@ -1,4 +1,5 @@
 import { CollapseList, SecondaryDrawerRnd } from '@/components/common';
+import { AgeRating } from '@/constants/age_rating';
 import {
   APP_PRIMARY_DRAWER_WIDTH,
   APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
@@ -7,6 +8,7 @@ import {
 } from '@/constants/drawer';
 import { ApplicationListInputSchema } from '@/server/schemas';
 import { OverridesDrawerProps, OverridesListProps } from '@/types/overrides';
+import { getLocaleStringList } from '@/utils/getLocaleList';
 import {
   AppBar,
   Box,
@@ -20,6 +22,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ApplicationCategory, ApplicationPlatform } from '@prisma/client';
+import countries from 'countries-list/minimal/countries.2to3.min.json';
 import { useTranslation } from 'next-i18next';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -99,6 +102,9 @@ export const ApplicationFilter = ({
         >
           <ApplicationCategoryFilter input={input} setInput={setInput} />
           <ApplicationPlatformFilter input={input} setInput={setInput} />
+          <ApplicationLocalesFilter input={input} setInput={setInput} />
+          <ApplicationCountriesFilter input={input} setInput={setInput} />
+          <ApplicationAgeRatingFilter input={input} setInput={setInput} />
         </List>
       </Drawer>
     </Box>
@@ -110,6 +116,8 @@ export const ApplicationCategoryFilter = ({
     category: Object.values(ApplicationCategory),
     platforms: Object.values(ApplicationPlatform),
     locales: [],
+    countries: [],
+    ageRating: undefined,
   },
   setInput = () => null,
 }: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
@@ -156,6 +164,8 @@ export const ApplicationPlatformFilter = ({
     category: Object.values(ApplicationCategory),
     platforms: Object.values(ApplicationPlatform),
     locales: [],
+    countries: [],
+    ageRating: undefined,
   },
   setInput = () => null,
 }: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
@@ -188,6 +198,146 @@ export const ApplicationPlatformFilter = ({
               size="small"
               edge="end"
               checked={selected.indexOf(item) > -1}
+              disableRipple
+            />
+          </ListItemSecondaryAction>
+        </ListItemButton>
+      ))}
+    </CollapseList>
+  );
+};
+
+export const ApplicationLocalesFilter = ({
+  input = {
+    category: Object.values(ApplicationCategory),
+    platforms: Object.values(ApplicationPlatform),
+    locales: [],
+    countries: [],
+    ageRating: undefined,
+  },
+  setInput = () => null,
+}: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
+  const { t } = useTranslation();
+  const handleSelect = (locale: string) => {
+    const currentIndex = selected.indexOf(locale);
+    const newSelected = [...selected];
+    if (currentIndex === -1) {
+      newSelected.push(locale);
+    } else {
+      newSelected.splice(currentIndex, 1);
+    }
+    setInput({ ...input, locales: newSelected });
+  };
+
+  const selected = input?.locales ?? getLocaleStringList();
+
+  return (
+    <CollapseList
+      localStorageKey={`app-application-locales-filter`}
+      primaryText={t('application:Locales.Locales')}
+      secondaryText={`${selected.length}`}
+      defaultExpandMore={false}
+    >
+      {getLocaleStringList().map((item) => (
+        <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
+          <ListItemText primary={item} />
+          <ListItemSecondaryAction>
+            <Checkbox
+              size="small"
+              edge="end"
+              checked={selected.indexOf(item) > -1}
+              disableRipple
+            />
+          </ListItemSecondaryAction>
+        </ListItemButton>
+      ))}
+    </CollapseList>
+  );
+};
+
+export const ApplicationCountriesFilter = ({
+  input = {
+    category: Object.values(ApplicationCategory),
+    platforms: Object.values(ApplicationPlatform),
+    locales: [],
+    countries: [],
+    ageRating: undefined,
+  },
+  setInput = () => null,
+}: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
+  const { t } = useTranslation();
+  const handleSelect = (country: string) => {
+    const currentIndex = selected.indexOf(country);
+    const newSelected = [...selected];
+    if (currentIndex === -1) {
+      newSelected.push(country);
+    } else {
+      newSelected.splice(currentIndex, 1);
+    }
+    setInput({ ...input, countries: newSelected });
+  };
+
+  const selected = input?.countries ?? Object.keys(countries);
+
+  return (
+    <CollapseList
+      localStorageKey={`app-application-countries-filter`}
+      primaryText={t('application:Countries.Countries')}
+      secondaryText={`${selected.length}`}
+      defaultExpandMore={false}
+    >
+      {Object.keys(countries).map((item) => (
+        <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
+          <ListItemText primary={item} />
+          <ListItemSecondaryAction>
+            <Checkbox
+              size="small"
+              edge="end"
+              checked={selected.indexOf(item) > -1}
+              disableRipple
+            />
+          </ListItemSecondaryAction>
+        </ListItemButton>
+      ))}
+    </CollapseList>
+  );
+};
+
+export const ApplicationAgeRatingFilter = ({
+  input = {
+    category: Object.values(ApplicationCategory),
+    platforms: Object.values(ApplicationPlatform),
+    locales: [],
+    countries: [],
+    ageRating: undefined,
+  },
+  setInput = () => null,
+}: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
+  const { t } = useTranslation();
+  const handleSelect = (ageRating: string) => {
+    setInput({
+      ...input,
+      ageRating: ageRating === input.ageRating ? undefined : ageRating,
+    });
+  };
+
+  const selected = input?.ageRating;
+
+  return (
+    <CollapseList
+      localStorageKey={`app-application-age_rating-filter`}
+      primaryText={t('application:AgeRating.AgeRating')}
+      secondaryText={selected ? '1' : '0'}
+      defaultExpandMore={false}
+    >
+      {Object.values(AgeRating).map((item) => (
+        <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
+          <ListItemText primary={item} />
+          <ListItemSecondaryAction>
+            <Checkbox
+              size="small"
+              edge="end"
+              checked={selected === item}
               disableRipple
             />
           </ListItemSecondaryAction>

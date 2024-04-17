@@ -44,6 +44,14 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
       Assets: true,
     },
   },
+  Information: {
+    select: {
+      platforms: true,
+      ageRating: true,
+      countries: true,
+      locales: true,
+    },
+  },
 });
 
 const fullSelect = {
@@ -217,6 +225,24 @@ export const publicAppApplication = router({
                     ],
                   },
                 }),
+            ...(rest.countries?.length
+              ? {
+                  Information: {
+                    countries: {
+                      hasSome: rest.countries,
+                    },
+                  },
+                }
+              : {}),
+            ...(rest.ageRating
+              ? {
+                  Information: {
+                    ageRating: {
+                      equals: rest.ageRating,
+                    },
+                  },
+                }
+              : {}),
           };
 
           const [items, total] = await prisma.$transaction([
@@ -310,6 +336,24 @@ export const protectedAppApplication = router({
                   Information: {
                     locales: {
                       hasSome: rest.locales,
+                    },
+                  },
+                }
+              : {}),
+            ...(rest.countries?.length
+              ? {
+                  Information: {
+                    countries: {
+                      hasSome: rest.countries,
+                    },
+                  },
+                }
+              : {}),
+            ...(rest.ageRating
+              ? {
+                  Information: {
+                    ageRating: {
+                      equals: rest.ageRating,
                     },
                   },
                 }
@@ -685,6 +729,24 @@ export const protectedDashboardApplication = router({
               ? {
                   status: {
                     in: rest.status,
+                  },
+                }
+              : {}),
+            ...(rest.countries?.length
+              ? {
+                  Information: {
+                    countries: {
+                      hasSome: rest.countries,
+                    },
+                  },
+                }
+              : {}),
+            ...(rest.ageRating
+              ? {
+                  Information: {
+                    ageRating: {
+                      equals: rest.ageRating,
+                    },
                   },
                 }
               : {}),

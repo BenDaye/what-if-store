@@ -7,6 +7,7 @@ import { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
+import { Stack } from '@mui/material';
 import { ApplicationGroupType } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -25,8 +26,10 @@ const Page: NextPageWithLayout<
   });
   return (
     <PageContainer>
-      <PermanentSectionCard data={permanent} />
-      <PersistentSectionCard data={persistent} />
+      <Stack gap={2}>
+        <PermanentSectionCard data={permanent} />
+        <PersistentSectionCard data={persistent} />
+      </Stack>
     </PageContainer>
   );
 };

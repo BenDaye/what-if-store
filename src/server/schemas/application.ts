@@ -13,6 +13,8 @@ export const applicationListInputSchema = listInputSchema
     platforms: z.nativeEnum(ApplicationPlatform).array(),
     locales: z.string().array(),
     status: z.nativeEnum(ApplicationStatus).array(),
+    countries: z.string().array(),
+    ageRating: z.string().regex(/^\d+\+$/),
   })
   .partial();
 export type ApplicationListInputSchema = z.infer<

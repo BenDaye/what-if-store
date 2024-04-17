@@ -1,4 +1,7 @@
 {
+  "AgeRating": {
+    "AgeRating": "AgeRating"
+  },
   "Asset": {
     "Type": {
       "Background": "Background",
@@ -45,6 +48,9 @@
   },
   "Copyright": {
     "_": "Copyright"
+  },
+  "Countries": {
+    "Countries": "Countries"
   },
   "DataGridHeaderName": {
     "Category": "Category",
@@ -155,6 +161,9 @@
       "Temporary": "Temporary"
     },
     "_": "Application Groups"
+  },
+  "Locales": {
+    "Locales": "Locales"
   },
   "Media": {
     "Icons": "Icons",

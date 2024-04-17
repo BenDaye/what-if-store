@@ -1,5 +1,5 @@
 import nextI18NextConfig from '@/../next-i18next.config';
-import { ApplicationFilter } from '@/components/app';
+import { ApplicationFilter, CategorySectionCard } from '@/components/app';
 import { PageContainer } from '@/components/common';
 import { AppLayout } from '@/components/layouts';
 import { useAppApplications } from '@/hooks';
@@ -8,7 +8,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
 import { ApplicationListInputSchema } from '@/server/schemas';
-import { Box } from '@mui/material';
+import { Stack } from '@mui/material';
 import { ApplicationCategory, ApplicationPlatform } from '@prisma/client';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
@@ -25,6 +25,8 @@ const Page: NextPageWithLayout<
     category: Object.values(ApplicationCategory),
     platforms: Object.values(ApplicationPlatform),
     locales: [],
+    countries: [],
+    ageRating: undefined,
   });
   const [debounceInput, setDebounceInput] = useDebounceValue(input, 500);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,9 +36,9 @@ const Page: NextPageWithLayout<
     <>
       <ApplicationFilter input={input} setInput={setInput} />
       <PageContainer>
-        {data.map((item) => (
-          <Box key={item.id}>{item.name}</Box>
-        ))}
+        <Stack gap={1}>
+          <CategorySectionCard data={data} input={input} />
+        </Stack>
       </PageContainer>
     </>
   );

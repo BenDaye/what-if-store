@@ -1,3 +1,4 @@
+import { AgeRating } from '@/constants/age_rating';
 import {
   PermanentPresetGroupNames,
   PersistentPresetGroupNames,
@@ -274,9 +275,9 @@ const getRandomApplicationCategories = (): ApplicationCategory[] => {
 };
 
 const getRandomApplicationStatus = (): ApplicationStatus => {
-  const _platforms = Object.values(ApplicationStatus);
-  const _random = Math.floor(Math.random() * _platforms.length);
-  return _platforms[_random];
+  const _status = Object.values(ApplicationStatus);
+  const _random = Math.floor(Math.random() * _status.length);
+  return _status[_random];
 };
 
 const getRandomApplicationCountries = (): string[] => {
@@ -288,7 +289,10 @@ const getRandomApplicationCountries = (): string[] => {
 };
 
 const getRandomApplicationAgeRating = (): string => {
-  return faker.number.int({ min: 3, max: 18 }) + '+';
+  // return faker.number.int({ min: 3, max: 18 }) + '+';
+  const _values = Object.values(AgeRating);
+  const _random = Math.floor(Math.random() * _values.length);
+  return _values[_random];
 };
 
 const getRandomApplicationLanguages = (): string[] => {

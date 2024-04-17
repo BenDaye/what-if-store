@@ -1,4 +1,7 @@
 {
+  "AgeRating": {
+    "AgeRating": "年龄分段"
+  },
   "Asset": {
     "Type": {
       "Background": "背景",
@@ -45,6 +48,9 @@
   },
   "Copyright": {
     "_": "版权"
+  },
+  "Countries": {
+    "Countries": "支持地区"
   },
   "DataGridHeaderName": {
     "Category": "类别",
@@ -155,6 +161,9 @@
       "Temporary": "临时"
     },
     "_": "应用分组"
+  },
+  "Locales": {
+    "Locales": "支持语言"
   },
   "Media": {
     "Icons": "图标",
