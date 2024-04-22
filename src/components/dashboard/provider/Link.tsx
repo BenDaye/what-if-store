@@ -14,7 +14,9 @@ type ProviderLinkProps = {
 };
 
 export const ProviderLink = ({ providerId, overrides }: ProviderLinkProps) => {
-  const { name, verified } = useDashboardProvider(providerId);
+  const {
+    data: { name, verified },
+  } = useDashboardProvider(providerId);
   return (
     <Link
       href={`/dashboard/provider/${providerId}`}

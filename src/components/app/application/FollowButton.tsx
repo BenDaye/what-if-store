@@ -25,7 +25,7 @@ export const FollowApplicationButton = ({
 
   const { status, data: session } = useSession();
   const followed = useMemo(
-    () => followers.some((item) => item.id === session?.user?.id),
+    () => followers.some((item) => item.userId === session?.user?.id),
     [session?.user?.id, followers],
   );
 

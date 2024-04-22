@@ -4,4 +4,3 @@ export * from './FollowButton';
 export * from './OwnButton';
 export * from './category';
 export * from './group';
-export * from './platform';

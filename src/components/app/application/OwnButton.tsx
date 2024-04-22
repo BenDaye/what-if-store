@@ -25,7 +25,7 @@ export const OwnApplicationButton = ({
 
   const { status, data: session } = useSession();
   const owned = useMemo(
-    () => owners.some((item) => item.id === session?.user?.id),
+    () => owners.some((item) => item.userId === session?.user?.id),
     [session?.user?.id, owners],
   );
 

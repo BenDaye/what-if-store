@@ -85,10 +85,10 @@ const fullSelect = {
       },
     },
     Followers: {
-      select: { id: true },
+      select: { userId: true },
     },
     Owners: {
-      select: { id: true },
+      select: { userId: true },
     },
     Collections: {
       select: {
@@ -390,68 +390,85 @@ export const protectedAppApplication = router({
     .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
-        const result = await prisma.application.create({
-          data: {
-            providerId: session.user.id,
-            name: input.name,
-            description: input.description,
-            category: input.category,
-            price: input.price,
-            Information: {
-              create: {
-                platforms: input.platforms,
-                compatibility: input.compatibility,
-                ageRating: input.ageRating,
-                countries: input.countries,
-                locales: input.locales,
-                website: input.website,
-                github: input.github,
+        await prisma.$transaction(async (tx) => {
+          const exists = await tx.application.findFirst({
+            where: {
+              name: input.name,
+              providerId: session.user.id,
+              status: { not: ApplicationStatus.Deleted },
+            },
+          });
+          if (exists) throw new Error('Application already exists');
+          const creation = await tx.application.create({
+            data: {
+              providerId: session.user.id,
+              name: input.name,
+              description: input.description,
+              category: input.category,
+              price: input.price,
+              Information: {
+                create: {
+                  platforms: input.platforms,
+                  compatibility: input.compatibility,
+                  ageRating: input.ageRating,
+                  countries: input.countries,
+                  locales: input.locales,
+                  website: input.website,
+                  github: input.github,
+                },
+              },
+              Tags: {
+                connect: input.tags,
+              },
+              Assets: {
+                createMany: {
+                  skipDuplicates: true,
+                  data: [
+                    {
+                      type: ApplicationAssetType.File,
+                      url: '',
+                      name: 'PrivacyPolicy',
+                    },
+                    {
+                      type: ApplicationAssetType.File,
+                      url: '',
+                      name: 'TermsOfUse',
+                    },
+                    {
+                      type: ApplicationAssetType.File,
+                      url: '',
+                      name: 'Copyright',
+                    },
+                    {
+                      type: ApplicationAssetType.File,
+                      url: '',
+                      name: 'Readme',
+                    },
+                  ],
+                },
               },
             },
-            Owners: {
-              connect: {
-                id: session.user.id,
-              },
+            select: defaultSelect,
+          });
+          await tx.application.update({
+            where: {
+              id: creation.id,
             },
-            Followers: {
-              connect: {
-                id: session.user.id,
-              },
-            },
-            Tags: {
-              connect: input.tags,
-            },
-            Assets: {
-              createMany: {
-                skipDuplicates: true,
-                data: [
+            data: {
+              Followers: {
+                set: [
                   {
-                    type: ApplicationAssetType.File,
-                    url: '',
-                    name: 'PrivacyPolicy',
-                  },
-                  {
-                    type: ApplicationAssetType.File,
-                    url: '',
-                    name: 'TermsOfUse',
-                  },
-                  {
-                    type: ApplicationAssetType.File,
-                    url: '',
-                    name: 'Copyright',
-                  },
-                  {
-                    type: ApplicationAssetType.File,
-                    url: '',
-                    name: 'Readme',
+                    applicationId_userId: {
+                      userId: session.user.id,
+                      applicationId: creation.id,
+                    },
                   },
                 ],
               },
             },
-          },
-          select: defaultSelect,
+          });
+          applicationEmitter.emit('create', creation.id);
         });
-        applicationEmitter.emit('create', result.id);
         return true;
       } catch (err) {
         throw onError(err);
@@ -578,7 +595,10 @@ export const protectedAppApplication = router({
           data: {
             Followers: {
               connect: {
-                id: session.user.id,
+                applicationId_userId: {
+                  userId: session.user.id,
+                  applicationId: id,
+                },
               },
             },
           },
@@ -599,7 +619,10 @@ export const protectedAppApplication = router({
           data: {
             Followers: {
               disconnect: {
-                id: session.user.id,
+                applicationId_userId: {
+                  userId: session.user.id,
+                  applicationId: id,
+                },
               },
             },
           },
@@ -616,17 +639,17 @@ export const protectedAppApplication = router({
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         // TODO: It should be checked if the user can pay for the application
-        await prisma.application.update({
-          where: { id, status: { equals: ApplicationStatus.Published } },
-          data: {
-            Owners: {
-              connect: {
-                id: session.user.id,
-              },
-            },
-          },
-        });
-        applicationEmitter.emit('update', id);
+        // await prisma.application.update({
+        //   where: { id, status: { equals: ApplicationStatus.Published } },
+        //   data: {
+        //     Owners: {
+        //       connect: {
+        //         id: session.user.id,
+        //       },
+        //     },
+        //   },
+        // });
+        // applicationEmitter.emit('update', id);
         return true;
       } catch (err) {
         throw onError(err);

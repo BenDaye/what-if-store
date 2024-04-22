@@ -17,24 +17,36 @@ enum AuthRole {
 }
 
 model User {
-  id                    String                  @id @default(uuid())
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
-  username              String                  @unique
+  id                    String                        @id @default(uuid())
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
+  username              String                        @unique
   password              String
-  role                  AuthRole                @default(User)
+  role                  AuthRole                      @default(User)
   UserProfile           UserProfile?
   ProviderProfile       ProviderProfile?
-  FollowingUsers        User[]                  @relation("UserFollows")
-  Followers             User[]                  @relation("UserFollows")
+  FollowingUsers        UserFollow[]                  @relation("UserFollowing")
+  Followers             UserFollow[]                  @relation("UserFollowers")
   ProvidingApplications Application[]
-  OwningApplications    Application[]           @relation("ApplicationOwns")
-  FollowingApplications Application[]           @relation("ApplicationFollows")
-  ProvidingCollections  ApplicationCollection[] @relation()
-  OwningCollections     ApplicationCollection[] @relation("CollectionOwns")
-  FollowingCollections  ApplicationCollection[] @relation("CollectionFollows")
+  OwningApplications    ApplicationOwn[]
+  FollowingApplications ApplicationFollow[]
+  ProvidingCollections  ApplicationCollection[]       @relation()
+  OwningCollections     ApplicationCollectionOwn[]
+  FollowingCollections  ApplicationCollectionFollow[]
   Files                 File[]
   ApiKeys               UserApiKey[]
+  Balance               UserBalance?
+  BalanceLogs           UserBalanceLog[]
+}
+
+model UserFollow {
+  following    User     @relation("UserFollowing", fields: [followingId], references: [id])
+  followingId  String
+  followedBy   User     @relation("UserFollowers", fields: [followedById], references: [id])
+  followedById String
+  followedAt   DateTime @default(now())
+
+  @@id([followingId, followedById])
 }
 
 model UserProfile {
@@ -60,6 +72,45 @@ model UserApiKey {
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, remark])
+}
+
+model UserBalance {
+  id        String           @id @default(uuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  balance   Float
+  userId    String           @unique
+  User      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Logs      UserBalanceLog[]
+}
+
+enum UserBalanceLogType {
+  Deposit
+  Withdraw
+  Refund
+  Reward
+  Purchase
+  Sale
+  Other
+}
+
+model UserBalanceLog {
+  id                       String                    @id @default(uuid())
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  amount                   Float
+  balance                  Float
+  remark                   String?
+  type                     UserBalanceLogType        @default(Other)
+  prevId                   String?                   @unique
+  PrevLog                  UserBalanceLog?           @relation("UserBalanceLogContext", fields: [prevId], references: [id])
+  NextLog                  UserBalanceLog?           @relation("UserBalanceLogContext")
+  userId                   String
+  User                     User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balanceId                String
+  Balance                  UserBalance               @relation(fields: [balanceId], references: [id], onDelete: Cascade)
+  ApplicationOwn           ApplicationOwn?
+  ApplicationCollectionOwn ApplicationCollectionOwn?
 }
 
 enum ProviderType {
@@ -168,14 +219,14 @@ model Application {
   VersionHistories ApplicationVersion[]
   providerId       String
   Provider         User                    @relation(fields: [providerId], references: [id], onDelete: Restrict)
-  Followers        User[]                  @relation("ApplicationFollows")
-  Owners           User[]                  @relation("ApplicationOwns")
+  Followers        ApplicationFollow[]
+  Owners           ApplicationOwn[]
   Collections      ApplicationCollection[]
   Groups           ApplicationGroup[]
   Tags             ApplicationTag[]
   Assets           ApplicationAsset[]
 
-  @@unique([name, providerId])
+  @@unique([name, providerId, status])
 }
 
 model ApplicationInformation {
@@ -228,17 +279,17 @@ model ApplicationGroup {
 }
 
 model ApplicationCollection {
-  id           String        @id @default(uuid())
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id           String                        @id @default(uuid())
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
   name         String
   description  String?
-  price        Float?        @default(0)
+  price        Float?                        @default(0)
   providerId   String
-  Provider     User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  Provider     User                          @relation(fields: [providerId], references: [id], onDelete: Cascade)
   Applications Application[]
-  Followers    User[]        @relation("CollectionFollows")
-  Owners       User[]        @relation("CollectionOwns")
+  Followers    ApplicationCollectionFollow[]
+  Owners       ApplicationCollectionOwn[]
 
   @@unique([name, providerId])
 }
@@ -287,4 +338,48 @@ model File {
   size      Int
   mimeType  String
   Users     User[]
+}
+
+model ApplicationFollow {
+  Application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String
+  User          User        @relation(fields: [userId], references: [id])
+  userId        String
+  followedAt    DateTime    @default(now())
+
+  @@id([applicationId, userId])
+}
+
+model ApplicationCollectionFollow {
+  ApplicationCollection   ApplicationCollection @relation(fields: [applicationCollectionId], references: [id])
+  applicationCollectionId String
+  User                    User                  @relation(fields: [userId], references: [id])
+  userId                  String
+  followedAt              DateTime              @default(now())
+
+  @@id([applicationCollectionId, userId])
+}
+
+model ApplicationOwn {
+  Application   Application    @relation(fields: [applicationId], references: [id])
+  applicationId String
+  User          User           @relation(fields: [userId], references: [id])
+  userId        String
+  ownedAt       DateTime       @default(now())
+  balanceLogId  String         @unique
+  BalanceLog    UserBalanceLog @relation(fields: [balanceLogId], references: [id])
+
+  @@id([applicationId, userId])
+}
+
+model ApplicationCollectionOwn {
+  ApplicationCollection   ApplicationCollection @relation(fields: [applicationCollectionId], references: [id])
+  applicationCollectionId String
+  User                    User                  @relation(fields: [userId], references: [id])
+  userId                  String
+  ownedAt                 DateTime              @default(now())
+  balanceLogId            String                @unique
+  BalanceLog              UserBalanceLog        @relation(fields: [balanceLogId], references: [id])
+
+  @@id([applicationCollectionId, userId])
 }

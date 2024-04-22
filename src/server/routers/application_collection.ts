@@ -22,18 +22,30 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationCollectionSelect>()({
   id: true,
   name: true,
   description: true,
+  providerId: true,
+  price: true,
 });
 
 const fullSelect = {
   ...defaultSelect,
   ...Prisma.validator<Prisma.ApplicationCollectionSelect>()({
-    price: true,
-    providerId: true,
     Applications: {
       select: {
         id: true,
         name: true,
-        providerId: true,
+        price: true,
+      },
+    },
+    Followers: {
+      select: {
+        userId: true,
+        followedAt: true,
+      },
+    },
+    Owners: {
+      select: {
+        userId: true,
+        ownedAt: true,
       },
     },
   }),
@@ -146,34 +158,48 @@ export const protectedAppApplicationCollection = router({
         input: { name, description, price, applications },
       }) => {
         try {
-          // TODO: It should be checked if the application is provided by the user
-          const result = await prisma.applicationCollection.create({
-            data: {
-              providerId: session.user.id,
-              name,
-              description,
-              price,
-              Applications: {
-                connect: applications.map((id) => ({
-                  id,
-                  providerId: session.user.id,
-                  status: ApplicationStatus.Published,
-                })),
+          await prisma.$transaction(async (tx) => {
+            const exists = await tx.applicationCollection.findFirst({
+              where: {
+                providerId: session.user.id,
+                name,
               },
-              Followers: {
-                connect: {
-                  id: session.user.id,
+            });
+            if (exists)
+              throw new Error('Application collection already exists');
+
+            const creation = await tx.applicationCollection.create({
+              data: {
+                providerId: session.user.id,
+                name,
+                description,
+                price,
+                Applications: {
+                  connect: applications.map((id) => ({
+                    id,
+                    providerId: session.user.id,
+                    status: ApplicationStatus.Published,
+                  })),
                 },
               },
-              Owners: {
-                connect: {
-                  id: session.user.id,
+            });
+            await tx.applicationCollection.update({
+              where: {
+                id: creation.id,
+              },
+              data: {
+                Followers: {
+                  connect: {
+                    applicationCollectionId_userId: {
+                      applicationCollectionId: creation.id,
+                      userId: session.user.id,
+                    },
+                  },
                 },
               },
-            },
-            select: defaultSelect,
+            });
+            applicationCollectionEmitter.emit('create', creation.id);
           });
-          applicationCollectionEmitter.emit('create', result.id);
           return true;
         } catch (err) {
           throw onError(err);
@@ -227,7 +253,10 @@ export const protectedAppApplicationCollection = router({
           data: {
             Followers: {
               connect: {
-                id: session.user.id,
+                applicationCollectionId_userId: {
+                  applicationCollectionId: id,
+                  userId: session.user.id,
+                },
               },
             },
           },
@@ -244,17 +273,17 @@ export const protectedAppApplicationCollection = router({
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
         // TODO: It should be checked if the user can pay for the application collection
-        await prisma.applicationCollection.update({
-          where: { id },
-          data: {
-            Owners: {
-              connect: {
-                id: session.user.id,
-              },
-            },
-          },
-        });
-        applicationCollectionEmitter.emit('update', id);
+        // await prisma.applicationCollection.update({
+        //   where: { id },
+        //   data: {
+        //     Owners: {
+        //       connect: {
+        //         id: session.user.id,
+        //       },
+        //     },
+        //   },
+        // });
+        // applicationCollectionEmitter.emit('update', id);
         return true;
       } catch (err) {
         throw onError(err);

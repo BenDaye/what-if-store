@@ -3,7 +3,6 @@ import { ApplicationListInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Divider,
@@ -104,7 +103,6 @@ const CommonSection = ({
         <Typography variant="h6">
           {t(`application:Category.Name.${category}`)}
         </Typography>
-        <Button>{t('common:View')}</Button>
       </Stack>
       <Grid container spacing={2}>
         {applications.map((item) => (
