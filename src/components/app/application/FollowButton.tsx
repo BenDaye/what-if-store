@@ -1,4 +1,4 @@
-import { UseAppApplicationHookDataSchema, useAuth, useNotice } from '@/hooks';
+import { useAuth, useNotice } from '@/hooks';
 import { OverridesButtonProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import {
@@ -12,30 +12,38 @@ import { useCallback, useMemo } from 'react';
 
 type FollowApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;
-  followers: UseAppApplicationHookDataSchema['followers'];
   showText?: boolean;
 };
 export const FollowApplicationButton = ({
   overrides,
   applicationId,
-  followers,
   showText = false,
 }: FollowApplicationButtonProps) => {
   const { t } = useTranslation();
 
-  const { status, data: session } = useSession();
-  const followed = useMemo(
-    () => followers.some((item) => item.userId === session?.user?.id),
-    [session?.user?.id, followers],
-  );
+  const { status } = useSession();
 
   const { signIn } = useAuth();
 
   const { showWarning } = useNotice();
 
-  const { mutateAsync: follow } =
+  const {
+    data: followed,
+    isFetching,
+    refetch,
+  } = trpc.protectedAppApplication.isFollowedById.useQuery(applicationId, {
+    enabled: status === 'authenticated',
+    placeholderData: false,
+  });
+  const { mutateAsync: follow, isPending: isFollowPending } =
     trpc.protectedAppApplication.followById.useMutation({
       onError: (err) => showWarning(err.message),
+      onSuccess: () => refetch(),
+    });
+  const { mutateAsync: unfollow, isPending: isUnfollowPending } =
+    trpc.protectedAppApplication.unfollowById.useMutation({
+      onError: (err) => showWarning(err.message),
+      onSuccess: () => refetch(),
     });
 
   const onClick = useCallback(async () => {
@@ -43,8 +51,18 @@ export const FollowApplicationButton = ({
       signIn();
       return;
     }
+
+    if (followed) {
+      await unfollow(applicationId).catch(() => null);
+      return;
+    }
     await follow(applicationId).catch(() => null);
-  }, [status, signIn, follow, applicationId]);
+  }, [status, signIn, followed, follow, unfollow, applicationId]);
+
+  const disabled = useMemo(
+    () => isFetching || isFollowPending || isUnfollowPending,
+    [isFetching, isFollowPending, isUnfollowPending],
+  );
 
   return showText ? (
     <Button
@@ -52,6 +70,7 @@ export const FollowApplicationButton = ({
       color={followed ? 'error' : 'inherit'}
       startIcon={followed ? <FollowedIcon /> : <FollowIcon />}
       onClick={onClick}
+      disabled={disabled}
       {...overrides?.ButtonProps}
     >
       {followed
@@ -65,6 +84,7 @@ export const FollowApplicationButton = ({
         fontSize: (theme) => theme.typography.body1.fontSize,
       }}
       onClick={onClick}
+      disabled={disabled}
     >
       {followed ? (
         <FollowedIcon sx={{ fontSize: 'inherit' }} />

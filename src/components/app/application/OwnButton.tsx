@@ -1,4 +1,4 @@
-import { UseAppApplicationHookDataSchema, useAuth, useNotice } from '@/hooks';
+import { useAuth, useNotice } from '@/hooks';
 import { OverridesButtonProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import {
@@ -12,32 +12,34 @@ import { useCallback, useMemo } from 'react';
 
 type OwnApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;
-  owners: UseAppApplicationHookDataSchema['owners'];
   showText?: boolean;
 };
 export const OwnApplicationButton = ({
   overrides,
   applicationId,
-  owners,
   showText = false,
 }: OwnApplicationButtonProps) => {
   const { t } = useTranslation();
 
-  const { status, data: session } = useSession();
-  const owned = useMemo(
-    () => owners.some((item) => item.userId === session?.user?.id),
-    [session?.user?.id, owners],
-  );
+  const { status } = useSession();
 
   const { signIn } = useAuth();
 
   const { showWarning } = useNotice();
 
-  const { mutateAsync: own } = trpc.protectedAppApplication.ownById.useMutation(
-    {
+  const {
+    data: owned,
+    isFetching,
+    refetch,
+  } = trpc.protectedAppApplication.isOwnedById.useQuery(applicationId, {
+    enabled: status === 'authenticated',
+    placeholderData: false,
+  });
+  const { mutateAsync: own, isPending: isOwnPending } =
+    trpc.protectedAppApplication.ownById.useMutation({
       onError: (err) => showWarning(err.message),
-    },
-  );
+      onSuccess: () => refetch(),
+    });
 
   const onClick = useCallback(async () => {
     if (status !== 'authenticated') {
@@ -47,12 +49,18 @@ export const OwnApplicationButton = ({
     await own(applicationId).catch(() => null);
   }, [status, signIn, own, applicationId]);
 
+  const disabled = useMemo(
+    () => isFetching || isOwnPending,
+    [isFetching, isOwnPending],
+  );
+
   return showText ? (
     <Button
       size="small"
       color={owned ? 'primary' : 'inherit'}
       startIcon={owned ? <OwnedIcon /> : <OwnIcon />}
       onClick={onClick}
+      disabled={disabled}
       {...overrides?.ButtonProps}
     >
       {owned ? t('application:Own.Owned') : t('application:Own.Own')}
@@ -64,6 +72,7 @@ export const OwnApplicationButton = ({
         fontSize: (theme) => theme.typography.body1.fontSize,
       }}
       onClick={onClick}
+      disabled={disabled}
     >
       {owned ? (
         <OwnedIcon sx={{ fontSize: 'inherit' }} />

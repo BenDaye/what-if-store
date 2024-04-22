@@ -576,6 +576,22 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
+  isFollowedById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .query(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        const exists = await prisma.applicationFollow.findFirst({
+          where: {
+            applicationId: id,
+            userId: session.user.id,
+          },
+        });
+        return Boolean(exists);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   followById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -594,11 +610,8 @@ export const protectedAppApplication = router({
           },
           data: {
             Followers: {
-              connect: {
-                applicationId_userId: {
-                  userId: session.user.id,
-                  applicationId: id,
-                },
+              create: {
+                userId: session.user.id,
               },
             },
           },
@@ -614,21 +627,32 @@ export const protectedAppApplication = router({
     .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: id }) => {
       try {
-        await prisma.application.update({
-          where: { id },
-          data: {
-            Followers: {
-              disconnect: {
-                applicationId_userId: {
-                  userId: session.user.id,
-                  applicationId: id,
-                },
-              },
+        await prisma.applicationFollow.delete({
+          where: {
+            applicationId_userId: {
+              applicationId: id,
+              userId: session.user.id,
             },
           },
         });
         applicationEmitter.emit('update', id);
         return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  isOwnedById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .query(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        const exists = await prisma.applicationOwn.findFirst({
+          where: {
+            applicationId: id,
+            userId: session.user.id,
+          },
+        });
+        return Boolean(exists);
       } catch (err) {
         throw onError(err);
       }

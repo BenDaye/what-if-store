@@ -114,14 +114,8 @@ export const SimpleApplicationCard = ({
       </CardActionArea>
       <CardActions sx={{ pt: 0 }} {...overrides?.CardActionsProps}>
         <Box flexGrow={1} />
-        <FollowApplicationButton
-          applicationId={data.id}
-          followers={application.followers}
-        />
-        <OwnApplicationButton
-          applicationId={data.id}
-          owners={application.owners}
-        />
+        <FollowApplicationButton applicationId={data.id} />
+        <OwnApplicationButton applicationId={data.id} />
       </CardActions>
     </Card>
   );

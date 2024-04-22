@@ -24,7 +24,6 @@ export const prisma: PrismaClient =
         { level: 'info', emit: 'event' },
         { level: 'warn', emit: 'event' },
       ],
-      errorFormat: env.NODE_ENV === 'development' ? 'pretty' : 'colorless',
     });
 
     _prisma.$on('query', (ev) => {
