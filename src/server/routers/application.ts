@@ -29,7 +29,6 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
   name: true,
   description: true,
   category: true,
-  price: true,
   status: true,
   createdAt: true,
   updatedAt: true,
@@ -50,6 +49,14 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationSelect>()({
       ageRating: true,
       countries: true,
       locales: true,
+    },
+  },
+  Price: {
+    select: {
+      id: true,
+      price: true,
+      country: true,
+      currency: true,
     },
   },
 });
@@ -85,10 +92,10 @@ const fullSelect = {
       },
     },
     Followers: {
-      select: { userId: true },
+      select: { userId: true, createdAt: true },
     },
     Owners: {
-      select: { userId: true },
+      select: { userId: true, createdAt: true },
     },
     Collections: {
       select: {
@@ -113,6 +120,14 @@ const fullSelect = {
         isPrimary: true,
         isLocal: true,
         url: true,
+      },
+    },
+    PriceHistories: {
+      select: {
+        id: true,
+        price: true,
+        country: true,
+        currency: true,
       },
     },
   }),
@@ -405,7 +420,7 @@ export const protectedAppApplication = router({
               name: input.name,
               description: input.description,
               category: input.category,
-              price: input.price,
+              // price: input.price,
               Information: {
                 create: {
                   platforms: input.platforms,
@@ -445,6 +460,18 @@ export const protectedAppApplication = router({
                       name: 'Readme',
                     },
                   ],
+                },
+              },
+              Price: {
+                createMany: {
+                  skipDuplicates: true,
+                  data: input.price,
+                },
+              },
+              PriceHistories: {
+                createMany: {
+                  skipDuplicates: true,
+                  data: input.price,
                 },
               },
             },
@@ -521,34 +548,109 @@ export const protectedAppApplication = router({
     .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
       try {
         // TODO: It should be checked if the application is editable.
-        await prisma.application.update({
-          where: {
-            id,
-            providerId: session.user.id,
-            status: { not: ApplicationStatus.Deleted },
-          },
-          data: {
-            name: input.name,
-            description: input.description,
-            category: input.category,
-            price: input.price,
-            Information: {
-              update: {
-                platforms: input.platforms,
-                compatibility: input.compatibility,
-                ageRating: input.ageRating,
-                countries: input.countries,
-                locales: input.locales,
-                website: input.website,
-                github: input.github,
+        await prisma.$transaction(async (tx) => {
+          const exists = await tx.application.findFirst({
+            where: {
+              id,
+              providerId: session.user.id,
+              status: { not: ApplicationStatus.Deleted },
+            },
+            select: defaultSelect,
+          });
+          if (!exists) throw new Error('Application not found');
+
+          await tx.application.update({
+            where: {
+              id,
+              providerId: session.user.id,
+              status: { not: ApplicationStatus.Deleted },
+            },
+            data: {
+              name: input.name,
+              description: input.description,
+              category: input.category,
+              Information: {
+                update: {
+                  platforms: input.platforms,
+                  compatibility: input.compatibility,
+                  ageRating: input.ageRating,
+                  countries: input.countries,
+                  locales: input.locales,
+                  website: input.website,
+                  github: input.github,
+                },
+              },
+              Tags: {
+                set: input.tags,
               },
             },
-            Tags: {
-              set: input.tags,
-            },
-          },
+          });
+
+          if (input.price) {
+            for await (const next of input.price) {
+              const created = exists.Price.find(
+                (price) => price.country === next.country,
+              );
+              if (!created) {
+                await tx.application.update({
+                  where: {
+                    id,
+                    providerId: session.user.id,
+                    status: { not: ApplicationStatus.Deleted },
+                    Information: {
+                      countries: {
+                        has: next.country,
+                      },
+                    },
+                  },
+                  data: {
+                    Price: {
+                      create: next,
+                    },
+                    PriceHistories: {
+                      create: next,
+                    },
+                  },
+                });
+              } else {
+                if (
+                  created.price === next.price &&
+                  created.currency === next.currency
+                )
+                  continue;
+
+                await tx.application.update({
+                  where: {
+                    id,
+                    providerId: session.user.id,
+                    status: { not: ApplicationStatus.Deleted },
+                    Information: {
+                      countries: {
+                        has: next.country,
+                      },
+                    },
+                  },
+                  data: {
+                    Price: {
+                      update: {
+                        where: {
+                          id: created.id,
+                          country: next.country,
+                        },
+                        data: next,
+                      },
+                    },
+                    PriceHistories: {
+                      create: next,
+                    },
+                  },
+                });
+              }
+            }
+          }
+
+          applicationEmitter.emit('update', id);
         });
-        applicationEmitter.emit('update', id);
         return true;
       } catch (err) {
         throw onError(err);
@@ -592,6 +694,22 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
+  followedList: protectedUserProcedure.query(
+    async ({ ctx: { prisma, session } }) => {
+      try {
+        return await prisma.applicationFollow.findMany({
+          where: {
+            userId: session.user.id,
+          },
+          select: {
+            applicationId: true,
+          },
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    },
+  ),
   followById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -657,6 +775,22 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
+  ownedList: protectedUserProcedure.query(
+    async ({ ctx: { prisma, session } }) => {
+      try {
+        return await prisma.applicationOwn.findMany({
+          where: {
+            userId: session.user.id,
+          },
+          select: {
+            applicationId: true,
+          },
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    },
+  ),
   ownById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -837,30 +971,101 @@ export const protectedDashboardApplication = router({
     .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
       try {
-        await prisma.application.update({
-          where: { id },
-          data: {
-            name: input.name,
-            description: input.description,
-            category: input.category,
-            price: input.price,
-            Information: {
-              update: {
-                platforms: input.platforms,
-                compatibility: input.compatibility,
-                ageRating: input.ageRating,
-                countries: input.countries,
-                locales: input.locales,
-                website: input.website,
-                github: input.github,
+        await prisma.$transaction(async (tx) => {
+          const exists = await tx.application.findFirst({
+            where: {
+              id,
+            },
+            select: defaultSelect,
+          });
+          if (!exists) throw new Error('Application not found');
+
+          await tx.application.update({
+            where: {
+              id,
+            },
+            data: {
+              name: input.name,
+              description: input.description,
+              category: input.category,
+              Information: {
+                update: {
+                  platforms: input.platforms,
+                  compatibility: input.compatibility,
+                  ageRating: input.ageRating,
+                  countries: input.countries,
+                  locales: input.locales,
+                  website: input.website,
+                  github: input.github,
+                },
+              },
+              Tags: {
+                set: input.tags,
               },
             },
-            Tags: {
-              set: input.tags,
-            },
-          },
+          });
+
+          if (input.price) {
+            for await (const next of input.price) {
+              const created = exists.Price.find(
+                (price) => price.country === next.country,
+              );
+              if (!created) {
+                await tx.application.update({
+                  where: {
+                    id,
+                    Information: {
+                      countries: {
+                        has: next.country,
+                      },
+                    },
+                  },
+                  data: {
+                    Price: {
+                      create: next,
+                    },
+                    PriceHistories: {
+                      create: next,
+                    },
+                  },
+                });
+              } else {
+                if (
+                  created.price === next.price &&
+                  created.currency === next.currency
+                )
+                  continue;
+
+                await tx.application.update({
+                  where: {
+                    id,
+                    Information: {
+                      countries: {
+                        has: next.country,
+                      },
+                    },
+                  },
+                  data: {
+                    Price: {
+                      update: {
+                        where: {
+                          id: created.id,
+                          country: next.country,
+                        },
+                        data: next,
+                      },
+                    },
+                    PriceHistories: {
+                      create: next,
+                    },
+                  },
+                });
+              }
+            }
+          }
+
+          applicationEmitter.emit('update', id);
         });
-        applicationEmitter.emit('update', id);
         return true;
       } catch (err) {
         throw onError(err);

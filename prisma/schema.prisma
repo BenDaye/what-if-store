@@ -30,23 +30,37 @@ model User {
   ProvidingApplications Application[]
   OwningApplications    ApplicationOwn[]
   FollowingApplications ApplicationFollow[]
-  ProvidingCollections  ApplicationCollection[]       @relation()
+  ProvidingCollections  ApplicationCollection[]
   OwningCollections     ApplicationCollectionOwn[]
   FollowingCollections  ApplicationCollectionFollow[]
   Files                 File[]
   ApiKeys               UserApiKey[]
   Balance               UserBalance?
   BalanceLogs           UserBalanceLog[]
+  Donors                UserDonation[]                @relation("UserDonationDonor")
+  Donees                UserDonation[]                @relation("UserDonationDonee")
 }
 
 model UserFollow {
-  following    User     @relation("UserFollowing", fields: [followingId], references: [id])
+  createdAt    DateTime @default(now())
+  Following    User     @relation("UserFollowing", fields: [followingId], references: [id])
   followingId  String
-  followedBy   User     @relation("UserFollowers", fields: [followedById], references: [id])
+  FollowedBy   User     @relation("UserFollowers", fields: [followedById], references: [id])
   followedById String
-  followedAt   DateTime @default(now())
 
   @@id([followingId, followedById])
+}
+
+model UserDonation {
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  donorId      String
+  Donor        User           @relation("UserDonationDonor", fields: [donorId], references: [id])
+  doneeId      String
+  Donee        User           @relation("UserDonationDonee", fields: [doneeId], references: [id])
+  balanceLogId String         @unique
+  BalanceLog   UserBalanceLog @relation(fields: [balanceLogId], references: [id])
 }
 
 model UserProfile {
@@ -78,7 +92,8 @@ model UserBalance {
   id        String           @id @default(uuid())
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
-  balance   Float
+  available Int              @default(0)
+  frozen    Int              @default(0)
   userId    String           @unique
   User      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   Logs      UserBalanceLog[]
@@ -91,6 +106,8 @@ enum UserBalanceLogType {
   Reward
   Purchase
   Sale
+  Prepayment
+  Donation
   Other
 }
 
@@ -98,8 +115,8 @@ model UserBalanceLog {
   id                       String                    @id @default(uuid())
   createdAt                DateTime                  @default(now())
   updatedAt                DateTime                  @updatedAt
-  amount                   Float
-  balance                  Float
+  amount                   Int
+  balance                  Int
   remark                   String?
   type                     UserBalanceLogType        @default(Other)
   prevId                   String?                   @unique
@@ -109,6 +126,7 @@ model UserBalanceLog {
   User                     User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   balanceId                String
   Balance                  UserBalance               @relation(fields: [balanceId], references: [id], onDelete: Cascade)
+  UserDonation             UserDonation?
   ApplicationOwn           ApplicationOwn?
   ApplicationCollectionOwn ApplicationCollectionOwn?
 }
@@ -206,6 +224,11 @@ enum ApplicationStatus {
   Achieved
 }
 
+enum ApplicationPurchaseType {
+  Store
+  InApp
+}
+
 model Application {
   id               String                  @id @default(uuid())
   createdAt        DateTime                @default(now())
@@ -213,7 +236,6 @@ model Application {
   name             String
   description      String?
   category         ApplicationCategory
-  price            Float?                  @default(0)
   status           ApplicationStatus       @default(Draft)
   Information      ApplicationInformation?
   VersionHistories ApplicationVersion[]
@@ -225,8 +247,39 @@ model Application {
   Groups           ApplicationGroup[]
   Tags             ApplicationTag[]
   Assets           ApplicationAsset[]
+  purchaseType     ApplicationPurchaseType @default(Store)
+  Price            Price[]
+  PriceHistories   PriceHistory[]
 
   @@unique([name, providerId, status])
+}
+
+model Price {
+  id                      String                 @id @default(uuid())
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  price                   Int                    @default(0)
+  country                 String
+  currency                String
+  applicationId           String?
+  Application             Application?           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationCollectionId String?
+  ApplicationCollection   ApplicationCollection? @relation(fields: [applicationCollectionId], references: [id], onDelete: Cascade)
+}
+
+model PriceHistory {
+  id                      String                 @id @default(uuid())
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  price                   Int                    @default(0)
+  country                 String
+  currency                String
+  startedAt               DateTime               @default(now())
+  endedAt                 DateTime?
+  applicationId           String?
+  Application             Application?           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationCollectionId String?
+  ApplicationCollection   ApplicationCollection? @relation(fields: [applicationCollectionId], references: [id], onDelete: Cascade)
 }
 
 model ApplicationInformation {
@@ -278,20 +331,30 @@ model ApplicationGroup {
   Applications Application[]
 }
 
-model ApplicationCollection {
-  id           String                        @id @default(uuid())
-  createdAt    DateTime                      @default(now())
-  updatedAt    DateTime                      @updatedAt
-  name         String
-  description  String?
-  price        Float?                        @default(0)
-  providerId   String
-  Provider     User                          @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  Applications Application[]
-  Followers    ApplicationCollectionFollow[]
-  Owners       ApplicationCollectionOwn[]
+enum ApplicationCollectionStatus {
+  Draft
+  Deleted
+  Published
+  Suspended
+  Achieved
+}
 
-  @@unique([name, providerId])
+model ApplicationCollection {
+  id             String                        @id @default(uuid())
+  createdAt      DateTime                      @default(now())
+  updatedAt      DateTime                      @updatedAt
+  name           String
+  description    String?
+  status         ApplicationCollectionStatus   @default(Draft)
+  providerId     String
+  Provider       User                          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  Applications   Application[]
+  Followers      ApplicationCollectionFollow[]
+  Owners         ApplicationCollectionOwn[]
+  Price          Price[]
+  PriceHistories PriceHistory[]
+
+  @@unique([name, providerId, status])
 }
 
 model ApplicationTag {
@@ -341,31 +404,31 @@ model File {
 }
 
 model ApplicationFollow {
+  createdAt     DateTime    @default(now())
   Application   Application @relation(fields: [applicationId], references: [id])
   applicationId String
   User          User        @relation(fields: [userId], references: [id])
   userId        String
-  followedAt    DateTime    @default(now())
 
   @@id([applicationId, userId])
 }
 
 model ApplicationCollectionFollow {
+  createdAt               DateTime              @default(now())
   ApplicationCollection   ApplicationCollection @relation(fields: [applicationCollectionId], references: [id])
   applicationCollectionId String
   User                    User                  @relation(fields: [userId], references: [id])
   userId                  String
-  followedAt              DateTime              @default(now())
 
   @@id([applicationCollectionId, userId])
 }
 
 model ApplicationOwn {
+  createdAt     DateTime       @default(now())
   Application   Application    @relation(fields: [applicationId], references: [id])
   applicationId String
   User          User           @relation(fields: [userId], references: [id])
   userId        String
-  ownedAt       DateTime       @default(now())
   balanceLogId  String         @unique
   BalanceLog    UserBalanceLog @relation(fields: [balanceLogId], references: [id])
 
@@ -373,11 +436,11 @@ model ApplicationOwn {
 }
 
 model ApplicationCollectionOwn {
+  createdAt               DateTime              @default(now())
   ApplicationCollection   ApplicationCollection @relation(fields: [applicationCollectionId], references: [id])
   applicationCollectionId String
   User                    User                  @relation(fields: [userId], references: [id])
   userId                  String
-  ownedAt                 DateTime              @default(now())
   balanceLogId            String                @unique
   BalanceLog              UserBalanceLog        @relation(fields: [balanceLogId], references: [id])
 

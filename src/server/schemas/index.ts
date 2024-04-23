@@ -11,6 +11,7 @@ export * from './json';
 export * from './list';
 export * from './meta';
 export * from './output';
+export * from './price';
 export * from './provider';
 export * from './upload';
 export * from './user';

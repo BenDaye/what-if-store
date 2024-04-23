@@ -1,7 +1,7 @@
 import { AuthRole, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { userEmitter } from '../modules';
-import { IdSchema, idSchema } from '../schemas';
+import { IdSchema, idSchema, mutationOutputSchema } from '../schemas';
 import {
   userListInputSchema,
   userUpdateProfileInputSchema,
@@ -32,6 +32,7 @@ const fullSelect = {
         email: true,
         avatar: true,
         bio: true,
+        country: true,
       },
     },
     ProviderProfile: {
@@ -43,6 +44,13 @@ const fullSelect = {
         bio: true,
         avatar: true,
         website: true,
+      },
+    },
+    Balance: {
+      select: {
+        id: true,
+        available: true,
+        frozen: true,
       },
     },
     _count: {
@@ -176,7 +184,7 @@ export const protectedAppUser = router({
   }),
   update: protectedUserProcedure
     .input(userUpdateProfileInputSchema)
-    .output(userUpdateProfileInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         await prisma.user.update({
@@ -184,19 +192,87 @@ export const protectedAppUser = router({
           data: {
             UserProfile: {
               update: {
-                data: {
-                  nickname: input.nickname,
-                  email: input.email,
-                  avatar: input.avatar,
-                  bio: input.bio,
-                },
+                data: input,
               },
             },
           },
         });
         userEmitter.emit('update', session.user.id);
-        // NOTE: Typically mutation should only return "true", but we return the input for client side to call "updateSession"
-        return input;
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  isFollowedById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .query(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        const exists = await prisma.userFollow.findFirst({
+          where: {
+            followedById: session.user.id,
+            followingId: id,
+          },
+        });
+        return Boolean(exists);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  followedList: protectedUserProcedure.query(
+    async ({ ctx: { prisma, session } }) => {
+      try {
+        return await prisma.userFollow.findMany({
+          where: {
+            followedById: session.user.id,
+          },
+          select: {
+            followingId: true,
+          },
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    },
+  ),
+  followById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.user.update({
+          where: {
+            id: session.user.id,
+          },
+          data: {
+            Followers: {
+              create: {
+                followingId: id,
+              },
+            },
+          },
+        });
+        userEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  unfollowById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.userFollow.delete({
+          where: {
+            followingId_followedById: {
+              followedById: session.user.id,
+              followingId: id,
+            },
+          },
+        });
+        userEmitter.emit('update', id);
+        return true;
       } catch (err) {
         throw onError(err);
       }
@@ -297,7 +373,7 @@ export const protectedDashboardUser = router({
   }),
   update: protectedAdminProcedure
     .input(userUpdateProfileInputSchema)
-    .output(userUpdateProfileInputSchema)
+    .output(mutationOutputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
       try {
         await prisma.user.update({
@@ -305,19 +381,13 @@ export const protectedDashboardUser = router({
           data: {
             UserProfile: {
               update: {
-                data: {
-                  nickname: input.nickname,
-                  email: input.email,
-                  avatar: input.avatar,
-                  bio: input.bio,
-                },
+                data: input,
               },
             },
           },
         });
         userEmitter.emit('update', session.user.id);
-        // NOTE: Typically mutation should only return "true", but we return the input for client side to call "updateSession"
-        return input;
+        return true;
       } catch (err) {
         throw onError(err);
       }
@@ -344,12 +414,7 @@ export const protectedDashboardUser = router({
             role: input.role,
             UserProfile: {
               update: {
-                data: {
-                  nickname: input.nickname,
-                  email: input.email,
-                  avatar: input.avatar,
-                  bio: input.bio,
-                },
+                data: input,
               },
             },
           },

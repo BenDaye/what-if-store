@@ -5,7 +5,7 @@ import {
   idSchema,
 } from '@/server/schemas';
 import { RouterOutput, trpc } from '@/utils/trpc';
-import currency from 'currency.js';
+// import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
@@ -17,7 +17,7 @@ export const useAppApplicationCollectionHookDataSchema =
     .omit({ applications: true })
     .extend({
       id: idSchema,
-      priceText: z.string(),
+      // priceText: z.string(),
 
       applications:
         z.custom<AppApplicationCollectionRouterOutput['Applications']>(),
@@ -52,8 +52,8 @@ export const useAppApplicationCollection = (id: IdSchema) => {
       id,
       name: data?.name ?? '-',
       description: data?.description ?? '-',
-      price: data?.price ?? Number.MAX_VALUE,
-      priceText: data?.price ? currency(data?.price).toString() : '-',
+      price: data?.Price ?? [],
+      // priceText: data?.price ? currency(data?.price).toString() : '-',
       applications: data?.Applications ?? [],
       applicationIds: data?.Applications.map((app) => app.id) ?? [],
     };

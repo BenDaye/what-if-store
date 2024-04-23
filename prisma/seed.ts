@@ -91,14 +91,91 @@ const main = async () => {
   });
 
   console.log({ genesisProvider });
+  for await (const name of Object.values(PermanentPresetGroupNames)) {
+    try {
+      const group = await prisma.applicationGroup.upsert({
+        where: {
+          name,
+        },
+        create: {
+          name,
+          description: name,
+          type: ApplicationGroupType.Permanent,
+        },
+        update: {
+          type: ApplicationGroupType.Permanent,
+        },
+      });
+      console.log({ group });
+    } catch (error) {
+      console.error(error);
+      continue;
+    }
+  }
+
+  for await (const name of Object.values(PersistentPresetGroupNames)) {
+    try {
+      const group = await prisma.applicationGroup.upsert({
+        where: {
+          name,
+        },
+        create: {
+          name,
+          description: name,
+          type: ApplicationGroupType.Persistent,
+        },
+        update: {
+          type: ApplicationGroupType.Persistent,
+        },
+      });
+      console.log({ group });
+    } catch (error) {
+      console.error(error);
+      continue;
+    }
+  }
 
   for await (const category of getRandomApplicationCategories()) {
+    const status = getRandomApplicationStatus();
     const data: Prisma.ApplicationUncheckedCreateInput = {
       name: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
       category,
-      price: faker.number.float({ min: 0, max: 100, multipleOf: 2 }),
-      status: getRandomApplicationStatus(),
+      Price: {
+        createMany: {
+          skipDuplicates: true,
+          data: [
+            {
+              price: faker.number.int({ min: 0, max: 10000 }),
+              country: 'CN',
+              currency: 'CNY',
+            },
+            {
+              price: faker.number.int({ min: 0, max: 10000 }),
+              country: 'US',
+              currency: 'USD',
+            },
+          ],
+        },
+      },
+      PriceHistories: {
+        createMany: {
+          skipDuplicates: true,
+          data: [
+            {
+              price: faker.number.int({ min: 0, max: 10000 }),
+              country: 'CN',
+              currency: 'CNY',
+            },
+            {
+              price: faker.number.int({ min: 0, max: 10000 }),
+              country: 'US',
+              currency: 'USD',
+            },
+          ],
+        },
+      },
+      status,
 
       providerId: genesisProvider.id,
 
@@ -181,6 +258,14 @@ const main = async () => {
           ],
         },
       },
+      Groups: {
+        connect:
+          status === ApplicationStatus.Published
+            ? {
+                name: getRandomApplicationGroupName(),
+              }
+            : undefined,
+      },
     };
 
     try {
@@ -202,50 +287,6 @@ const main = async () => {
   });
 
   console.log({ genesisTags });
-
-  for await (const name of Object.values(PermanentPresetGroupNames)) {
-    try {
-      const group = await prisma.applicationGroup.upsert({
-        where: {
-          name,
-        },
-        create: {
-          name,
-          description: name,
-          type: ApplicationGroupType.Permanent,
-        },
-        update: {
-          type: ApplicationGroupType.Permanent,
-        },
-      });
-      console.log({ group });
-    } catch (error) {
-      console.error(error);
-      continue;
-    }
-  }
-
-  for await (const name of Object.values(PersistentPresetGroupNames)) {
-    try {
-      const group = await prisma.applicationGroup.upsert({
-        where: {
-          name,
-        },
-        create: {
-          name,
-          description: name,
-          type: ApplicationGroupType.Persistent,
-        },
-        update: {
-          type: ApplicationGroupType.Persistent,
-        },
-      });
-      console.log({ group });
-    } catch (error) {
-      console.error(error);
-      continue;
-    }
-  }
 };
 
 main()
@@ -271,7 +312,9 @@ const getRandomApplicationCategories = (): ApplicationCategory[] => {
   const _start = Math.floor(Math.random() * _values.length);
   const _end =
     _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
-  return _values.slice(_start, _end);
+  return [..._values, ..._values.slice(_start, _end)].flatMap((v) =>
+    Array(3).fill(v),
+  );
 };
 
 const getRandomApplicationStatus = (): ApplicationStatus => {
@@ -301,4 +344,13 @@ const getRandomApplicationLanguages = (): string[] => {
   const _end =
     _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
   return _values.slice(_start, _end);
+};
+
+const getRandomApplicationGroupName = (): string => {
+  const _values = [
+    ...Object.values(PermanentPresetGroupNames),
+    ...Object.values(PersistentPresetGroupNames),
+  ];
+  const _random = Math.floor(Math.random() * _values.length);
+  return _values[_random];
 };

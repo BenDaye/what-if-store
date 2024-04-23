@@ -6,7 +6,7 @@ import {
 } from '@/server/schemas';
 import { RouterOutput, trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
-import currency from 'currency.js';
+// import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
@@ -19,7 +19,7 @@ export const useDashboardApplicationCollectionHookDataSchema =
     .omit({ applications: true })
     .extend({
       id: idSchema,
-      priceText: z.string(),
+      // priceText: z.string(),
 
       applications:
         z.custom<DashboardApplicationCollectionRouterOutput['Applications']>(),
@@ -64,8 +64,8 @@ export const useDashboardApplicationCollection = (id: IdSchema) => {
         id,
         name: data?.name ?? '-',
         description: data?.description ?? '-',
-        price: data?.price ?? Number.MAX_VALUE,
-        priceText: data?.price ? currency(data?.price).toString() : '-',
+        price: data?.Price ?? [],
+        // priceText: data?.price ? currency(data?.price).toString() : '-',
         applications: data?.Applications ?? [],
         applicationIds: data?.Applications.map((app) => app.id) ?? [],
       };

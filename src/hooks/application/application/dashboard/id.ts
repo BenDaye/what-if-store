@@ -13,7 +13,7 @@ import {
   ApplicationStatus,
   AuthRole,
 } from '@prisma/client';
-import currency from 'currency.js';
+// import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
@@ -25,7 +25,7 @@ export const useDashboardApplicationHookDataSchema =
   applicationCreateInputSchema
     .extend({
       id: idSchema,
-      priceText: z.string(),
+      // priceText: z.string(),
       status: z.nativeEnum(ApplicationStatus),
 
       provider: z.object({ id: idSchema }).optional(),
@@ -95,8 +95,8 @@ export const useDashboardApplication = (id: IdSchema) => {
       name: data?.name ?? '-',
       description: data?.description ?? '-',
       category: data?.category ?? ApplicationCategory.Other,
-      price: data?.price ?? Number.MAX_VALUE,
-      priceText: data?.price ? currency(data?.price).toString() : '-',
+      price: data?.Price ?? [],
+      // priceText: data?.price ? currency(data?.price).toString() : '-',
       status: data?.status ?? ApplicationStatus.Draft,
       count: data?._count ?? {
         Followers: 0,

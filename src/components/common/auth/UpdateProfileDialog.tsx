@@ -65,18 +65,18 @@ export const AuthUpdateProfileDialog = ({
   const { mutateAsync: updateUserProfile } =
     trpc.protectedAppUser.update.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: (res) => {
+      onSuccess: () => {
         showSuccess(t('user:Profile.Updated'));
-        updateSession(res);
+        updateSession();
         DialogProps.onClose?.({}, 'backdropClick');
       },
     });
   const { mutateAsync: updateAdminProfile } =
     trpc.protectedDashboardUser.update.useMutation({
       onError: (err) => showError(err.message),
-      onSuccess: (res) => {
+      onSuccess: () => {
         showSuccess(t('user:Profile.Updated'));
-        updateSession(res);
+        updateSession();
         DialogProps.onClose?.({}, 'backdropClick');
       },
     });

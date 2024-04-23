@@ -14,6 +14,7 @@ declare module 'next-auth' {
       nickname?: string | null;
       avatar?: string | null;
       bio?: string | null;
+      country?: string | null;
     } & DefaultSession['user'];
   }
 
@@ -23,6 +24,7 @@ declare module 'next-auth' {
     avatar?: string | null;
     bio?: string | null;
     nickname?: string | null;
+    country?: string | null;
   }
 }
 
@@ -37,5 +39,6 @@ declare module 'next-auth/jwt' {
     nickname?: string | null;
     avatar?: string | null;
     bio?: string | null;
+    country?: string | null;
   }
 }

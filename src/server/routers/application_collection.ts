@@ -1,4 +1,4 @@
-import { ApplicationStatus, Prisma } from '@prisma/client';
+import { ApplicationCollectionStatus, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationCollectionEmitter } from '../modules';
 import {
@@ -23,7 +23,22 @@ const defaultSelect = Prisma.validator<Prisma.ApplicationCollectionSelect>()({
   name: true,
   description: true,
   providerId: true,
-  price: true,
+  status: true,
+  _count: {
+    select: {
+      Followers: true,
+      Owners: true,
+      Applications: true,
+    },
+  },
+  Price: {
+    select: {
+      id: true,
+      price: true,
+      country: true,
+      currency: true,
+    },
+  },
 });
 
 const fullSelect = {
@@ -33,19 +48,26 @@ const fullSelect = {
       select: {
         id: true,
         name: true,
-        price: true,
       },
     },
     Followers: {
       select: {
         userId: true,
-        followedAt: true,
+        createdAt: true,
       },
     },
     Owners: {
       select: {
         userId: true,
-        ownedAt: true,
+        createdAt: true,
+      },
+    },
+    PriceHistories: {
+      select: {
+        id: true,
+        price: true,
+        country: true,
+        currency: true,
       },
     },
   }),
@@ -173,13 +195,20 @@ export const protectedAppApplicationCollection = router({
                 providerId: session.user.id,
                 name,
                 description,
-                price,
                 Applications: {
-                  connect: applications.map((id) => ({
-                    id,
-                    providerId: session.user.id,
-                    status: ApplicationStatus.Published,
-                  })),
+                  connect: applications,
+                },
+                Price: {
+                  createMany: {
+                    skipDuplicates: true,
+                    data: price,
+                  },
+                },
+                PriceHistories: {
+                  createMany: {
+                    skipDuplicates: true,
+                    data: price,
+                  },
                 },
               },
             });
@@ -209,22 +238,101 @@ export const protectedAppApplicationCollection = router({
   updateById: protectedProviderProcedure
     .input(applicationCollectionUpdateInputSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma, session }, input: { id, ...input } }) => {
-      try {
-        const result = await prisma.applicationCollection.update({
-          where: { id },
-          data: {
-            providerId: session.user.id,
-            ...input,
-          },
-          select: defaultSelect,
-        });
-        applicationCollectionEmitter.emit('update', result.id);
-        return true;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+    .mutation(
+      async ({
+        ctx: { prisma, session },
+        input: { id, name, description, price, applications },
+      }) => {
+        try {
+          await prisma.$transaction(async (tx) => {
+            const exists = await tx.applicationCollection.findFirst({
+              where: {
+                id,
+                providerId: session.user.id,
+                status: {
+                  not: ApplicationCollectionStatus.Deleted,
+                },
+              },
+              select: defaultSelect,
+            });
+            if (!exists) throw new Error('Application collection not found');
+
+            await tx.applicationCollection.update({
+              where: {
+                id,
+              },
+              data: {
+                name,
+                description,
+                Applications: {
+                  set: applications,
+                },
+              },
+            });
+            if (price) {
+              for await (const next of price) {
+                const created = exists.Price.find(
+                  (price) => price.country === next.country,
+                );
+                if (!created) {
+                  await tx.applicationCollection.update({
+                    where: {
+                      id,
+                      providerId: session.user.id,
+                      status: {
+                        not: ApplicationCollectionStatus.Deleted,
+                      },
+                    },
+                    data: {
+                      Price: {
+                        create: next,
+                      },
+                      PriceHistories: {
+                        create: next,
+                      },
+                    },
+                  });
+                } else {
+                  if (
+                    created.price === next.price &&
+                    created.currency === next.currency
+                  )
+                    continue;
+
+                  await tx.applicationCollection.update({
+                    where: {
+                      id,
+                      providerId: session.user.id,
+                      status: {
+                        not: ApplicationCollectionStatus.Deleted,
+                      },
+                    },
+                    data: {
+                      Price: {
+                        update: {
+                          where: {
+                            id: created.id,
+                            country: next.country,
+                          },
+                          data: next,
+                        },
+                      },
+                      PriceHistories: {
+                        create: next,
+                      },
+                    },
+                  });
+                }
+              }
+            }
+            applicationCollectionEmitter.emit('update', id);
+          });
+          return true;
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
   removeById: protectedProviderProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -243,6 +351,38 @@ export const protectedAppApplicationCollection = router({
         throw onError(err);
       }
     }),
+  isFollowedById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .query(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        const exists = await prisma.applicationCollectionFollow.findFirst({
+          where: {
+            applicationCollectionId: id,
+            userId: session.user.id,
+          },
+        });
+        return Boolean(exists);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  followedList: protectedUserProcedure.query(
+    async ({ ctx: { prisma, session } }) => {
+      try {
+        return await prisma.applicationCollectionFollow.findMany({
+          where: {
+            userId: session.user.id,
+          },
+          select: {
+            applicationCollectionId: true,
+          },
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    },
+  ),
   followById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -252,11 +392,8 @@ export const protectedAppApplicationCollection = router({
           where: { id },
           data: {
             Followers: {
-              connect: {
-                applicationCollectionId_userId: {
-                  applicationCollectionId: id,
-                  userId: session.user.id,
-                },
+              create: {
+                userId: session.user.id,
               },
             },
           },
@@ -267,6 +404,57 @@ export const protectedAppApplicationCollection = router({
         throw onError(err);
       }
     }),
+  unfollowById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        await prisma.applicationCollectionFollow.delete({
+          where: {
+            applicationCollectionId_userId: {
+              applicationCollectionId: id,
+              userId: session.user.id,
+            },
+          },
+        });
+        applicationCollectionEmitter.emit('update', id);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  isOwnedById: protectedUserProcedure
+    .input(idSchema)
+    .output(mutationOutputSchema)
+    .query(async ({ ctx: { prisma, session }, input: id }) => {
+      try {
+        const exists = await prisma.applicationCollectionOwn.findFirst({
+          where: {
+            applicationCollectionId: id,
+            userId: session.user.id,
+          },
+        });
+        return Boolean(exists);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
+  ownedList: protectedUserProcedure.query(
+    async ({ ctx: { prisma, session } }) => {
+      try {
+        return await prisma.applicationCollectionOwn.findMany({
+          where: {
+            userId: session.user.id,
+          },
+          select: {
+            applicationCollectionId: true,
+          },
+        });
+      } catch (err) {
+        throw onError(err);
+      }
+    },
+  ),
   ownById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -390,20 +578,95 @@ export const protectedDashboardApplicationCollection = router({
   updateById: protectedAdminProcedure
     .input(applicationCollectionUpdateInputSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {
-      try {
-        await prisma.applicationCollection.update({
-          where: {
-            id,
-          },
-          data: input,
-        });
-        applicationCollectionEmitter.emit('update', id);
-        return true;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+    .mutation(
+      async ({
+        ctx: { prisma },
+        input: { id, name, description, price, applications },
+      }) => {
+        try {
+          await prisma.$transaction(async (tx) => {
+            const exists = await tx.applicationCollection.findFirst({
+              where: {
+                id,
+              },
+              select: defaultSelect,
+            });
+            if (!exists) throw new Error('Application collection not found');
+
+            await tx.applicationCollection.update({
+              where: {
+                id,
+              },
+              data: {
+                name,
+                description,
+                Applications: {
+                  set: applications,
+                },
+              },
+            });
+            if (price) {
+              for await (const next of price) {
+                const created = exists.Price.find(
+                  (price) => price.country === next.country,
+                );
+                if (!created) {
+                  await tx.applicationCollection.update({
+                    where: {
+                      id,
+                    },
+                    data: {
+                      Price: {
+                        create: next,
+                      },
+                      PriceHistories: {
+                        create: {
+                          ...next,
+                          startedAt: new Date(),
+                        },
+                      },
+                    },
+                  });
+                } else {
+                  if (
+                    created.price === next.price &&
+                    created.currency === next.currency
+                  )
+                    continue;
+
+                  await tx.applicationCollection.update({
+                    where: {
+                      id,
+                    },
+                    data: {
+                      Price: {
+                        update: {
+                          where: {
+                            id: created.id,
+                            country: next.country,
+                          },
+                          data: next,
+                        },
+                      },
+                      PriceHistories: {
+                        create: {
+                          ...next,
+                          startedAt: new Date(),
+                        },
+                      },
+                    },
+                  });
+                }
+              }
+            }
+            applicationCollectionEmitter.emit('update', id);
+          });
+          return true;
+        } catch (err) {
+          throw onError(err);
+        }
+      },
+    ),
   removeById: protectedAdminProcedure
     .input(idSchema)
     .output(mutationOutputSchema)

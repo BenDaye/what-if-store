@@ -5,6 +5,7 @@ import { verify } from 'argon2';
 import { AuthOptions, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { z } from 'zod';
 
 const select = Prisma.validator<Prisma.UserSelect>()({
   id: true,
@@ -17,6 +18,7 @@ const select = Prisma.validator<Prisma.UserSelect>()({
       email: true,
       avatar: true,
       bio: true,
+      country: true,
     },
   },
 });
@@ -33,13 +35,29 @@ export const authOptions: AuthOptions = {
         token.email = user.email;
         token.avatar = user.avatar;
         token.bio = user.bio;
+        token.country = user.country;
       }
 
       if (trigger === 'update') {
-        if (session?.nickname) token.nickname = session.nickname;
-        if (session?.email) token.email = session.email;
-        if (session?.avatar) token.avatar = session.avatar;
-        if (session?.bio) token.bio = session.bio;
+        if (typeof session !== 'undefined') {
+          const valid = await z
+            .object({
+              nickname: z.string().nullable().optional(),
+              email: z.string().email().nullable().optional(),
+              avatar: z.string().nullable().optional(),
+              bio: z.string().nullable().optional(),
+              country: z.string().nullable().optional(),
+            })
+            .strict()
+            .safeParseAsync(session);
+          if (valid.success) {
+            if (valid.data?.nickname) token.nickname = valid.data.nickname;
+            if (valid.data?.email) token.email = valid.data.email;
+            if (valid.data?.avatar) token.avatar = valid.data.avatar;
+            if (valid.data?.bio) token.bio = valid.data.bio;
+            if (valid.data?.country) token.country = valid.data.country;
+          }
+        }
       }
 
       return token;
@@ -105,6 +123,7 @@ export const authOptions: AuthOptions = {
             email: result.UserProfile?.email,
             avatar: result.UserProfile?.avatar,
             bio: result.UserProfile?.bio,
+            country: result.UserProfile?.country,
           };
         } catch (error) {
           console.error(error);

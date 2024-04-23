@@ -16,6 +16,7 @@ export const userUpdateProfileInputSchema = z
     email: z.union([z.string().email(), z.string().nullable()]),
     avatar: z.string().nullable(),
     bio: z.string().nullable(),
+    country: z.string().nullable(),
   })
   .partial();
 export type UserUpdateProfileInputSchema = z.infer<

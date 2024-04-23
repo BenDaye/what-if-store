@@ -6,6 +6,7 @@ import {
 import { z } from 'zod';
 import { idSchema } from './id';
 import { listInputSchema } from './list';
+import { priceSchema } from './price';
 
 export const applicationListInputSchema = listInputSchema
   .extend({
@@ -25,7 +26,7 @@ export const applicationCreateInputSchema = z.object({
   name: z.string(),
   description: z.string(),
   category: z.nativeEnum(ApplicationCategory),
-  price: z.number().nonnegative(),
+  price: priceSchema.array().min(1),
 
   platforms: z.nativeEnum(ApplicationPlatform).array().min(1),
   compatibility: z
