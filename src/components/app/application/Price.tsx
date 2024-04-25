@@ -1,12 +1,17 @@
 import { FallbackPriceText, getCurrencySymbol } from '@/constants/country';
-import { Stack, Typography, TypographyProps } from '@mui/material';
+import { OverridesProps } from '@/types/overrides';
+import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import currency from 'currency.js';
 import { useMemo } from 'react';
 
-type PriceTextProps = {
+type PriceTextProps = OverridesProps<{
+  WrapperProps?: StackProps;
+  SymbolProps?: TypographyProps;
+  IntegerProps?: TypographyProps;
+  DecimalProps?: TypographyProps;
+}> & {
   integerVarient?: TypographyProps['variant'];
   decimalVarient?: TypographyProps['variant'];
-  color?: TypographyProps['color'];
   price?: {
     price: number;
     currency: string;
@@ -14,9 +19,9 @@ type PriceTextProps = {
   };
 };
 export const PriceText = ({
+  overrides,
   integerVarient = 'body2',
   decimalVarient,
-  color = 'error.dark',
   price,
 }: PriceTextProps) => {
   const _decimalVarient = useMemo(() => {
@@ -65,39 +70,52 @@ export const PriceText = ({
   }, [price]);
 
   return price ? (
-    <Stack direction={'row'} alignItems={'baseline'}>
+    <Stack
+      direction={'row'}
+      alignItems={'baseline'}
+      sx={{
+        px: 1,
+        color: (theme) =>
+          theme.palette.mode === 'dark' ? 'error.light' : 'error.dark',
+      }}
+      {...overrides?.WrapperProps}
+    >
       <Typography
-        color={color}
         variant={_decimalVarient}
         sx={{ fontFamily: 'Roboto Mono', mr: 0.5 }}
+        {...overrides?.SymbolProps}
       >
         {symbol}
       </Typography>
       <Typography
-        color={color}
         variant={integerVarient}
         sx={{
           fontFamily: 'Roboto Mono',
           fontWeight: (theme) => theme.typography.fontWeightMedium,
         }}
+        {...overrides?.IntegerProps}
       >
         {integerPart}
       </Typography>
       <Typography
-        color={color}
         variant={_decimalVarient}
         sx={{
           fontFamily: 'Roboto Mono',
         }}
+        {...overrides?.DecimalProps}
       >
         .{decimalPart}
       </Typography>
     </Stack>
   ) : (
     <Typography
-      color={color}
       variant={_decimalVarient}
-      sx={{ fontFamily: 'Roboto Mono' }}
+      sx={{
+        fontFamily: 'Roboto Mono',
+        color: (theme) =>
+          theme.palette.mode === 'dark' ? 'error.light' : 'error.dark',
+      }}
+      {...overrides?.DecimalProps}
     >
       {FallbackPriceText}
     </Typography>
