@@ -1,3 +1,9 @@
+import {
+  FallbackCountry,
+  FallbackCurrency,
+  FallbackPriceText,
+  getCurrencySymbol,
+} from '@/constants/country';
 import { useNotice } from '@/hooks/notice';
 import {
   ApplicationCreateInputSchema,
@@ -12,7 +18,8 @@ import {
   ApplicationCategory,
   ApplicationStatus,
 } from '@prisma/client';
-// import currency from 'currency.js';
+import currency from 'currency.js';
+import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
@@ -60,6 +67,15 @@ export const useAppApplicationHookDataSchema = applicationCreateInputSchema
     termsOfUse: z.string().optional(),
     copyright: z.string().optional(),
     readme: z.string().optional(),
+
+    primaryPrice: z
+      .custom<AppApplicationRouterOutput['Price'][number]>()
+      .optional(),
+    primaryPriceText: z.string().optional(),
+    fallbackPrice: z
+      .custom<AppApplicationRouterOutput['Price'][number]>()
+      .optional(),
+    fallbackPriceText: z.string(),
   })
   .strict();
 export type UseAppApplicationHookDataSchema = z.infer<
@@ -67,6 +83,7 @@ export type UseAppApplicationHookDataSchema = z.infer<
 >;
 
 export const useAppApplication = (id: IdSchema) => {
+  const { data: session, status: sessionStatus } = useSession();
   const { data, refetch, isFetching, error, isError } =
     trpc.publicAppApplication.getById.useQuery(id ?? '[UNSET]', {
       enabled: !!id,
@@ -78,6 +95,14 @@ export const useAppApplication = (id: IdSchema) => {
   });
 
   const memoData = useMemo((): UseAppApplicationHookDataSchema => {
+    const primaryPrice =
+      sessionStatus === 'authenticated'
+        ? data?.Price?.find(({ country }) => session?.user?.country === country)
+        : undefined;
+    const fallbackPrice = data?.Price?.find(
+      ({ country }) => country === FallbackCountry,
+    );
+
     return {
       id,
       name: data?.name ?? '-',
@@ -162,8 +187,23 @@ export const useAppApplication = (id: IdSchema) => {
         ({ type, name }) =>
           type === ApplicationAssetType.File && name === 'Readme',
       )?.id,
+
+      primaryPrice,
+      primaryPriceText: primaryPrice
+        ? currency(primaryPrice.price, {
+            fromCents: true,
+            symbol: getCurrencySymbol(primaryPrice.currency),
+          }).format()
+        : undefined,
+      fallbackPrice,
+      fallbackPriceText: fallbackPrice?.price
+        ? currency(fallbackPrice.price, {
+            fromCents: true,
+            symbol: getCurrencySymbol(FallbackCurrency),
+          }).format()
+        : FallbackPriceText,
     };
-  }, [id, data]);
+  }, [id, data, session, sessionStatus]);
 
   const { showWarning } = useNotice();
   const { t } = useTranslation();

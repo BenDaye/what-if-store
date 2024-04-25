@@ -1,3 +1,9 @@
+import {
+  FallbackCountry,
+  FallbackCurrency,
+  FallbackPriceText,
+  getCurrencySymbol,
+} from '@/constants/country';
 import { useNotice } from '@/hooks/notice';
 import {
   ApplicationCreateInputSchema,
@@ -13,7 +19,7 @@ import {
   ApplicationStatus,
   AuthRole,
 } from '@prisma/client';
-// import currency from 'currency.js';
+import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
@@ -64,6 +70,15 @@ export const useDashboardApplicationHookDataSchema =
       termsOfUse: z.string().optional(),
       copyright: z.string().optional(),
       readme: z.string().optional(),
+
+      primaryPrice: z
+        .custom<DashboardApplicationRouterOutput['Price'][number]>()
+        .optional(),
+      primaryPriceText: z.string().optional(),
+      fallbackPrice: z
+        .custom<DashboardApplicationRouterOutput['Price'][number]>()
+        .optional(),
+      fallbackPriceText: z.string(),
     })
     .strict();
 export type UseDashboardApplicationHookDataSchema = z.infer<
@@ -90,6 +105,14 @@ export const useDashboardApplication = (id: IdSchema) => {
   });
 
   const memoData = useMemo((): UseDashboardApplicationHookDataSchema => {
+    const primaryPrice =
+      sessionStatus === 'authenticated'
+        ? data?.Price?.find(({ country }) => session?.user?.country === country)
+        : undefined;
+    const fallbackPrice = data?.Price?.find(
+      ({ country }) => country === FallbackCountry,
+    );
+
     return {
       id,
       name: data?.name ?? '-',
@@ -174,8 +197,23 @@ export const useDashboardApplication = (id: IdSchema) => {
         ({ type, name }) =>
           type === ApplicationAssetType.File && name === 'Readme',
       )?.id,
+
+      primaryPrice,
+      primaryPriceText: primaryPrice
+        ? currency(primaryPrice.price, {
+            fromCents: true,
+            symbol: getCurrencySymbol(primaryPrice.currency),
+          }).format()
+        : undefined,
+      fallbackPrice,
+      fallbackPriceText: fallbackPrice?.price
+        ? currency(fallbackPrice.price, {
+            fromCents: true,
+            symbol: getCurrencySymbol(FallbackCurrency),
+          }).format()
+        : FallbackPriceText,
     };
-  }, [id, data]);
+  }, [id, data, sessionStatus, session]);
 
   const { showWarning } = useNotice();
   const { t } = useTranslation();

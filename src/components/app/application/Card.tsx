@@ -25,6 +25,7 @@ import { useRouter } from 'next/router';
 import { ReactNode, useMemo } from 'react';
 import { FollowApplicationButton } from './FollowButton';
 import { OwnApplicationButton } from './OwnButton';
+import { PriceText } from './Price';
 
 type ApplicationCardProps = OverridesCardProps & {
   data: {
@@ -113,6 +114,9 @@ export const SimpleApplicationCard = ({
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ pt: 0 }} {...overrides?.CardActionsProps}>
+        <PriceText
+          price={application?.primaryPrice ?? application.fallbackPrice}
+        />
         <Box flexGrow={1} />
         <FollowApplicationButton applicationId={data.id} />
         <OwnApplicationButton applicationId={data.id} />
