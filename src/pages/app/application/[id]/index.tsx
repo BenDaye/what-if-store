@@ -1,4 +1,5 @@
 import nextI18NextConfig from '@/../next-i18next.config';
+import { ApplicationPage } from '@/components/app';
 import { PageContainer } from '@/components/common';
 import { AppLayout } from '@/components/layouts';
 import { NextPageWithLayout } from '@/pages/_app';
@@ -15,7 +16,11 @@ import SuperJSON from 'superjson';
 const Page: NextPageWithLayout<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <ApplicationPage applicationId={id} />
+    </PageContainer>
+  );
 };
 
 Page.getLayout = (page) => <AppLayout>{page}</AppLayout>;
