@@ -1,4 +1,5 @@
 export * from './CollapseList';
+export * from './EmptyDataBox';
 export * from './IconButtonWithTooltip';
 export * from './PageContainer';
 export * from './PrimaryDrawerRnd';

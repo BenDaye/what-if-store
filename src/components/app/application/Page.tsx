@@ -1,9 +1,11 @@
+import { EmptyDataBox } from '@/components/common';
 import { FallbackId } from '@/constants/common';
 import {
   UseAppApplicationHookDataSchema,
   useAppApplication,
   useDashboardApplicationAsset,
 } from '@/hooks';
+import { OverridesProps } from '@/types/overrides';
 import {
   Avatar,
   Box,
@@ -12,6 +14,7 @@ import {
   Chip,
   Divider,
   Stack,
+  StackProps,
   Tab,
   Tabs,
   Typography,
@@ -21,7 +24,7 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { ProviderLink } from '../provider';
@@ -44,7 +47,7 @@ export const ApplicationPage = ({ applicationId }: ApplicationPageProps) => {
   return (
     <Card>
       <ApplicationPageHeader data={data} />
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid xs={12} lg={8} xl={10}>
           <ApplicationPagePrimaryContent data={data} />
         </Grid>
@@ -174,28 +177,43 @@ const ApplicationPageSecondaryContent = ({
     <Box>
       <Box sx={{ height: 48 }} />
       <Stack gap={2} sx={{ px: 2, pb: 2 }}>
-        <Stack gap={1}>
-          <Typography variant="subtitle2">
-            {t('application:Category._')}
-          </Typography>
-          <Divider flexItem />
-          <Box>
-            <Chip
-              variant="outlined"
-              label={t(`application:Category.Name.${data.category}`)}
-            />
-          </Box>
-        </Stack>
-        <Stack gap={1}>
-          <Typography variant="subtitle2">{t('application:Tag._')}</Typography>
-          <Divider flexItem />
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            {data.tags.map((tag) => (
+        <ApplicationPageSecondaryContentSection
+          title={t('application:Category._')}
+        >
+          <Chip
+            variant="outlined"
+            label={t(`application:Category.Name.${data.category}`)}
+          />
+        </ApplicationPageSecondaryContentSection>
+        <ApplicationPageSecondaryContentSection title={t('application:Tag._')}>
+          {data.tags.length ? (
+            data.tags.map((tag) => (
               <Chip key={tag.id} variant="outlined" label={tag.name} />
-            ))}
-          </Box>
-        </Stack>
+            ))
+          ) : (
+            <EmptyDataBox height={32} />
+          )}
+        </ApplicationPageSecondaryContentSection>
       </Stack>
     </Box>
+  );
+};
+
+type ApplicationPageSecondaryContentSectionProps = PropsWithChildren<
+  OverridesProps<{ WrapperProps?: StackProps }> & {
+    title: string;
+  }
+>;
+const ApplicationPageSecondaryContentSection = ({
+  overrides,
+  title,
+  children,
+}: ApplicationPageSecondaryContentSectionProps) => {
+  return (
+    <Stack gap={1} {...overrides?.WrapperProps}>
+      <Typography variant="subtitle2">{title}</Typography>
+      <Divider flexItem />
+      <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>{children}</Box>
+    </Stack>
   );
 };

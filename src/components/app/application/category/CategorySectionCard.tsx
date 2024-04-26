@@ -1,3 +1,4 @@
+import { EmptyDataBox } from '@/components/common';
 import { UseAppApplicationsHookDataSchema } from '@/hooks';
 import { ApplicationListInputSchema } from '@/server/schemas';
 import { OverridesCardProps } from '@/types/overrides';
@@ -111,20 +112,7 @@ const CommonSection = ({
           </Grid>
         ))}
       </Grid>
-      {!applications.length && (
-        <Box
-          sx={{
-            height: 120,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="caption" color="text.disabled">
-            {t('common:NoData')}
-          </Typography>
-        </Box>
-      )}
+      {!applications.length && <EmptyDataBox />}
     </Box>
   );
 };
