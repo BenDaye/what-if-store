@@ -11,6 +11,8 @@
     }
   },
   "Category": {
+    "Categories": "Categories",
+    "Category": "Category",
     "Name": {
       "AR": "AR",
       "Books": "Books",
@@ -44,6 +46,8 @@
     "_": "Category"
   },
   "Collection": {
+    "Collection": "Collection",
+    "Collections": "Collections",
     "_": "Application Collections"
   },
   "Copyright": {
@@ -92,6 +96,8 @@
   "Follow": {
     "Follow": "Follow",
     "Followed": "Followed",
+    "Follower": "Follower",
+    "Followers": "Followers",
     "_": "Application Followers"
   },
   "General": {
@@ -141,6 +147,8 @@
       "Priority": "Priority",
       "Type": "Type"
     },
+    "Group": "Group",
+    "Groups": "Groups",
     "Name": {
       "MostFollowersOfAllTime": "MostFollowersOfAllTime",
       "MostFollowersOfThisMonth": "MostFollowersOfThisMonth",
@@ -161,6 +169,15 @@
       "Temporary": "Temporary"
     },
     "_": "Application Groups"
+  },
+  "Information": {
+    "AgeRating": "AgeRating",
+    "Compatibility": "Compatibility",
+    "Countries": "Countries",
+    "Github": "Github",
+    "Information": "Information",
+    "Locales": "Locales",
+    "Website": "Website"
   },
   "Locales": {
     "Locales": "Locales"
@@ -191,6 +208,8 @@
   "Own": {
     "Own": "Own",
     "Owned": "Owned",
+    "Owner": "Owner",
+    "Owners": "Owners",
     "_": "Application Owners"
   },
   "Platform": {
@@ -218,6 +237,8 @@
     }
   },
   "Tag": {
+    "Tag": "Tag",
+    "Tags": "Tags",
     "_": "Application Tag"
   },
   "TermsOfUse": {
@@ -228,6 +249,8 @@
     "Latest": "Latest",
     "Preview": "Preview",
     "ReleasedAt": "Released at {{releaseDate}}.",
+    "Version": "Version",
+    "Versions": "Versions",
     "_": "Version"
   },
   "_": "Application"

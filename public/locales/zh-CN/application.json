@@ -11,6 +11,8 @@
     }
   },
   "Category": {
+    "Categories": "类别",
+    "Category": "类别",
     "Name": {
       "AR": "AR",
       "Books": "图书",
@@ -44,6 +46,8 @@
     "_": "类别"
   },
   "Collection": {
+    "Collection": "合集",
+    "Collections": "合集",
     "_": "应用合集"
   },
   "Copyright": {
@@ -92,6 +96,8 @@
   "Follow": {
     "Follow": "收藏",
     "Followed": "已收藏",
+    "Follower": "收藏者",
+    "Followers": "收藏者",
     "_": "收藏者"
   },
   "General": {
@@ -141,6 +147,8 @@
       "Priority": "优先级",
       "Type": "类型"
     },
+    "Group": "分组",
+    "Groups": "分组",
     "Name": {
       "MostFollowersOfAllTime": "收藏总榜",
       "MostFollowersOfThisMonth": "收藏月榜",
@@ -161,6 +169,15 @@
       "Temporary": "临时"
     },
     "_": "应用分组"
+  },
+  "Information": {
+    "AgeRating": "年龄分段",
+    "Compatibility": "兼容性",
+    "Countries": "支持地区",
+    "Github": "Github",
+    "Information": "信息",
+    "Locales": "支持语言",
+    "Website": "网站"
   },
   "Locales": {
     "Locales": "支持语言"
@@ -191,6 +208,8 @@
   "Own": {
     "Own": "购买",
     "Owned": "已购买",
+    "Owner": "持有者",
+    "Owners": "持有者",
     "_": "持有者"
   },
   "Platform": {
@@ -218,6 +237,8 @@
     }
   },
   "Tag": {
+    "Tag": "标签",
+    "Tags": "标签",
     "_": "应用标签"
   },
   "TermsOfUse": {
@@ -228,6 +249,8 @@
     "Latest": "最新版",
     "Preview": "预览版",
     "ReleasedAt": "发布于 {{releaseDate}}.",
+    "Version": "版本",
+    "Versions": "版本",
     "_": "版本"
   },
   "_": "应用"
