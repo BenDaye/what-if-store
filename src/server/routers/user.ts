@@ -44,6 +44,7 @@ const fullSelect = {
         bio: true,
         avatar: true,
         website: true,
+        verified: true,
       },
     },
     Balance: {

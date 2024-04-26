@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
@@ -44,15 +45,15 @@ export const useAppUserMy = () => {
 
   const memoData = useMemo(
     (): UseAppUserHookDataSchema => ({
-      id: session?.user?.id ?? '',
-      nickname: data?.UserProfile?.nickname ?? '-',
-      avatar: data?.UserProfile?.avatar ?? '-',
-      email: data?.UserProfile?.email ?? '-',
-      bio: data?.UserProfile?.bio ?? '-',
-      username: data?.username ?? '-',
+      id: session?.user?.id ?? FallbackId,
+      nickname: data?.UserProfile?.nickname ?? FallbackString,
+      avatar: data?.UserProfile?.avatar ?? FallbackString,
+      email: data?.UserProfile?.email ?? FallbackString,
+      bio: data?.UserProfile?.bio ?? FallbackString,
+      username: data?.username ?? FallbackString,
       role: data?.role ?? AuthRole.User,
       avatarSrc: data?.UserProfile?.avatar,
-      avatarText: data?.UserProfile?.nickname?.charAt(0) ?? '-',
+      avatarText: data?.UserProfile?.nickname?.charAt(0) ?? FallbackString,
       provider: data?.ProviderProfile,
       providerId: data?.ProviderProfile?.id,
       providerName: data?.ProviderProfile?.name,

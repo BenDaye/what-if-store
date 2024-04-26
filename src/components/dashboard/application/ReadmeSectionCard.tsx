@@ -1,4 +1,5 @@
 // import { Lexical } from '@/components/common';
+import { FallbackId } from '@/constants/common';
 import {
   UseDashboardApplicationHookDataSchema,
   useDashboardApplicationAsset,
@@ -29,7 +30,7 @@ export const ReadmeSectionCard = ({
   const {
     data,
     router: { isError, isFetching },
-  } = useDashboardApplicationAsset(id ?? '');
+  } = useDashboardApplicationAsset(id ?? FallbackId);
   const { showError } = useNotice();
   const { mutateAsync: upsert } =
     trpc.protectedDashboardApplicationAsset.upsertFileContent.useMutation({

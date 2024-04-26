@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -31,7 +32,7 @@ export const useDashboardApplicationTag = (id: IdSchema) => {
   );
   const { data, refetch, isFetching, error, isError } =
     trpc.protectedDashboardApplicationTag.getById.useQuery(id, {
-      enabled: !!id && authenticated,
+      enabled: !!id && id !== FallbackId && authenticated,
     });
   trpc.protectedDashboardApplicationTag.subscribe.useSubscription(undefined, {
     enabled: authenticated,
@@ -51,7 +52,7 @@ export const useDashboardApplicationTag = (id: IdSchema) => {
   const memoData = useMemo((): UseDashboardApplicationTagHookDataSchema => {
     return {
       id,
-      name: data?.name ?? '-',
+      name: data?.name ?? FallbackString,
     };
   }, [id, data]);
 

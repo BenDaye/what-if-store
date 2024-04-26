@@ -100,16 +100,19 @@ const fullSelect = {
     Collections: {
       select: {
         id: true,
+        name: true,
       },
     },
     Groups: {
       select: {
         id: true,
+        name: true,
       },
     },
     Tags: {
       select: {
         id: true,
+        name: true,
       },
     },
     Assets: {

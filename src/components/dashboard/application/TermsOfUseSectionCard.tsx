@@ -1,3 +1,4 @@
+import { FallbackId } from '@/constants/common';
 import {
   UseDashboardApplicationHookDataSchema,
   useDashboardApplicationAsset,
@@ -28,7 +29,7 @@ export const TermsOfUseSectionCard = ({
   const {
     data,
     router: { isError, isFetching },
-  } = useDashboardApplicationAsset(id ?? '');
+  } = useDashboardApplicationAsset(id ?? FallbackId);
   const { showError } = useNotice();
   const { mutateAsync: upsert } =
     trpc.protectedDashboardApplicationAsset.upsertFileContent.useMutation({

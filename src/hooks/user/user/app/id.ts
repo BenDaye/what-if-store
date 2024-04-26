@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -28,7 +29,7 @@ export type UseAppUserHookDataSchema = z.infer<typeof useAppUserHookDataSchema>;
 export const useAppUser = (id: IdSchema) => {
   const { data, refetch, isFetching, error, isError } =
     trpc.publicAppUser.getById.useQuery(id, {
-      enabled: !!id,
+      enabled: !!id && id !== FallbackId,
     });
   trpc.publicAppUser.subscribe.useSubscription(undefined, {
     onData: (_id) => {
@@ -46,14 +47,14 @@ export const useAppUser = (id: IdSchema) => {
   const memoData = useMemo(
     (): UseAppUserHookDataSchema => ({
       id,
-      nickname: data?.UserProfile?.nickname ?? '-',
-      avatar: data?.UserProfile?.avatar ?? '-',
-      email: data?.UserProfile?.email ?? '-',
-      bio: data?.UserProfile?.bio ?? '-',
-      username: data?.username ?? '-',
+      nickname: data?.UserProfile?.nickname ?? FallbackString,
+      avatar: data?.UserProfile?.avatar ?? FallbackString,
+      email: data?.UserProfile?.email ?? FallbackString,
+      bio: data?.UserProfile?.bio ?? FallbackString,
+      username: data?.username ?? FallbackString,
       role: data?.role ?? AuthRole.User,
       avatarSrc: data?.UserProfile?.avatar,
-      avatarText: data?.UserProfile?.nickname?.charAt(0) ?? '-',
+      avatarText: data?.UserProfile?.nickname?.charAt(0) ?? FallbackString,
       provider: data?.ProviderProfile,
       providerId: data?.ProviderProfile?.id,
       providerName: data?.ProviderProfile?.name,

@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -29,7 +30,7 @@ export type UseAppApplicationGroupHookDataSchema = z.infer<
 export const useAppApplicationGroup = (id: IdSchema) => {
   const { data, refetch, isFetching, error, isError } =
     trpc.publicAppApplicationGroup.getById.useQuery(id, {
-      enabled: !!id,
+      enabled: !!id && id !== FallbackId,
     });
   trpc.publicAppApplicationGroup.subscribe.useSubscription(undefined, {
     onData: (_id) => {
@@ -48,8 +49,8 @@ export const useAppApplicationGroup = (id: IdSchema) => {
   const memoData = useMemo((): UseAppApplicationGroupHookDataSchema => {
     return {
       id,
-      name: data?.name ?? '-',
-      description: data?.description ?? '-',
+      name: data?.name ?? FallbackString,
+      description: data?.description ?? FallbackString,
       type: data?.type ?? ApplicationGroupType.Temporary,
       priority: data?.priority ?? Number.MIN_VALUE,
       applications: data?.Applications ?? [],

@@ -1,3 +1,4 @@
+import { FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks';
 import {
   UserUpdateProfileInputSchema,
@@ -146,7 +147,7 @@ export const AuthUpdateProfileDialog = ({
           }}
         >
           <Avatar src={avatarSrc || undefined} sx={{ height: 128, width: 128 }}>
-            {getValues('nickname')?.charAt(0) ?? '-'}
+            {getValues('nickname')?.charAt(0) ?? FallbackString}
           </Avatar>
         </Box>
         <Controller

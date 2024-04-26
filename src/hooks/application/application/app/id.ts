@@ -1,9 +1,12 @@
+import { FallbackAgeRating } from '@/constants/age_rating';
+import { FallbackId, FallbackString } from '@/constants/common';
 import {
   FallbackCountry,
   FallbackCurrency,
   FallbackPriceText,
   getCurrencySymbol,
 } from '@/constants/country';
+import { FallbackVersion } from '@/constants/version';
 import { useNotice } from '@/hooks/notice';
 import {
   ApplicationCreateInputSchema,
@@ -85,8 +88,8 @@ export type UseAppApplicationHookDataSchema = z.infer<
 export const useAppApplication = (id: IdSchema) => {
   const { data: session, status: sessionStatus } = useSession();
   const { data, refetch, isFetching, error, isError } =
-    trpc.publicAppApplication.getById.useQuery(id ?? '[UNSET]', {
-      enabled: !!id,
+    trpc.publicAppApplication.getById.useQuery(id, {
+      enabled: !!id && id !== FallbackId,
     });
   trpc.publicAppApplication.subscribe.useSubscription(undefined, {
     onData: (_id) => {
@@ -105,11 +108,11 @@ export const useAppApplication = (id: IdSchema) => {
 
     return {
       id,
-      name: data?.name ?? '-',
-      description: data?.description ?? '-',
+      name: data?.name ?? FallbackString,
+      description: data?.description ?? FallbackString,
       category: data?.category ?? ApplicationCategory.Other,
       price: data?.Price ?? [],
-      // priceText: data?.price ? currency(data?.price).toString() : '-',
+      // priceText: data?.price ? currency(data?.price).toString() : FallbackString,
       status: data?.status ?? ApplicationStatus.Draft,
       count: data?._count ?? {
         Followers: 0,
@@ -126,15 +129,16 @@ export const useAppApplication = (id: IdSchema) => {
         (data?.Information
           ?.compatibility as ApplicationCreateInputSchema['compatibility']) ??
         [],
-      ageRating: data?.Information?.ageRating ?? '-',
+      ageRating: data?.Information?.ageRating ?? FallbackAgeRating,
       countries: data?.Information?.countries ?? [],
       locales: data?.Information?.locales ?? [],
-      website: data?.Information?.website ?? '-',
-      github: data?.Information?.github ?? '-',
+      website: data?.Information?.website ?? FallbackString,
+      github: data?.Information?.github ?? FallbackString,
       versions: data?.VersionHistories ?? [],
       latestVersion: data?.VersionHistories.find((v) => v.latest),
       latestVersionText:
-        data?.VersionHistories.find((v) => v.latest)?.version ?? '-',
+        data?.VersionHistories.find((v) => v.latest)?.version ??
+        FallbackVersion,
       followers: data?.Followers ?? [],
       owners: data?.Owners ?? [],
       collections: data?.Collections ?? [],
@@ -150,7 +154,7 @@ export const useAppApplication = (id: IdSchema) => {
         ({ type, isPrimary }) =>
           type === ApplicationAssetType.Icon && isPrimary,
       ),
-      primaryIconText: data?.name?.charAt(0) ?? '-',
+      primaryIconText: data?.name?.charAt(0) ?? FallbackString,
       backgrounds:
         data?.Assets?.filter(
           ({ type }) => type === ApplicationAssetType.Background,

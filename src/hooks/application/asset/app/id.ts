@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -26,7 +27,7 @@ export type UseAppApplicationAssetHookDataSchema = z.infer<
 export const useAppApplicationAsset = (id: IdSchema) => {
   const { data, refetch, isFetching, error, isError } =
     trpc.publicAppApplicationAsset.getById.useQuery(id, {
-      enabled: !!id,
+      enabled: !!id && id !== FallbackId,
     });
   trpc.publicAppApplicationAsset.subscribe.useSubscription(undefined, {
     onData: (_id) => {
@@ -37,11 +38,11 @@ export const useAppApplicationAsset = (id: IdSchema) => {
   const memoData = useMemo((): UseAppApplicationAssetHookDataSchema => {
     return {
       id,
-      applicationId: data?.applicationId ?? '',
+      applicationId: data?.applicationId ?? FallbackId,
       type: data?.type ?? ApplicationAssetType.File,
       url: data?.url ?? '',
-      name: data?.name ?? '-',
-      description: data?.description ?? '-',
+      name: data?.name ?? FallbackString,
+      description: data?.description ?? FallbackString,
       content: data?.content as PartialBlock[] | undefined,
       isPrimary: data?.isPrimary ?? false,
       isLocal: data?.isLocal ?? false,

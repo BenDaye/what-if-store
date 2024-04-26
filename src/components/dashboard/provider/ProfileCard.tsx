@@ -1,3 +1,4 @@
+import { FallbackString } from '@/constants/common';
 import { RouterOutput } from '@/utils/trpc';
 import { Edit as EditIcon } from '@mui/icons-material';
 import {
@@ -51,7 +52,7 @@ export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
             }}
             variant="rounded"
           >
-            {data?.name?.charAt(0) ?? '-'}
+            {data?.name?.charAt(0) ?? FallbackString}
           </Avatar>
         </ListItemAvatar>
         <Box
@@ -62,12 +63,12 @@ export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
           }}
         >
           <ListItemText
-            primary={data?.name ?? '-'}
+            primary={data?.name ?? FallbackString}
             primaryTypographyProps={{
               variant: 'h6',
               letterSpacing: 0.5,
             }}
-            secondary={data?.email ?? '-'}
+            secondary={data?.email ?? FallbackString}
             secondaryTypographyProps={{
               variant: 'body2',
             }}
@@ -81,7 +82,7 @@ export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
             component={'div'}
             sx={{ flex: 1, mb: 0.8 }}
           >
-            {data?.bio ?? '-'}
+            {data?.bio ?? FallbackString}
           </Typography>
         </Box>
       </ListItem>

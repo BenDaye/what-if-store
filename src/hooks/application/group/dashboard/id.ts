@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -36,7 +37,7 @@ export const useDashboardApplicationGroup = (id: IdSchema) => {
   );
   const { data, refetch, isFetching, error, isError } =
     trpc.protectedDashboardApplicationGroup.getById.useQuery(id, {
-      enabled: !!id && authenticated,
+      enabled: !!id && id !== FallbackId && authenticated,
     });
   trpc.protectedDashboardApplicationGroup.subscribe.useSubscription(undefined, {
     enabled: authenticated,
@@ -56,8 +57,8 @@ export const useDashboardApplicationGroup = (id: IdSchema) => {
   const memoData = useMemo((): UseDashboardApplicationGroupHookDataSchema => {
     return {
       id,
-      name: data?.name ?? '-',
-      description: data?.description ?? '-',
+      name: data?.name ?? FallbackString,
+      description: data?.description ?? FallbackString,
       type: data?.type ?? ApplicationGroupType.Temporary,
       priority: data?.priority ?? Number.MIN_VALUE,
       applications: data?.Applications ?? [],

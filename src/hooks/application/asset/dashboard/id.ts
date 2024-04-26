@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -32,7 +33,7 @@ export const useDashboardApplicationAsset = (id: IdSchema) => {
   );
   const { data, refetch, isFetching, error, isError } =
     trpc.protectedDashboardApplicationAsset.getById.useQuery(id, {
-      enabled: !!id && authenticated,
+      enabled: !!id && id !== FallbackId && authenticated,
     });
   trpc.protectedDashboardApplicationAsset.subscribe.useSubscription(undefined, {
     enabled: authenticated,
@@ -51,11 +52,11 @@ export const useDashboardApplicationAsset = (id: IdSchema) => {
   const memoData = useMemo((): UseDashboardApplicationAssetHookDataSchema => {
     return {
       id,
-      applicationId: data?.applicationId ?? '',
+      applicationId: data?.applicationId ?? FallbackId,
       type: data?.type ?? ApplicationAssetType.File,
       url: data?.url ?? '',
-      name: data?.name ?? '-',
-      description: data?.description ?? '-',
+      name: data?.name ?? FallbackString,
+      description: data?.description ?? FallbackString,
       content: data?.content as PartialBlock[] | undefined,
       isPrimary: data?.isPrimary ?? false,
       isLocal: data?.isLocal ?? false,

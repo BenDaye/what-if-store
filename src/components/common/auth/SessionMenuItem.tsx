@@ -1,3 +1,4 @@
+import { FallbackString } from '@/constants/common';
 import { useAuth } from '@/hooks';
 import { OverridesMenuItemProps } from '@/types/overrides';
 import { Avatar, ListItemAvatar, ListItemText, MenuItem } from '@mui/material';
@@ -37,16 +38,14 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
           src={session?.user?.avatar || undefined}
           {...overrides?.AvatarProps}
         >
-          {session?.user?.nickname?.charAt(0) ??
-            session?.user?.nickname?.charAt(0) ??
-            '-'}
+          {session?.user?.nickname?.charAt(0) ?? FallbackString}
         </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={
           status !== 'authenticated'
             ? t('auth:Unauthenticated')
-            : session?.user?.nickname ?? ''
+            : session?.user?.nickname ?? FallbackString
         }
         primaryTypographyProps={{
           color: status !== 'authenticated' ? 'text.disabled' : 'primary.light',
@@ -54,7 +53,9 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
           textOverflow: 'ellipsis',
         }}
         secondary={
-          status !== 'authenticated' ? ' ' : session?.user?.email ?? ''
+          status !== 'authenticated'
+            ? FallbackString
+            : session?.user?.email ?? FallbackString
         }
         secondaryTypographyProps={{
           noWrap: true,

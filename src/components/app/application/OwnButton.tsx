@@ -13,10 +13,12 @@ import { useCallback, useMemo } from 'react';
 type OwnApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;
   showText?: boolean;
+  text?: string;
 };
 export const OwnApplicationButton = ({
   overrides,
   applicationId,
+  text,
   showText = false,
 }: OwnApplicationButtonProps) => {
   const { t } = useTranslation();
@@ -54,7 +56,7 @@ export const OwnApplicationButton = ({
     [isFetching, isOwnPending],
   );
 
-  return showText ? (
+  return showText || text ? (
     <Button
       size="small"
       color={owned ? 'primary' : 'inherit'}
@@ -63,7 +65,7 @@ export const OwnApplicationButton = ({
       disabled={disabled}
       {...overrides?.ButtonProps}
     >
-      {owned ? t('application:Own.Owned') : t('application:Own.Own')}
+      {text ?? (owned ? t('application:Own.Owned') : t('application:Own.Own'))}
     </Button>
   ) : (
     <IconButton

@@ -1,3 +1,4 @@
+import { FallbackString } from '@/constants/common';
 import { ExpandMore, NavigateNext } from '@mui/icons-material';
 import {
   Box,
@@ -80,7 +81,7 @@ export const CollapseListItemButton = ({
 
       {overrides?.listPrimary ?? (
         <ListItemText
-          primary={primaryText ?? ''}
+          primary={primaryText ?? FallbackString}
           primaryTypographyProps={{
             variant: 'caption',
             fontWeight: (theme) => theme.typography.fontWeightMedium,
@@ -101,7 +102,7 @@ export const CollapseListItemButton = ({
             }}
             {...overrides?.TypographyProps}
           >
-            {secondaryText ?? ''}
+            {secondaryText ?? FallbackString}
           </Typography>
         </Box>
       )}

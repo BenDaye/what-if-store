@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -38,8 +39,8 @@ export const useDashboardUser = (id: IdSchema) => {
     [status, session],
   );
   const { data, refetch, isFetching, error, isError } =
-    trpc.protectedDashboardUser.getById.useQuery(id ?? '[UNSET]', {
-      enabled: !!id && authenticated,
+    trpc.protectedDashboardUser.getById.useQuery(id, {
+      enabled: !!id && id !== FallbackId && authenticated,
     });
   trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
     enabled: authenticated,
@@ -67,14 +68,14 @@ export const useDashboardUser = (id: IdSchema) => {
   const memoData = useMemo(
     (): UseDashboardUserHookDataSchema => ({
       id,
-      nickname: data?.UserProfile?.nickname ?? '-',
-      avatar: data?.UserProfile?.avatar ?? '-',
-      email: data?.UserProfile?.email ?? '-',
-      bio: data?.UserProfile?.bio ?? '-',
-      username: data?.username ?? '-',
+      nickname: data?.UserProfile?.nickname ?? FallbackString,
+      avatar: data?.UserProfile?.avatar ?? FallbackString,
+      email: data?.UserProfile?.email ?? FallbackString,
+      bio: data?.UserProfile?.bio ?? FallbackString,
+      username: data?.username ?? FallbackString,
       role: data?.role ?? AuthRole.User,
       avatarSrc: data?.UserProfile?.avatar,
-      avatarText: data?.UserProfile?.nickname?.charAt(0) ?? '-',
+      avatarText: data?.UserProfile?.nickname?.charAt(0) ?? FallbackString,
       provider: data?.ProviderProfile,
       providerId: data?.ProviderProfile?.id,
       providerName: data?.ProviderProfile?.name,

@@ -1,3 +1,4 @@
+import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
 import {
   IdSchema,
@@ -29,7 +30,7 @@ export type UseDashboardProviderHookDataSchema = z.infer<
 export const useDashboardProvider = (id: IdSchema) => {
   const { data, isFetching, refetch, error, isError } =
     trpc.protectedDashboardProvider.getById.useQuery(id, {
-      enabled: !!id,
+      enabled: !!id && id !== FallbackId,
     });
   trpc.protectedDashboardProvider.subscribe.useSubscription(undefined, {
     onData: (_id) => {
@@ -56,14 +57,14 @@ export const useDashboardProvider = (id: IdSchema) => {
   const memoData = useMemo(
     (): UseDashboardProviderHookDataSchema => ({
       id,
-      name: data?.name ?? '-',
-      avatar: data?.avatar ?? '-',
-      email: data?.email ?? '-',
-      bio: data?.bio ?? '-',
+      name: data?.name ?? FallbackString,
+      avatar: data?.avatar ?? FallbackString,
+      email: data?.email ?? FallbackString,
+      bio: data?.bio ?? FallbackString,
       type: data?.type ?? ProviderType.IndependentDeveloper,
       avatarSrc: data?.avatar,
-      avatarText: data?.name?.charAt(0) ?? '-',
-      userId: data?.userId ?? '',
+      avatarText: data?.name?.charAt(0) ?? FallbackString,
+      userId: data?.userId ?? FallbackId,
       verified: data?.verified ?? false,
     }),
     [data, id],

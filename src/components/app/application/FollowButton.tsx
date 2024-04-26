@@ -13,10 +13,12 @@ import { useCallback, useMemo } from 'react';
 type FollowApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;
   showText?: boolean;
+  text?: string;
 };
 export const FollowApplicationButton = ({
   overrides,
   applicationId,
+  text,
   showText = false,
 }: FollowApplicationButtonProps) => {
   const { t } = useTranslation();
@@ -64,7 +66,7 @@ export const FollowApplicationButton = ({
     [isFetching, isFollowPending, isUnfollowPending],
   );
 
-  return showText ? (
+  return showText || text ? (
     <Button
       size="small"
       color={followed ? 'error' : 'inherit'}
@@ -73,9 +75,10 @@ export const FollowApplicationButton = ({
       disabled={disabled}
       {...overrides?.ButtonProps}
     >
-      {followed
-        ? t('application:Follow.Followed')
-        : t('application:Follow.Follow')}
+      {text ??
+        (followed
+          ? t('application:Follow.Followed')
+          : t('application:Follow.Follow'))}
     </Button>
   ) : (
     <IconButton
