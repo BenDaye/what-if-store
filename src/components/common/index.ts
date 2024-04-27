@@ -4,6 +4,7 @@ export * from './IconButtonWithTooltip';
 export * from './PageContainer';
 export * from './PrimaryDrawerRnd';
 export * from './RouterBreadcrumbs';
+export * from './SearchTextField';
 export * from './SecondaryDrawerRnd';
 export * from './application';
 export * from './auth';

@@ -1,4 +1,8 @@
-import { CollapseList, SecondaryDrawerRnd } from '@/components/common';
+import {
+  CollapseList,
+  SearchInput,
+  SecondaryDrawerRnd,
+} from '@/components/common';
 import { AgeRating } from '@/constants/age_rating';
 import {
   APP_PRIMARY_DRAWER_WIDTH,
@@ -19,7 +23,6 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Toolbar,
-  Typography,
 } from '@mui/material';
 import { ApplicationCategory, ApplicationPlatform } from '@prisma/client';
 import countries from 'countries-list/minimal/countries.2to3.min.json';
@@ -78,13 +81,13 @@ export const ApplicationFilter = ({
         transitionDuration={0}
         {...overrides?.DrawerProps}
       >
-        <AppBar color="inherit">
+        <AppBar color="inherit" elevation={0}>
           <Toolbar
             sx={{ flexShrink: 0, gap: 1, px: 2 }}
             variant="dense"
             disableGutters
           >
-            <Typography variant="subtitle2">Application Filter</Typography>
+            <SearchInput input={input} setInput={setInput} />
           </Toolbar>
         </AppBar>
 

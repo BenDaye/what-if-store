@@ -58,11 +58,12 @@ export const CategorySectionCard = ({
     <Card {...overrides?.CardProps}>
       <CardContent {...overrides?.CardContentProps}>
         <Stack direction={'column'} spacing={2} alignItems={'stretch'}>
-          {input.category?.map((item) => (
+          {input.category?.map((item, index) => (
             <CommonSection
               key={item}
               data={_data.filter((v) => v.category === item)}
               category={item}
+              divider={index !== 0}
             />
           ))}
         </Stack>
@@ -74,10 +75,12 @@ export const CategorySectionCard = ({
 type CommonSectionProps = {
   category: ApplicationCategory;
   data: UseAppApplicationsHookDataSchema;
+  divider?: boolean;
 };
 const CommonSection = ({
   category,
   data: applications,
+  divider = true,
 }: CommonSectionProps) => {
   const { t } = useTranslation();
 
@@ -91,7 +94,7 @@ const CommonSection = ({
         pb: 1,
       }}
     >
-      <Divider />
+      {divider && <Divider />}
       <Stack
         direction={'row'}
         alignItems={'baseline'}

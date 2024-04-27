@@ -28,7 +28,7 @@ const Page: NextPageWithLayout<
     countries: [],
     ageRating: undefined,
   });
-  const [debounceInput, setDebounceInput] = useDebounceValue(input, 500);
+  const [debounceInput, setDebounceInput] = useDebounceValue(input, 100);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setDebounceInput(input), [input]);
   const { data } = useAppApplications(debounceInput);
