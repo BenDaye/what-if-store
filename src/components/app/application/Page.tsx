@@ -1,5 +1,6 @@
 import { EmptyDataBox } from '@/components/common';
 import { FallbackId } from '@/constants/common';
+import { FallbackVersion } from '@/constants/version';
 import {
   UseAppApplicationHookDataSchema,
   useAppApplication,
@@ -36,7 +37,7 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, ReactNode, useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { ProviderLink } from '../provider';
@@ -59,7 +60,7 @@ export const ApplicationPage = ({ applicationId }: ApplicationPageProps) => {
   return (
     <Card>
       <ApplicationPageHeader data={data} />
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid xs={12} lg={8} xl={10}>
           <ApplicationPagePrimaryContent data={data} />
         </Grid>
@@ -150,31 +151,71 @@ const ApplicationPagePrimaryContent = ({
         autoplay={false}
       >
         <ApplicationPageReadmeContent assetId={data.readme} />
-        <Box>2</Box>
-        <Box>3</Box>
-        <Box>4</Box>
+        <ApplicationPageVersionsContent data={data.versions} />
+        <EmptyDataBox />
+        <EmptyDataBox />
       </AutoPlaySwipeableViews>
     </Box>
   );
 };
 
 const ApplicationPageReadmeContent = ({ assetId }: { assetId?: string }) => {
-  const { t } = useTranslation();
   const { data } = useDashboardApplicationAsset(assetId ?? FallbackId);
   return assetId ? (
-    <Editor initialContent={data.content} editable={false} />
+    <Box sx={{ p: 2 }}>
+      <Editor initialContent={data.content} editable={false} />
+    </Box>
   ) : (
-    <Box
-      sx={{
-        height: 120,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Typography variant="caption" color="text.disabled">
-        {t('common:NoData')}
-      </Typography>
+    <EmptyDataBox />
+  );
+};
+
+const ApplicationPageVersionsContent = ({
+  data,
+}: {
+  data: UseAppApplicationHookDataSchema['versions'];
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Box sx={{ p: 2 }}>
+      {data
+        .sort((a, b) => b.releaseDate.valueOf() - a.releaseDate.valueOf())
+        .map((item) => {
+          const version = `v${item?.version ?? FallbackVersion}`;
+          return (
+            <ApplicationPageSecondaryContentSection
+              key={item.id}
+              title={
+                <Stack direction={'row'} gap={1} alignItems={'center'}>
+                  <Typography variant="h6">{version}</Typography>
+                  {item.latest && (
+                    <Chip variant="outlined" color="success" label={'Latest'} />
+                  )}
+                  {item.preview && (
+                    <Chip
+                      variant="outlined"
+                      color="warning"
+                      label={'Preview'}
+                    />
+                  )}
+                  {item.deprecated && (
+                    <Chip
+                      variant="outlined"
+                      color="error"
+                      label={'Deprecated'}
+                    />
+                  )}
+                </Stack>
+              }
+              subheader={t('application:Version.ReleasedAt', {
+                releaseDate: item.releaseDate,
+              })}
+            >
+              {item.changelog}
+            </ApplicationPageSecondaryContentSection>
+          );
+        })}
     </Box>
   );
 };
@@ -188,7 +229,7 @@ const ApplicationPageSecondaryContent = ({
   return (
     <Box>
       <Box sx={{ height: 48 }} />
-      <Stack sx={{ px: 1, pb: 2 }}>
+      <Stack sx={{ p: 2 }}>
         <ApplicationPageSecondaryContentSection
           title={t('application:Category._')}
         >
@@ -288,13 +329,15 @@ type ApplicationPageSecondaryContentSectionProps = PropsWithChildren<
     HeaderProps?: Omit<AccordionSummaryProps, 'children'>;
     ContentProps?: Omit<AccordionDetailsProps, 'children'>;
   }> & {
-    title: string;
+    title: ReactNode;
+    subheader?: ReactNode;
     defaultExpanded?: AccordionProps['defaultExpanded'];
   }
 >;
 const ApplicationPageSecondaryContentSection = ({
   overrides,
   title,
+  subheader,
   defaultExpanded = true,
   children,
 }: ApplicationPageSecondaryContentSectionProps) => {
@@ -302,14 +345,13 @@ const ApplicationPageSecondaryContentSection = ({
     <Accordion
       defaultExpanded={defaultExpanded}
       variant="outlined"
-      disableGutters
       {...overrides?.WrapperProps}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         {...overrides?.HeaderProps}
       >
-        {title}
+        <ListItemText primary={title} secondary={subheader} />
       </AccordionSummary>
       <AccordionDetails {...overrides?.ContentProps}>
         {children}
