@@ -6,6 +6,7 @@ import {
   Favorite as FollowedIcon,
 } from '@mui/icons-material';
 import { Button, IconButton } from '@mui/material';
+import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
@@ -23,7 +24,7 @@ export const FollowApplicationButton = ({
 }: FollowApplicationButtonProps) => {
   const { t } = useTranslation();
 
-  const { status } = useSession();
+  const { status, data: session } = useSession();
 
   const { signIn } = useAuth();
 
@@ -34,7 +35,10 @@ export const FollowApplicationButton = ({
     isFetching,
     refetch,
   } = trpc.protectedAppApplication.isFollowedById.useQuery(applicationId, {
-    enabled: status === 'authenticated',
+    enabled:
+      status === 'authenticated' &&
+      (session.user?.role === AuthRole.User ||
+        session.user?.role === AuthRole.Provider),
     placeholderData: false,
   });
   const { mutateAsync: follow, isPending: isFollowPending } =

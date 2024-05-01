@@ -19,8 +19,10 @@ const Page: NextPageWithLayout<
   return (
     <>
       <SignUpDialog
-        open
-        onClose={() => back()}
+        DialogProps={{
+          open: true,
+          onClose: () => back(),
+        }}
         disableSignIn={disableSignIn}
         disableSignUp={disableSignUp}
       />
