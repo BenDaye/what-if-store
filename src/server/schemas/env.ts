@@ -20,6 +20,11 @@ export const envSchema = z.object({
     .int()
     .nonnegative()
     .describe('The port for serve to listen on'),
+  EXPRESS_PORT: z.coerce
+    .number()
+    .int()
+    .nonnegative()
+    .describe('The port for express to listen on'),
   NEXTAUTH_SECRET: z.string().describe('The secret for next-auth'),
   NEXTAUTH_URL: z.string().url().describe('The url for next-auth'),
   NEXTAUTH_URL_INTERNAL: z

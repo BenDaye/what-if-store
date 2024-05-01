@@ -23,7 +23,7 @@ export const createContext = async (
   const sessionFromApiKey = await getSessionFromApiKey(opts);
 
   appLogger
-    .child({}, { msgPrefix: '[TRPC] ' })
+    .child({}, { msgPrefix: '[tRPC] ' })
     .debug(
       session || sessionFromApiKey || 'Create Context For Guest',
       'Create Context',

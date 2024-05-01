@@ -1,10 +1,11 @@
 import { shutdownBullMQ, startupBullMQ } from './bullmq';
+import { shutDownExpress, startUpExpress } from './express/server';
 import { appLogger } from './pino';
 
 const _logger = appLogger.child({}, { msgPrefix: '[Task] ' });
 
 export const launchStartupTasks = async () => {
-  await Promise.allSettled([startupBullMQ()])
+  await Promise.allSettled([startupBullMQ(), startUpExpress()])
     .then((result) => {
       result.forEach((task) =>
         task.status === 'fulfilled'
@@ -18,7 +19,7 @@ export const launchStartupTasks = async () => {
 };
 
 export const launchShutdownTasks = async () => {
-  await Promise.allSettled([shutdownBullMQ()])
+  await Promise.allSettled([shutdownBullMQ(), shutDownExpress()])
     .then((result) => {
       result.forEach((task) =>
         task.status === 'fulfilled'
