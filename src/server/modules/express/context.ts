@@ -1,10 +1,13 @@
 import { CreateExpressContextOptions } from '@trpc/server/adapters/express';
-import { CreateContextOptions } from '../../context';
+import { verify } from 'jsonwebtoken';
+import { Session } from 'next-auth';
+import { env } from '../env';
 import { appLogger } from '../pino';
 import { prisma } from '../prisma';
 import { redis } from '../redis';
 
 export const createContext = async ({ req }: CreateExpressContextOptions) => {
+  appLogger.debug({ req: req.body });
   const session = await getSessionFromRequestHeaders(req);
 
   appLogger
@@ -25,11 +28,13 @@ export type Context = Omit<Awaited<ReturnType<typeof createContext>>, 'req'> & {
 
 const getSessionFromRequestHeaders = async (
   req: CreateExpressContextOptions['req'],
-): Promise<CreateContextOptions['session']> => {
-  const jwt = req.headers.authorization?.replace('Bearer ', '');
-  if (!jwt) {
+): Promise<Session | null> => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return null;
+  try {
+    return verify(token, env.NEXTAUTH_SECRET) as Session;
+  } catch (error) {
+    appLogger.error({ error }, 'getSessionFromRequestHeaders');
     return null;
   }
-  // TODO: decode and verify JWT
-  return null;
 };

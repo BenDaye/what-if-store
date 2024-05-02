@@ -29,7 +29,8 @@ const nextApiHandler = createNextApiHandler<AppRouter>({
   /**
    * Enable query batching
    */
-  allowBatching: true,
+  allowBatching: false,
+  allowMethodOverride: true,
 
   experimental_contentTypeHandlers: [
     nodeHTTPFormDataContentTypeHandler(),

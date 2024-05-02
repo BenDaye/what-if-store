@@ -1,4 +1,5 @@
 import * as trpcExpress from '@trpc/server/adapters/express';
+import bodyParser from 'body-parser';
 import express from 'express';
 import { IncomingMessage, Server, ServerResponse } from 'node:http';
 import { appRouter } from '../../routers/_app';
@@ -14,6 +15,13 @@ export const startUpExpress = async (): Promise<string> =>
   new Promise((res, rej) => {
     try {
       const app = express();
+
+      app.use(bodyParser.json());
+      app.use(bodyParser.urlencoded({ extended: true }));
+
+      // app.use((req, res, next) => {
+      //   const args = { ...req.params, ...req.query, ...req.body };
+      // });
 
       app.use(
         '/trpc',

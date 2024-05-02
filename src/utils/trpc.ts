@@ -1,6 +1,12 @@
-import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
-import { loggerLink } from '@trpc/client/links/loggerLink';
-import { createWSClient, wsLink } from '@trpc/client/links/wsLink';
+import {
+  TRPCLink,
+  createWSClient,
+  experimental_formDataLink,
+  httpLink,
+  loggerLink,
+  splitLink,
+  wsLink,
+} from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import { NextPageContext } from 'next';
 import superjson from 'superjson';
@@ -8,28 +14,29 @@ import superjson from 'superjson';
 // ℹ️ Type-only import:
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 import type { AppRouter } from '@/server/routers/_app';
-import { TRPCLink, experimental_formDataLink, splitLink } from '@trpc/client';
 import type { inferRouterOutputs } from '@trpc/server';
 
 let client: ReturnType<typeof createWSClient> | null = null;
 
-function getEndingLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
-  if (typeof window === 'undefined') {
-    return httpBatchLink({
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
-      headers() {
-        if (!ctx?.req?.headers) {
-          return {};
-        }
-        // on ssr, forward client's headers to the server
-        return {
-          ...ctx.req.headers,
-          'x-ssr': '1',
-        };
-      },
-      transformer: superjson,
-    });
-  }
+function getHttpLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
+  return httpLink({
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
+    headers() {
+      if (!ctx?.req?.headers) {
+        return {};
+      }
+      return {
+        ...ctx.req.headers,
+        'x-ssr': '1',
+      };
+    },
+    transformer: superjson,
+    fetch: (url, options) => fetch(url, { ...options, credentials: 'include' }),
+    methodOverride: 'POST',
+  });
+}
+
+function getWSLink(): TRPCLink<AppRouter> {
   client = createWSClient({
     url: `${process.env.NEXT_PUBLIC_WS_URL}`,
     lazy: {
@@ -43,17 +50,18 @@ function getEndingLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
   });
 }
 
+function getEndingLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
+  if (typeof window === 'undefined') {
+    return getHttpLink(ctx);
+  }
+  return getWSLink();
+}
+
 export const resetTRPCClient = () => {
   if (client) {
     client.close();
   }
-  client = createWSClient({
-    url: `${process.env.NEXT_PUBLIC_WS_URL}`,
-    lazy: {
-      enabled: true,
-      closeMs: 30 * 1000,
-    },
-  });
+  return getWSLink();
 };
 
 /**
@@ -85,7 +93,11 @@ export const trpc = createTRPCNext<AppRouter>({
             url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
             transformer: superjson,
           }),
-          false: getEndingLink(ctx),
+          false: splitLink({
+            condition: (opts) => opts.type === 'subscription',
+            true: getEndingLink(ctx),
+            false: getHttpLink(ctx),
+          }),
         }),
       ],
       /**
