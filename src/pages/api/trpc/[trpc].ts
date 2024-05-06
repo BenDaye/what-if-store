@@ -8,8 +8,6 @@ import {
   NextApiResponse,
   createNextApiHandler,
 } from '@trpc/server/adapters/next';
-import { nodeHTTPFormDataContentTypeHandler } from '@trpc/server/adapters/node-http/content-type/form-data';
-import { nodeHTTPJSONContentTypeHandler } from '@trpc/server/adapters/node-http/content-type/json';
 
 const nextApiHandler = createNextApiHandler<AppRouter>({
   router: appRouter,
@@ -31,11 +29,6 @@ const nextApiHandler = createNextApiHandler<AppRouter>({
    */
   allowBatching: false,
   allowMethodOverride: true,
-
-  experimental_contentTypeHandlers: [
-    nodeHTTPFormDataContentTypeHandler(),
-    nodeHTTPJSONContentTypeHandler(),
-  ],
 });
 
 export default async function handler(

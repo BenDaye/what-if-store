@@ -1,7 +1,6 @@
 import {
   TRPCLink,
   createWSClient,
-  experimental_formDataLink,
   httpLink,
   loggerLink,
   splitLink,
@@ -88,16 +87,9 @@ export const trpc = createTRPCNext<AppRouter>({
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         splitLink({
-          condition: (opts) => opts.input instanceof FormData,
-          true: experimental_formDataLink({
-            url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
-            transformer: superjson,
-          }),
-          false: splitLink({
-            condition: (opts) => opts.type === 'subscription',
-            true: getEndingLink(ctx),
-            false: getHttpLink(ctx),
-          }),
+          condition: (opts) => opts.type === 'subscription',
+          true: getEndingLink(ctx),
+          false: getHttpLink(ctx),
         }),
       ],
       /**

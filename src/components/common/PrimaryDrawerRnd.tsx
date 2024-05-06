@@ -2,20 +2,40 @@ import {
   APP_PRIMARY_DRAWER_WIDTH,
   APP_PRIMARY_DRAWER_WIDTH_EDITABLE,
   APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
+  DASHBOARD_PRIMARY_DRAWER_WIDTH,
+  DASHBOARD_PRIMARY_DRAWER_WIDTH_EDITABLE,
+  DASHBOARD_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
 } from '@/constants/drawer';
 import { useTheme } from '@mui/material';
+import { AuthRole } from '@prisma/client';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
 
-export const PrimaryDrawerRnd = () => {
+type PrimaryDrawerRndProps = { role?: AuthRole };
+export const PrimaryDrawerRnd = ({
+  role = AuthRole.User,
+}: PrimaryDrawerRndProps) => {
+  const localStorageKey =
+    role === AuthRole.Admin
+      ? DASHBOARD_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY
+      : APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY;
+  const width =
+    role === AuthRole.Admin
+      ? DASHBOARD_PRIMARY_DRAWER_WIDTH
+      : APP_PRIMARY_DRAWER_WIDTH;
+  const editable =
+    role === AuthRole.Admin
+      ? DASHBOARD_PRIMARY_DRAWER_WIDTH_EDITABLE
+      : APP_PRIMARY_DRAWER_WIDTH_EDITABLE;
+
   const theme = useTheme();
   const [primaryRndZIndex, setPrimaryRndZIndex] = useState<number>(
     () => theme.zIndex.drawer + 8,
   );
   const [primaryDrawerWidth, setPrimaryDrawerWidth] = useLocalStorage<number>(
-    APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
-    APP_PRIMARY_DRAWER_WIDTH,
+    localStorageKey,
+    width,
     {
       initializeWithValue: false,
     },
@@ -27,15 +47,15 @@ export const PrimaryDrawerRnd = () => {
   return (
     <Rnd
       style={{
-        zIndex: APP_PRIMARY_DRAWER_WIDTH_EDITABLE ? primaryRndZIndex : 0,
+        zIndex: editable ? primaryRndZIndex : 0,
         backgroundImage:
           theme.palette.mode === 'dark'
             ? `linear-gradient(rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.05))`
             : `linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.05))`,
       }}
       size={{
-        height: APP_PRIMARY_DRAWER_WIDTH_EDITABLE ? '100vh' : 0,
-        width: APP_PRIMARY_DRAWER_WIDTH_EDITABLE ? primaryDrawerWidth : 0,
+        height: editable ? '100vh' : 0,
+        width: editable ? primaryDrawerWidth : 0,
       }}
       resizeHandleClasses={{
         right:
@@ -49,7 +69,7 @@ export const PrimaryDrawerRnd = () => {
       disableDragging
       enableResizing={{
         top: false,
-        right: APP_PRIMARY_DRAWER_WIDTH_EDITABLE,
+        right: editable,
         bottom: false,
         left: false,
         topRight: false,
