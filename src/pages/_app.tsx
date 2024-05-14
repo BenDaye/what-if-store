@@ -12,7 +12,11 @@ import '@fontsource/roboto/700.css';
 import 'overlayscrollbars/overlayscrollbars.css';
 
 import { DefaultLayout } from '@/components/layouts';
-import { AuthProvider, TernaryDarkModeProvider } from '@/hooks';
+import {
+  AuthProvider,
+  ElectronProvider,
+  TernaryDarkModeProvider,
+} from '@/hooks';
 import { NoticeProvider } from '@/hooks/notice';
 import { CreateContextOptions } from '@/server/context';
 import { createEmotionCache } from '@/theme';
@@ -78,25 +82,27 @@ const MyApp: AppType<CreateContextOptions> = ({
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <NoticeProvider>
-            <SessionProvider session={pageProps?.session}>
-              <SWRConfig
-                value={{
-                  fetcher: (resource, init) =>
-                    fetch(resource, init).then((res) => res.json()),
-                }}
-              >
-                <AuthProvider
-                  disableSignIn={Boolean(
-                    process.env.NEXT_PUBLIC_DISABLE_SIGN_IN,
-                  )}
-                  disableSignUp={Boolean(
-                    process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
-                  )}
+            <ElectronProvider>
+              <SessionProvider session={pageProps?.session}>
+                <SWRConfig
+                  value={{
+                    fetcher: (resource, init) =>
+                      fetch(resource, init).then((res) => res.json()),
+                  }}
                 >
-                  {getLayout(<Component {...pageProps} />)}
-                </AuthProvider>
-              </SWRConfig>
-            </SessionProvider>
+                  <AuthProvider
+                    disableSignIn={Boolean(
+                      process.env.NEXT_PUBLIC_DISABLE_SIGN_IN,
+                    )}
+                    disableSignUp={Boolean(
+                      process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
+                    )}
+                  >
+                    {getLayout(<Component {...pageProps} />)}
+                  </AuthProvider>
+                </SWRConfig>
+              </SessionProvider>
+            </ElectronProvider>
           </NoticeProvider>
         </SnackbarProvider>
       </TernaryDarkModeProvider>
