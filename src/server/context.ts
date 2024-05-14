@@ -26,7 +26,7 @@ export const createContext = async (
     .child({}, { msgPrefix: '[tRPC] ' })
     .debug(
       session || sessionFromApiKey || 'Create Context For Guest',
-      'Create Context',
+      'Create Context For User',
     );
 
   return {
