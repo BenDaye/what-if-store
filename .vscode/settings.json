@@ -11,6 +11,7 @@
     "hideable",
     "hookform",
     "HTTPJSON",
+    "ianvs",
     "Lngs",
     "locize",
     "mantine",
@@ -21,6 +22,7 @@
     "pino",
     "Signin",
     "superjson",
+    "swipeable",
     "tanstack",
     "trpc",
     "ulidx",
@@ -39,6 +41,8 @@
     "source.sortPackageJson": "explicit",
     "source.organizeImports": "explicit"
   },
+  "editor.stickyScroll.enabled": true,
+  "editor.inlineSuggest.enabled": true,
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -59,27 +63,15 @@
     "dist": true,
     "app": true
   },
-  "editor.stickyScroll.enabled": true,
-  "editor.inlineSuggest.enabled": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "prisma.fileWatcher": true,
-  "i18n-ally.localesPaths": ["public/locales"],
+  "i18n-ally.localesPaths": ["packages/web/public/locales"],
   "i18n-ally.keystyle": "nested",
   "i18n-ally.namespace": true,
   "i18n-ally.sourceLanguage": "en-US",
-  "i18n-ally.displayLanguage": "en-US",
-  "i18n-ally.extract.ignored": [
-    "Roboto Mono",
-    "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 320px"
-  ],
-  "i18n-ally.extract.ignoredByFiles": {
-    "src/components/dashboard/application/CopyrightSectionCard.tsx": [
-      "Copyright"
-    ],
-    "src/components/dashboard/application/ReadmeSectionCard.tsx": ["Readme"]
-  }
+  "i18n-ally.displayLanguage": "en-US"
 }
