@@ -42,6 +42,12 @@ importers:
       '@typescript-eslint/parser':
         specifier: 7.5.0
         version: 7.5.0(eslint@8.57.0)(typescript@5.4.5)
+      '@what-if-store/bridge':
+        specifier: workspace:*
+        version: link:packages/bridge
+      '@what-if-store/electron':
+        specifier: workspace:*
+        version: link:packages/electron
       '@what-if-store/web':
         specifier: workspace:*
         version: link:packages/web
@@ -87,6 +93,24 @@ importers:
       typescript:
         specifier: 5.4.5
         version: 5.4.5
+
+  packages/bridge:
+    dependencies:
+      '@trpc/server':
+        specifier: next
+        version: 11.0.0-rc.370
+      cors:
+        specifier: 2.8.5
+        version: 2.8.5
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/cors':
+        specifier: 2.8.17
+        version: 2.8.17
+
+  packages/electron: {}
 
   packages/web:
     dependencies:
@@ -2397,6 +2421,12 @@ packages:
       '@types/node': 20.12.12
     dev: true
 
+  /@types/cors@2.8.17:
+    resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
+    dependencies:
+      '@types/node': 20.12.12
+    dev: true
+
   /@types/debug@4.1.12:
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
     dependencies:
@@ -3410,6 +3440,14 @@ packages:
 
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
+    dev: false
+
+  /cors@2.8.5:
+    resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      object-assign: 4.1.1
+      vary: 1.1.2
     dev: false
 
   /cosmiconfig-typescript-loader@5.0.0(@types/node@20.12.12)(cosmiconfig@9.0.0)(typescript@5.4.5):

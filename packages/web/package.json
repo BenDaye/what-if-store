@@ -2,6 +2,7 @@
   "name": "@what-if-store/web",
   "version": "0.1.0",
   "private": true,
+  "description": "Web app for What If Store",
   "scripts": {
     "build": "run-s build:client build:server",
     "build:client": "next build",
