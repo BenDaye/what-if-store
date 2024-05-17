@@ -3,14 +3,14 @@
   "parserOptions": {
     "ecmaVersion": 2018, // Allows for the parsing of modern ECMAScript features
     "sourceType": "module", // Allows for the use of imports,
-    "project": "packages/web/tsconfig.json"
+    "project": "apps/web/tsconfig.json"
   },
   "rules": {
     "@typescript-eslint/no-redundant-type-constituents": "off"
   },
   "settings": {
     "next": {
-      "rootDir": "packages/web"
+      "rootDir": "apps/web"
     }
   }
 }

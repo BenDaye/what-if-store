@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
-    "lint": "eslint --cache --ext \".js,.ts,.tsx\" --report-unused-disable-directives packages",
+    "lint": "eslint --cache --ext \".js,.ts,.tsx\" --report-unused-disable-directives .",
     "lint:fix": "pnpm run lint --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev": "turbo run dev"
   },
   "resolutions": {
     "@types/node": "20.12.12",
@@ -43,6 +45,7 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tsx": "4.10.2",
+    "turbo": "1.13.3",
     "typescript": "5.4.5"
   },
   "packageManager": "pnpm@8.15.6",

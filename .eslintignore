@@ -4,6 +4,6 @@ node_modules
 **/.vscode/**
 **/dist/**
 
-/packages/**/next.config.js
-/packages/**/next-i18next.config.js
-/packages/**/uploads
+/apps/**/next.config.js
+/apps/**/next-i18next.config.js
+/apps/**/uploads

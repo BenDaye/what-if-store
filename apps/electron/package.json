@@ -1,0 +1,69 @@
+{
+  "name": "@what-if-store/electron",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Electron app for What If Store",
+  "author": "Benjamin Daye <yypsgdsg@163.com>",
+  "main": "app/background.js",
+  "scripts": {
+    "build": "nextron build",
+    "dev": "nextron",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "electron-is-dev": "3.0.1",
+    "electron-log": "5.1.4",
+    "electron-serve": "^1.3.0",
+    "electron-store": "^8.2.0",
+    "fs-extra": "11.2.0"
+  },
+  "devDependencies": {
+    "@blocknote/core": "0.13.2",
+    "@blocknote/react": "0.13.2",
+    "@emotion/cache": "11.11.0",
+    "@emotion/react": "11.11.4",
+    "@emotion/server": "11.11.0",
+    "@emotion/styled": "11.11.5",
+    "@fontsource/roboto": "5.0.13",
+    "@fontsource/roboto-mono": "5.0.18",
+    "@hookform/error-message": "2.0.1",
+    "@hookform/resolvers": "3.3.4",
+    "@mui/icons-material": "5.15.17",
+    "@mui/lab": "5.0.0-alpha.170",
+    "@mui/material": "5.15.17",
+    "@mui/x-data-grid": "6.19.11",
+    "@mui/x-date-pickers": "6.19.9",
+    "@next/eslint-plugin-next": "13.5.6",
+    "@react-spring/web": "9.7.3",
+    "@types/fs-extra": "11.0.4",
+    "@types/react-swipeable-views": "^0.13.5",
+    "@types/react-swipeable-views-utils": "^0.13.7",
+    "electron": "^29.4.0",
+    "electron-builder": "^24.13.3",
+    "next": "13.5.6",
+    "nextron": "^8.15.0",
+    "notistack": "3.0.1",
+    "overlayscrollbars": "2.8.0",
+    "overlayscrollbars-react": "0.5.6",
+    "react-hook-form": "7.51.4",
+    "react-rnd": "10.4.10",
+    "react-swipeable-views": "0.14.0",
+    "react-swipeable-views-utils": "0.14.0",
+    "usehooks-ts": "3.1.0",
+    "zod": "3.23.8",
+    "zod-form-data": "2.0.2"
+  },
+  "peerDependencies": {
+    "@types/node": "20.12.12",
+    "@types/react": "18.3.2",
+    "@types/react-dom": "18.3.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "packageManager": "pnpm@8.15.6",
+  "engines": {
+    "node": ">=20.11.1",
+    "pnpm": "8.15.6"
+  },
+  "productName": "What If Store"
+}

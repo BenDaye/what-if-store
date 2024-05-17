@@ -16,6 +16,7 @@
     "Lngs",
     "locize",
     "mantine",
+    "maximizable",
     "multistream",
     "NEXTAUTH",
     "nextron",
@@ -28,6 +29,7 @@
     "tanstack",
     "trpc",
     "ulidx",
+    "undocked",
     "unfollow",
     "upsert",
     "usehooks"
@@ -40,8 +42,7 @@
   "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.sortPackageJson": "explicit",
-    "source.organizeImports": "explicit"
+    "source.sortPackageJson": "explicit"
   },
   "editor.stickyScroll.enabled": true,
   "editor.inlineSuggest.enabled": true,
