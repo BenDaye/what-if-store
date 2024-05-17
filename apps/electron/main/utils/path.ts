@@ -1,7 +1,8 @@
 import path from 'path';
 import { App, app } from 'electron';
-import isDev from 'electron-is-dev';
 import { ensureDirSync } from 'fs-extra';
+
+const isDev = process.env.NODE_ENV !== 'production';
 
 const appName = isDev ? `${app.getName()} (DEV)` : app.getName();
 
@@ -16,14 +17,13 @@ export const initializePath = () => {
   ensureDirSync(userDataPath, 0o2775);
   app.setPath('userData', userDataPath);
 
-  const sessionDataPath = path.join(userDataPath, 'session');
+  const sessionDataPath = path.join(userDataPath, 'sessionData');
   ensureDirSync(sessionDataPath, 0o2775);
-  app.setPath('session', sessionDataPath);
+  app.setPath('sessionData', sessionDataPath);
 
   const logsPath = path.join(userDataPath, 'logs');
   ensureDirSync(logsPath, 0o2775);
   app.setPath('logs', logsPath);
-  app.setAppLogsPath(logsPath);
 };
 
 export const getPath = (name: Parameters<App['getPath']>[0]) => {

@@ -1,4 +1,4 @@
-node_modules
+**/node_modules/**
 **/.next/**
 **/_next/**
 **/.vscode/**
@@ -7,3 +7,4 @@ node_modules
 /apps/**/next.config.js
 /apps/**/next-i18next.config.js
 /apps/**/uploads
+/apps/**/app/**

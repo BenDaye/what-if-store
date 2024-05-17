@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from 'electron';
-import isDev from 'electron-is-dev';
 import serve from 'electron-serve';
 import { initializeIpc } from './ipc';
 import { initializeLogger } from './logger';
@@ -9,6 +8,8 @@ import {
   stopPowerSaveBlocker,
 } from './utils';
 import { createWindow } from './window';
+
+const isDev = process.env.NODE_ENV !== 'production';
 
 const main = async () => {
   initializePath();

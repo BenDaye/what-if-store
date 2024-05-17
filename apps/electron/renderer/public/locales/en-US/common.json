@@ -1,0 +1,43 @@
+{
+  "Applications": "Applications",
+  "Copy": "Copy",
+  "Create": "Create",
+  "Created": "Created",
+  "DarkMode": {
+    "Auto": "System",
+    "Off": "Light",
+    "On": "Dark",
+    "_": "Theme"
+  },
+  "Dashboard": "Dashboard",
+  "DataGridHeaderName": {
+    "Actions": "Actions",
+    "CreatedAt": "CreatedAt",
+    "UpdatedAt": "UpdatedAt"
+  },
+  "Home": "Home",
+  "Import": "Import",
+  "Imported": "Imported",
+  "Language": {
+    "Activated": "Activated",
+    "Update": "Update Language",
+    "Updated": "Language Updated",
+    "_": "Language",
+    "en-US": "English",
+    "zh-CN": "简体中文"
+  },
+  "NoData": "No Data available at this moment.",
+  "Providers": "Providers",
+  "Remove": "Remove",
+  "Removed": "Removed",
+  "Reset": "Reset",
+  "Settings": "Settings",
+  "Submit": "Submit",
+  "UnsavedFormAlert": "Unsaved changes will be lost.",
+  "Update": "Update",
+  "Updated": "Updated",
+  "Upload": "Upload",
+  "Uploaded": "Uploaded",
+  "Users": "Users",
+  "View": "View"
+}
