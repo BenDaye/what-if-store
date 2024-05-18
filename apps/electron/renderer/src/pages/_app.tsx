@@ -10,6 +10,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import 'overlayscrollbars/overlayscrollbars.css';
+import { DefaultLayout } from '@/components/layouts';
 import { TernaryDarkModeProvider } from '@/hooks';
 import { NoticeProvider } from '@/hooks/notice';
 import { createEmotionCache } from '@/theme';
@@ -46,6 +47,9 @@ const MyApp: AppType = ({
   emotionCache = clientSideEmotionCache,
   pageProps,
 }: MyAppProps) => {
+  const getLayout =
+    Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+
   return (
     <CacheProvider value={emotionCache}>
       <Head key="default">
@@ -61,7 +65,7 @@ const MyApp: AppType = ({
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <NoticeProvider>
-            <Component {...pageProps} />
+            {getLayout(<Component {...pageProps} />)}
           </NoticeProvider>
         </SnackbarProvider>
       </TernaryDarkModeProvider>

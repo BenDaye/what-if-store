@@ -6,7 +6,12 @@ import { Session } from 'next-auth';
 import { z } from 'zod';
 import { env, userEmitter } from '../modules';
 import { mutationOutputSchema, signUpSchema } from '../schemas';
-import { publicProcedure, router } from '../trpc';
+import {
+  protectedAdminProcedure,
+  protectedUserProcedure,
+  publicProcedure,
+  router,
+} from '../trpc';
 import { onError } from '../utils/errors';
 
 export const publicAppAuth = router({
@@ -102,10 +107,13 @@ export const publicAppAuth = router({
         throw onError(error);
       }
     }),
+  session: publicProcedure.query(async ({ ctx: { session } }) => session),
 });
 
 export const protectedAppAuth = router({});
 
-export const publicDashboardAuth = router({});
+export const publicDashboardAuth = router({
+  session: publicProcedure.query(async ({ ctx: { session } }) => session),
+});
 
 export const protectedDashboardAuth = router({});

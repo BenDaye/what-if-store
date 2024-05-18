@@ -1,8 +1,9 @@
 import { contextBridge } from 'electron';
-import { commonChannel } from './ipc';
+import { apiKeyChannel, commonChannel } from './ipc';
 
 const handler = {
   common: commonChannel.handlers,
+  apiKey: apiKeyChannel.handlers,
 };
 
 contextBridge.exposeInMainWorld('ipc', handler);
