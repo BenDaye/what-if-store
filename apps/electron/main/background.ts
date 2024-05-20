@@ -14,6 +14,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const main = async () => {
   initializePath();
   initializeLogger();
+  initializeIpc();
 
   const mainWindow = createWindow({
     center: true,
@@ -25,8 +26,6 @@ const main = async () => {
   mainWindow.removeMenu();
   // if (mainWindow.maximizable) mainWindow.maximize();
 
-  initializeIpc(mainWindow);
-
   if (isDev) {
     const rendererPort = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${rendererPort}`);
@@ -35,12 +34,11 @@ const main = async () => {
     serve({ directory: 'app' });
     await mainWindow.loadURL('app://./index.html');
   }
-
-  startPowerSaveBlocker();
 };
 
 app.whenReady().then(async () => {
   await main();
+  startPowerSaveBlocker();
   app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       await main();
