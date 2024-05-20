@@ -512,12 +512,24 @@ importers:
 
   packages/bridge:
     dependencies:
+      '@trpc/client':
+        specifier: next
+        version: 11.0.0-rc.374(@trpc/server@11.0.0-rc.370)
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.370
       cors:
         specifier: 2.8.5
         version: 2.8.5
+      superjson:
+        specifier: 2.2.1
+        version: 2.2.1
+      systeminformation:
+        specifier: 5.22.9
+        version: 5.22.9
+      ws:
+        specifier: 8.17.0
+        version: 8.17.0
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -525,6 +537,9 @@ importers:
       '@types/cors':
         specifier: 2.8.17
         version: 2.8.17
+      '@types/ws':
+        specifier: 8.5.10
+        version: 8.5.10
 
 packages:
 
@@ -3841,6 +3856,14 @@ packages:
       '@trpc/server': 11.0.0-rc.373+db2ec5cae
     dependencies:
       '@trpc/server': 11.0.0-rc.373
+
+  /@trpc/client@11.0.0-rc.374(@trpc/server@11.0.0-rc.370):
+    resolution: {integrity: sha512-Ha1GaTT9FCq9BRPQPa+KKRTXSDRwvjHpsoYVl683vNoXnJRtTycMsPdydr/zdL10vuUHjutpLMZNycSRQ9yN0g==}
+    peerDependencies:
+      '@trpc/server': 11.0.0-rc.374+5027209bc
+    dependencies:
+      '@trpc/server': 11.0.0-rc.370
+    dev: false
 
   /@trpc/next@11.0.0-rc.373(@tanstack/react-query@5.28.14)(@trpc/client@11.0.0-rc.373)(@trpc/react-query@11.0.0-rc.373)(@trpc/server@11.0.0-rc.373)(next@13.5.6)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-VCuV2qBlr0z5tFMExtNzY6zEtKMUSXCOxuC53u4IRePParFZ2uVpqx2yGqyHsgORThjn1xtjlX2klp5wEPt1YA==}
@@ -11173,6 +11196,13 @@ packages:
       '@pkgr/core': 0.1.1
       tslib: 2.6.2
     dev: true
+
+  /systeminformation@5.22.9:
+    resolution: {integrity: sha512-qUWJhQ9JSBhdjzNUQywpvc0icxUAjMY3sZqUoS0GOtaJV9Ijq8s9zEP8Gaqmymn1dOefcICyPXK1L3kgKxlUpg==}
+    engines: {node: '>=8.0.0'}
+    os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos, android]
+    hasBin: true
+    dev: false
 
   /tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
