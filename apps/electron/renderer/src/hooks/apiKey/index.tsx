@@ -5,7 +5,7 @@ export type ApiKeyProviderProps = PropsWithChildren;
 
 export type ApiKeyContextValue = {
   keys: string[];
-  get: () => Promise<void>;
+  get: () => Promise<string[]>;
   set: (keys: string[]) => Promise<void>;
   clear: () => Promise<void>;
   create: (key: string) => Promise<void>;
@@ -32,16 +32,17 @@ export const ApiKeyProvider = ({ children }: ApiKeyProviderProps) => {
       if (!isClient) return;
       const keys = await window.ipc.apiKey.get();
       setKeys(keys);
+      return keys;
     },
     set: async (keys) => {
       if (!isClient) return;
       await window.ipc.apiKey.set(keys);
-      setKeys(keys);
+      await value.get();
     },
     clear: async () => {
       if (!isClient) return;
       await window.ipc.apiKey.clear();
-      setKeys([]);
+      await value.get();
     },
     create: async (key) => {
       if (!isClient) return;

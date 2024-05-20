@@ -123,7 +123,10 @@ export const createWindow = (
   win.on('close', saveBounds);
 
   win.webContents.once('did-finish-load', () => {
-    win.setTitle(`${app.getName()} ${app.getVersion()}`);
+    const isDev = process.env.NODE_ENV !== 'production';
+    win.setTitle(
+      `${isDev ? '[Dev] ' : ''}${app.getName()} ${app.getVersion()}`,
+    );
   });
 
   return win;

@@ -2,12 +2,9 @@ import path from 'path';
 import { App, app } from 'electron';
 import { ensureDirSync } from 'fs-extra';
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-const appName = isDev ? `${app.getName()} (DEV)` : app.getName();
-
 export const initializePath = () => {
-  app.setName(appName);
+  const isDev = process.env.NODE_ENV !== 'production';
+  const appName = isDev ? `${app.getName()} (Dev)` : app.getName();
 
   const appDataPath = path.join(app.getPath('home'), '.config');
   ensureDirSync(appDataPath, 0o2775);

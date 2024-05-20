@@ -1,3 +1,2 @@
-export * from './api_key';
-export * from './common';
-export * from './types';
+export { apiKeyChannelMain as apiKey } from './api_key/main';
+export { commonChannelMain as common } from './common/main';

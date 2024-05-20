@@ -23,7 +23,7 @@ const main = async () => {
   });
 
   mainWindow.removeMenu();
-  if (mainWindow.maximizable) mainWindow.maximize();
+  // if (mainWindow.maximizable) mainWindow.maximize();
 
   initializeIpc(mainWindow);
 

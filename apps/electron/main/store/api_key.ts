@@ -1,9 +1,34 @@
 import { Schema, default as Store } from 'electron-store';
 import { getPath } from '../utils';
 
-export type SchemaType = string[];
+export interface ApiKey {
+  key: string;
+  active: boolean;
+}
 
-const schema: Schema<SchemaType> = [];
+export type SchemaType = {
+  keys: ApiKey[];
+};
+
+const schema: Schema<SchemaType> = {
+  keys: {
+    type: 'array',
+    default: [],
+    items: {
+      type: 'object',
+      properties: {
+        key: {
+          type: 'string',
+        },
+        active: {
+          type: 'boolean',
+          default: false,
+        },
+      },
+      required: ['key', 'active'],
+    },
+  },
+};
 
 export const store = new Store<SchemaType>({
   schema,
@@ -11,23 +36,37 @@ export const store = new Store<SchemaType>({
   cwd: getPath('userData'),
 });
 
-export const getApiKey = (): string[] => store.store;
-export const setApiKey = (apiKey: string[]): void => store.set(apiKey);
+export const getApiKeys = (): ApiKey[] => store.get('keys');
+export const setApiKeys = (keys: ApiKey[]): void => store.set('keys', keys);
 export const clearApiKey = (): void => store.clear();
-export const createApiKey = (apiKey: string): void => {
-  const apiKeys = getApiKey();
-  if (!apiKeys.includes(apiKey)) {
-    apiKeys.push(apiKey);
-    setApiKey(apiKeys);
+export const createApiKey = (key: string): void => {
+  const keys = getApiKeys();
+  if (keys.findIndex((item) => item.key === key) === -1) {
+    keys.push({ key, active: false });
+    setApiKeys(keys);
   }
 };
-export const removeApiKey = (apiKey: string): void => {
-  const apiKeys = getApiKey();
-  const index = apiKeys.indexOf(apiKey);
+export const removeApiKey = (key: string): void => {
+  const keys = getApiKeys();
+  const index = keys.findIndex((item) => item.key === key);
   if (index !== -1) {
-    apiKeys.splice(index, 1);
-    setApiKey(apiKeys);
+    keys.splice(index, 1);
+    setApiKeys(keys);
   }
 };
 export const hasApiKey = (apiKey: string): boolean =>
-  getApiKey().includes(apiKey);
+  getApiKeys().some((item) => item.key === apiKey);
+export const setActiveApiKey = (key: string): void => {
+  const keys = getApiKeys();
+  const index = keys.findIndex((item) => item.key === key);
+  if (index !== -1) {
+    keys.forEach((item) => (item.active = false));
+    keys[index].active = true;
+    setApiKeys(keys);
+  }
+};
+export const getActiveApiKey = (): string | null => {
+  const keys = getApiKeys();
+  const key = keys.find((item) => item.active);
+  return key ? key.key : null;
+};
