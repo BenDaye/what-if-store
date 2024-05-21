@@ -1,11 +1,4 @@
-import {
-  amber,
-  cyan,
-  deepPurple,
-  orange,
-  red,
-  teal,
-} from '@mui/material/colors';
+import { amber, cyan, deepPurple, orange, red, teal } from '@mui/material/colors';
 import { zhCN } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 

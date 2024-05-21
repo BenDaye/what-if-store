@@ -1,10 +1,5 @@
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  IpcMainInvokeEvent,
-  Rectangle,
-} from 'electron';
+import type { IpcMainInvokeEvent, Rectangle } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { IpcChannel } from '../types';
 import { channelMap } from './map';
 

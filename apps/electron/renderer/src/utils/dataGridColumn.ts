@@ -1,4 +1,4 @@
-import { GridColTypeDef } from '@mui/x-data-grid';
+import type { GridColTypeDef } from '@mui/x-data-grid';
 
 export const createdAtColumn: GridColTypeDef = {
   width: 200,

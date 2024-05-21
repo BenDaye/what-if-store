@@ -1,11 +1,6 @@
 import path from 'path';
-import {
-  app,
-  BrowserWindow,
-  BrowserWindowConstructorOptions,
-  Rectangle,
-  screen,
-} from 'electron';
+import type { BrowserWindowConstructorOptions, Rectangle } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import { windowStore } from '../store';
 import { MIN_HEIGHT, MIN_WIDTH } from './constants';
 
@@ -20,32 +15,19 @@ export const createWindow = (
   const defaultBounds = {
     width,
     height,
-    x:
-      options.x ?? options.center
-        ? (primaryDisplayBounds.width - width) / 2
-        : 0,
-    y:
-      options.y ?? options.center
-        ? (primaryDisplayBounds.height - height) / 2
-        : 0,
+    x: options.x ?? options.center ? (primaryDisplayBounds.width - width) / 2 : 0,
+    y: options.y ?? options.center ? (primaryDisplayBounds.height - height) / 2 : 0,
   };
   const recentBounds: Rectangle = windowStore.store;
 
-  const validBounds: Rectangle = useRecentBounds
-    ? { ...recentBounds }
-    : { ...defaultBounds };
+  const validBounds: Rectangle = useRecentBounds ? { ...recentBounds } : { ...defaultBounds };
 
-  const windowWithinDisplayBounds = (
-    windowBounds: Rectangle,
-    displayBounds: Rectangle,
-  ) => {
+  const windowWithinDisplayBounds = (windowBounds: Rectangle, displayBounds: Rectangle) => {
     return (
       windowBounds.x >= displayBounds.x &&
       windowBounds.y >= displayBounds.y &&
-      windowBounds.x + windowBounds.width <=
-        displayBounds.x + displayBounds.width &&
-      windowBounds.y + windowBounds.height <=
-        displayBounds.y + displayBounds.height
+      windowBounds.x + windowBounds.width <= displayBounds.x + displayBounds.width &&
+      windowBounds.y + windowBounds.height <= displayBounds.y + displayBounds.height
     );
   };
 
@@ -124,9 +106,7 @@ export const createWindow = (
 
   win.webContents.once('did-finish-load', () => {
     const isDev = process.env.NODE_ENV !== 'production';
-    win.setTitle(
-      `${isDev ? '[Dev] ' : ''}${app.getName()} ${app.getVersion()}`,
-    );
+    win.setTitle(`${isDev ? '[Dev] ' : ''}${app.getName()} ${app.getVersion()}`);
   });
 
   return win;

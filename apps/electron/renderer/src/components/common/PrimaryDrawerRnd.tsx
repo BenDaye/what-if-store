@@ -15,9 +15,7 @@ import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
 
 type PrimaryDrawerRndProps = { key?: 'DEFAULT' | 'APP' | 'DASHBOARD' };
-export const PrimaryDrawerRnd = ({
-  key = 'DEFAULT',
-}: PrimaryDrawerRndProps) => {
+export const PrimaryDrawerRnd = ({ key = 'DEFAULT' }: PrimaryDrawerRndProps) => {
   const localStorageKey =
     key === 'DASHBOARD'
       ? DASHBOARD_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY
@@ -38,20 +36,11 @@ export const PrimaryDrawerRnd = ({
         : DEFAULT_PRIMARY_DRAWER_WIDTH_EDITABLE;
 
   const theme = useTheme();
-  const [primaryRndZIndex, setPrimaryRndZIndex] = useState<number>(
-    () => theme.zIndex.drawer + 8,
-  );
-  const [primaryDrawerWidth, setPrimaryDrawerWidth] = useLocalStorage<number>(
-    localStorageKey,
-    width,
-    {
-      initializeWithValue: false,
-    },
-  );
-  const handlePrimaryDrawerWidth = useDebounceCallback(
-    setPrimaryDrawerWidth,
-    10,
-  );
+  const [primaryRndZIndex, setPrimaryRndZIndex] = useState<number>(() => theme.zIndex.drawer + 8);
+  const [primaryDrawerWidth, setPrimaryDrawerWidth] = useLocalStorage<number>(localStorageKey, width, {
+    initializeWithValue: false,
+  });
+  const handlePrimaryDrawerWidth = useDebounceCallback(setPrimaryDrawerWidth, 10);
   return (
     <Rnd
       style={{
@@ -66,10 +55,7 @@ export const PrimaryDrawerRnd = ({
         width: editable ? primaryDrawerWidth : 0,
       }}
       resizeHandleClasses={{
-        right:
-          theme.palette.mode === 'dark'
-            ? 'resizeHandleClass darkMode'
-            : 'resizeHandleClass',
+        right: theme.palette.mode === 'dark' ? 'resizeHandleClass darkMode' : 'resizeHandleClass',
       }}
       position={{ x: 0, y: 0 }}
       maxWidth={240}

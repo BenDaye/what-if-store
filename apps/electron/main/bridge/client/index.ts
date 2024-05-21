@@ -1,14 +1,8 @@
-import {
-  createTRPCClient,
-  createWSClient,
-  httpLink,
-  splitLink,
-  wsLink,
-} from '@trpc/client';
 import SuperJSON from 'superjson';
 import { WebSocket } from 'ws';
+import { createTRPCClient, createWSClient, httpLink, splitLink, wsLink } from '@trpc/client';
 import type { AppRouter } from '../server/routers/_app';
-import { StartTRPCServerProps } from '../server/schema';
+import type { StartTRPCServerProps } from '../server/schema';
 
 globalThis.WebSocket = WebSocket as any;
 

@@ -1,14 +1,12 @@
 import { type Server } from 'http';
+import { WebSocketServer } from 'ws';
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { applyWSSHandler } from '@trpc/server/adapters/ws';
-import { WebSocketServer } from 'ws';
 import { createContext } from './context';
 import { appRouter, type AppRouter } from './routers/_app';
 import { startTRPCServerProps, type StartTRPCServerProps } from './schema';
 
-let server: Server,
-  wss: WebSocketServer,
-  handler: ReturnType<typeof applyWSSHandler>;
+let server: Server, wss: WebSocketServer, handler: ReturnType<typeof applyWSSHandler>;
 
 export const startTRPCServer = async (props?: StartTRPCServerProps) => {
   const validateProps = await startTRPCServerProps.safeParseAsync(props);

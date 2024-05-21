@@ -21,9 +21,7 @@ import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
 
 type SecondaryDrawerRndProps = { key?: 'DEFAULT' | 'APP' | 'DASHBOARD' };
-export const SecondaryDrawerRnd = ({
-  key = 'DEFAULT',
-}: SecondaryDrawerRndProps) => {
+export const SecondaryDrawerRnd = ({ key = 'DEFAULT' }: SecondaryDrawerRndProps) => {
   const localStorageKey =
     key === 'DASHBOARD'
       ? DASHBOARD_SECONDARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY
@@ -60,14 +58,10 @@ export const SecondaryDrawerRnd = ({
       initializeWithValue: false,
     },
   );
-  const [secondaryDrawerWidth, setSecondaryDrawerWidth] =
-    useLocalStorage<number>(localStorageKey, width, {
-      initializeWithValue: false,
-    });
-  const handleSecondaryDrawerWidth = useDebounceCallback(
-    setSecondaryDrawerWidth,
-    10,
-  );
+  const [secondaryDrawerWidth, setSecondaryDrawerWidth] = useLocalStorage<number>(localStorageKey, width, {
+    initializeWithValue: false,
+  });
+  const handleSecondaryDrawerWidth = useDebounceCallback(setSecondaryDrawerWidth, 10);
 
   return (
     <Rnd
@@ -83,10 +77,7 @@ export const SecondaryDrawerRnd = ({
         width: editable ? secondaryDrawerWidth : 0,
       }}
       resizeHandleClasses={{
-        right:
-          theme.palette.mode === 'dark'
-            ? 'resizeHandleClass darkMode'
-            : 'resizeHandleClass',
+        right: theme.palette.mode === 'dark' ? 'resizeHandleClass darkMode' : 'resizeHandleClass',
       }}
       position={{ x: primaryDrawerWidth, y: 0 }}
       maxWidth={480}

@@ -14,24 +14,22 @@ import { DefaultLayout } from '@/components/layouts';
 import { TernaryDarkModeProvider } from '@/hooks';
 import { NoticeProvider } from '@/hooks/notice';
 import { createEmotionCache } from '@/theme';
-import { CacheProvider, EmotionCache } from '@emotion/react';
+import type { EmotionCache } from '@emotion/react';
+import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
-import { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import nextI18NextConfig from '../../next-i18next.config.js';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type NextPageWithLayout<TProps = {}, TInitialProps = TProps> = NextPage<
-  TProps,
-  TInitialProps
-> & {
+export type NextPageWithLayout<TProps = {}, TInitialProps = TProps> = NextPage<TProps, TInitialProps> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -42,13 +40,8 @@ export interface MyAppProps extends AppProps {
   pageProps: AppProps['pageProps'];
 }
 
-const MyApp: AppType = ({
-  Component,
-  emotionCache = clientSideEmotionCache,
-  pageProps,
-}: MyAppProps) => {
-  const getLayout =
-    Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+const MyApp: AppType = ({ Component, emotionCache = clientSideEmotionCache, pageProps }: MyAppProps) => {
+  const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -64,9 +57,7 @@ const MyApp: AppType = ({
           disableWindowBlurListener
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          <NoticeProvider>
-            {getLayout(<Component {...pageProps} />)}
-          </NoticeProvider>
+          <NoticeProvider>{getLayout(<Component {...pageProps} />)}</NoticeProvider>
         </SnackbarProvider>
       </TernaryDarkModeProvider>
     </CacheProvider>

@@ -5,7 +5,8 @@ import {
   DEFAULT_SECONDARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
 } from '@/constants/drawer';
 import { Box } from '@mui/material';
-import { PropsWithChildren, ReactElement, useMemo } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { useMemo } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { Main } from './Main';
 
@@ -37,8 +38,7 @@ export const DefaultLayout = ({
     [primaryDrawerWidth, hasSecondaryDrawer, secondaryDrawerWidth],
   );
   const mainWidth = useMemo(
-    () =>
-      `calc(100% - ${primaryDrawerWidth + (hasSecondaryDrawer ? secondaryDrawerWidth : 0)}px)`,
+    () => `calc(100% - ${primaryDrawerWidth + (hasSecondaryDrawer ? secondaryDrawerWidth : 0)}px)`,
     [primaryDrawerWidth, hasSecondaryDrawer, secondaryDrawerWidth],
   );
 

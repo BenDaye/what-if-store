@@ -1,4 +1,5 @@
-import { createContext, PropsWithChildren, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useState } from 'react';
 import { useIsClient } from 'usehooks-ts';
 
 export type ApiKeyProviderProps = PropsWithChildren;
@@ -13,15 +14,10 @@ export type ApiKeyContextValue = {
   has: (key: string) => Promise<boolean>;
 };
 
-export const ApiKeyContext = createContext?.<ApiKeyContextValue | undefined>(
-  undefined,
-);
+export const ApiKeyContext = createContext?.<ApiKeyContextValue | undefined>(undefined);
 
 export const ApiKeyProvider = ({ children }: ApiKeyProviderProps) => {
-  if (!ApiKeyContext)
-    throw new Error(
-      'ApiKeyProvider must be used within a ApiKeyContext.Provider',
-    );
+  if (!ApiKeyContext) throw new Error('ApiKeyProvider must be used within a ApiKeyContext.Provider');
 
   const isClient = useIsClient();
   const [keys, setKeys] = useState<string[]>([]);
@@ -60,7 +56,5 @@ export const ApiKeyProvider = ({ children }: ApiKeyProviderProps) => {
     },
   };
 
-  return (
-    <ApiKeyContext.Provider value={value}>{children}</ApiKeyContext.Provider>
-  );
+  return <ApiKeyContext.Provider value={value}>{children}</ApiKeyContext.Provider>;
 };

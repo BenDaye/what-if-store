@@ -1,5 +1,6 @@
-import { RefetchOptions } from '@tanstack/react-query';
-import { createContext, PropsWithChildren, useMemo } from 'react';
+import type { RefetchOptions } from '@tanstack/react-query';
+import type { PropsWithChildren } from 'react';
+import { createContext, useMemo } from 'react';
 import { trpc } from '../trpc';
 
 type ISODateString = string;
@@ -40,41 +41,29 @@ export type SessionContextValue = {
   status: 'unauthenticated' | 'loading' | 'authenticated';
 };
 
-export const SessionContext = createContext?.<SessionContextValue | undefined>(
-  undefined,
-);
+export const SessionContext = createContext?.<SessionContextValue | undefined>(undefined);
 
 export const SessionProvider = ({
   children,
   refetchInterval = false,
   refetchOnWindowFocus = true,
 }: SessionProviderProps) => {
-  if (!SessionContext)
-    throw new Error(
-      'SessionProvider must be used within a SessionContext.Provider',
-    );
+  if (!SessionContext) throw new Error('SessionProvider must be used within a SessionContext.Provider');
 
-  const { data, isSuccess, isFetching, refetch } =
-    trpc.publicAppAuth.session.useQuery(undefined, {
-      placeholderData: { user: null, expires: '' },
-      refetchInterval,
-      refetchOnWindowFocus,
-    });
+  const { data, isSuccess, isFetching, refetch } = trpc.publicAppAuth.session.useQuery(undefined, {
+    placeholderData: { user: null, expires: '' },
+    refetchInterval,
+    refetchOnWindowFocus,
+  });
 
   const value: SessionContextValue = useMemo(
     () => ({
       data: data as Session | null,
-      status: isFetching
-        ? 'loading'
-        : isSuccess
-          ? 'authenticated'
-          : 'unauthenticated',
+      status: isFetching ? 'loading' : isSuccess ? 'authenticated' : 'unauthenticated',
       update: refetch,
     }),
     [data, isFetching, isSuccess, refetch],
   );
 
-  return (
-    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
-  );
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 };

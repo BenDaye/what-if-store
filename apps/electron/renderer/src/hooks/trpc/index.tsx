@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createTRPCReact, httpLink } from '@trpc/react-query';
+import { createContext, useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import SuperJSON from 'superjson';
 import type { AppRouter } from '@what-if-store/web/src/server/routers/_app';
-import { createContext, PropsWithChildren, useState } from 'react';
+import { createTRPCReact, httpLink } from '@trpc/react-query';
 
 export const trpc = createTRPCReact<AppRouter>();
 
@@ -15,9 +17,7 @@ export type TRPCContextValue = {
   apiKey?: string | null;
 };
 
-export const TRPCContext = createContext<TRPCContextValue | undefined>(
-  undefined,
-);
+export const TRPCContext = createContext<TRPCContextValue | undefined>(undefined);
 
 export const TRPCProvider = ({
   children,
@@ -25,34 +25,33 @@ export const TRPCProvider = ({
   baseUrl = 'http://localhost:3200',
   basePath = '/api/trpc',
 }: TRPCProviderProps) => {
-  if (!TRPCContext)
-    throw new Error('TRPCProvider must be used within a TRPCContext.Provider');
+  if (!TRPCContext) throw new Error('TRPCProvider must be used within a TRPCContext.Provider');
 
   const [queryClient] = useState(() => new QueryClient());
-  const client = trpc.createClient({
-    links: [
-      httpLink({
-        url: `${baseUrl}${basePath}`,
-        methodOverride: 'POST',
-        headers: () => {
-          return apiKey
-            ? {
-                'x-api-key': apiKey,
-              }
-            : {};
-        },
-        fetch: (url, options) =>
-          fetch(url, { ...options, credentials: 'include' }),
-      }),
-    ],
-  });
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpLink({
+          url: `${baseUrl}${basePath}`,
+          methodOverride: 'POST',
+          headers: () => {
+            return apiKey
+              ? {
+                  'x-api-key': apiKey,
+                }
+              : {};
+          },
+          fetch: (url, options) => fetch(url, { ...options, credentials: 'include' }),
+          transformer: SuperJSON,
+        }),
+      ],
+    }),
+  );
 
   return (
     <TRPCContext.Provider value={{ apiKey }}>
-      <trpc.Provider client={client} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </trpc.Provider>
     </TRPCContext.Provider>
   );

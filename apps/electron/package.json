@@ -8,7 +8,9 @@
   "scripts": {
     "build": "nextron build",
     "dev": "nextron",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "lint": "eslint . --ext .js,.ts,.tsx --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .js,.ts,.tsx --ignore-path .gitignore --fix"
   },
   "dependencies": {
     "electron-log": "5.1.4",
@@ -51,6 +53,7 @@
     "@types/ws": "8.5.10",
     "@what-if-store/config": "workspace:*",
     "@what-if-store/types": "workspace:*",
+    "@what-if-store/web": "workspace:*",
     "cors": "2.8.5",
     "electron": "^29.4.0",
     "electron-builder": "^24.13.3",

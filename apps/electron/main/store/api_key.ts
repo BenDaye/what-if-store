@@ -1,4 +1,5 @@
-import { Schema, default as Store } from 'electron-store';
+import type { Schema } from 'electron-store';
+import { default as Store } from 'electron-store';
 import { getPath } from '../utils';
 
 export interface ApiKey {
@@ -54,8 +55,7 @@ export const removeApiKey = (key: string): void => {
     setApiKeys(keys);
   }
 };
-export const hasApiKey = (apiKey: string): boolean =>
-  getApiKeys().some((item) => item.key === apiKey);
+export const hasApiKey = (apiKey: string): boolean => getApiKeys().some((item) => item.key === apiKey);
 export const setActiveApiKey = (key: string): void => {
   const keys = getApiKeys();
   const index = keys.findIndex((item) => item.key === key);

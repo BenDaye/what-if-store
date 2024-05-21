@@ -1,28 +1,18 @@
 import createEmotionServer from '@emotion/server/create-instance';
-import { AppType } from 'next/app';
-import Document, {
-  DocumentContext,
-  DocumentProps,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from 'next/document';
+import type { AppType } from 'next/app';
+import type { DocumentContext, DocumentProps } from 'next/document';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 import * as React from 'react';
 import i18nextConfig from '../../next-i18next.config.js';
 import { createEmotionCache } from '../theme';
-import { MyAppProps } from './_app';
+import type { MyAppProps } from './_app';
 
 interface MyDocumentProps extends DocumentProps {
   emotionStyleTags: JSX.Element[];
 }
 
-export default function MyDocument({
-  emotionStyleTags,
-  ...props
-}: MyDocumentProps) {
-  const currentLocale =
-    props.__NEXT_DATA__.locale ?? i18nextConfig.i18n.defaultLocale;
+export default function MyDocument({ emotionStyleTags, ...props }: MyDocumentProps) {
+  const currentLocale = props.__NEXT_DATA__.locale ?? i18nextConfig.i18n.defaultLocale;
 
   return (
     <Html lang={currentLocale}>
@@ -75,9 +65,7 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (
-        App: React.ComponentType<React.ComponentProps<AppType> & MyAppProps>,
-      ) =>
+      enhanceApp: (App: React.ComponentType<React.ComponentProps<AppType> & MyAppProps>) =>
         function EnhanceApp(props) {
           return <App emotionCache={cache} {...props} />;
         },

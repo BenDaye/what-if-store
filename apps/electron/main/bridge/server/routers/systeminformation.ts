@@ -24,9 +24,7 @@ export const systemInformationRouter = router({
   cpu: publicProcedure.query(async () => await si.cpu()),
   cpuFlags: publicProcedure.query(async () => await si.cpuFlags()),
   cpuCache: publicProcedure.query(async () => await si.cpuCache()),
-  cpuCurrentSpeed: publicProcedure.query(
-    async () => await si.cpuCurrentSpeed(),
-  ),
+  cpuCurrentSpeed: publicProcedure.query(async () => await si.cpuCurrentSpeed()),
   cpuTemperature: publicProcedure.query(async () => await si.cpuTemperature()),
   currentLoad: publicProcedure.query(async () => await si.currentLoad()),
   fullLoad: publicProcedure.query(async () => await si.fullLoad()),
@@ -46,22 +44,14 @@ export const systemInformationRouter = router({
   disksIO: publicProcedure.query(async () => await si.disksIO()),
   diskLayout: publicProcedure.query(async () => await si.diskLayout()),
 
-  networkInterfaceDefault: publicProcedure.query(
-    async () => await si.networkInterfaceDefault(),
-  ),
-  networkGatewayDefault: publicProcedure.query(
-    async () => await si.networkGatewayDefault(),
-  ),
-  networkInterfaces: publicProcedure.query(
-    async () => await si.networkInterfaces(),
-  ),
+  networkInterfaceDefault: publicProcedure.query(async () => await si.networkInterfaceDefault()),
+  networkGatewayDefault: publicProcedure.query(async () => await si.networkGatewayDefault()),
+  networkInterfaces: publicProcedure.query(async () => await si.networkInterfaces()),
 
   networkStats: publicProcedure
     .input(optionalStringInput)
     .query(async ({ input }) => await si.networkStats(input?.params)),
-  networkConnections: publicProcedure.query(
-    async () => await si.networkConnections(),
-  ),
+  networkConnections: publicProcedure.query(async () => await si.networkConnections()),
   inetChecksite: publicProcedure
     .input(stringInput)
     .query(async ({ input }) => await si.inetChecksite(input?.params)),
@@ -71,9 +61,7 @@ export const systemInformationRouter = router({
 
   wifiNetworks: publicProcedure.query(async () => await si.wifiNetworks()),
   wifiInterfaces: publicProcedure.query(async () => await si.wifiInterfaces()),
-  wifiConnections: publicProcedure.query(
-    async () => await si.wifiConnections(),
-  ),
+  wifiConnections: publicProcedure.query(async () => await si.wifiConnections()),
 
   users: publicProcedure.query(async () => await si.users()),
 
@@ -81,9 +69,7 @@ export const systemInformationRouter = router({
   processLoad: publicProcedure
     .input(stringInput)
     .query(async ({ input }) => await si.processLoad(input?.params)),
-  services: publicProcedure
-    .input(stringInput)
-    .query(async ({ input }) => await si.services(input?.params)),
+  services: publicProcedure.input(stringInput).query(async ({ input }) => await si.services(input?.params)),
 
   dockerInfo: publicProcedure.query(async () => await si.dockerInfo()),
   dockerImages: publicProcedure
@@ -97,9 +83,7 @@ export const systemInformationRouter = router({
     .query(async ({ input }) => await si.dockerContainerStats(input?.params)),
   dockerContainerProcesses: publicProcedure
     .input(optionalStringInput)
-    .query(
-      async ({ input }) => await si.dockerContainerProcesses(input?.params),
-    ),
+    .query(async ({ input }) => await si.dockerContainerProcesses(input?.params)),
   dockerVolumes: publicProcedure.query(async () => await si.dockerVolumes()),
   dockerAll: publicProcedure.query(async () => await si.dockerAll()),
 
@@ -111,9 +95,7 @@ export const systemInformationRouter = router({
 
   audio: publicProcedure.query(async () => await si.audio()),
 
-  bluetoothDevices: publicProcedure.query(
-    async () => await si.bluetoothDevices(),
-  ),
+  bluetoothDevices: publicProcedure.query(async () => await si.bluetoothDevices()),
 
   getStaticData: publicProcedure.query(async () => await si.getStaticData()),
   getDynamicData: publicProcedure
@@ -126,7 +108,5 @@ export const systemInformationRouter = router({
         .partial()
         .optional(),
     )
-    .query(
-      async ({ input }) => await si.getDynamicData(input?.srv, input?.iface),
-    ),
+    .query(async ({ input }) => await si.getDynamicData(input?.srv, input?.iface)),
 });
