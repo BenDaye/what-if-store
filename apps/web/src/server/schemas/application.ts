@@ -1,8 +1,4 @@
-import {
-  ApplicationCategory,
-  ApplicationPlatform,
-  ApplicationStatus,
-} from '@prisma/client';
+import { ApplicationCategory, ApplicationPlatform, ApplicationStatus } from '@prisma/client';
 import { z } from 'zod';
 import { idSchema } from './id';
 import { listInputSchema } from './list';
@@ -18,9 +14,7 @@ export const applicationListInputSchema = listInputSchema
     ageRating: z.string().regex(/^\d+\+$/),
   })
   .partial();
-export type ApplicationListInputSchema = z.infer<
-  typeof applicationListInputSchema
->;
+export type ApplicationListInputSchema = z.infer<typeof applicationListInputSchema>;
 
 export const applicationCreateInputSchema = z.object({
   name: z.string(),
@@ -43,18 +37,12 @@ export const applicationCreateInputSchema = z.object({
 
   tags: z.object({ id: idSchema }).array(),
 });
-export type ApplicationCreateInputSchema = z.infer<
-  typeof applicationCreateInputSchema
->;
+export type ApplicationCreateInputSchema = z.infer<typeof applicationCreateInputSchema>;
 
-export const applicationUpdateInputSchema = applicationCreateInputSchema
-  .partial()
-  .extend({
-    id: idSchema,
-  });
-export type ApplicationUpdateInputSchema = z.infer<
-  typeof applicationUpdateInputSchema
->;
+export const applicationUpdateInputSchema = applicationCreateInputSchema.partial().extend({
+  id: idSchema,
+});
+export type ApplicationUpdateInputSchema = z.infer<typeof applicationUpdateInputSchema>;
 
 export const applicationChangeStatusInputSchema = z.object({
   id: idSchema,
@@ -62,6 +50,4 @@ export const applicationChangeStatusInputSchema = z.object({
   request: z.string().nullable().optional(),
   response: z.string().nullable().optional(),
 });
-export type ApplicationChangeStatusInputSchema = z.infer<
-  typeof applicationChangeStatusInputSchema
->;
+export type ApplicationChangeStatusInputSchema = z.infer<typeof applicationChangeStatusInputSchema>;

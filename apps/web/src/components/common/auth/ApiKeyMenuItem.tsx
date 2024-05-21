@@ -1,4 +1,4 @@
-import { OverridesMenuItemProps } from '@/types/overrides';
+import type { OverridesMenuItemProps } from '@/types/overrides';
 import { Key as ApiKeyIcon } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useSession } from 'next-auth/react';

@@ -5,7 +5,7 @@ import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
-import { UseDashboardUserHookDataSchema } from './id';
+import type { UseDashboardUserHookDataSchema } from './id';
 
 export const useDashboardUserMy = () => {
   const { data: session, status, update: updateSession } = useSession();
@@ -13,10 +13,9 @@ export const useDashboardUserMy = () => {
     () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
-  const { data, refetch, isFetching, error, isError } =
-    trpc.protectedDashboardUser.get.useQuery(undefined, {
-      enabled: authenticated,
-    });
+  const { data, refetch, isFetching, error, isError } = trpc.protectedDashboardUser.get.useQuery(undefined, {
+    enabled: authenticated,
+  });
   trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
     enabled: authenticated,
     onData: (_id) => {
@@ -32,15 +31,14 @@ export const useDashboardUserMy = () => {
     showWarning(t(`errorMessage:${error.message}`));
   }, [isError, error, showWarning, t]);
 
-  const { mutateAsync: update } =
-    trpc.protectedDashboardUser.update.useMutation({
-      onSuccess: async (response) => {
-        showSuccess(t('user:Profile.Updated'));
-        await updateSession(response);
-        refetch();
-      },
-      onError: (err) => showError(err.message),
-    });
+  const { mutateAsync: update } = trpc.protectedDashboardUser.update.useMutation({
+    onSuccess: async (response) => {
+      showSuccess(t('user:Profile.Updated'));
+      await updateSession(response);
+      refetch();
+    },
+    onError: (err) => showError(err.message),
+  });
 
   const memoData = useMemo(
     (): UseDashboardUserHookDataSchema => ({

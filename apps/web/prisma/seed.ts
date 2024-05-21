@@ -1,9 +1,7 @@
 import { AgeRating } from '@/constants/age_rating';
-import {
-  PermanentPresetGroupNames,
-  PersistentPresetGroupNames,
-} from '@/constants/group';
+import { PermanentPresetGroupNames, PersistentPresetGroupNames } from '@/constants/group';
 import { faker } from '@faker-js/faker';
+import type { Prisma } from '@prisma/client';
 import {
   ApplicationAssetType,
   ApplicationCategory,
@@ -11,7 +9,6 @@ import {
   ApplicationPlatform,
   ApplicationStatus,
   AuthRole,
-  Prisma,
   PrismaClient,
   ProviderType,
 } from '@prisma/client';
@@ -302,19 +299,15 @@ main()
 const getRandomApplicationPlatforms = (): ApplicationPlatform[] => {
   const _values = Object.values(ApplicationPlatform);
   const _start = Math.floor(Math.random() * _values.length);
-  const _end =
-    _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
+  const _end = _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
   return _values.slice(_start, _end);
 };
 
 const getRandomApplicationCategories = (): ApplicationCategory[] => {
   const _values = Object.values(ApplicationCategory);
   const _start = Math.floor(Math.random() * _values.length);
-  const _end =
-    _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
-  return [..._values, ..._values.slice(_start, _end)].flatMap((v) =>
-    Array(3).fill(v),
-  );
+  const _end = _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
+  return [..._values, ..._values.slice(_start, _end)].flatMap((v) => Array(3).fill(v));
 };
 
 const getRandomApplicationStatus = (): ApplicationStatus => {
@@ -326,8 +319,7 @@ const getRandomApplicationStatus = (): ApplicationStatus => {
 const getRandomApplicationCountries = (): string[] => {
   const _values = Object.keys(countries);
   const _start = Math.floor(Math.random() * _values.length);
-  const _end =
-    _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
+  const _end = _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
   return _values.slice(_start, _end);
 };
 
@@ -341,16 +333,12 @@ const getRandomApplicationAgeRating = (): string => {
 const getRandomApplicationLanguages = (): string[] => {
   const _values = getLocaleStringList();
   const _start = Math.floor(Math.random() * _values.length);
-  const _end =
-    _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
+  const _end = _start + Math.floor(Math.random() * (_values.length - _start)) + 1;
   return _values.slice(_start, _end);
 };
 
 const getRandomApplicationGroupName = (): string => {
-  const _values = [
-    ...Object.values(PermanentPresetGroupNames),
-    ...Object.values(PersistentPresetGroupNames),
-  ];
+  const _values = [...Object.values(PermanentPresetGroupNames), ...Object.values(PersistentPresetGroupNames)];
   const _random = Math.floor(Math.random() * _values.length);
   return _values[_random];
 };

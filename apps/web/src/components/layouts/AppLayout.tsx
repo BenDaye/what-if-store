@@ -8,7 +8,8 @@ import { useHeadMeta } from '@/hooks';
 import { Box } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { PropsWithChildren, ReactElement, useMemo } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { useMemo } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { AppNavDrawer, AppProvider } from '../app';
 import { Main } from './Main';
@@ -42,18 +43,14 @@ export const AppLayout = ({
     [primaryDrawerWidth, hasSecondaryDrawer, secondaryDrawerWidth],
   );
   const mainWidth = useMemo(
-    () =>
-      `calc(100% - ${primaryDrawerWidth + (hasSecondaryDrawer ? secondaryDrawerWidth : 0)}px)`,
+    () => `calc(100% - ${primaryDrawerWidth + (hasSecondaryDrawer ? secondaryDrawerWidth : 0)}px)`,
     [primaryDrawerWidth, hasSecondaryDrawer, secondaryDrawerWidth],
   );
   return (
     <AppProvider>
       <Head key="app">
         <title>{t('meta:App.Title', title ?? 'App Title')}</title>
-        <meta
-          name="description"
-          content={t('meta:App.Description', description ?? 'App Description')}
-        />
+        <meta name="description" content={t('meta:App.Description', description ?? 'App Description')} />
       </Head>
       <Box
         sx={{

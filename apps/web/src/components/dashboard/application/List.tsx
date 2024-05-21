@@ -1,7 +1,8 @@
 import { CollapseList } from '@/components/common';
 import { useDashboardApplications } from '@/hooks';
-import { ApplicationListInputSchema } from '@/server/schemas';
-import { List, ListProps } from '@mui/material';
+import type { ApplicationListInputSchema } from '@/server/schemas';
+import type { ListProps } from '@mui/material';
+import { List } from '@mui/material';
 import { ApplicationCategory } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { ApplicationListItemButton } from './ListItemButton';
@@ -21,11 +22,7 @@ export const ApplicationList = ({ input, ...props }: ApplicationListProps) => {
       {...props}
     >
       {Object.values(ApplicationCategory).map((category) => (
-        <ApplicationCollapseList
-          key={category}
-          category={category}
-          input={input}
-        />
+        <ApplicationCollapseList key={category} category={category} input={input} />
       ))}
     </List>
   );
@@ -35,10 +32,7 @@ type ApplicationCollapseListProps = {
   input?: ApplicationListInputSchema;
   category: ApplicationCategory;
 };
-const ApplicationCollapseList = ({
-  category,
-  input,
-}: ApplicationCollapseListProps) => {
+const ApplicationCollapseList = ({ category, input }: ApplicationCollapseListProps) => {
   const { data } = useDashboardApplications({
     ...input,
     category: [category],

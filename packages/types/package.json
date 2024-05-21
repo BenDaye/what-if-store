@@ -1,0 +1,8 @@
+{
+  "name": "@what-if-store/types",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@what-if-store/config": "workspace:*"
+  }
+}

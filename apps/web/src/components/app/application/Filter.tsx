@@ -1,8 +1,4 @@
-import {
-  CollapseList,
-  SearchInput,
-  SecondaryDrawerRnd,
-} from '@/components/common';
+import { CollapseList, SearchInput, SecondaryDrawerRnd } from '@/components/common';
 import { AgeRating } from '@/constants/age_rating';
 import {
   APP_PRIMARY_DRAWER_WIDTH,
@@ -10,8 +6,8 @@ import {
   APP_SECONDARY_DRAWER_WIDTH,
   APP_SECONDARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
 } from '@/constants/drawer';
-import { ApplicationListInputSchema } from '@/server/schemas';
-import { OverridesDrawerProps, OverridesListProps } from '@/types/overrides';
+import type { ApplicationListInputSchema } from '@/server/schemas';
+import type { OverridesDrawerProps, OverridesListProps } from '@/types/overrides';
 import { getLocaleStringList } from '@/utils/getLocaleList';
 import {
   AppBar,
@@ -31,16 +27,8 @@ import { useLocalStorage } from 'usehooks-ts';
 
 type ApplicationFilterProps = OverridesDrawerProps &
   OverridesListProps & {
-    input?: Omit<
-      ApplicationListInputSchema,
-      'limit' | 'skip' | 'cursor' | 'status'
-    >;
-    setInput?: (
-      input: Omit<
-        ApplicationListInputSchema,
-        'limit' | 'skip' | 'cursor' | 'status'
-      >,
-    ) => void;
+    input?: Omit<ApplicationListInputSchema, 'limit' | 'skip' | 'cursor' | 'status'>;
+    setInput?: (input: Omit<ApplicationListInputSchema, 'limit' | 'skip' | 'cursor' | 'status'>) => void;
   };
 export const ApplicationFilter = ({
   overrides,
@@ -82,11 +70,7 @@ export const ApplicationFilter = ({
         {...overrides?.DrawerProps}
       >
         <AppBar color="inherit" elevation={0}>
-          <Toolbar
-            sx={{ flexShrink: 0, gap: 1, px: 2 }}
-            variant="dense"
-            disableGutters
-          >
+          <Toolbar sx={{ flexShrink: 0, gap: 1, px: 2 }} variant="dense" disableGutters>
             <SearchInput input={input} setInput={setInput} />
           </Toolbar>
         </AppBar>
@@ -140,7 +124,7 @@ export const ApplicationCategoryFilter = ({
 
   return (
     <CollapseList
-      localStorageKey={`app-application-category-filter`}
+      localStorageKey="app-application-category-filter"
       primaryText={t('application:Category._')}
       secondaryText={`${selected.length}`}
       defaultExpandMore={true}
@@ -149,12 +133,7 @@ export const ApplicationCategoryFilter = ({
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
           <ListItemText primary={t(`application:Category.Name.${item}`)} />
           <ListItemSecondaryAction>
-            <Checkbox
-              size="small"
-              edge="end"
-              checked={selected.indexOf(item) > -1}
-              disableRipple
-            />
+            <Checkbox size="small" edge="end" checked={selected.indexOf(item) > -1} disableRipple />
           </ListItemSecondaryAction>
         </ListItemButton>
       ))}
@@ -188,7 +167,7 @@ export const ApplicationPlatformFilter = ({
 
   return (
     <CollapseList
-      localStorageKey={`app-application-platforms-filter`}
+      localStorageKey="app-application-platforms-filter"
       primaryText={t('application:Platform.Platforms')}
       secondaryText={`${selected.length}`}
       defaultExpandMore={true}
@@ -197,12 +176,7 @@ export const ApplicationPlatformFilter = ({
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
           <ListItemText primary={item} />
           <ListItemSecondaryAction>
-            <Checkbox
-              size="small"
-              edge="end"
-              checked={selected.indexOf(item) > -1}
-              disableRipple
-            />
+            <Checkbox size="small" edge="end" checked={selected.indexOf(item) > -1} disableRipple />
           </ListItemSecondaryAction>
         </ListItemButton>
       ))}
@@ -236,7 +210,7 @@ export const ApplicationLocalesFilter = ({
 
   return (
     <CollapseList
-      localStorageKey={`app-application-locales-filter`}
+      localStorageKey="app-application-locales-filter"
       primaryText={t('application:Locales.Locales')}
       secondaryText={`${selected.length}`}
       defaultExpandMore={false}
@@ -245,12 +219,7 @@ export const ApplicationLocalesFilter = ({
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
           <ListItemText primary={item} />
           <ListItemSecondaryAction>
-            <Checkbox
-              size="small"
-              edge="end"
-              checked={selected.indexOf(item) > -1}
-              disableRipple
-            />
+            <Checkbox size="small" edge="end" checked={selected.indexOf(item) > -1} disableRipple />
           </ListItemSecondaryAction>
         </ListItemButton>
       ))}
@@ -284,7 +253,7 @@ export const ApplicationCountriesFilter = ({
 
   return (
     <CollapseList
-      localStorageKey={`app-application-countries-filter`}
+      localStorageKey="app-application-countries-filter"
       primaryText={t('application:Countries.Countries')}
       secondaryText={`${selected.length}`}
       defaultExpandMore={false}
@@ -293,12 +262,7 @@ export const ApplicationCountriesFilter = ({
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
           <ListItemText primary={item} />
           <ListItemSecondaryAction>
-            <Checkbox
-              size="small"
-              edge="end"
-              checked={selected.indexOf(item) > -1}
-              disableRipple
-            />
+            <Checkbox size="small" edge="end" checked={selected.indexOf(item) > -1} disableRipple />
           </ListItemSecondaryAction>
         </ListItemButton>
       ))}
@@ -328,7 +292,7 @@ export const ApplicationAgeRatingFilter = ({
 
   return (
     <CollapseList
-      localStorageKey={`app-application-age_rating-filter`}
+      localStorageKey="app-application-age_rating-filter"
       primaryText={t('application:AgeRating.AgeRating')}
       secondaryText={selected ? '1' : '0'}
       defaultExpandMore={false}
@@ -337,12 +301,7 @@ export const ApplicationAgeRatingFilter = ({
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
           <ListItemText primary={item} />
           <ListItemSecondaryAction>
-            <Checkbox
-              size="small"
-              edge="end"
-              checked={selected === item}
-              disableRipple
-            />
+            <Checkbox size="small" edge="end" checked={selected === item} disableRipple />
           </ListItemSecondaryAction>
         </ListItemButton>
       ))}

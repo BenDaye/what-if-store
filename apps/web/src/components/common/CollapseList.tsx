@@ -1,25 +1,18 @@
 import { FallbackString } from '@/constants/common';
 import { ExpandMore, NavigateNext } from '@mui/icons-material';
-import {
-  Box,
+import type {
   CollapseProps,
-  List,
-  ListItemButton,
   ListItemButtonProps,
-  ListItemIcon,
   ListItemIconProps,
-  ListItemText,
   ListItemTextProps,
   ListProps,
-  Typography,
   TypographyProps,
 } from '@mui/material';
+import { Box, List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { animated, easings, useSpring } from '@react-spring/web';
-import {
-  OverlayScrollbarsComponent,
-  OverlayScrollbarsComponentProps,
-} from 'overlayscrollbars-react';
-import { HTMLAttributes, PropsWithChildren, ReactNode } from 'react';
+import type { OverlayScrollbarsComponentProps } from 'overlayscrollbars-react';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import type { HTMLAttributes, PropsWithChildren, ReactNode } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 type CollapseListItemButtonProps = {
@@ -52,18 +45,13 @@ export const CollapseListItemButton = ({
         flexGrow: 0,
         flexShrink: 0,
         bgcolor: (theme) =>
-          theme.palette.mode === 'dark'
-            ? 'rgba(255, 255, 255, 0.02)'
-            : 'rgba(0, 0, 0, 0.05)',
+          theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.05)',
       }}
       divider
       onClick={onClick}
       {...overrides?.ListItemButtonProps}
     >
-      <ListItemIcon
-        sx={{ minWidth: (theme) => theme.spacing(3) }}
-        {...overrides?.ListItemIconProps}
-      >
+      <ListItemIcon sx={{ minWidth: (theme) => theme.spacing(3) }} {...overrides?.ListItemIconProps}>
         {overrides?.ListItemIconProps?.children ?? expandMore ? (
           <ExpandMore
             sx={{

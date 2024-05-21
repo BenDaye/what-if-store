@@ -1,9 +1,6 @@
-import { Queue, Worker } from 'bullmq';
+import type { Queue, Worker } from 'bullmq';
 
-export const startup = async (
-  queue: Queue,
-  worker: Worker,
-): Promise<string> => {
+export const startup = async (queue: Queue, worker: Worker): Promise<string> => {
   if (await queue.isPaused()) await queue.resume();
   if (!worker.isRunning()) worker.run();
   if (worker.isPaused()) worker.resume();
@@ -11,10 +8,7 @@ export const startup = async (
   return queue.name;
 };
 
-export const shutdown = async (
-  queue: Queue,
-  worker: Worker,
-): Promise<string> => {
+export const shutdown = async (queue: Queue, worker: Worker): Promise<string> => {
   if (worker.isRunning()) {
     await worker.pause();
     worker.removeAllListeners();

@@ -1,17 +1,7 @@
-import { UseDashboardApplicationHookDataSchema } from '@/hooks';
-import { OverridesCardProps } from '@/types/overrides';
-import {
-  DeleteForever as RemoveIcon,
-  AttachFile as ReplaceIcon,
-} from '@mui/icons-material';
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import type { OverridesCardProps } from '@/types/overrides';
+import { DeleteForever as RemoveIcon, AttachFile as ReplaceIcon } from '@mui/icons-material';
+import { Box, Card, CardActions, CardContent, IconButton, Typography } from '@mui/material';
 import { ApplicationAssetType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { default as NextImage } from 'next/image';
@@ -42,30 +32,21 @@ export const AssetCard = ({ asset, overrides }: AssetCardProps) => {
           alt={asset.type}
           src={asset.url}
           fill
-          sizes={'(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 320px'}
+          sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 320px"
           priority
           style={{ objectFit: 'contain' }}
         />
       </Box>
       <CardContent sx={{ pb: 0 }} {...overrides?.CardContentProps}>
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          sx={{ textAlign: 'center' }}
-        >
+        <Typography variant="subtitle1" gutterBottom sx={{ textAlign: 'center' }}>
           {t(`application:Asset.Type.${asset.url}`)}
-          {asset.type === ApplicationAssetType.Screenshot && asset.name
-            ? `-${asset.name}`
-            : ''}
+          {asset.type === ApplicationAssetType.Screenshot && asset.name ? `-${asset.name}` : ''}
         </Typography>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
           {`${width} x ${height}`}
         </Typography>
       </CardContent>
-      <CardActions
-        sx={{ justifyContent: 'center' }}
-        {...overrides?.CardActionsProps}
-      >
+      <CardActions sx={{ justifyContent: 'center' }} {...overrides?.CardActionsProps}>
         <IconButton>
           <ReplaceIcon />
         </IconButton>

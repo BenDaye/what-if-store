@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks';
-import { OverridesMenuItemProps } from '@/types/overrides';
+import type { OverridesMenuItemProps } from '@/types/overrides';
 import { Logout as SignOutIcon } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useSession } from 'next-auth/react';

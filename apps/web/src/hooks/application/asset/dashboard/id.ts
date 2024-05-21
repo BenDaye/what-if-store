@@ -1,26 +1,22 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  applicationAssetCreateInputSchema,
-  IdSchema,
-  idSchema,
-} from '@/server/schemas';
+import type { IdSchema } from '@/server/schemas';
+import { applicationAssetCreateInputSchema, idSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
-import { PartialBlock } from '@blocknote/core';
+import type { PartialBlock } from '@blocknote/core';
 import { ApplicationAssetType, AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 // type DashboardApplicationAssetRouterOutput =
 //   RouterOutput['protectedDashboardApplicationAsset']['getById'];
-export const useDashboardApplicationAssetHookDataSchema =
-  applicationAssetCreateInputSchema
-    .extend({
-      id: idSchema,
-    })
-    .strict();
+export const useDashboardApplicationAssetHookDataSchema = applicationAssetCreateInputSchema
+  .extend({
+    id: idSchema,
+  })
+  .strict();
 export type UseDashboardApplicationAssetHookDataSchema = z.infer<
   typeof useDashboardApplicationAssetHookDataSchema
 >;

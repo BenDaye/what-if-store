@@ -1,11 +1,9 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  applicationGroupCreateInputSchema,
-  IdSchema,
-  idSchema,
-} from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { IdSchema } from '@/server/schemas';
+import { applicationGroupCreateInputSchema, idSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { ApplicationGroupType, AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
@@ -14,17 +12,15 @@ import { z } from 'zod';
 
 export type DashboardApplicationGroupRouterOutput =
   RouterOutput['protectedDashboardApplicationGroup']['getById'];
-export const useDashboardApplicationGroupHookDataSchema =
-  applicationGroupCreateInputSchema
-    .omit({ applications: true })
-    .extend({
-      id: idSchema,
+export const useDashboardApplicationGroupHookDataSchema = applicationGroupCreateInputSchema
+  .omit({ applications: true })
+  .extend({
+    id: idSchema,
 
-      applications:
-        z.custom<DashboardApplicationGroupRouterOutput['Applications']>(),
-      applicationIds: z.array(idSchema),
-    })
-    .strict();
+    applications: z.custom<DashboardApplicationGroupRouterOutput['Applications']>(),
+    applicationIds: z.array(idSchema),
+  })
+  .strict();
 export type UseDashboardApplicationGroupHookDataSchema = z.infer<
   typeof useDashboardApplicationGroupHookDataSchema
 >;

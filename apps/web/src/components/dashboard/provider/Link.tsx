@@ -1,9 +1,7 @@
 import { useDashboardProvider } from '@/hooks';
-import {
-  NewReleases as UnverifiedIcon,
-  Verified as VerifiedIcon,
-} from '@mui/icons-material';
-import { Link, LinkProps, SvgIconProps } from '@mui/material';
+import { NewReleases as UnverifiedIcon, Verified as VerifiedIcon } from '@mui/icons-material';
+import type { LinkProps, SvgIconProps } from '@mui/material';
+import { Link } from '@mui/material';
 
 type ProviderLinkProps = {
   providerId: string;

@@ -1,26 +1,12 @@
 import { useDashboardApplicationCollectionsWithPagination } from '@/hooks';
-import {
-  createdAtColumn,
-  idColumn,
-  updatedAtColumn,
-} from '@/utils/dataGridColumn';
-import { RouterOutput } from '@/utils/trpc';
+import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
+import type { RouterOutput } from '@/utils/trpc';
 import { AddBox as CreateIcon } from '@mui/icons-material';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardContentProps,
-  CardHeader,
-  CardHeaderProps,
-  CardProps,
-} from '@mui/material';
+import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
+import { Button, Card, CardContent, CardHeader } from '@mui/material';
+import type { DataGridProps, GridColDef, GridFilterModel, GridSortModel } from '@mui/x-data-grid';
 import {
   DataGrid,
-  DataGridProps,
-  GridColDef,
-  GridFilterModel,
-  GridSortModel,
   // GridRowModel,
   GridToolbar,
   zhCN,
@@ -38,12 +24,9 @@ type ApplicationCollectionDataGridProps = {
   };
 };
 
-type RowModel =
-  RouterOutput['protectedDashboardApplicationCollection']['list']['items'][number];
+type RowModel = RouterOutput['protectedDashboardApplicationCollection']['list']['items'][number];
 
-export const ApplicationCollectionDataGrid = ({
-  overrides,
-}: ApplicationCollectionDataGridProps) => {
+export const ApplicationCollectionDataGrid = ({ overrides }: ApplicationCollectionDataGridProps) => {
   const { t } = useTranslation();
   const {
     router: { isFetching },
@@ -95,18 +78,13 @@ export const ApplicationCollectionDataGrid = ({
     },
     {
       field: '_count.applications',
-      headerName: t(
-        'application.DataGridHeaderName.Collection.Count.Application',
-      ),
+      headerName: t('application.DataGridHeaderName.Collection.Count.Application'),
       flex: 1,
       type: 'number',
     },
   ];
   const processRowUpdate = useCallback(
-    (
-      updatedRow: RowModel,
-      originalRow: RowModel,
-    ): Promise<RowModel> | RowModel => {
+    (updatedRow: RowModel, originalRow: RowModel): Promise<RowModel> | RowModel => {
       // TODO: implement update
       console.log(updatedRow, originalRow);
       return originalRow;
@@ -125,10 +103,7 @@ export const ApplicationCollectionDataGrid = ({
           variant: 'subtitle1',
         }}
         action={
-          <Button
-            startIcon={<CreateIcon />}
-            href="/dashboard/application_collection/create"
-          >
+          <Button startIcon={<CreateIcon />} href="/dashboard/application_collection/create">
             {t('common:Create')}
           </Button>
         }

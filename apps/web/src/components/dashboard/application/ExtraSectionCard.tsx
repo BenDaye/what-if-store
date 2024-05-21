@@ -1,20 +1,12 @@
-import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
-import {
-  ApplicationUpdateInputSchema,
-  applicationUpdateInputSchema,
-} from '@/server/schemas';
-import { OverridesCardProps } from '@/types/overrides';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import { useNotice } from '@/hooks';
+import type { ApplicationUpdateInputSchema } from '@/server/schemas';
+import { applicationUpdateInputSchema } from '@/server/schemas';
+import type { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-} from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
@@ -27,17 +19,13 @@ type ExtraSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const ExtraSectionCard = ({
-  overrides,
-  defaultValues,
-}: ExtraSectionCardProps) => {
+export const ExtraSectionCard = ({ overrides, defaultValues }: ExtraSectionCardProps) => {
   const { t } = useTranslation();
-  const { handleSubmit, reset, control, formState, setValue } =
-    useForm<ApplicationUpdateInputSchema>({
-      defaultValues,
-      mode: 'all',
-      resolver: zodResolver(applicationUpdateInputSchema),
-    });
+  const { handleSubmit, reset, control, formState, setValue } = useForm<ApplicationUpdateInputSchema>({
+    defaultValues,
+    mode: 'all',
+    resolver: zodResolver(applicationUpdateInputSchema),
+  });
 
   useEffect(() => {
     if (!defaultValues) return;
@@ -45,14 +33,12 @@ export const ExtraSectionCard = ({
   }, [defaultValues, reset]);
 
   const { showSuccess, showError } = useNotice();
-  const { mutateAsync: update, isPending } =
-    trpc.protectedDashboardApplication.updateById.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(t('common:Updated')),
-    });
+  const { mutateAsync: update, isPending } = trpc.protectedDashboardApplication.updateById.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => showSuccess(t('common:Updated')),
+  });
 
-  const onSubmit = async (data: ApplicationUpdateInputSchema) =>
-    await update(data).catch(() => null);
+  const onSubmit = async (data: ApplicationUpdateInputSchema) => await update(data).catch(() => null);
 
   useEffect(() => {
     if (!window) return;
@@ -79,47 +65,30 @@ export const ExtraSectionCard = ({
       }}
       {...overrides?.CardProps}
     >
-      <CardHeader
-        title={t('application:General.Extra')}
-        {...overrides?.CardHeaderProps}
-      />
+      <CardHeader title={t('application:General.Extra')} {...overrides?.CardHeaderProps} />
       <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={1}>
           <Grid xs={12}>
             <CountriesAutoComplete
-              onChange={(value) =>
-                setValue('countries', value, { shouldDirty: true })
-              }
+              onChange={(value) => setValue('countries', value, { shouldDirty: true })}
               defaultValue={defaultValues.countries}
               error={formState.errors.countries}
               disabled={isPending}
             />
-            <Controller
-              control={control}
-              name="countries"
-              render={() => <Box />}
-            />
+            <Controller control={control} name="countries" render={() => <Box />} />
           </Grid>
           <Grid xs={12}>
             <LocalesAutoComplete
-              onChange={(value) =>
-                setValue('locales', value, { shouldDirty: true })
-              }
+              onChange={(value) => setValue('locales', value, { shouldDirty: true })}
               defaultValue={defaultValues.locales}
               error={formState.errors.locales}
               disabled={isPending}
             />
-            <Controller
-              control={control}
-              name="locales"
-              render={() => <Box />}
-            />
+            <Controller control={control} name="locales" render={() => <Box />} />
           </Grid>
           <Grid xs={12}>
             <TagsAutoComplete
-              onChange={(value) =>
-                setValue('tags', value, { shouldDirty: true })
-              }
+              onChange={(value) => setValue('tags', value, { shouldDirty: true })}
               defaultValue={defaultValues.tags}
               error={formState.errors.tags}
               disabled={isPending}

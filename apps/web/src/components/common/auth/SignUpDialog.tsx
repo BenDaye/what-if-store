@@ -1,13 +1,10 @@
-import { AuthProps, useAuth, useNotice } from '@/hooks';
+import type { AuthProps } from '@/hooks';
+import { useAuth, useNotice } from '@/hooks';
 import { signUpSchema } from '@/server/schemas/auth';
-import { OverridesDialogProps } from '@/types/overrides';
+import type { OverridesDialogProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Close as CloseIcon,
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
+import { Close as CloseIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   AppBar,
@@ -25,7 +22,7 @@ import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { SignInButton } from './SignInButton';
 
 type SignUpDialogProps = OverridesDialogProps & AuthProps;
@@ -40,12 +37,7 @@ const signUpForm = signUpSchema
   });
 type SignUpForm = z.infer<typeof signUpForm>;
 
-export const SignUpDialog = ({
-  disableSignIn,
-  disableSignUp,
-  overrides,
-  DialogProps,
-}: SignUpDialogProps) => {
+export const SignUpDialog = ({ disableSignIn, disableSignUp, overrides, DialogProps }: SignUpDialogProps) => {
   const { signIn } = useAuth();
   const { showError, showSuccess, showWarning } = useNotice();
   const { status } = useSession();
@@ -96,12 +88,7 @@ export const SignUpDialog = ({
               {disableSignUp && ` (${t('auth:SignUp.Disabled')})`}
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <IconButton
-              edge="end"
-              onClick={onClose}
-              disabled={status === 'loading'}
-              color="inherit"
-            >
+            <IconButton edge="end" onClick={onClose} disabled={status === 'loading'} color="inherit">
               <CloseIcon />
             </IconButton>
           </Toolbar>
@@ -140,11 +127,7 @@ export const SignUpDialog = ({
                 InputProps={{
                   endAdornment: (
                     <IconButton onClick={toggleShowPassword} edge="end">
-                      {showPassword ? (
-                        <Visibility color="primary" />
-                      ) : (
-                        <VisibilityOff color="inherit" />
-                      )}
+                      {showPassword ? <Visibility color="primary" /> : <VisibilityOff color="inherit" />}
                     </IconButton>
                   ),
                 }}
@@ -168,11 +151,7 @@ export const SignUpDialog = ({
                 InputProps={{
                   endAdornment: (
                     <IconButton onClick={toggleShowPassword} edge="end">
-                      {showPassword ? (
-                        <Visibility color="primary" />
-                      ) : (
-                        <VisibilityOff color="inherit" />
-                      )}
+                      {showPassword ? <Visibility color="primary" /> : <VisibilityOff color="inherit" />}
                     </IconButton>
                   ),
                 }}
@@ -182,12 +161,8 @@ export const SignUpDialog = ({
           />
         </DialogContent>
         <DialogActions {...overrides?.DialogActionsProps}>
-          <SignInButton
-            color="secondary"
-            onClick={() => reset()}
-            disabled={disableSignIn}
-          />
-          <Box sx={{ flexGrow: 1 }}></Box>
+          <SignInButton color="secondary" onClick={() => reset()} disabled={disableSignIn} />
+          <Box sx={{ flexGrow: 1 }} />
           <LoadingButton
             loading={status === 'loading'}
             disabled={status === 'loading'}

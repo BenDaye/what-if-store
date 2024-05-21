@@ -20,18 +20,14 @@ export const SecondaryDrawerRnd = () => {
       initializeWithValue: false,
     },
   );
-  const [secondaryDrawerWidth, setSecondaryDrawerWidth] =
-    useLocalStorage<number>(
-      APP_SECONDARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
-      APP_SECONDARY_DRAWER_WIDTH,
-      {
-        initializeWithValue: false,
-      },
-    );
-  const handleSecondaryDrawerWidth = useDebounceCallback(
-    setSecondaryDrawerWidth,
-    10,
+  const [secondaryDrawerWidth, setSecondaryDrawerWidth] = useLocalStorage<number>(
+    APP_SECONDARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
+    APP_SECONDARY_DRAWER_WIDTH,
+    {
+      initializeWithValue: false,
+    },
   );
+  const handleSecondaryDrawerWidth = useDebounceCallback(setSecondaryDrawerWidth, 10);
 
   return (
     <Rnd
@@ -47,10 +43,7 @@ export const SecondaryDrawerRnd = () => {
         width: APP_SECONDARY_DRAWER_WIDTH_EDITABLE ? secondaryDrawerWidth : 0,
       }}
       resizeHandleClasses={{
-        right:
-          theme.palette.mode === 'dark'
-            ? 'resizeHandleClass darkMode'
-            : 'resizeHandleClass',
+        right: theme.palette.mode === 'dark' ? 'resizeHandleClass darkMode' : 'resizeHandleClass',
       }}
       position={{ x: primaryDrawerWidth, y: 0 }}
       maxWidth={480}

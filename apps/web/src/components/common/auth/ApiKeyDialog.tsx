@@ -1,4 +1,4 @@
-import { OverridesDialogProps } from '@/types/overrides';
+import type { OverridesDialogProps } from '@/types/overrides';
 import { Close as CloseIcon } from '@mui/icons-material';
 import {
   AppBar,
@@ -16,10 +16,7 @@ import { ApiKeyDataGrid } from './ApiKeyDataGrid';
 import { CreateApiKeyButton } from './CreateApiKeyButton';
 
 type AuthApiKeyDialogProps = OverridesDialogProps;
-export const AuthApiKeyDialog = ({
-  overrides,
-  DialogProps,
-}: AuthApiKeyDialogProps) => {
+export const AuthApiKeyDialog = ({ overrides, DialogProps }: AuthApiKeyDialogProps) => {
   const { t } = useTranslation();
 
   const onClose = useCallback(() => {

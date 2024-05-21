@@ -1,5 +1,5 @@
 import { FallbackString } from '@/constants/common';
-import { RouterOutput } from '@/utils/trpc';
+import type { RouterOutput } from '@/utils/trpc';
 import { Edit as EditIcon } from '@mui/icons-material';
 import {
   Avatar,
@@ -76,12 +76,7 @@ export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
               flex: 0,
             }}
           />
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            component={'div'}
-            sx={{ flex: 1, mb: 0.8 }}
-          >
+          <Typography variant="body2" color="text.secondary" component="div" sx={{ flex: 1, mb: 0.8 }}>
             {data?.bio ?? FallbackString}
           </Typography>
         </Box>
@@ -89,9 +84,7 @@ export const ProviderProfileCard = ({ data }: ProviderProfileCardProps) => {
       <Divider sx={{ opacity: 0.6 }} variant="middle" />
       <Stack
         direction="row"
-        divider={
-          <Divider orientation="vertical" sx={{ opacity: 0.6, height: 64 }} />
-        }
+        divider={<Divider orientation="vertical" sx={{ opacity: 0.6, height: 64 }} />}
         sx={{
           flex: 1,
           alignItems: 'center',

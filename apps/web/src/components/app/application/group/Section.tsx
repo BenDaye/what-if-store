@@ -1,8 +1,6 @@
 import { EmptyDataBox } from '@/components/common';
-import {
-  useAppApplicationGroup,
-  UseAppApplicationGroupsDataSchema,
-} from '@/hooks';
+import type { UseAppApplicationGroupsDataSchema } from '@/hooks';
+import { useAppApplicationGroup } from '@/hooks';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { ApplicationGroupType } from '@prisma/client';
@@ -20,7 +18,7 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
 
   return (
     <Box
-      component={'section'}
+      component="section"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -30,18 +28,16 @@ export const CommonSection = ({ data: { id } }: CommonSectionProps) => {
     >
       <Divider />
       <Stack
-        direction={'row'}
-        alignItems={'baseline'}
-        justifyContent={'space-between'}
+        direction="row"
+        alignItems="baseline"
+        justifyContent="space-between"
         sx={{
           mt: 1,
           mb: 2,
         }}
       >
         <Typography variant="h6">
-          {type === ApplicationGroupType.Temporary
-            ? name
-            : t(`application:Group.Name.${name}`)}
+          {type === ApplicationGroupType.Temporary ? name : t(`application:Group.Name.${name}`)}
         </Typography>
         <Button>{t('common:View')}</Button>
       </Stack>

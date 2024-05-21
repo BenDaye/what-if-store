@@ -1,14 +1,13 @@
 import { useDashboardApplicationTags } from '@/hooks';
-import { ApplicationUpdateInputSchema } from '@/server/schemas';
-import { MultipleAutoCompleteProps } from '@/types/overrides';
-import { RouterOutput } from '@/utils/trpc';
+import type { ApplicationUpdateInputSchema } from '@/server/schemas';
+import type { MultipleAutoCompleteProps } from '@/types/overrides';
+import type { RouterOutput } from '@/utils/trpc';
 import { Autocomplete, ListItem, ListItemText, TextField } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
-type ITagData =
-  RouterOutput['protectedDashboardApplicationTag']['list']['items'][number];
+type ITagData = RouterOutput['protectedDashboardApplicationTag']['list']['items'][number];
 
 type TagsAutoCompleteProps = MultipleAutoCompleteProps<
   ITagData,
@@ -46,18 +45,11 @@ export const TagsAutoComplete = ({
   );
 
   const [tags, setTags] = useState<ITagData[]>(
-    () =>
-      defaultValue
-        .map((code) => getTagData(code))
-        .filter((v) => v !== false) as ITagData[],
+    () => defaultValue.map((code) => getTagData(code)).filter((v) => v !== false) as ITagData[],
   );
 
   useEffect(() => {
-    setTags(
-      defaultValue
-        .map((code) => getTagData(code))
-        .filter((v) => v !== false) as ITagData[],
-    );
+    setTags(defaultValue.map((code) => getTagData(code)).filter((v) => v !== false) as ITagData[]);
   }, [defaultValue, getTagData]);
 
   useEffect(() => {

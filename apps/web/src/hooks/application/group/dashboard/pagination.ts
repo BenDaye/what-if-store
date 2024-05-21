@@ -1,13 +1,11 @@
 import { useGridPagination } from '@/hooks/common';
-import { ApplicationGroupListInputSchema } from '@/server/schemas';
+import type { ApplicationGroupListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
-export const useDashboardApplicationGroupsWithPagination = (
-  input?: ApplicationGroupListInputSchema,
-) => {
+export const useDashboardApplicationGroupsWithPagination = (input?: ApplicationGroupListInputSchema) => {
   const {
     pagination: { page, pageSize },
     setPaginationModel,
@@ -18,15 +16,14 @@ export const useDashboardApplicationGroupsWithPagination = (
     () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
-  const { data, isFetching, refetch, error, isError } =
-    trpc.protectedDashboardApplicationGroup.list.useQuery(
-      {
-        limit: pageSize,
-        skip,
-        query: input?.query,
-      },
-      { enabled: authenticated },
-    );
+  const { data, isFetching, refetch, error, isError } = trpc.protectedDashboardApplicationGroup.list.useQuery(
+    {
+      limit: pageSize,
+      skip,
+      query: input?.query,
+    },
+    { enabled: authenticated },
+  );
 
   trpc.protectedDashboardApplicationGroup.subscribe.useSubscription(undefined, {
     enabled: authenticated,

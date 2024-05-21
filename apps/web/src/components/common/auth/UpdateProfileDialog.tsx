@@ -1,10 +1,8 @@
 import { FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks';
-import {
-  UserUpdateProfileInputSchema,
-  userUpdateProfileInputSchema,
-} from '@/server/schemas/user';
-import { OverridesDialogProps } from '@/types/overrides';
+import type { UserUpdateProfileInputSchema } from '@/server/schemas/user';
+import { userUpdateProfileInputSchema } from '@/server/schemas/user';
+import type { OverridesDialogProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
@@ -29,58 +27,47 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 
 type AuthUpdateProfileDialogProps = OverridesDialogProps;
-export const AuthUpdateProfileDialog = ({
-  overrides,
-  DialogProps,
-}: AuthUpdateProfileDialogProps) => {
+export const AuthUpdateProfileDialog = ({ overrides, DialogProps }: AuthUpdateProfileDialogProps) => {
   const { showError, showSuccess } = useNotice();
   const { t } = useTranslation();
 
   const { data: session, status, update: updateSession } = useSession();
   const isUser = useMemo(
-    () =>
-      session?.user?.role === AuthRole.User ||
-      session?.user?.role === AuthRole.Provider,
+    () => session?.user?.role === AuthRole.User || session?.user?.role === AuthRole.Provider,
     [session?.user?.role],
   );
-  const isAdmin = useMemo(
-    () => session?.user?.role === AuthRole.Admin,
-    [session?.user?.role],
-  );
+  const isAdmin = useMemo(() => session?.user?.role === AuthRole.Admin, [session?.user?.role]);
 
-  const { handleSubmit, control, reset, getValues, watch } =
-    useForm<UserUpdateProfileInputSchema>({
-      defaultValues: {
-        nickname: session?.user?.nickname ?? null,
-        email: session?.user?.email ?? null,
-        avatar: session?.user?.avatar ?? null,
-        bio: session?.user?.bio ?? null,
-      },
-      mode: 'all',
-      resolver: zodResolver(userUpdateProfileInputSchema),
-    });
+  const { handleSubmit, control, reset, getValues, watch } = useForm<UserUpdateProfileInputSchema>({
+    defaultValues: {
+      nickname: session?.user?.nickname ?? null,
+      email: session?.user?.email ?? null,
+      avatar: session?.user?.avatar ?? null,
+      bio: session?.user?.bio ?? null,
+    },
+    mode: 'all',
+    resolver: zodResolver(userUpdateProfileInputSchema),
+  });
   useEffect(() => {
     if (session?.user) reset(session.user, { keepDefaultValues: false });
   }, [session, reset]);
 
-  const { mutateAsync: updateUserProfile } =
-    trpc.protectedAppUser.update.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => {
-        showSuccess(t('user:Profile.Updated'));
-        updateSession();
-        DialogProps.onClose?.({}, 'backdropClick');
-      },
-    });
-  const { mutateAsync: updateAdminProfile } =
-    trpc.protectedDashboardUser.update.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => {
-        showSuccess(t('user:Profile.Updated'));
-        updateSession();
-        DialogProps.onClose?.({}, 'backdropClick');
-      },
-    });
+  const { mutateAsync: updateUserProfile } = trpc.protectedAppUser.update.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => {
+      showSuccess(t('user:Profile.Updated'));
+      updateSession();
+      DialogProps.onClose?.({}, 'backdropClick');
+    },
+  });
+  const { mutateAsync: updateAdminProfile } = trpc.protectedDashboardUser.update.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => {
+      showSuccess(t('user:Profile.Updated'));
+      updateSession();
+      DialogProps.onClose?.({}, 'backdropClick');
+    },
+  });
 
   const onSubmit = useCallback(
     async (data: UserUpdateProfileInputSchema) => {
@@ -104,10 +91,7 @@ export const AuthUpdateProfileDialog = ({
     [isUser, isAdmin, updateUserProfile, updateAdminProfile],
   );
 
-  const [avatarSrc, setAvatarSrc] = useDebounceValue(
-    session?.user?.avatar,
-    1500,
-  );
+  const [avatarSrc, setAvatarSrc] = useDebounceValue(session?.user?.avatar, 1500);
 
   useEffect(() => {
     setAvatarSrc(watch('avatar'));
@@ -123,16 +107,9 @@ export const AuthUpdateProfileDialog = ({
     <Dialog onClose={onClose} {...DialogProps}>
       <AppBar elevation={0} {...overrides?.AppBarProps}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">
-            {t('user:Profile.Update')}
-          </Typography>
+          <Typography variant="subtitle1">{t('user:Profile.Update')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton
-            edge="end"
-            onClick={onClose}
-            disabled={status === 'loading'}
-            color="inherit"
-          >
+          <IconButton edge="end" onClick={onClose} disabled={status === 'loading'} color="inherit">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -212,7 +189,7 @@ export const AuthUpdateProfileDialog = ({
         />
       </DialogContent>
       <DialogActions {...overrides?.DialogActionsProps}>
-        <Box sx={{ flexGrow: 1 }}></Box>
+        <Box sx={{ flexGrow: 1 }} />
         <LoadingButton
           loading={status === 'loading'}
           disabled={!isAdmin && !isUser}

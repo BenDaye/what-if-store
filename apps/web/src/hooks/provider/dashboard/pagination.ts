@@ -1,24 +1,21 @@
 import { useGridPagination } from '@/hooks/common';
 import { useNotice } from '@/hooks/notice';
-import { ProviderListInputSchema } from '@/server/schemas';
+import type { ProviderListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 
-export const useDashboardProvidersWithPagination = (
-  input?: ProviderListInputSchema,
-) => {
+export const useDashboardProvidersWithPagination = (input?: ProviderListInputSchema) => {
   const {
     pagination: { page, pageSize },
     setPaginationModel,
     skip,
   } = useGridPagination();
-  const { data, isFetching, refetch, isError, error } =
-    trpc.protectedDashboardProvider.list.useQuery({
-      limit: pageSize,
-      skip,
-      query: input?.query,
-    });
+  const { data, isFetching, refetch, isError, error } = trpc.protectedDashboardProvider.list.useQuery({
+    limit: pageSize,
+    skip,
+    query: input?.query,
+  });
 
   trpc.protectedDashboardProvider.subscribe.useSubscription(undefined, {
     onData: () => refetch(),

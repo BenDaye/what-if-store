@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
-import { Logger, multistream, pino } from 'pino';
+import type { Logger } from 'pino';
+import { multistream, pino } from 'pino';
 import pretty from 'pino-pretty';
 import { env } from './env';
 

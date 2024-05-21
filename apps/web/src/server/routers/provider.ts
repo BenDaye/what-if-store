@@ -1,9 +1,9 @@
 import { Prisma, ProviderVerificationStatus } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { providerEmitter, providerVerificationQueue } from '../modules';
+import type { IdSchema } from '../schemas';
 import {
   bullmqJobIdSchema,
-  IdSchema,
   idSchema,
   mutationOutputSchema,
   providerCreateProfileInputSchema,
@@ -79,76 +79,67 @@ export const publicAppProvider = router({
   }),
   list: publicProcedure
     .input(providerListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ProviderProfileWhereInput = {
-            ...(query
-              ? {
-                  name: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-            ...(rest.type?.length
-              ? {
-                  type: {
-                    in: rest.type,
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.providerProfile.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.providerProfile.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.providerProfile.findUniqueOrThrow({
-          where: { id },
-          select: fullSelect,
-        });
+        const where: Prisma.ProviderProfileWhereInput = {
+          ...(query
+            ? {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              }
+            : {}),
+          ...(rest.type?.length
+            ? {
+                type: {
+                  in: rest.type,
+                },
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.providerProfile.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.providerProfile.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: publicProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.providerProfile.findUniqueOrThrow({
+        where: { id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });
 
 export const protectedAppProvider = router({
-  get: protectedProviderProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
-      try {
-        return await prisma.providerProfile.findUniqueOrThrow({
-          where: { userId: session.user.id },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    },
-  ),
+  get: protectedProviderProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      return await prisma.providerProfile.findUniqueOrThrow({
+        where: { userId: session.user.id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   update: protectedProviderProcedure
     .input(providerUpdateProfileInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input }) => {
@@ -220,8 +211,7 @@ export const protectedAppProvider = router({
             v.status === ProviderVerificationStatus.Pending ||
             v.status === ProviderVerificationStatus.Approved,
         );
-        if (hasPendingOrApprovedVerification)
-          throw new Error('Verification already pending or approved');
+        if (hasPendingOrApprovedVerification) throw new Error('Verification already pending or approved');
 
         const job = await providerVerificationQueue.add(provider.id, {
           application: input.application,
@@ -273,61 +263,54 @@ export const protectedDashboardProvider = router({
   }),
   list: protectedAdminProcedure
     .input(providerListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ProviderProfileWhereInput = {
-            ...(query
-              ? {
-                  name: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-            ...(rest.type?.length
-              ? {
-                  type: {
-                    in: rest.type,
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.providerProfile.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.providerProfile.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.providerProfile.findUniqueOrThrow({
-          where: { id },
-          select: fullSelect,
-        });
+        const where: Prisma.ProviderProfileWhereInput = {
+          ...(query
+            ? {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              }
+            : {}),
+          ...(rest.type?.length
+            ? {
+                type: {
+                  in: rest.type,
+                },
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.providerProfile.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.providerProfile.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.providerProfile.findUniqueOrThrow({
+        where: { id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   updateById: protectedAdminProcedure
     .input(providerUpdateProfileInputSchemaForAdmin)
     .output(mutationOutputSchema)
@@ -353,40 +336,38 @@ export const protectedDashboardProvider = router({
   replyVerification: protectedAdminProcedure
     .input(providerVerificationResponseInputSchema)
     .output(mutationOutputSchema)
-    .mutation(
-      async ({ ctx: { prisma }, input: { id, status, replication } }) => {
-        try {
-          const verification = await prisma.providerVerification.findUnique({
-            where: { id: id },
-            select: {
-              status: true,
-              providerId: true,
+    .mutation(async ({ ctx: { prisma }, input: { id, status, replication } }) => {
+      try {
+        const verification = await prisma.providerVerification.findUnique({
+          where: { id: id },
+          select: {
+            status: true,
+            providerId: true,
+          },
+        });
+
+        if (!verification) throw new Error('Verification not found');
+        if (verification.status !== ProviderVerificationStatus.Pending)
+          throw new Error('Verification not pending');
+
+        await prisma.$transaction([
+          prisma.providerVerification.update({
+            where: { id },
+            data: {
+              status,
+              replication,
             },
-          });
-
-          if (!verification) throw new Error('Verification not found');
-          if (verification.status !== ProviderVerificationStatus.Pending)
-            throw new Error('Verification not pending');
-
-          await prisma.$transaction([
-            prisma.providerVerification.update({
-              where: { id },
-              data: {
-                status,
-                replication,
-              },
-            }),
-            prisma.providerProfile.update({
-              where: { id: verification.providerId },
-              data: {
-                verified: status === ProviderVerificationStatus.Approved,
-              },
-            }),
-          ]);
-          return true;
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+          }),
+          prisma.providerProfile.update({
+            where: { id: verification.providerId },
+            data: {
+              verified: status === ProviderVerificationStatus.Approved,
+            },
+          }),
+        ]);
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
 });

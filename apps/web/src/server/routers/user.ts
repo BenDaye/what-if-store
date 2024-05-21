@@ -1,18 +1,14 @@
 import { AuthRole, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { userEmitter } from '../modules';
-import { IdSchema, idSchema, mutationOutputSchema } from '../schemas';
+import type { IdSchema } from '../schemas';
+import { idSchema, mutationOutputSchema } from '../schemas';
 import {
   userListInputSchema,
   userUpdateProfileInputSchema,
   userUpdateProfileInputSchemaForAdmin,
 } from '../schemas/user';
-import {
-  protectedAdminProcedure,
-  protectedUserProcedure,
-  publicProcedure,
-  router,
-} from '../trpc';
+import { protectedAdminProcedure, protectedUserProcedure, publicProcedure, router } from '../trpc';
 import { formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.UserSelect>()({
@@ -107,69 +103,62 @@ export const publicAppUser = router({
   }),
   list: publicProcedure
     .input(userListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.UserWhereInput = {
-            ...(query
-              ? {
-                  name: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-            ...(rest.role?.length
-              ? {
-                  role: {
-                    in: rest.role,
-                  },
-                }
-              : {}),
-            role: {
-              not: AuthRole.Admin,
-            },
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.user.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.user.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.user.findUniqueOrThrow({
-          where: {
-            id,
-            role: {
-              not: AuthRole.Admin,
-            },
+        const where: Prisma.UserWhereInput = {
+          ...(query
+            ? {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              }
+            : {}),
+          ...(rest.role?.length
+            ? {
+                role: {
+                  in: rest.role,
+                },
+              }
+            : {}),
+          role: {
+            not: AuthRole.Admin,
           },
-          select: fullSelect,
-        });
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.user.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.user.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: publicProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.user.findUniqueOrThrow({
+        where: {
+          id,
+          role: {
+            not: AuthRole.Admin,
+          },
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });
 
 export const protectedAppUser = router({
@@ -220,22 +209,20 @@ export const protectedAppUser = router({
         throw onError(err);
       }
     }),
-  followedList: protectedUserProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
-      try {
-        return await prisma.userFollow.findMany({
-          where: {
-            followedById: session.user.id,
-          },
-          select: {
-            followingId: true,
-          },
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    },
-  ),
+  followedList: protectedUserProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      return await prisma.userFollow.findMany({
+        where: {
+          followedById: session.user.id,
+        },
+        select: {
+          followingId: true,
+        },
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   followById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -319,49 +306,44 @@ export const protectedDashboardUser = router({
   }),
   list: protectedAdminProcedure
     .input(userListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.UserWhereInput = {
-            ...(query
-              ? {
-                  name: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-            ...(rest.role?.length
-              ? {
-                  role: {
-                    in: rest.role,
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.user.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
+      try {
+        const where: Prisma.UserWhereInput = {
+          ...(query
+            ? {
+                name: {
+                  contains: query,
+                  mode: 'insensitive',
                 },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.user.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+              }
+            : {}),
+          ...(rest.role?.length
+            ? {
+                role: {
+                  in: rest.role,
+                },
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.user.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.user.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   get: protectedAdminProcedure.query(async ({ ctx: { prisma, session } }) => {
     try {
       return await prisma.user.findUniqueOrThrow({
@@ -393,18 +375,16 @@ export const protectedDashboardUser = router({
         throw onError(err);
       }
     }),
-  getById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
-      try {
-        return await prisma.user.findUniqueOrThrow({
-          where: { id },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+  getById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.user.findUniqueOrThrow({
+        where: { id },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   updateById: protectedAdminProcedure
     .input(userUpdateProfileInputSchemaForAdmin)
     .mutation(async ({ ctx: { prisma }, input: { id, ...input } }) => {

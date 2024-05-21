@@ -1,6 +1,6 @@
 import { useGridPagination } from '@/hooks/common';
 import { useNotice } from '@/hooks/notice';
-import { UserListInputSchema } from '@/server/schemas';
+import type { UserListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
@@ -11,12 +11,11 @@ export const useAppUsersWithPagination = (input?: UserListInputSchema) => {
     setPaginationModel,
     skip,
   } = useGridPagination();
-  const { data, isFetching, refetch, isError, error } =
-    trpc.publicAppUser.list.useQuery({
-      limit: pageSize,
-      skip,
-      query: input?.query,
-    });
+  const { data, isFetching, refetch, isError, error } = trpc.publicAppUser.list.useQuery({
+    limit: pageSize,
+    skip,
+    query: input?.query,
+  });
 
   trpc.publicAppUser.subscribe.useSubscription(undefined, {
     onData: () => refetch(),

@@ -1,4 +1,5 @@
-import mitt, { Emitter } from 'mitt';
+import type { Emitter } from 'mitt';
+import mitt from 'mitt';
 import { env } from './env';
 
 type BaseEvents = {
@@ -21,24 +22,16 @@ const mittGlobal = global as typeof global & {
 
 // NOTE: User
 export const userEmitter = mittGlobal?.userEmitter ?? mitt<BaseEvents>();
-export const userApiKeyEmitter =
-  mittGlobal?.userApiKeyEmitter ?? mitt<BaseEvents>();
+export const userApiKeyEmitter = mittGlobal?.userApiKeyEmitter ?? mitt<BaseEvents>();
 // NOTE: Provider
-export const providerEmitter =
-  mittGlobal?.providerEmitter ?? mitt<BaseEvents>();
+export const providerEmitter = mittGlobal?.providerEmitter ?? mitt<BaseEvents>();
 // NOTE: Application
-export const applicationEmitter =
-  mittGlobal?.applicationEmitter ?? mitt<BaseEvents>();
-export const applicationGroupEmitter =
-  mittGlobal?.applicationGroupEmitter ?? mitt<BaseEvents>();
-export const applicationCollectionEmitter =
-  mittGlobal?.applicationCollectionEmitter ?? mitt<BaseEvents>();
-export const applicationTagEmitter =
-  mittGlobal?.applicationTagEmitter ?? mitt<BaseEvents>();
-export const applicationVersionEmitter =
-  mittGlobal?.applicationVersionEmitter ?? mitt<BaseEvents>();
-export const applicationAssetEmitter =
-  mittGlobal?.applicationAssetEmitter ?? mitt<BaseEvents>();
+export const applicationEmitter = mittGlobal?.applicationEmitter ?? mitt<BaseEvents>();
+export const applicationGroupEmitter = mittGlobal?.applicationGroupEmitter ?? mitt<BaseEvents>();
+export const applicationCollectionEmitter = mittGlobal?.applicationCollectionEmitter ?? mitt<BaseEvents>();
+export const applicationTagEmitter = mittGlobal?.applicationTagEmitter ?? mitt<BaseEvents>();
+export const applicationVersionEmitter = mittGlobal?.applicationVersionEmitter ?? mitt<BaseEvents>();
+export const applicationAssetEmitter = mittGlobal?.applicationAssetEmitter ?? mitt<BaseEvents>();
 
 if (env.NODE_ENV !== 'production') {
   mittGlobal.userEmitter = userEmitter;

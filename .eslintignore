@@ -1,10 +1,5 @@
-**/node_modules/**
-**/.next/**
-**/_next/**
-**/.vscode/**
-**/dist/**
-
-/apps/**/next.config.js
-/apps/**/next-i18next.config.js
-/apps/**/uploads
-/apps/**/app/**
+node_modules
+**/**/node_modules
+**/**/.next
+**/**/public
+**/**/app

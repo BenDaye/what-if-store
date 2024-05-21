@@ -2,14 +2,10 @@ import { z } from 'zod';
 import { idSchema } from './id';
 import { listInputSchema } from './list';
 
-export const applicationVersionListInputSchema = listInputSchema
-  .partial()
-  .extend({
-    applicationId: idSchema,
-  });
-export type ApplicationVersionListInputSchema = z.infer<
-  typeof applicationVersionListInputSchema
->;
+export const applicationVersionListInputSchema = listInputSchema.partial().extend({
+  applicationId: idSchema,
+});
+export type ApplicationVersionListInputSchema = z.infer<typeof applicationVersionListInputSchema>;
 
 export const applicationVersionCreateInputSchema = z.object({
   applicationId: idSchema,
@@ -20,12 +16,9 @@ export const applicationVersionCreateInputSchema = z.object({
   deprecated: z.boolean(),
   preview: z.boolean(),
 });
-export type ApplicationVersionCreateInputSchema = z.infer<
-  typeof applicationVersionCreateInputSchema
->;
+export type ApplicationVersionCreateInputSchema = z.infer<typeof applicationVersionCreateInputSchema>;
 
-export const applicationVersionUpdateInputSchema =
-  applicationVersionCreateInputSchema.partial().extend({ id: idSchema });
-export type ApplicationVersionUpdateInputSchema = z.infer<
-  typeof applicationVersionUpdateInputSchema
->;
+export const applicationVersionUpdateInputSchema = applicationVersionCreateInputSchema
+  .partial()
+  .extend({ id: idSchema });
+export type ApplicationVersionUpdateInputSchema = z.infer<typeof applicationVersionUpdateInputSchema>;

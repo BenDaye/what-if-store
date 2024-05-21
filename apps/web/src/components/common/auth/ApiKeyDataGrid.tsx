@@ -1,27 +1,18 @@
-import {
-  useAppUserApiKeysWithPagination,
-  useDashboardUserApiKeysWithPagination,
-  useNotice,
-} from '@/hooks';
-import { OverridesProps } from '@/types/overrides';
-import {
-  createdAtColumn,
-  idColumn,
-  updatedAtColumn,
-} from '@/utils/dataGridColumn';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import { useAppUserApiKeysWithPagination, useDashboardUserApiKeysWithPagination, useNotice } from '@/hooks';
+import type { OverridesProps } from '@/types/overrides';
+import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { DeleteForever as RemoveIcon } from '@mui/icons-material';
-import { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
-import {
-  DataGrid,
+import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
+import type {
   DataGridProps,
-  GridActionsCellItem,
   GridColDef,
   GridFilterModel,
   GridRowParams,
   GridSortModel,
-  zhCN,
 } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, zhCN } from '@mui/x-data-grid';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
@@ -34,23 +25,16 @@ type ApiKeyDataGridProps = OverridesProps<{
   CardContentProps?: CardContentProps;
 }>;
 
-type AppRowModel =
-  RouterOutput['protectedAppUserApiKey']['list']['items'][number];
-type DashboardRowModel =
-  RouterOutput['protectedDashboardUserApiKey']['list']['items'][number];
+type AppRowModel = RouterOutput['protectedAppUserApiKey']['list']['items'][number];
+type DashboardRowModel = RouterOutput['protectedDashboardUserApiKey']['list']['items'][number];
 
 export const ApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
   const { data: session } = useSession();
   const isUser = useMemo(
-    () =>
-      session?.user?.role === AuthRole.User ||
-      session?.user?.role === AuthRole.Provider,
+    () => session?.user?.role === AuthRole.User || session?.user?.role === AuthRole.Provider,
     [session?.user?.role],
   );
-  const isAdmin = useMemo(
-    () => session?.user?.role === AuthRole.Admin,
-    [session?.user?.role],
-  );
+  const isAdmin = useMemo(() => session?.user?.role === AuthRole.Admin, [session?.user?.role]);
 
   if (isUser) return <AppApiKeyDataGrid overrides={overrides} />;
   if (isAdmin) return <DashboardApiKeyDataGrid overrides={overrides} />;
@@ -66,10 +50,9 @@ const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     pagination: { page, pageSize, setPaginationModel },
   } = useAppUserApiKeysWithPagination();
   const { showError } = useNotice();
-  const { mutateAsync: remove } =
-    trpc.protectedAppUserApiKey.removeById.useMutation({
-      onError: (err) => showError(err.message),
-    });
+  const { mutateAsync: remove } = trpc.protectedAppUserApiKey.removeById.useMutation({
+    onError: (err) => showError(err.message),
+  });
 
   const setFilterModel = useCallback((filterMode: GridFilterModel) => {
     // TODO: implement filter
@@ -126,10 +109,7 @@ const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     },
   ];
   const processRowUpdate = useCallback(
-    (
-      updatedRow: AppRowModel,
-      originalRow: AppRowModel,
-    ): Promise<AppRowModel> | AppRowModel => {
+    (updatedRow: AppRowModel, originalRow: AppRowModel): Promise<AppRowModel> | AppRowModel => {
       // TODO: implement update
       console.log(updatedRow, originalRow);
       return originalRow;
@@ -182,10 +162,9 @@ const DashboardApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     pagination: { page, pageSize, setPaginationModel },
   } = useDashboardUserApiKeysWithPagination();
   const { showError } = useNotice();
-  const { mutateAsync: remove } =
-    trpc.protectedDashboardUserApiKey.removeById.useMutation({
-      onError: (err) => showError(err.message),
-    });
+  const { mutateAsync: remove } = trpc.protectedDashboardUserApiKey.removeById.useMutation({
+    onError: (err) => showError(err.message),
+  });
 
   const setFilterModel = useCallback((filterMode: GridFilterModel) => {
     // TODO: implement filter

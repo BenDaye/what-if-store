@@ -1,5 +1,5 @@
 import { useGridPagination } from '@/hooks/common';
-import { ApplicationCollectionListInputSchema } from '@/server/schemas';
+import type { ApplicationCollectionListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -28,13 +28,10 @@ export const useDashboardApplicationCollectionsWithPagination = (
       { enabled: authenticated },
     );
 
-  trpc.protectedDashboardApplicationCollection.subscribe.useSubscription(
-    undefined,
-    {
-      enabled: authenticated,
-      onData: () => refetch(),
-    },
-  );
+  trpc.protectedDashboardApplicationCollection.subscribe.useSubscription(undefined, {
+    enabled: authenticated,
+    onData: () => refetch(),
+  });
 
   return {
     router: { data, refetch, isFetching, error, isError },

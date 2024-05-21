@@ -1,14 +1,6 @@
-import { UseDashboardApplicationHookDataSchema } from '@/hooks';
-import { OverridesCardProps } from '@/types/overrides';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  List,
-  ListItem,
-  ListItemText,
-} from '@mui/material';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import type { OverridesCardProps } from '@/types/overrides';
+import { Button, Card, CardContent, CardHeader, List, ListItem, ListItemText } from '@mui/material';
 import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { ChangeStatusButton } from './ChangeStatusButton';
@@ -42,9 +34,7 @@ export const DangerZoneSectionCard = ({
         <ListItem divider sx={{ gap: 1 }}>
           <ListItemText
             primary={t('application:General.DangerZone.ChangeStatus.Title')}
-            secondary={t(
-              'application.General.DangerZone.ChangeStatus.Description',
-            )}
+            secondary={t('application.General.DangerZone.ChangeStatus.Description')}
             secondaryTypographyProps={{
               whiteSpace: 'pre-line',
             }}
@@ -68,12 +58,7 @@ export const DangerZoneSectionCard = ({
               whiteSpace: 'pre-line',
             }}
           />
-          <Button
-            color="error"
-            variant="contained"
-            sx={{ flexShrink: 0 }}
-            disableElevation
-          >
+          <Button color="error" variant="contained" sx={{ flexShrink: 0 }} disableElevation>
             {t('application:General.DangerZone.Transfer.Button')}
           </Button>
         </ListItem>
@@ -85,12 +70,7 @@ export const DangerZoneSectionCard = ({
               whiteSpace: 'pre-line',
             }}
           />
-          <Button
-            color="error"
-            variant="contained"
-            sx={{ flexShrink: 0 }}
-            disableElevation
-          >
+          <Button color="error" variant="contained" sx={{ flexShrink: 0 }} disableElevation>
             {t('application:General.DangerZone.Delete.Button')}
           </Button>
         </ListItem>

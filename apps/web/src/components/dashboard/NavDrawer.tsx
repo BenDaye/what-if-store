@@ -1,5 +1,5 @@
 import { AuthIconButton, IconButtonWithTooltip } from '@/components/common';
-import { OverridesDrawerProps } from '@/types/overrides';
+import type { OverridesDrawerProps } from '@/types/overrides';
 import {
   Apps as ApplicationsIcon,
   Store as DashboardIcon,

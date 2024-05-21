@@ -1,19 +1,17 @@
 import nextI18NextConfig from '@/../next-i18next.config';
-import { NextPageWithLayout } from '@/pages/_app';
+import type { NextPageWithLayout } from '@/pages/_app';
 import { prisma, redis } from '@/server/modules';
 import { appRouter } from '@/server/routers/_app';
 import { Box, Divider, Link, Typography } from '@mui/material';
-import { createServerSideHelpers } from '@trpc/react-query/server';
-import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
+import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import SuperJSON from 'superjson';
 import { useCountdown } from 'usehooks-ts';
+import { createServerSideHelpers } from '@trpc/react-query/server';
 
-const Page: NextPageWithLayout<
-  InferGetStaticPropsType<typeof getStaticProps>
-> = () => {
+const Page: NextPageWithLayout<InferGetStaticPropsType<typeof getStaticProps>> = () => {
   const { back } = useRouter();
   const [count, { startCountdown, resetCountdown }] = useCountdown({
     countStart: 3,
@@ -50,12 +48,7 @@ const Page: NextPageWithLayout<
         }}
       >
         <Typography variant="h1">404</Typography>
-        <Divider
-          flexItem
-          orientation="vertical"
-          variant="middle"
-          sx={{ mx: 2 }}
-        />
+        <Divider flexItem orientation="vertical" variant="middle" sx={{ mx: 2 }} />
         <Box>
           <Typography variant="h4" paragraph>
             Page Not Found
@@ -84,11 +77,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(
-        context.locale ?? 'en-US',
-        undefined,
-        nextI18NextConfig,
-      )),
+      ...(await serverSideTranslations(context.locale ?? 'en-US', undefined, nextI18NextConfig)),
       trpcState: helpers.dehydrate(),
     },
     revalidate: 10,

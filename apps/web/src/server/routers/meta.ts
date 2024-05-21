@@ -5,10 +5,8 @@ import { publicProcedure, router } from '../trpc';
 
 export const publicAppMeta = router({
   get: publicProcedure.output(metaSchema).query(async ({ ctx: { redis } }) => {
-    const title =
-      (await redis.get(redisKeyMap.metaAppTitle)) ?? 'What If Example';
-    const description =
-      (await redis.get(redisKeyMap.metaAppDescription)) ?? 'What If... Example';
+    const title = (await redis.get(redisKeyMap.metaAppTitle)) ?? 'What If Example';
+    const description = (await redis.get(redisKeyMap.metaAppDescription)) ?? 'What If... Example';
 
     const valid = metaSchema.safeParse({ title, description });
     if (!valid.success)
@@ -26,11 +24,8 @@ export const protectedAppMeta = router({});
 
 export const publicDashboardMeta = router({
   get: publicProcedure.output(metaSchema).query(async ({ ctx: { redis } }) => {
-    const title =
-      (await redis.get(redisKeyMap.metaAppTitle)) ??
-      'What If Example Dashboard';
-    const description =
-      (await redis.get(redisKeyMap.metaAppDescription)) ?? 'What If... Example';
+    const title = (await redis.get(redisKeyMap.metaAppTitle)) ?? 'What If Example Dashboard';
+    const description = (await redis.get(redisKeyMap.metaAppDescription)) ?? 'What If... Example';
 
     const valid = metaSchema.safeParse({ title, description });
     if (!valid.success)

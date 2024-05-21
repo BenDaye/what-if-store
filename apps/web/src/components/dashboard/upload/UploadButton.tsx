@@ -1,7 +1,8 @@
-import { OverridesProps } from '@/types/overrides';
+import type { OverridesProps } from '@/types/overrides';
 import { NOOPAsync } from '@/utils/noop';
 import { AddBox as CreateIcon } from '@mui/icons-material';
-import { Button, ButtonProps } from '@mui/material';
+import type { ButtonProps } from '@mui/material';
+import { Button } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useBoolean } from 'usehooks-ts';
 import { UploadDialog } from './UploadDialog';
@@ -12,10 +13,7 @@ type UploadButtonProps = OverridesProps<{
   onClose?: () => void;
 };
 
-export const UploadButton = ({
-  overrides,
-  onClose = NOOPAsync,
-}: UploadButtonProps) => {
+export const UploadButton = ({ overrides, onClose = NOOPAsync }: UploadButtonProps) => {
   const { t } = useTranslation();
   const {
     value: uploadDialogVisible,

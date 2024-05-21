@@ -1,11 +1,12 @@
-import { OverridesProps } from '@/types/overrides';
+import type { OverridesProps } from '@/types/overrides';
 import { NOOP } from '@/utils/noop';
-import { PartialBlock } from '@blocknote/core';
+import type { PartialBlock } from '@blocknote/core';
 import '@blocknote/core/fonts/inter.css';
 import { BlockNoteView } from '@blocknote/mantine';
 import { useCreateBlockNote } from '@blocknote/react';
 import '@blocknote/mantine/style.css';
-import { Box, BoxProps } from '@mui/material';
+import type { BoxProps } from '@mui/material';
+import { Box } from '@mui/material';
 import { useDebounceCallback } from 'usehooks-ts';
 
 type BlockNoteEditorProps = OverridesProps<{ BoxProps?: BoxProps }> & {

@@ -1,11 +1,9 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  applicationCollectionCreateInputSchema,
-  IdSchema,
-  idSchema,
-} from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { IdSchema } from '@/server/schemas';
+import { applicationCollectionCreateInputSchema, idSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 // import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
@@ -15,18 +13,16 @@ import { z } from 'zod';
 
 type DashboardApplicationCollectionRouterOutput =
   RouterOutput['protectedDashboardApplicationCollection']['getById'];
-export const useDashboardApplicationCollectionHookDataSchema =
-  applicationCollectionCreateInputSchema
-    .omit({ applications: true })
-    .extend({
-      id: idSchema,
-      // priceText: z.string(),
+export const useDashboardApplicationCollectionHookDataSchema = applicationCollectionCreateInputSchema
+  .omit({ applications: true })
+  .extend({
+    id: idSchema,
+    // priceText: z.string(),
 
-      applications:
-        z.custom<DashboardApplicationCollectionRouterOutput['Applications']>(),
-      applicationIds: z.array(idSchema),
-    })
-    .strict();
+    applications: z.custom<DashboardApplicationCollectionRouterOutput['Applications']>(),
+    applicationIds: z.array(idSchema),
+  })
+  .strict();
 export type UseDashboardApplicationCollectionHookDataSchema = z.infer<
   typeof useDashboardApplicationCollectionHookDataSchema
 >;
@@ -41,15 +37,12 @@ export const useDashboardApplicationCollection = (id: IdSchema) => {
     trpc.protectedDashboardApplicationCollection.getById.useQuery(id, {
       enabled: !!id && id !== FallbackId && authenticated,
     });
-  trpc.protectedDashboardApplicationCollection.subscribe.useSubscription(
-    undefined,
-    {
-      enabled: authenticated,
-      onData: (_id) => {
-        if (_id === id) refetch();
-      },
+  trpc.protectedDashboardApplicationCollection.subscribe.useSubscription(undefined, {
+    enabled: authenticated,
+    onData: (_id) => {
+      if (_id === id) refetch();
     },
-  );
+  });
 
   const { showWarning } = useNotice();
   const { t } = useTranslation();
@@ -59,18 +52,17 @@ export const useDashboardApplicationCollection = (id: IdSchema) => {
     showWarning(t(`errorMessage:${error.message}`));
   }, [isError, error, showWarning, t]);
 
-  const memoData =
-    useMemo((): UseDashboardApplicationCollectionHookDataSchema => {
-      return {
-        id,
-        name: data?.name ?? FallbackString,
-        description: data?.description ?? FallbackString,
-        price: data?.Price ?? [],
-        // priceText: data?.price ? currency(data?.price).toString() : FallbackString,
-        applications: data?.Applications ?? [],
-        applicationIds: data?.Applications.map((app) => app.id) ?? [],
-      };
-    }, [id, data]);
+  const memoData = useMemo((): UseDashboardApplicationCollectionHookDataSchema => {
+    return {
+      id,
+      name: data?.name ?? FallbackString,
+      description: data?.description ?? FallbackString,
+      price: data?.Price ?? [],
+      // priceText: data?.price ? currency(data?.price).toString() : FallbackString,
+      applications: data?.Applications ?? [],
+      applicationIds: data?.Applications.map((app) => app.id) ?? [],
+    };
+  }, [id, data]);
 
   return {
     router: { data, refetch, isFetching, error, isError },

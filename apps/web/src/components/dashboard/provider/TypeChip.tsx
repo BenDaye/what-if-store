@@ -1,7 +1,9 @@
-import { Chip, ChipProps } from '@mui/material';
+import type { ChipProps } from '@mui/material';
+import { Chip } from '@mui/material';
 import { ProviderType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
-import { PropsWithChildren, useMemo } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useMemo } from 'react';
 
 type ProviderTypeChipProps = {
   overrides?: {
@@ -10,10 +12,7 @@ type ProviderTypeChipProps = {
   type: ProviderType;
 };
 
-export const ProviderTypeChip = ({
-  overrides,
-  type,
-}: PropsWithChildren<ProviderTypeChipProps>) => {
+export const ProviderTypeChip = ({ overrides, type }: PropsWithChildren<ProviderTypeChipProps>) => {
   const { t } = useTranslation();
   const color = useMemo<ChipProps['color']>(() => {
     switch (type) {

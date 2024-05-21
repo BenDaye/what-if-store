@@ -1,6 +1,7 @@
 import { useAppUser } from '@/hooks';
-import { OverridesProps } from '@/types/overrides';
-import { Link, LinkProps } from '@mui/material';
+import type { OverridesProps } from '@/types/overrides';
+import type { LinkProps } from '@mui/material';
+import { Link } from '@mui/material';
 
 type UserLinkProps = OverridesProps<{ LinkProps?: LinkProps }> & {
   userId: string;

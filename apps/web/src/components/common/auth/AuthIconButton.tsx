@@ -1,14 +1,14 @@
-import { OverridesProps } from '@/types/overrides';
+import type { OverridesProps } from '@/types/overrides';
 import { AccountCircle as AuthIcon } from '@mui/icons-material';
-import { IconButtonProps, Menu, MenuProps } from '@mui/material';
+import type { IconButtonProps, MenuProps } from '@mui/material';
+import { Menu } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
-import { PropsWithChildren, useRef } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
-import {
-  IconButtonWithTooltip,
-  IconButtonWithTooltipProps,
-} from '../IconButtonWithTooltip';
+import type { IconButtonWithTooltipProps } from '../IconButtonWithTooltip';
+import { IconButtonWithTooltip } from '../IconButtonWithTooltip';
 import { AuthApiKeyDialog } from './ApiKeyDialog';
 import { ApiKeyMenuItem } from './ApiKeyMenuItem';
 import { SessionMenuItem } from './SessionMenuItem';
@@ -44,11 +44,7 @@ export const AuthIconButton = ({
   } = useBoolean(false);
 
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const {
-    value: menuVisible,
-    setTrue: openMenu,
-    setFalse: closeMenu,
-  } = useBoolean(false);
+  const { value: menuVisible, setTrue: openMenu, setFalse: closeMenu } = useBoolean(false);
 
   return (
     <>
@@ -82,10 +78,7 @@ export const AuthIconButton = ({
           <SessionMenuItem
             overrides={{
               MenuItemProps: {
-                onClick:
-                  status === 'authenticated'
-                    ? openUpdateProfileDialog
-                    : undefined,
+                onClick: status === 'authenticated' ? openUpdateProfileDialog : undefined,
               },
             }}
           />

@@ -1,25 +1,21 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  applicationTagCreateInputSchema,
-  IdSchema,
-  idSchema,
-} from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { IdSchema } from '@/server/schemas';
+import { applicationTagCreateInputSchema, idSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-type DashboardApplicationTagRouterOutput =
-  RouterOutput['protectedDashboardApplicationTag']['getById'];
-export const useDashboardApplicationTagHookDataSchema =
-  applicationTagCreateInputSchema
-    .extend({
-      id: idSchema,
-    })
-    .strict();
+type _DashboardApplicationTagRouterOutput = RouterOutput['protectedDashboardApplicationTag']['getById'];
+export const useDashboardApplicationTagHookDataSchema = applicationTagCreateInputSchema
+  .extend({
+    id: idSchema,
+  })
+  .strict();
 export type UseDashboardApplicationTagHookDataSchema = z.infer<
   typeof useDashboardApplicationTagHookDataSchema
 >;

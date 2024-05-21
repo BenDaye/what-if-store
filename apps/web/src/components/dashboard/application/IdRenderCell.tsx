@@ -1,16 +1,14 @@
 import { useDashboardApplication } from '@/hooks';
-import { IdSchema } from '@/server/schemas';
-import { Link, LinkProps, Typography, TypographyProps } from '@mui/material';
+import type { IdSchema } from '@/server/schemas';
+import type { LinkProps, TypographyProps } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 
 type IdRenderCellProps = {
   applicationId: IdSchema;
   overrides?: { LinkProps?: LinkProps; TypographyProps?: TypographyProps };
 };
 
-export const IdRenderCell = ({
-  applicationId,
-  overrides,
-}: IdRenderCellProps) => {
+export const IdRenderCell = ({ applicationId, overrides }: IdRenderCellProps) => {
   const {
     router: { isError, error, isFetching },
     data: { name },
@@ -22,10 +20,7 @@ export const IdRenderCell = ({
     return <Typography color="error">{error?.message}</Typography>;
   }
   return (
-    <Link
-      href={`/dashboard/application/${applicationId}`}
-      {...overrides?.LinkProps}
-    >
+    <Link href={`/dashboard/application/${applicationId}`} {...overrides?.LinkProps}>
       {name}
     </Link>
   );

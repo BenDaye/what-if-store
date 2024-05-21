@@ -4,12 +4,8 @@ import { resetTRPCClient } from '@/utils/trpc';
 import { signOut as signOutNextAuth, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import {
-  createContext,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-} from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useCallback, useContext } from 'react';
 import { useBoolean } from 'usehooks-ts';
 import { useNotice } from '../notice';
 
@@ -58,16 +54,8 @@ export const AuthProvider = ({
     }
   };
 
-  const {
-    value: signInDialog,
-    setFalse: closeSignInDialog,
-    setTrue: openSignInDialog,
-  } = useBoolean(false);
-  const {
-    value: signUpDialog,
-    setFalse: closeSignUpDialog,
-    setTrue: openSignUpDialog,
-  } = useBoolean(false);
+  const { value: signInDialog, setFalse: closeSignInDialog, setTrue: openSignInDialog } = useBoolean(false);
+  const { value: signUpDialog, setFalse: closeSignUpDialog, setTrue: openSignUpDialog } = useBoolean(false);
 
   const signIn = useCallback(() => {
     if (disableSignIn) return showWarning(t('auth:SignIn.Disabled'));

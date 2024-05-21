@@ -1,13 +1,11 @@
 import { useGridPagination } from '@/hooks/common';
-import { UserApiKeyListInputSchema } from '@/server/schemas';
+import type { UserApiKeyListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
-export const useAppUserApiKeysWithPagination = (
-  input?: UserApiKeyListInputSchema,
-) => {
+export const useAppUserApiKeysWithPagination = (input?: UserApiKeyListInputSchema) => {
   const {
     pagination: { page, pageSize },
     setPaginationModel,
@@ -17,19 +15,17 @@ export const useAppUserApiKeysWithPagination = (
   const authenticated = useMemo(
     () =>
       status === 'authenticated' &&
-      (session.user?.role === AuthRole.User ||
-        session.user?.role === AuthRole.Provider),
+      (session.user?.role === AuthRole.User || session.user?.role === AuthRole.Provider),
     [status, session],
   );
-  const { data, isFetching, refetch, error, isError } =
-    trpc.protectedAppUserApiKey.list.useQuery(
-      {
-        limit: pageSize,
-        skip,
-        query: input?.query,
-      },
-      { enabled: authenticated },
-    );
+  const { data, isFetching, refetch, error, isError } = trpc.protectedAppUserApiKey.list.useQuery(
+    {
+      limit: pageSize,
+      skip,
+      query: input?.query,
+    },
+    { enabled: authenticated },
+  );
 
   trpc.protectedAppUserApiKey.subscribe.useSubscription(undefined, {
     enabled: authenticated,

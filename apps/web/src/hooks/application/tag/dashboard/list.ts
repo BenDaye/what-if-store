@@ -1,6 +1,7 @@
 import { useNotice } from '@/hooks/notice';
-import { ApplicationTagListInputSchema } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { ApplicationTagListInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
@@ -17,24 +18,17 @@ export const useDashboardApplicationTags = (
     [status, session],
   );
   const { showWarning } = useNotice();
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.protectedDashboardApplicationTag.list.useInfiniteQuery(
-    {
-      limit: 20,
-      ...query,
-    },
-    {
-      enabled: authenticated,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
+  const { hasNextPage, fetchNextPage, isFetching, data, error, isError, refetch } =
+    trpc.protectedDashboardApplicationTag.list.useInfiniteQuery(
+      {
+        limit: 20,
+        ...query,
+      },
+      {
+        enabled: authenticated,
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      },
+    );
 
   useEffect(() => {
     if (!notify) return;
@@ -51,10 +45,7 @@ export const useDashboardApplicationTags = (
     },
   });
 
-  useInterval(
-    fetchNextPage,
-    hasNextPage && fetchAll && !isFetching ? 1000 : null,
-  );
+  useInterval(fetchNextPage, hasNextPage && fetchAll && !isFetching ? 1000 : null);
 
   const memoData = useMemo(
     (): RouterOutput['protectedDashboardApplicationTag']['list']['items'] =>

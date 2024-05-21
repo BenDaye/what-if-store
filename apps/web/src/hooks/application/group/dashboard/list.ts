@@ -1,6 +1,7 @@
 import { useNotice } from '@/hooks/notice';
-import { ApplicationGroupListInputSchema } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { ApplicationGroupListInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
@@ -19,24 +20,17 @@ export const useDashboardApplicationGroups = (
     [status, session],
   );
   const { showWarning } = useNotice();
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.protectedDashboardApplicationGroup.list.useInfiniteQuery(
-    {
-      limit: 20,
-      ...query,
-    },
-    {
-      enabled: authenticated,
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
+  const { hasNextPage, fetchNextPage, isFetching, data, error, isError, refetch } =
+    trpc.protectedDashboardApplicationGroup.list.useInfiniteQuery(
+      {
+        limit: 20,
+        ...query,
+      },
+      {
+        enabled: authenticated,
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      },
+    );
 
   useEffect(() => {
     if (!notify) return;
@@ -53,14 +47,10 @@ export const useDashboardApplicationGroups = (
     },
   });
 
-  useInterval(
-    fetchNextPage,
-    hasNextPage && fetchAll && !isFetching ? 1000 : null,
-  );
+  useInterval(fetchNextPage, hasNextPage && fetchAll && !isFetching ? 1000 : null);
 
   const memoData = useMemo(
-    (): UseDashboardApplicationGroupsDataSchema =>
-      data?.pages.flatMap((page) => page.items) ?? [],
+    (): UseDashboardApplicationGroupsDataSchema => data?.pages.flatMap((page) => page.items) ?? [],
     [data],
   );
 

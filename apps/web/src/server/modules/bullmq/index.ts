@@ -1,17 +1,9 @@
 import { env } from '../env';
 import { appLogger } from '../pino';
-import {
-  ApplicationChangeStatusQueue,
-  ApplicationChangeStatusWorker,
-  createApplicationChangeStatusQueue,
-  createApplicationChangeStatusWorker,
-} from './application';
-import {
-  createProviderVerificationQueue,
-  createProviderVerificationWorker,
-  ProviderVerificationQueue,
-  ProviderVerificationWorker,
-} from './provider';
+import type { ApplicationChangeStatusQueue, ApplicationChangeStatusWorker } from './application';
+import { createApplicationChangeStatusQueue, createApplicationChangeStatusWorker } from './application';
+import type { ProviderVerificationQueue, ProviderVerificationWorker } from './provider';
+import { createProviderVerificationQueue, createProviderVerificationWorker } from './provider';
 import { shutdown, startup } from './utils/task';
 
 const _logger = appLogger.child({}, { msgPrefix: '[BullMQ] ' });
@@ -30,11 +22,9 @@ export const providerVerificationWorker: ProviderVerificationWorker =
   bullmqGlobal.providerVerificationWorker ?? createProviderVerificationWorker();
 
 export const applicationChangeStatusQueue: ApplicationChangeStatusQueue =
-  bullmqGlobal.applicationChangeStatusQueue ??
-  createApplicationChangeStatusQueue();
+  bullmqGlobal.applicationChangeStatusQueue ?? createApplicationChangeStatusQueue();
 export const applicationChangeStatusWorker: ApplicationChangeStatusWorker =
-  bullmqGlobal.applicationChangeStatusWorker ??
-  createApplicationChangeStatusWorker();
+  bullmqGlobal.applicationChangeStatusWorker ?? createApplicationChangeStatusWorker();
 
 if (env.NODE_ENV !== 'production') {
   bullmqGlobal.providerVerificationQueue = providerVerificationQueue;

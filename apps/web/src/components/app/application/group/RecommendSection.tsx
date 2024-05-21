@@ -1,10 +1,6 @@
 import { PlaceholderBase64DataUrl } from '@/constants/image';
-import {
-  AppApplicationGroupRouterOutput,
-  useAppApplication,
-  useAppApplicationGroup,
-  UseAppApplicationGroupsDataSchema,
-} from '@/hooks';
+import type { AppApplicationGroupRouterOutput, UseAppApplicationGroupsDataSchema } from '@/hooks';
+import { useAppApplication, useAppApplicationGroup } from '@/hooks';
 import { Box, CardActionArea, useTheme } from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -33,7 +29,7 @@ export const RecommendSection = ({ data: { id } }: RecommendSectionProps) => {
       autoplay={true}
     >
       {applications.map((item) => (
-        <ApplicationView key={item.id} data={item}></ApplicationView>
+        <ApplicationView key={item.id} data={item} />
       ))}
     </AutoPlaySwipeableViews>
   );
@@ -46,10 +42,7 @@ const ApplicationView = ({
 }) => {
   const { data } = useAppApplication(id);
   return (
-    <CardActionArea
-      href={`/app/application/${id}`}
-      sx={{ position: 'relative', height: 480 }}
-    >
+    <CardActionArea href={`/app/application/${id}`} sx={{ position: 'relative', height: 480 }}>
       <Image
         alt={name}
         fill

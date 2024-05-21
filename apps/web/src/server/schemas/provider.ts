@@ -18,22 +18,17 @@ export const providerCreateProfileInputSchema = z.object({
   website: z.string().nullable(),
   avatar: z.string().nullable(),
 });
-export type ProviderCreateProfileInputSchema = z.infer<
-  typeof providerCreateProfileInputSchema
->;
+export type ProviderCreateProfileInputSchema = z.infer<typeof providerCreateProfileInputSchema>;
 
 export const providerUpdateProfileInputSchema = providerCreateProfileInputSchema
   .omit({ type: true })
   .partial();
-export type ProviderUpdateProfileInputSchema = z.infer<
-  typeof providerUpdateProfileInputSchema
->;
+export type ProviderUpdateProfileInputSchema = z.infer<typeof providerUpdateProfileInputSchema>;
 
-export const providerUpdateProfileInputSchemaForAdmin =
-  providerUpdateProfileInputSchema.extend({
-    id: idSchema,
-    type: z.nativeEnum(ProviderType).optional(),
-  });
+export const providerUpdateProfileInputSchemaForAdmin = providerUpdateProfileInputSchema.extend({
+  id: idSchema,
+  type: z.nativeEnum(ProviderType).optional(),
+});
 export type ProviderUpdateProfileInputSchemaForAdmin = z.infer<
   typeof providerUpdateProfileInputSchemaForAdmin
 >;
@@ -41,15 +36,11 @@ export type ProviderUpdateProfileInputSchemaForAdmin = z.infer<
 export const providerVerificationRequestInputSchema = z.object({
   application: z.string().nullable(),
 });
-export type ProviderVerificationRequestInputSchema = z.infer<
-  typeof providerVerificationRequestInputSchema
->;
+export type ProviderVerificationRequestInputSchema = z.infer<typeof providerVerificationRequestInputSchema>;
 
 export const providerVerificationResponseInputSchema = z.object({
   status: z.nativeEnum(ProviderVerificationStatus),
   replication: z.string().nullable(),
   id: idSchema,
 });
-export type ProviderVerificationResponseInputSchema = z.infer<
-  typeof providerVerificationResponseInputSchema
->;
+export type ProviderVerificationResponseInputSchema = z.infer<typeof providerVerificationResponseInputSchema>;

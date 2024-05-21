@@ -1,20 +1,15 @@
 import { Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationTagEmitter } from '../modules';
+import type { IdSchema } from '../schemas';
 import {
   applicationTagCreateInputSchema,
   applicationTagListInputSchema,
   applicationTagUpdateInputSchema,
-  IdSchema,
   idSchema,
   mutationOutputSchema,
 } from '../schemas';
-import {
-  protectedAdminProcedure,
-  protectedProviderProcedure,
-  publicProcedure,
-  router,
-} from '../trpc';
+import { protectedAdminProcedure, protectedProviderProcedure, publicProcedure, router } from '../trpc';
 import { formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.ApplicationTagSelect>()({
@@ -72,57 +67,53 @@ export const publicAppApplicationTag = router({
   }),
   list: publicProcedure
     .input(applicationTagListInputSchema)
-    .query(
-      async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
-        try {
-          const where: Prisma.ApplicationTagWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.applicationTag.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.applicationTag.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
       try {
-        return await prisma.applicationTag.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
+        const where: Prisma.ApplicationTagWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.applicationTag.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.applicationTag.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: publicProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.applicationTag.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });
 
 export const protectedAppApplicationTag = router({
@@ -182,57 +173,53 @@ export const protectedDashboardApplicationTag = router({
   }),
   list: protectedAdminProcedure
     .input(applicationTagListInputSchema)
-    .query(
-      async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
-        try {
-          const where: Prisma.ApplicationTagWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.applicationTag.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.applicationTag.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
       try {
-        return await prisma.applicationTag.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
+        const where: Prisma.ApplicationTagWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.applicationTag.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.applicationTag.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.applicationTag.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   updateById: protectedAdminProcedure
     .input(applicationTagUpdateInputSchema)
     .output(mutationOutputSchema)

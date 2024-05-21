@@ -1,24 +1,22 @@
 import { EmptyDataBox } from '@/components/common';
 import { FallbackId } from '@/constants/common';
 import { FallbackVersion } from '@/constants/version';
-import {
-  useAppApplication,
-  UseAppApplicationHookDataSchema,
-  useAppUser,
-  useDashboardApplicationAsset,
-} from '@/hooks';
-import { OverridesProps } from '@/types/overrides';
+import type { UseAppApplicationHookDataSchema } from '@/hooks';
+import { useAppApplication, useAppUser, useDashboardApplicationAsset } from '@/hooks';
+import type { OverridesProps } from '@/types/overrides';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+import type {
+  AccordionDetailsProps,
+  AccordionProps,
+  AccordionSummaryProps,
+  AvatarProps,
+} from '@mui/material';
 import {
   Accordion,
   AccordionDetails,
-  AccordionDetailsProps,
-  AccordionProps,
   AccordionSummary,
-  AccordionSummaryProps,
   Avatar,
   AvatarGroup,
-  AvatarProps,
   Box,
   Card,
   CardHeader,
@@ -37,7 +35,8 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
+import { useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { ProviderLink } from '../provider';
@@ -72,11 +71,7 @@ export const ApplicationPage = ({ applicationId }: ApplicationPageProps) => {
   );
 };
 
-const ApplicationPageHeader = ({
-  data,
-}: {
-  data: UseAppApplicationHookDataSchema;
-}) => {
+const ApplicationPageHeader = ({ data }: { data: UseAppApplicationHookDataSchema }) => {
   return (
     <CardHeader
       avatar={
@@ -85,24 +80,20 @@ const ApplicationPageHeader = ({
         </Avatar>
       }
       title={
-        <Stack direction={'row'} gap={1} alignItems={'center'}>
+        <Stack direction="row" gap={1} alignItems="center">
           <Typography variant="h6">{data.name}</Typography>
           <ApplicationVersionChip versions={data.versions} />
         </Stack>
       }
       subheader={
-        <Stack direction={'column'} gap={1}>
+        <Stack direction="column" gap={1}>
           <Stack
-            direction={'row'}
-            alignItems={'center'}
+            direction="row"
+            alignItems="center"
             gap={1}
-            divider={
-              <Divider flexItem orientation="vertical" variant="middle" />
-            }
+            divider={<Divider flexItem orientation="vertical" variant="middle" />}
           >
-            {data.provider?.id && (
-              <ProviderLink providerId={data.provider.id} />
-            )}
+            {data.provider?.id && <ProviderLink providerId={data.provider.id} />}
             <FollowApplicationButton
               applicationId={data.id}
               text={currency(data.count.Followers, {
@@ -126,19 +117,12 @@ const ApplicationPageHeader = ({
   );
 };
 
-const ApplicationPagePrimaryContent = ({
-  data,
-}: {
-  data: UseAppApplicationHookDataSchema;
-}) => {
+const ApplicationPagePrimaryContent = ({ data }: { data: UseAppApplicationHookDataSchema }) => {
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
   const theme = useTheme();
   return (
     <Box>
-      <Tabs
-        value={currentTabIndex}
-        onChange={(ev, nextTab) => setCurrentTabIndex(nextTab)}
-      >
+      <Tabs value={currentTabIndex} onChange={(ev, nextTab) => setCurrentTabIndex(nextTab)}>
         <Tab label="readme" />
         <Tab label="versions" />
         <Tab label="reviews" />
@@ -170,11 +154,7 @@ const ApplicationPageReadmeContent = ({ assetId }: { assetId?: string }) => {
   );
 };
 
-const ApplicationPageVersionsContent = ({
-  data,
-}: {
-  data: UseAppApplicationHookDataSchema['versions'];
-}) => {
+const ApplicationPageVersionsContent = ({ data }: { data: UseAppApplicationHookDataSchema['versions'] }) => {
   const { t } = useTranslation();
 
   return (
@@ -187,25 +167,11 @@ const ApplicationPageVersionsContent = ({
             <ApplicationPageSecondaryContentSection
               key={item.id}
               title={
-                <Stack direction={'row'} gap={1} alignItems={'center'}>
+                <Stack direction="row" gap={1} alignItems="center">
                   <Typography variant="h6">{version}</Typography>
-                  {item.latest && (
-                    <Chip variant="outlined" color="success" label={'Latest'} />
-                  )}
-                  {item.preview && (
-                    <Chip
-                      variant="outlined"
-                      color="warning"
-                      label={'Preview'}
-                    />
-                  )}
-                  {item.deprecated && (
-                    <Chip
-                      variant="outlined"
-                      color="error"
-                      label={'Deprecated'}
-                    />
-                  )}
+                  {item.latest && <Chip variant="outlined" color="success" label="Latest" />}
+                  {item.preview && <Chip variant="outlined" color="warning" label="Preview" />}
+                  {item.deprecated && <Chip variant="outlined" color="error" label="Deprecated" />}
                 </Stack>
               }
               subheader={t('application:Version.ReleasedAt', {
@@ -220,65 +186,40 @@ const ApplicationPageVersionsContent = ({
   );
 };
 
-const ApplicationPageSecondaryContent = ({
-  data,
-}: {
-  data: UseAppApplicationHookDataSchema;
-}) => {
+const ApplicationPageSecondaryContent = ({ data }: { data: UseAppApplicationHookDataSchema }) => {
   const { t } = useTranslation();
   return (
     <Box>
       <Box sx={{ height: 48 }} />
       <Stack sx={{ p: 2 }}>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Category._')}
-        >
-          <Chip
-            variant="outlined"
-            label={t(`application:Category.Name.${data.category}`)}
-          />
+        <ApplicationPageSecondaryContentSection title={t('application:Category._')}>
+          <Chip variant="outlined" label={t(`application:Category.Name.${data.category}`)} />
         </ApplicationPageSecondaryContentSection>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Tag.Tags')}
-        >
+        <ApplicationPageSecondaryContentSection title={t('application:Tag.Tags')}>
           {data.tags.length ? (
-            data.tags.map((item) => (
-              <Chip key={item.id} variant="outlined" label={item.name} />
-            ))
+            data.tags.map((item) => <Chip key={item.id} variant="outlined" label={item.name} />)
           ) : (
             <EmptyDataBox height={32} />
           )}
         </ApplicationPageSecondaryContentSection>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Information.Information')}
-        >
+        <ApplicationPageSecondaryContentSection title={t('application:Information.Information')}>
           <ApplicationPageSecondaryContentInformationList data={data} />
         </ApplicationPageSecondaryContentSection>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Group.Groups')}
-        >
+        <ApplicationPageSecondaryContentSection title={t('application:Group.Groups')}>
           {data.groups.length ? (
-            data.groups.map((item) => (
-              <Chip key={item.id} variant="outlined" label={item.name} />
-            ))
+            data.groups.map((item) => <Chip key={item.id} variant="outlined" label={item.name} />)
           ) : (
             <EmptyDataBox height={32} />
           )}
         </ApplicationPageSecondaryContentSection>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Collection.Collections')}
-        >
+        <ApplicationPageSecondaryContentSection title={t('application:Collection.Collections')}>
           {data.collections.length ? (
-            data.collections.map((item) => (
-              <Chip key={item.id} variant="outlined" label={item.name} />
-            ))
+            data.collections.map((item) => <Chip key={item.id} variant="outlined" label={item.name} />)
           ) : (
             <EmptyDataBox height={32} />
           )}
         </ApplicationPageSecondaryContentSection>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Follow.Followers')}
-        >
+        <ApplicationPageSecondaryContentSection title={t('application:Follow.Followers')}>
           {data.followers.length ? (
             <AvatarGroup variant="rounded" total={data.followers.length}>
               {data.followers.map((item) => (
@@ -289,9 +230,7 @@ const ApplicationPageSecondaryContent = ({
             <EmptyDataBox height={32} />
           )}
         </ApplicationPageSecondaryContentSection>
-        <ApplicationPageSecondaryContentSection
-          title={t('application:Own.Owners')}
-        >
+        <ApplicationPageSecondaryContentSection title={t('application:Own.Owners')}>
           {data.owners.length ? (
             <AvatarGroup variant="rounded" total={data.owners.length}>
               {data.owners.map((item) => (
@@ -342,20 +281,11 @@ const ApplicationPageSecondaryContentSection = ({
   children,
 }: ApplicationPageSecondaryContentSectionProps) => {
   return (
-    <Accordion
-      defaultExpanded={defaultExpanded}
-      variant="outlined"
-      {...overrides?.WrapperProps}
-    >
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        {...overrides?.HeaderProps}
-      >
+    <Accordion defaultExpanded={defaultExpanded} variant="outlined" {...overrides?.WrapperProps}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} {...overrides?.HeaderProps}>
         <ListItemText primary={title} secondary={subheader} />
       </AccordionSummary>
-      <AccordionDetails {...overrides?.ContentProps}>
-        {children}
-      </AccordionDetails>
+      <AccordionDetails {...overrides?.ContentProps}>{children}</AccordionDetails>
     </Accordion>
   );
 };
@@ -426,11 +356,7 @@ const ApplicationPageSecondaryContentInformationList = ({
           secondary={
             <Stack gap={1}>
               {data.compatibility.map((item) => (
-                <Typography
-                  key={item.platform}
-                  variant="body2"
-                  color="text.primary"
-                >
+                <Typography key={item.platform} variant="body2" color="text.primary">
                   {item.requirement}
                 </Typography>
               ))}
@@ -449,7 +375,7 @@ const ApplicationPageSecondaryContentInformationList = ({
             color: 'text.secondary',
           }}
           secondary={
-            <Stack direction={'row'} gap={1} flexWrap={'wrap'}>
+            <Stack direction="row" gap={1} flexWrap="wrap">
               {data.countries.map((item) => (
                 <Chip key={item} label={item} />
               ))}
@@ -468,7 +394,7 @@ const ApplicationPageSecondaryContentInformationList = ({
             color: 'text.secondary',
           }}
           secondary={
-            <Stack direction={'row'} gap={1} flexWrap={'wrap'}>
+            <Stack direction="row" gap={1} flexWrap="wrap">
               {data.locales.map((item) => (
                 <Chip key={item} label={item} />
               ))}

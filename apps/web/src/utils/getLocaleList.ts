@@ -1,4 +1,5 @@
-import { countries, ICountry } from 'countries-list';
+import type { ICountry } from 'countries-list';
+import { countries } from 'countries-list';
 
 export const getLocaleStringList = (): string[] =>
   Object.entries(countries)

@@ -1,13 +1,6 @@
-import { UseDashboardApplicationHookDataSchema } from '@/hooks';
-import { OverridesCardProps } from '@/types/overrides';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Stack,
-  Typography,
-} from '@mui/material';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import type { OverridesCardProps } from '@/types/overrides';
+import { Card, CardContent, CardHeader, Chip, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 
@@ -15,18 +8,12 @@ type VersionHistorySectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const VersionHistorySectionCard = ({
-  overrides,
-  defaultValues,
-}: VersionHistorySectionCardProps) => {
+export const VersionHistorySectionCard = ({ overrides, defaultValues }: VersionHistorySectionCardProps) => {
   const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
-      <CardHeader
-        title={t('application:Version._')}
-        {...overrides?.CardHeaderProps}
-      />
+      <CardHeader title={t('application:Version._')} {...overrides?.CardHeaderProps} />
       <CardContent {...overrides?.CardContentProps}>
         <Stack spacing={2}>
           {defaultValues.versions.map((version) => (
@@ -61,22 +48,12 @@ export const VersionCard = ({ overrides, version }: VersionCardProps) => {
         action={
           <Stack direction="row" spacing={1}>
             {version.latest && (
-              <Chip
-                label={t('application:Version.Latest')}
-                color="success"
-                variant="outlined"
-              />
+              <Chip label={t('application:Version.Latest')} color="success" variant="outlined" />
             )}
             {version.preview && (
-              <Chip
-                label={t('application:Version.Preview')}
-                color="warning"
-                variant="outlined"
-              />
+              <Chip label={t('application:Version.Preview')} color="warning" variant="outlined" />
             )}
-            {version.deprecated && (
-              <Chip label={t('application:Version.Deprecated')} color="error" />
-            )}
+            {version.deprecated && <Chip label={t('application:Version.Deprecated')} color="error" />}
           </Stack>
         }
         {...overrides?.CardHeaderProps}

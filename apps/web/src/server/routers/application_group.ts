@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationGroupEmitter } from '../modules';
+import type { IdSchema } from '../schemas';
 import {
   applicationGroupCreateInputSchema,
   applicationGroupListInputSchema,
   applicationGroupUpdateInputSchema,
-  IdSchema,
   idSchema,
   mutationOutputSchema,
 } from '../schemas';
@@ -75,77 +75,70 @@ export const publicAppApplicationGroup = router({
   }),
   list: publicProcedure
     .input(applicationGroupListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationGroupWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(rest.type
-              ? {
-                  type: {
-                    equals: rest.type,
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.applicationGroup.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  priority: 'asc',
-                },
-                { name: 'asc' },
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.applicationGroup.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.applicationGroup.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
+        const where: Prisma.ApplicationGroupWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+          ...(rest.type
+            ? {
+                type: {
+                  equals: rest.type,
+                },
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.applicationGroup.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                priority: 'asc',
+              },
+              { name: 'asc' },
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.applicationGroup.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: publicProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.applicationGroup.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });
 
 export const protectedAppApplicationGroup = router({});
@@ -189,63 +182,58 @@ export const protectedDashboardApplicationGroup = router({
   }),
   list: protectedAdminProcedure
     .input(applicationGroupListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationGroupWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
+      try {
+        const where: Prisma.ApplicationGroupWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
                     },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(rest.type
-              ? {
-                  type: {
-                    equals: rest.type,
                   },
-                }
-              : {}),
-          };
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+          ...(rest.type
+            ? {
+                type: {
+                  equals: rest.type,
+                },
+              }
+            : {}),
+        };
 
-          const [items, total] = await prisma.$transaction([
-            prisma.applicationGroup.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  priority: 'asc',
-                },
-                { name: 'asc' },
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.applicationGroup.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+        const [items, total] = await prisma.$transaction([
+          prisma.applicationGroup.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                priority: 'asc',
+              },
+              { name: 'asc' },
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.applicationGroup.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   create: protectedAdminProcedure
     .input(applicationGroupCreateInputSchema)
     .output(mutationOutputSchema)
@@ -266,44 +254,40 @@ export const protectedDashboardApplicationGroup = router({
         throw onError(err);
       }
     }),
-  getById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+  getById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.applicationGroup.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
+  updateById: protectedAdminProcedure
+    .input(applicationGroupUpdateInputSchema)
+    .output(mutationOutputSchema)
+    .mutation(async ({ ctx: { prisma }, input: { id, applications, ...data } }) => {
       try {
-        return await prisma.applicationGroup.findUniqueOrThrow({
+        await prisma.applicationGroup.update({
           where: {
             id,
           },
-          select: fullSelect,
+          data: {
+            ...data,
+            Applications: {
+              set: applications,
+            },
+          },
         });
+        applicationGroupEmitter.emit('update', id);
+        return true;
       } catch (err) {
         throw onError(err);
       }
     }),
-  updateById: protectedAdminProcedure
-    .input(applicationGroupUpdateInputSchema)
-    .output(mutationOutputSchema)
-    .mutation(
-      async ({ ctx: { prisma }, input: { id, applications, ...data } }) => {
-        try {
-          await prisma.applicationGroup.update({
-            where: {
-              id,
-            },
-            data: {
-              ...data,
-              Applications: {
-                set: applications,
-              },
-            },
-          });
-          applicationGroupEmitter.emit('update', id);
-          return true;
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
   removeById: protectedAdminProcedure
     .input(idSchema)
     .output(mutationOutputSchema)

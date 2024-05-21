@@ -1,19 +1,18 @@
 import { useNotice } from '@/hooks';
-import { UploadFormDataSchema, uploadFormDataSchema } from '@/server/schemas';
-import { OverridesProps } from '@/types/overrides';
+import type { UploadFormDataSchema } from '@/server/schemas';
+import { uploadFormDataSchema } from '@/server/schemas';
+import type { OverridesProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
+import type { DialogActionsProps, DialogContentProps, DialogProps } from '@mui/material';
 import {
   AppBar,
   Box,
   Dialog,
   DialogActions,
-  DialogActionsProps,
   DialogContent,
-  DialogContentProps,
-  DialogProps,
   IconButton,
   TextField,
   Toolbar,
@@ -42,16 +41,15 @@ export const UploadDialog = ({ overrides, ...props }: UploadDialogProps) => {
     onSuccess: () => showSuccess(t('common:Uploaded')),
   });
 
-  const { handleSubmit, watch, formState, setValue, reset } =
-    useForm<UploadFormDataSchema>({
-      mode: 'all',
-      defaultValues: {
-        name: Date.now().toString(),
-      },
-      resolver: zodResolver(uploadFormDataSchema, undefined, {
-        raw: true,
-      }),
-    });
+  const { handleSubmit, watch, formState, setValue, reset } = useForm<UploadFormDataSchema>({
+    mode: 'all',
+    defaultValues: {
+      name: Date.now().toString(),
+    },
+    resolver: zodResolver(uploadFormDataSchema, undefined, {
+      raw: true,
+    }),
+  });
 
   const onSubmit = async (data: UploadFormDataSchema) => {
     const formData = new FormData();

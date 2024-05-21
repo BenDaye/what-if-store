@@ -1,13 +1,11 @@
-import { AuthProps, useNotice } from '@/hooks';
-import { SignInSchema, signInSchema } from '@/server/schemas/auth';
-import { OverridesDialogProps } from '@/types/overrides';
+import type { AuthProps } from '@/hooks';
+import { useNotice } from '@/hooks';
+import type { SignInSchema } from '@/server/schemas/auth';
+import { signInSchema } from '@/server/schemas/auth';
+import type { OverridesDialogProps } from '@/types/overrides';
 import { resetTRPCClient } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Close as CloseIcon,
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
+import { Close as CloseIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import {
   AppBar,
@@ -31,12 +29,7 @@ import { SignUpButton } from './SignUpButton';
 
 type SignInDialogProps = OverridesDialogProps & AuthProps;
 
-export const SignInDialog = ({
-  disableSignIn,
-  disableSignUp,
-  overrides,
-  DialogProps,
-}: SignInDialogProps) => {
+export const SignInDialog = ({ disableSignIn, disableSignUp, overrides, DialogProps }: SignInDialogProps) => {
   const { query, pathname, push } = useRouter();
   const { showError, showSuccess, showWarning } = useNotice();
   const { status, update: updateSession } = useSession();
@@ -70,10 +63,7 @@ export const SignInDialog = ({
           autoHideDuration: 1000,
           onClose: async () => {
             const _session = await getSession();
-            if (
-              _session?.user?.role === AuthRole.Admin &&
-              !pathname.startsWith('/dashboard')
-            ) {
+            if (_session?.user?.role === AuthRole.Admin && !pathname.startsWith('/dashboard')) {
               push('/dashboard');
               return;
             }
@@ -104,10 +94,8 @@ export const SignInDialog = ({
   useEffect(() => {
     const { error: nextAuthError } = query;
     if (!nextAuthError) return;
-    if (typeof nextAuthError === 'string')
-      showError(t(`errorMessage:${nextAuthError}`));
-    if (Array.isArray(nextAuthError))
-      nextAuthError.forEach((err) => showError(t(`errorMessage:${err}`)));
+    if (typeof nextAuthError === 'string') showError(t(`errorMessage:${nextAuthError}`));
+    if (Array.isArray(nextAuthError)) nextAuthError.forEach((err) => showError(t(`errorMessage:${err}`)));
   }, [query, showError, t]);
 
   const onClose = useCallback(() => {
@@ -126,12 +114,7 @@ export const SignInDialog = ({
             </Typography>
             <Box sx={{ flexGrow: 1 }} />
             {!pathname.startsWith('/auth/signin') && (
-              <IconButton
-                edge="end"
-                onClick={onClose}
-                disabled={status === 'loading'}
-                color="inherit"
-              >
+              <IconButton edge="end" onClick={onClose} disabled={status === 'loading'} color="inherit">
                 <CloseIcon />
               </IconButton>
             )}
@@ -171,11 +154,7 @@ export const SignInDialog = ({
                 InputProps={{
                   endAdornment: (
                     <IconButton onClick={toggleShowPassword} edge="end">
-                      {showPassword ? (
-                        <Visibility color="primary" />
-                      ) : (
-                        <VisibilityOff color="inherit" />
-                      )}
+                      {showPassword ? <Visibility color="primary" /> : <VisibilityOff color="inherit" />}
                     </IconButton>
                   ),
                 }}
@@ -185,12 +164,8 @@ export const SignInDialog = ({
           />
         </DialogContent>
         <DialogActions {...overrides?.DialogActionsProps}>
-          <SignUpButton
-            color="secondary"
-            onClick={() => reset()}
-            disabled={disableSignUp}
-          />
-          <Box sx={{ flexGrow: 1 }}></Box>
+          <SignUpButton color="secondary" onClick={() => reset()} disabled={disableSignUp} />
+          <Box sx={{ flexGrow: 1 }} />
           <LoadingButton
             loading={status === 'loading'}
             disabled={status === 'loading'}

@@ -1,5 +1,6 @@
-import { OverridesProps } from '@/types/overrides';
-import { Chip, ChipProps } from '@mui/material';
+import type { OverridesProps } from '@/types/overrides';
+import type { ChipProps } from '@mui/material';
+import { Chip } from '@mui/material';
 import { ApplicationStatus } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
@@ -9,10 +10,7 @@ type ApplicationStatusChipProps = OverridesProps<{
 }> & {
   status: ApplicationStatus;
 };
-export const ApplicationStatusChip = ({
-  overrides,
-  status,
-}: ApplicationStatusChipProps) => {
+export const ApplicationStatusChip = ({ overrides, status }: ApplicationStatusChipProps) => {
   const { t } = useTranslation();
   const color = useMemo<ChipProps['color']>(() => {
     switch (status) {

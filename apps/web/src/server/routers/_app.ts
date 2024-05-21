@@ -38,18 +38,8 @@ import {
   publicAppApplicationVersion,
   publicDashboardApplicationVersion,
 } from './application_version';
-import {
-  protectedAppAuth,
-  protectedDashboardAuth,
-  publicAppAuth,
-  publicDashboardAuth,
-} from './auth';
-import {
-  protectedAppMeta,
-  protectedDashboardMeta,
-  publicAppMeta,
-  publicDashboardMeta,
-} from './meta';
+import { protectedAppAuth, protectedDashboardAuth, publicAppAuth, publicDashboardAuth } from './auth';
+import { protectedAppMeta, protectedDashboardMeta, publicAppMeta, publicDashboardMeta } from './meta';
 import {
   protectedAppProvider,
   protectedDashboardProvider,
@@ -62,12 +52,7 @@ import {
   publicAppUpload,
   publicDashboardUpload,
 } from './upload';
-import {
-  protectedAppUser,
-  protectedDashboardUser,
-  publicAppUser,
-  publicDashboardUser,
-} from './user';
+import { protectedAppUser, protectedDashboardUser, publicAppUser, publicDashboardUser } from './user';
 import {
   protectedAppUserApiKey,
   protectedDashboardUserApiKey,

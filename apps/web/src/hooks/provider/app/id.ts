@@ -1,10 +1,7 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  IdSchema,
-  idSchema,
-  providerUpdateProfileInputSchema,
-} from '@/server/schemas';
+import type { IdSchema } from '@/server/schemas';
+import { idSchema, providerUpdateProfileInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 import { ProviderType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
@@ -22,15 +19,12 @@ export const useAppProviderHookDataSchema = providerUpdateProfileInputSchema
     verified: z.boolean(),
   })
   .strict();
-export type UseAppProviderHookDataSchema = z.infer<
-  typeof useAppProviderHookDataSchema
->;
+export type UseAppProviderHookDataSchema = z.infer<typeof useAppProviderHookDataSchema>;
 
 export const useAppProvider = (id: IdSchema) => {
-  const { data, isFetching, refetch, error, isError } =
-    trpc.publicAppProvider.getById.useQuery(id, {
-      enabled: !!id && id !== FallbackId,
-    });
+  const { data, isFetching, refetch, error, isError } = trpc.publicAppProvider.getById.useQuery(id, {
+    enabled: !!id && id !== FallbackId,
+  });
   trpc.publicAppProvider.subscribe.useSubscription(undefined, {
     onData: (_id) => {
       if (_id === id) refetch();

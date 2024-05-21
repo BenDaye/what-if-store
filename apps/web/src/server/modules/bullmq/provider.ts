@@ -1,76 +1,52 @@
-import { ProviderVerificationRequestInputSchema } from '@/server/schemas';
+import type { ProviderVerificationRequestInputSchema } from '@/server/schemas';
 import { ProviderVerificationStatus } from '@prisma/client';
-import {
-  MetricsTime,
-  Processor,
-  Queue,
-  QueueOptions,
-  UnrecoverableError,
-  Worker,
-  WorkerOptions,
-} from 'bullmq';
+import type { Processor, QueueOptions, WorkerOptions } from 'bullmq';
+import { MetricsTime, Queue, UnrecoverableError, Worker } from 'bullmq';
 import { prisma } from '../prisma';
 import { redis as connection } from '../redis';
 import { QUEUE_NAME } from './utils/constants';
 import { addQueueListeners, addWorkerListeners } from './utils/listener';
 
-export type ProviderVerificationQueue = Queue<
-  ProviderVerificationRequestInputSchema,
-  boolean
->;
+export type ProviderVerificationQueue = Queue<ProviderVerificationRequestInputSchema, boolean>;
 
-export type ProviderVerificationWorker = Worker<
-  ProviderVerificationRequestInputSchema,
-  boolean
->;
+export type ProviderVerificationWorker = Worker<ProviderVerificationRequestInputSchema, boolean>;
 
-export type ProviderVerificationProcessor = Processor<
-  ProviderVerificationRequestInputSchema,
-  boolean
->;
+export type ProviderVerificationProcessor = Processor<ProviderVerificationRequestInputSchema, boolean>;
 
-export const providerVerificationProcessor: ProviderVerificationProcessor =
-  async (job) => {
-    await prisma.$transaction(async (_prisma) => {
-      const providerId = job.name;
-      const provider = await _prisma.providerProfile.findUnique({
-        where: {
-          id: providerId,
-        },
-      });
-
-      if (!provider) throw new UnrecoverableError('Provider not found');
-      if (provider.verified)
-        throw new UnrecoverableError('Provider already verified');
-
-      const hasPendingOrApprovedVerification =
-        await _prisma.providerVerification.count({
-          where: {
-            providerId,
-            status: {
-              in: [
-                ProviderVerificationStatus.Pending,
-                ProviderVerificationStatus.Approved,
-              ],
-            },
-          },
-        });
-
-      if (hasPendingOrApprovedVerification)
-        throw new UnrecoverableError(
-          'Verification already pending or approved',
-        );
-
-      await _prisma.providerVerification.create({
-        data: {
-          providerId,
-          application: job.data.application,
-        },
-      });
+export const providerVerificationProcessor: ProviderVerificationProcessor = async (job) => {
+  await prisma.$transaction(async (_prisma) => {
+    const providerId = job.name;
+    const provider = await _prisma.providerProfile.findUnique({
+      where: {
+        id: providerId,
+      },
     });
 
-    return true;
-  };
+    if (!provider) throw new UnrecoverableError('Provider not found');
+    if (provider.verified) throw new UnrecoverableError('Provider already verified');
+
+    const hasPendingOrApprovedVerification = await _prisma.providerVerification.count({
+      where: {
+        providerId,
+        status: {
+          in: [ProviderVerificationStatus.Pending, ProviderVerificationStatus.Approved],
+        },
+      },
+    });
+
+    if (hasPendingOrApprovedVerification)
+      throw new UnrecoverableError('Verification already pending or approved');
+
+    await _prisma.providerVerification.create({
+      data: {
+        providerId,
+        application: job.data.application,
+      },
+    });
+  });
+
+  return true;
+};
 
 export const createProviderVerificationQueue = (
   queueName = QUEUE_NAME.providerVerification,

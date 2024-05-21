@@ -1,7 +1,7 @@
-import { IncomingMessage, Server, ServerResponse } from 'node:http';
-import * as trpcExpress from '@trpc/server/adapters/express';
+import type { IncomingMessage, Server, ServerResponse } from 'node:http';
 import bodyParser from 'body-parser';
 import express from 'express';
+import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter } from '../../routers/_app';
 import { env } from '../env';
 import { appLogger } from '../pino';
@@ -32,9 +32,7 @@ export const startUpExpress = async (): Promise<string> =>
       );
 
       server = app.listen(env.EXPRESS_PORT ?? 3003, () => {
-        _logger.info(
-          `Server listening on ${env.EXPRESS_PORT} as ${env.NODE_ENV}`,
-        );
+        _logger.info(`Server listening on ${env.EXPRESS_PORT} as ${env.NODE_ENV}`);
         res('Express');
       });
     } catch (error) {

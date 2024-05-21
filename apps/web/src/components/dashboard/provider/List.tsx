@@ -1,7 +1,8 @@
 import { CollapseList } from '@/components/common';
 import { useDashboardProviders } from '@/hooks';
-import { ProviderListInputSchema } from '@/server/schemas';
-import { List, ListProps } from '@mui/material';
+import type { ProviderListInputSchema } from '@/server/schemas';
+import type { ListProps } from '@mui/material';
+import { List } from '@mui/material';
 import { ProviderType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { ProviderListItemButton } from './ListItemButton';

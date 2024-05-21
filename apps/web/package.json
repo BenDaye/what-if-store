@@ -20,8 +20,8 @@
     "dev:client": "dotenv -e .env.development.local -- next dev",
     "dev:server": "dotenv -e .env.development.local -- tsx watch src/server/dev.ts  --tsconfig tsconfig.server.json ",
     "postinstall": "prisma generate",
-    "lint": "eslint --cache --ext \".js,.ts,.tsx\" --report-unused-disable-directives --report-unused-disable-directives src",
-    "lint-fix": "pnpm lint --fix",
+    "lint": "eslint . --ext .js,.ts,.tsx --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .js,.ts,.tsx --ignore-path .gitignore --fix",
     "locize:format": "locize format ./public/locales",
     "start": "dotenv -e .env.production.local -- node dist/prod.js"
   },
@@ -101,6 +101,8 @@
     "@types/serve-handler": "^6.1.4",
     "@types/uuid": "^9.0.8",
     "@types/ws": "^8.5.10",
+    "@what-if-store/config": "workspace:*",
+    "@what-if-store/types": "workspace:*",
     "locize-cli": "^8.0.1",
     "prisma": "5.13.0"
   },

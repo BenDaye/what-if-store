@@ -1,4 +1,4 @@
-import { IdSchema } from '@/server/schemas';
+import type { IdSchema } from '@/server/schemas';
 import {
   Link as CollectionIcon,
   Support as CompatibilityIcon,
@@ -13,22 +13,18 @@ import {
   Gavel as TermsOfUseIcon,
   LocalOffer as VersionIcon,
 } from '@mui/icons-material';
-import {
-  Divider,
-  List,
-  ListItemButton,
+import type {
   ListItemButtonProps,
-  ListItemIcon,
   ListItemIconProps,
-  ListItemText,
   ListItemTextProps,
   ListProps,
-  ListSubheader,
   ListSubheaderProps,
 } from '@mui/material';
+import { Divider, List, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export type NavListProps = {
   applicationId: IdSchema;
@@ -40,11 +36,7 @@ export type NavListProps = {
   divider?: boolean;
 };
 
-export const NavList = ({
-  applicationId,
-  overrides,
-  divider = true,
-}: NavListProps) => {
+export const NavList = ({ applicationId, overrides, divider = true }: NavListProps) => {
   const { t } = useTranslation();
   return (
     <List dense {...overrides?.ListProps}>
@@ -56,9 +48,7 @@ export const NavList = ({
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
-      <ListSubheader {...overrides?.ListSubheaderProps}>
-        {t('application:Nav.Review')}
-      </ListSubheader>
+      <ListSubheader {...overrides?.ListSubheaderProps}>{t('application:Nav.Review')}</ListSubheader>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/media"
@@ -74,9 +64,7 @@ export const NavList = ({
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
-      <ListSubheader {...overrides?.ListSubheaderProps}>
-        {t('application:Nav.Declaration')}
-      </ListSubheader>
+      <ListSubheader {...overrides?.ListSubheaderProps}>{t('application:Nav.Declaration')}</ListSubheader>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/compatibility"
@@ -113,9 +101,7 @@ export const NavList = ({
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
-      <ListSubheader {...overrides?.ListSubheaderProps}>
-        {t('application:Nav.Relation')}
-      </ListSubheader>
+      <ListSubheader {...overrides?.ListSubheaderProps}>{t('application:Nav.Relation')}</ListSubheader>
       <ApplicationNavListItemButton
         applicationId={applicationId}
         pathnameSuffix="/follow"
@@ -145,9 +131,7 @@ export const NavList = ({
         {...overrides?.ListItemButtonProps}
       />
       {divider && <Divider sx={{ mt: 1 }} />}
-      <ListSubheader {...overrides?.ListSubheaderProps}>
-        {t('application:Nav.Stat')}
-      </ListSubheader>
+      <ListSubheader {...overrides?.ListSubheaderProps}>{t('application:Nav.Stat')}</ListSubheader>
     </List>
   );
 };
@@ -191,11 +175,7 @@ const ApplicationNavListItemButton = ({
   }, [url, push]);
 
   return (
-    <ListItemButton
-      selected={selected}
-      onClick={onClick}
-      {...overrides?.ListItemButtonProps}
-    >
+    <ListItemButton selected={selected} onClick={onClick} {...overrides?.ListItemButtonProps}>
       <ListItemIcon {...overrides?.ListItemIconProps}>{icon}</ListItemIcon>
       <ListItemText primary={text} {...overrides?.ListItemTextProps} />
     </ListItemButton>

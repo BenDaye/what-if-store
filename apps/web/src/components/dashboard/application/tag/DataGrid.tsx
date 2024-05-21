@@ -1,26 +1,12 @@
 import { useDashboardApplicationTagsWithPagination } from '@/hooks';
-import {
-  createdAtColumn,
-  idColumn,
-  updatedAtColumn,
-} from '@/utils/dataGridColumn';
-import { RouterOutput } from '@/utils/trpc';
+import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
+import type { RouterOutput } from '@/utils/trpc';
 import { AddBox as CreateIcon } from '@mui/icons-material';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardContentProps,
-  CardHeader,
-  CardHeaderProps,
-  CardProps,
-} from '@mui/material';
+import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
+import { Button, Card, CardContent, CardHeader } from '@mui/material';
+import type { DataGridProps, GridColDef, GridFilterModel, GridSortModel } from '@mui/x-data-grid';
 import {
   DataGrid,
-  DataGridProps,
-  GridColDef,
-  GridFilterModel,
-  GridSortModel,
   // GridRowModel,
   GridToolbar,
   zhCN,
@@ -37,12 +23,9 @@ type ApplicationTagDataGridProps = {
   };
 };
 
-type RowModel =
-  RouterOutput['protectedDashboardApplicationTag']['list']['items'][number];
+type RowModel = RouterOutput['protectedDashboardApplicationTag']['list']['items'][number];
 
-export const ApplicationTagDataGrid = ({
-  overrides,
-}: ApplicationTagDataGridProps) => {
+export const ApplicationTagDataGrid = ({ overrides }: ApplicationTagDataGridProps) => {
   const { t } = useTranslation();
   const {
     router: { isFetching },
@@ -86,10 +69,7 @@ export const ApplicationTagDataGrid = ({
     },
   ];
   const processRowUpdate = useCallback(
-    (
-      updatedRow: RowModel,
-      originalRow: RowModel,
-    ): Promise<RowModel> | RowModel => {
+    (updatedRow: RowModel, originalRow: RowModel): Promise<RowModel> | RowModel => {
       // TODO: implement update
       console.log(updatedRow, originalRow);
       return originalRow;
@@ -108,10 +88,7 @@ export const ApplicationTagDataGrid = ({
           variant: 'subtitle1',
         }}
         action={
-          <Button
-            startIcon={<CreateIcon />}
-            href="/dashboard/application_tag/create"
-          >
+          <Button startIcon={<CreateIcon />} href="/dashboard/application_tag/create">
             {t('common:Create')}
           </Button>
         }

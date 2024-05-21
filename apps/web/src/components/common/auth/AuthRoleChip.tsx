@@ -1,8 +1,10 @@
-import { OverridesProps } from '@/types/overrides';
-import { Chip, ChipProps } from '@mui/material';
+import type { OverridesProps } from '@/types/overrides';
+import type { ChipProps } from '@mui/material';
+import { Chip } from '@mui/material';
 import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
-import { PropsWithChildren, useMemo } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useMemo } from 'react';
 
 type AuthRoleChipProps = OverridesProps<{
   ChipProps?: ChipProps;
@@ -10,10 +12,7 @@ type AuthRoleChipProps = OverridesProps<{
   role: AuthRole;
 };
 
-export const AuthRoleChip = ({
-  overrides,
-  role,
-}: PropsWithChildren<AuthRoleChipProps>) => {
+export const AuthRoleChip = ({ overrides, role }: PropsWithChildren<AuthRoleChipProps>) => {
   const { t } = useTranslation();
   const color = useMemo<ChipProps['color']>(() => {
     switch (role) {
@@ -27,12 +26,5 @@ export const AuthRoleChip = ({
         return 'default';
     }
   }, [role]);
-  return (
-    <Chip
-      label={t(`auth:Role.${role}`)}
-      size="small"
-      color={color}
-      {...overrides?.ChipProps}
-    />
-  );
+  return <Chip label={t(`auth:Role.${role}`)} size="small" color={color} {...overrides?.ChipProps} />;
 };

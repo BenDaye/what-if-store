@@ -1,24 +1,11 @@
 import { useDashboardApplicationGroupsWithPagination } from '@/hooks';
-import {
-  createdAtColumn,
-  idColumn,
-  updatedAtColumn,
-} from '@/utils/dataGridColumn';
-import { RouterOutput } from '@/utils/trpc';
-import {
-  Card,
-  CardContent,
-  CardContentProps,
-  CardHeader,
-  CardHeaderProps,
-  CardProps,
-} from '@mui/material';
+import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
+import type { RouterOutput } from '@/utils/trpc';
+import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
+import { Card, CardContent, CardHeader } from '@mui/material';
+import type { DataGridProps, GridColDef, GridFilterModel, GridSortModel } from '@mui/x-data-grid';
 import {
   DataGrid,
-  DataGridProps,
-  GridColDef,
-  GridFilterModel,
-  GridSortModel,
   // GridRowModel,
   GridToolbar,
   zhCN,
@@ -37,12 +24,9 @@ type ApplicationGroupDataGridProps = {
   };
 };
 
-type RowModel =
-  RouterOutput['protectedDashboardApplicationGroup']['list']['items'][number];
+type RowModel = RouterOutput['protectedDashboardApplicationGroup']['list']['items'][number];
 
-export const ApplicationGroupDataGrid = ({
-  overrides,
-}: ApplicationGroupDataGridProps) => {
+export const ApplicationGroupDataGrid = ({ overrides }: ApplicationGroupDataGridProps) => {
   const { t } = useTranslation();
   const {
     router: { isFetching },
@@ -105,10 +89,7 @@ export const ApplicationGroupDataGrid = ({
     },
   ];
   const processRowUpdate = useCallback(
-    (
-      updatedRow: RowModel,
-      originalRow: RowModel,
-    ): Promise<RowModel> | RowModel => {
+    (updatedRow: RowModel, originalRow: RowModel): Promise<RowModel> | RowModel => {
       // TODO: implement update
       console.log(updatedRow, originalRow);
       return originalRow;

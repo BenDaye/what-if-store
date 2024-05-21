@@ -1,6 +1,7 @@
 import { useNotice } from '@/hooks/notice';
-import { UserListInputSchema } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { UserListInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
@@ -18,18 +19,11 @@ export const useDashboardUsers = (
   );
   const { showWarning } = useNotice();
 
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.protectedDashboardUser.list.useInfiniteQuery(input, {
-    enabled: authenticated,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+  const { hasNextPage, fetchNextPage, isFetching, data, error, isError, refetch } =
+    trpc.protectedDashboardUser.list.useInfiniteQuery(input, {
+      enabled: authenticated,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   useEffect(() => {
     if (!notify) return;
@@ -47,10 +41,7 @@ export const useDashboardUsers = (
     },
   });
 
-  useInterval(
-    fetchNextPage,
-    hasNextPage && fetchAll && !isFetching ? 1000 : null,
-  );
+  useInterval(fetchNextPage, hasNextPage && fetchAll && !isFetching ? 1000 : null);
 
   const memoData = useMemo(
     (): RouterOutput['protectedDashboardUser']['list']['items'] =>

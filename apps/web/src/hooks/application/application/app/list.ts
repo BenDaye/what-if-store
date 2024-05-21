@@ -1,34 +1,23 @@
 import { useNotice } from '@/hooks/notice';
-import { ApplicationListInputSchema } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { ApplicationListInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
 
-export type UseAppApplicationsHookDataSchema =
-  RouterOutput['publicAppApplication']['list']['items'];
-export const useAppApplications = (
-  query?: ApplicationListInputSchema,
-  notify = true,
-  fetchAll = true,
-) => {
+export type UseAppApplicationsHookDataSchema = RouterOutput['publicAppApplication']['list']['items'];
+export const useAppApplications = (query?: ApplicationListInputSchema, notify = true, fetchAll = true) => {
   const { showWarning } = useNotice();
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.publicAppApplication.list.useInfiniteQuery(
-    {
-      limit: 20,
-      ...query,
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
+  const { hasNextPage, fetchNextPage, isFetching, data, error, isError, refetch } =
+    trpc.publicAppApplication.list.useInfiniteQuery(
+      {
+        limit: 20,
+        ...query,
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      },
+    );
 
   useEffect(() => {
     if (!notify) return;
@@ -44,14 +33,10 @@ export const useAppApplications = (
     },
   });
 
-  useInterval(
-    fetchNextPage,
-    hasNextPage && fetchAll && !isFetching ? 1000 : null,
-  );
+  useInterval(fetchNextPage, hasNextPage && fetchAll && !isFetching ? 1000 : null);
 
   const memoData = useMemo(
-    (): UseAppApplicationsHookDataSchema =>
-      data?.pages.flatMap((page) => page.items) ?? [],
+    (): UseAppApplicationsHookDataSchema => data?.pages.flatMap((page) => page.items) ?? [],
     [data],
   );
 

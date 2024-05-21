@@ -9,17 +9,7 @@ module.exports = {
   reloadOnPrerender: process.env.NODE_ENV === 'development',
   saveMissing: process.env.NODE_ENV === 'development',
   nonExplicitSupportedLngs: true,
-  ns: [
-    'common',
-    'router',
-    'errorMessage',
-    'meta',
-    'upload',
-    'auth',
-    'user',
-    'provider',
-    'application',
-  ],
+  ns: ['common', 'router', 'errorMessage', 'meta', 'upload', 'auth', 'user', 'provider', 'application'],
   preload: ['en-US', 'zh-CN'],
   defaultNS: 'common',
   react: {

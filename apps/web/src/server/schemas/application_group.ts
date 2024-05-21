@@ -8,9 +8,7 @@ export const applicationGroupListInputSchema = listInputSchema
     type: z.nativeEnum(ApplicationGroupType),
   })
   .partial();
-export type ApplicationGroupListInputSchema = z.infer<
-  typeof applicationGroupListInputSchema
->;
+export type ApplicationGroupListInputSchema = z.infer<typeof applicationGroupListInputSchema>;
 
 export const applicationGroupCreateInputSchema = z.object({
   name: z.string(),
@@ -19,14 +17,9 @@ export const applicationGroupCreateInputSchema = z.object({
   priority: z.number(),
   applications: z.object({ id: idSchema }).array(),
 });
-export type ApplicationGroupCreateInputSchema = z.infer<
-  typeof applicationGroupCreateInputSchema
->;
+export type ApplicationGroupCreateInputSchema = z.infer<typeof applicationGroupCreateInputSchema>;
 
-export const applicationGroupUpdateInputSchema =
-  applicationGroupCreateInputSchema.partial().extend({
-    id: idSchema,
-  });
-export type ApplicationGroupUpdateInputSchema = z.infer<
-  typeof applicationGroupUpdateInputSchema
->;
+export const applicationGroupUpdateInputSchema = applicationGroupCreateInputSchema.partial().extend({
+  id: idSchema,
+});
+export type ApplicationGroupUpdateInputSchema = z.infer<typeof applicationGroupUpdateInputSchema>;

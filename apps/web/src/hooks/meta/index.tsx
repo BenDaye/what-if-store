@@ -11,19 +11,13 @@ export const useHeadMeta = (type: HeadMetaType = 'Default'): HeadMeta => {
     switch (type) {
       case 'App':
         return {
-          title: process.env.NEXT_PUBLIC_HEAD_META_APP_TITLE ?? 'App Title',
-          description:
-            process.env.NEXT_PUBLIC_HEAD_META_APP_DESCRIPTION ??
-            'App Description',
+          title: 'App Title',
+          description: 'App Description',
         };
       case 'Dashboard':
         return {
-          title:
-            process.env.NEXT_PUBLIC_HEAD_META_DASHBOARD_TITLE ??
-            'Dashboard Title',
-          description:
-            process.env.NEXT_PUBLIC_HEAD_META_DASHBOARD_DESCRIPTION ??
-            'Dashboard Description',
+          title: 'Dashboard Title',
+          description: 'Dashboard Description',
         };
       default:
         return {
@@ -34,21 +28,22 @@ export const useHeadMeta = (type: HeadMetaType = 'Default'): HeadMeta => {
   };
   const [{ title, description }, setMeta] = useState(initMeta);
 
-  const { data: appMeta, isFetched: isFetchedAppMeta } =
-    trpc.publicAppMeta.get.useQuery(undefined, {
-      enabled: type === 'App',
-      refetchOnWindowFocus: true,
-    });
+  const { data: appMeta, isFetched: isFetchedAppMeta } = trpc.publicAppMeta.get.useQuery(undefined, {
+    enabled: type === 'App',
+    refetchOnWindowFocus: true,
+  });
 
   useEffect(() => {
     if (isFetchedAppMeta && appMeta) setMeta(appMeta);
   }, [appMeta, isFetchedAppMeta]);
 
-  const { data: dashboardMeta, isFetched: isFetchedDashboardMeta } =
-    trpc.publicDashboardMeta.get.useQuery(undefined, {
+  const { data: dashboardMeta, isFetched: isFetchedDashboardMeta } = trpc.publicDashboardMeta.get.useQuery(
+    undefined,
+    {
       enabled: type === 'Dashboard',
       refetchOnWindowFocus: true,
-    });
+    },
+  );
 
   useEffect(() => {
     if (isFetchedDashboardMeta && dashboardMeta) setMeta(dashboardMeta);

@@ -1,15 +1,10 @@
 import { createHash } from 'crypto';
-import { createWriteStream, PathLike } from 'node:fs';
-import {
-  constants,
-  access as fsAccess,
-  mkdir,
-  readFile,
-  writeFile,
-} from 'node:fs/promises';
+import type { PathLike } from 'node:fs';
+import { createWriteStream } from 'node:fs';
+import { constants, access as fsAccess, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable } from 'node:stream';
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { format } from 'date-fns';
 import { ulid } from 'ulidx';
 
@@ -38,9 +33,7 @@ export const calculateFileMD5 = async (path: string): Promise<string> => {
   return fileHash.digest('hex');
 };
 
-export const write = async (
-  file: File,
-): Promise<Prisma.FileCreateWithoutUsersInput> => {
+export const write = async (file: File): Promise<Prisma.FileCreateWithoutUsersInput> => {
   const uploadDir = path.join(process.cwd(), 'uploads');
   const nonce = format(Date.now(), 'yyyy/MM/dd');
   const fileDir = path.resolve(uploadDir, nonce);

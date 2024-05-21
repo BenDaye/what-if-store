@@ -1,10 +1,7 @@
 import { useAuth, useNotice } from '@/hooks';
-import { OverridesButtonProps } from '@/types/overrides';
+import type { OverridesButtonProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
-import {
-  DownloadDone as OwnedIcon,
-  GetApp as OwnIcon,
-} from '@mui/icons-material';
+import { DownloadDone as OwnedIcon, GetApp as OwnIcon } from '@mui/icons-material';
 import { Button, IconButton } from '@mui/material';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -37,15 +34,13 @@ export const OwnApplicationButton = ({
   } = trpc.protectedAppApplication.isOwnedById.useQuery(applicationId, {
     enabled:
       status === 'authenticated' &&
-      (session.user?.role === AuthRole.User ||
-        session.user?.role === AuthRole.Provider),
+      (session.user?.role === AuthRole.User || session.user?.role === AuthRole.Provider),
     placeholderData: false,
   });
-  const { mutateAsync: own, isPending: isOwnPending } =
-    trpc.protectedAppApplication.ownById.useMutation({
-      onError: (err) => showWarning(err.message),
-      onSuccess: () => refetch(),
-    });
+  const { mutateAsync: own, isPending: isOwnPending } = trpc.protectedAppApplication.ownById.useMutation({
+    onError: (err) => showWarning(err.message),
+    onSuccess: () => refetch(),
+  });
 
   const onClick = useCallback(async () => {
     if (status !== 'authenticated') {
@@ -55,10 +50,7 @@ export const OwnApplicationButton = ({
     await own(applicationId).catch(() => null);
   }, [status, signIn, own, applicationId]);
 
-  const disabled = useMemo(
-    () => isFetching || isOwnPending,
-    [isFetching, isOwnPending],
-  );
+  const disabled = useMemo(() => isFetching || isOwnPending, [isFetching, isOwnPending]);
 
   return showText || text ? (
     <Button
@@ -80,11 +72,7 @@ export const OwnApplicationButton = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {owned ? (
-        <OwnedIcon sx={{ fontSize: 'inherit' }} />
-      ) : (
-        <OwnIcon sx={{ fontSize: 'inherit' }} />
-      )}
+      {owned ? <OwnedIcon sx={{ fontSize: 'inherit' }} /> : <OwnIcon sx={{ fontSize: 'inherit' }} />}
     </IconButton>
   );
 };

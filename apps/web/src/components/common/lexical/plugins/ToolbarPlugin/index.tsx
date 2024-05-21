@@ -24,7 +24,8 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from 'lexical';
-import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
+import type { Dispatch } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const LowPriority = 1;
 
@@ -32,9 +33,11 @@ type ToolbarPluginProps = {
   setIsLinkEditMode?: Dispatch<boolean>;
 };
 
-export const ToolbarPlugin = ({
-  setIsLinkEditMode = () => null,
-}: ToolbarPluginProps) => {
+export const ToolbarPlugin = (
+  {
+    // setIsLinkEditMode = () => null
+  }: ToolbarPluginProps,
+) => {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
@@ -64,7 +67,7 @@ export const ToolbarPlugin = ({
       }),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
-        (_payload, newEditor) => {
+        (_payload, _newEditor) => {
           updateToolbar();
           return false;
         },

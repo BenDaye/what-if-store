@@ -1,9 +1,8 @@
-import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
-import {
-  ApplicationUpdateInputSchema,
-  applicationUpdateInputSchema,
-} from '@/server/schemas';
-import { OverridesCardProps } from '@/types/overrides';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import { useNotice } from '@/hooks';
+import type { ApplicationUpdateInputSchema } from '@/server/schemas';
+import { applicationUpdateInputSchema } from '@/server/schemas';
+import type { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,10 +31,7 @@ type CompatibilitySectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const CompatibilitySectionCard = ({
-  overrides,
-  defaultValues,
-}: CompatibilitySectionCardProps) => {
+export const CompatibilitySectionCard = ({ overrides, defaultValues }: CompatibilitySectionCardProps) => {
   const { t } = useTranslation();
   const { handleSubmit, reset, control, formState, setValue, getValues } =
     useForm<ApplicationUpdateInputSchema>({
@@ -50,14 +46,12 @@ export const CompatibilitySectionCard = ({
   }, [defaultValues, reset]);
 
   const { showSuccess, showError } = useNotice();
-  const { mutateAsync: update, isPending } =
-    trpc.protectedDashboardApplication.updateById.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(t('common:Updated')),
-    });
+  const { mutateAsync: update, isPending } = trpc.protectedDashboardApplication.updateById.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => showSuccess(t('common:Updated')),
+  });
 
-  const onSubmit = async (data: ApplicationUpdateInputSchema) =>
-    await update(data).catch(() => null);
+  const onSubmit = async (data: ApplicationUpdateInputSchema) => await update(data).catch(() => null);
 
   useEffect(() => {
     if (!window) return;
@@ -74,9 +68,7 @@ export const CompatibilitySectionCard = ({
     };
   }, [formState, t]);
 
-  const [compatibility, setCompatibility] = useState<
-    Record<ApplicationPlatform, string>
-  >({
+  const [compatibility, setCompatibility] = useState<Record<ApplicationPlatform, string>>({
     Other: '',
     iOS: '',
     Android: '',
@@ -126,17 +118,10 @@ export const CompatibilitySectionCard = ({
       }}
       {...overrides?.CardProps}
     >
-      <CardHeader
-        title={t('application:Declaration.Compatibility._')}
-        {...overrides?.CardHeaderProps}
-      />
+      <CardHeader title={t('application:Declaration.Compatibility._')} {...overrides?.CardHeaderProps} />
       <CardContent component={List} {...overrides?.CardContentProps}>
         <Controller control={control} name="platforms" render={() => <Box />} />
-        <Controller
-          control={control}
-          name="compatibility"
-          render={() => <Box />}
-        />
+        <Controller control={control} name="compatibility" render={() => <Box />} />
         {Object.values(ApplicationPlatform).map((platform) => (
           <ListItem key={platform}>
             <ListItemIcon>
@@ -165,9 +150,7 @@ export const CompatibilitySectionCard = ({
                     })
                   }
                   label={platform}
-                  placeholder={t(
-                    'application.Declaration.Compatibility.Requirement',
-                  )}
+                  placeholder={t('application.Declaration.Compatibility.Requirement')}
                   disabled={!getValues('platforms')?.includes(platform)}
                   size="small"
                   multiline

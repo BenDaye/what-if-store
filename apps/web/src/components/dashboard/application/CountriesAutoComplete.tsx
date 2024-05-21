@@ -1,11 +1,7 @@
-import { MultipleAutoCompleteProps } from '@/types/overrides';
+import type { MultipleAutoCompleteProps } from '@/types/overrides';
 import { Autocomplete, ListItem, ListItemText, TextField } from '@mui/material';
-import {
-  getCountryData,
-  getCountryDataList,
-  ICountryData,
-  TCountryCode,
-} from 'countries-list';
+import type { ICountryData, TCountryCode } from 'countries-list';
+import { getCountryData, getCountryDataList } from 'countries-list';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
@@ -29,17 +25,12 @@ export const CountriesAutoComplete = ({
   };
 
   const [countries, setCountries] = useState<ICountryData[]>(
-    () =>
-      defaultValue
-        .map((code) => _getCountryData(code))
-        .filter((v) => v !== false) as ICountryData[],
+    () => defaultValue.map((code) => _getCountryData(code)).filter((v) => v !== false) as ICountryData[],
   );
 
   useEffect(() => {
     setCountries(
-      defaultValue
-        .map((code) => _getCountryData(code))
-        .filter((v) => v !== false) as ICountryData[],
+      defaultValue.map((code) => _getCountryData(code)).filter((v) => v !== false) as ICountryData[],
     );
   }, [defaultValue]);
 
@@ -56,9 +47,7 @@ export const CountriesAutoComplete = ({
       limitTags={12}
       clearOnEscape
       disableCloseOnSelect
-      options={getCountryDataList().sort((a, b) =>
-        a.continent.localeCompare(b.continent),
-      )}
+      options={getCountryDataList().sort((a, b) => a.continent.localeCompare(b.continent))}
       getOptionKey={(option) => option.name}
       getOptionLabel={(option) => option.name}
       isOptionEqualToValue={(option, value) => option.name === value.name}

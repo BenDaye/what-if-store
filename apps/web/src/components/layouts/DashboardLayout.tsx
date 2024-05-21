@@ -3,41 +3,25 @@ import { Box, useTheme } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { PropsWithChildren, ReactElement, useMemo, useState } from 'react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { useMemo, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
-import {
-  ApplicationDrawer,
-  DashboardNavDrawer,
-  DashboardProvider,
-  UserDrawer,
-} from '../dashboard';
+import { ApplicationDrawer, DashboardNavDrawer, DashboardProvider, UserDrawer } from '../dashboard';
 import { ProviderDrawer } from '../dashboard/provider';
 import { Main } from './Main';
 
 const navDrawerWidth = 48;
 
-export const DashboardLayout = ({
-  children,
-}: PropsWithChildren): ReactElement<PropsWithChildren> => {
+export const DashboardLayout = ({ children }: PropsWithChildren): ReactElement<PropsWithChildren> => {
   const { t } = useTranslation();
   const { title, description } = useHeadMeta('Dashboard');
   const { pathname } = useRouter();
-  const openApplicationListDrawer = useMemo(
-    () => pathname.startsWith('/dashboard/app'),
-    [pathname],
-  );
-  const openUserListDrawer = useMemo(
-    () => pathname.startsWith('/dashboard/user'),
-    [pathname],
-  );
-  const openProviderListDrawer = useMemo(
-    () => pathname.startsWith('/dashboard/provider'),
-    [pathname],
-  );
+  const openApplicationListDrawer = useMemo(() => pathname.startsWith('/dashboard/app'), [pathname]);
+  const openUserListDrawer = useMemo(() => pathname.startsWith('/dashboard/user'), [pathname]);
+  const openProviderListDrawer = useMemo(() => pathname.startsWith('/dashboard/provider'), [pathname]);
   const openDrawer = useMemo(
-    () =>
-      openApplicationListDrawer || openUserListDrawer || openProviderListDrawer,
+    () => openApplicationListDrawer || openUserListDrawer || openProviderListDrawer,
     [openApplicationListDrawer, openProviderListDrawer, openUserListDrawer],
   );
   const [listDrawerWidth, setListDrawerWidth] = useLocalStorage<number>(
@@ -53,8 +37,7 @@ export const DashboardLayout = ({
     [listDrawerWidth, openDrawer],
   );
   const mainWidth = useMemo(
-    () =>
-      `calc(100% - ${navDrawerWidth + 1 + (openDrawer ? listDrawerWidth + 1 : 0)}px)`,
+    () => `calc(100% - ${navDrawerWidth + 1 + (openDrawer ? listDrawerWidth + 1 : 0)}px)`,
     [listDrawerWidth, openDrawer],
   );
   const theme = useTheme();
@@ -65,10 +48,7 @@ export const DashboardLayout = ({
         <title>{t('meta:Dashboard.Title', title ?? 'Dashboard Title')}</title>
         <meta
           name="description"
-          content={t(
-            'meta.Dashboard.Description',
-            description ?? 'Dashboard Description',
-          )}
+          content={t('meta.Dashboard.Description', description ?? 'Dashboard Description')}
         />
       </Head>
       <Box
@@ -92,10 +72,7 @@ export const DashboardLayout = ({
             width: openDrawer ? listDrawerWidth : 0,
           }}
           resizeHandleClasses={{
-            right:
-              theme.palette.mode === 'dark'
-                ? 'resizeHandleClass darkMode'
-                : 'resizeHandleClass',
+            right: theme.palette.mode === 'dark' ? 'resizeHandleClass darkMode' : 'resizeHandleClass',
           }}
           position={{ x: navDrawerWidth + 1, y: 0 }}
           maxWidth={480}

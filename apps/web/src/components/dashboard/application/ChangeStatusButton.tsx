@@ -1,21 +1,12 @@
 import { useNotice } from '@/hooks';
-import { IdSchema } from '@/server/schemas';
-import { OverridesProps } from '@/types/overrides';
+import type { IdSchema } from '@/server/schemas';
+import type { OverridesProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { getAvailableStatuses } from '@/utils/validApplicationStatusTransition';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
-import {
-  Button,
-  ButtonProps,
-  ListItemText,
-  Menu,
-  MenuItem,
-  MenuItemProps,
-  MenuProps,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { ApplicationStatus, AuthRole } from '@prisma/client';
+import type { ButtonProps, MenuItemProps, MenuProps } from '@mui/material';
+import { Button, ListItemText, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
+import type { ApplicationStatus, AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
@@ -38,22 +29,14 @@ export const ChangeStatusButton = ({
 }: ChangeStatusButtonProps) => {
   const { t } = useTranslation();
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const {
-    value: menuVisible,
-    setTrue: openMenu,
-    setFalse: closeMenu,
-  } = useBoolean(false);
-  const availableStatuses = useMemo(
-    () => getAvailableStatuses(defaultValue, role),
-    [defaultValue, role],
-  );
+  const { value: menuVisible, setTrue: openMenu, setFalse: closeMenu } = useBoolean(false);
+  const availableStatuses = useMemo(() => getAvailableStatuses(defaultValue, role), [defaultValue, role]);
 
   const { showSuccess, showError } = useNotice();
-  const { mutateAsync: update, isPending } =
-    trpc.protectedDashboardApplication.changeStatusById.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(t('common:Updated')),
-    });
+  const { mutateAsync: update, isPending } = trpc.protectedDashboardApplication.changeStatusById.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => showSuccess(t('common:Updated')),
+  });
 
   const onSubmit = async (status: ApplicationStatus) =>
     await update({ status, id: applicationId }).catch(() => null);
@@ -90,32 +73,22 @@ export const ChangeStatusButton = ({
           {...overrides?.MenuProps}
         >
           {availableStatuses.map((status) => (
-            <MenuItem
-              key={status}
-              disabled={isPending}
-              onClick={() => onSubmit(status)}
-            >
+            <MenuItem key={status} disabled={isPending} onClick={() => onSubmit(status)}>
               <Tooltip
                 title={
                   <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
-                    {t(
-                      `application.DangerZone.ChangeStatus.${status}.Description`,
-                    )}
+                    {t(`application.DangerZone.ChangeStatus.${status}.Description`)}
                   </Typography>
                 }
                 arrow
                 placement="left"
               >
                 <ListItemText
-                  primary={t(
-                    `application.DangerZone.ChangeStatus.${status}.Button`,
-                  )}
+                  primary={t(`application.DangerZone.ChangeStatus.${status}.Button`)}
                   primaryTypographyProps={{
                     color: 'error',
                   }}
-                  secondary={t(
-                    `application.DangerZone.ChangeStatus.${status}.Title`,
-                  )}
+                  secondary={t(`application.DangerZone.ChangeStatus.${status}.Title`)}
                   secondaryTypographyProps={{
                     noWrap: true,
                   }}

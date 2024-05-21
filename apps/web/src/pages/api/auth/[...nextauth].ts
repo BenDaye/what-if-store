@@ -2,7 +2,7 @@ import { prisma } from '@/server/modules/prisma';
 import { signInSchema } from '@/server/schemas/auth';
 import { Prisma } from '@prisma/client';
 import { verify } from 'argon2';
-import { AuthOptions, User } from 'next-auth';
+import type { AuthOptions, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { z } from 'zod';
@@ -110,8 +110,7 @@ export const authOptions: AuthOptions = {
             select,
           });
 
-          if (!result)
-            throw new Error('Account not found or password incorrect');
+          if (!result) throw new Error('Account not found or password incorrect');
           if (!(await verify(result.password, password)))
             throw new Error('Account not found or password incorrect');
 

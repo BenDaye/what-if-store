@@ -1,6 +1,7 @@
 import { FallbackPriceText, getCurrencySymbol } from '@/constants/country';
-import { OverridesProps } from '@/types/overrides';
-import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
+import type { OverridesProps } from '@/types/overrides';
+import type { StackProps, TypographyProps } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import currency from 'currency.js';
 import { useMemo } from 'react';
 
@@ -18,12 +19,7 @@ type PriceTextProps = OverridesProps<{
     country: string;
   };
 };
-export const PriceText = ({
-  overrides,
-  integerVarient = 'body2',
-  decimalVarient,
-  price,
-}: PriceTextProps) => {
+export const PriceText = ({ overrides, integerVarient = 'body2', decimalVarient, price }: PriceTextProps) => {
   const _decimalVarient = useMemo(() => {
     if (decimalVarient) return decimalVarient;
 
@@ -52,31 +48,23 @@ export const PriceText = ({
         return 'caption';
     }
   }, [integerVarient, decimalVarient]);
-  const symbol = useMemo(
-    () => (price?.currency ? getCurrencySymbol(price.currency) : ''),
-    [price],
-  );
+  const symbol = useMemo(() => (price?.currency ? getCurrencySymbol(price.currency) : ''), [price]);
   const integerPart = useMemo(() => {
     if (!price) return '';
-    return currency(price.price, { fromCents: true, symbol: '' })
-      .format()
-      .split('.')[0];
+    return currency(price.price, { fromCents: true, symbol: '' }).format().split('.')[0];
   }, [price]);
   const decimalPart = useMemo(() => {
     if (!price) return '';
-    return currency(price.price, { fromCents: true, symbol: '' })
-      .format()
-      .split('.')[1];
+    return currency(price.price, { fromCents: true, symbol: '' }).format().split('.')[1];
   }, [price]);
 
   return price ? (
     <Stack
-      direction={'row'}
-      alignItems={'baseline'}
+      direction="row"
+      alignItems="baseline"
       sx={{
         px: 1,
-        color: (theme) =>
-          theme.palette.mode === 'dark' ? 'error.light' : 'error.dark',
+        color: (theme) => (theme.palette.mode === 'dark' ? 'error.light' : 'error.dark'),
       }}
       {...overrides?.WrapperProps}
     >
@@ -112,8 +100,7 @@ export const PriceText = ({
       variant={_decimalVarient}
       sx={{
         fontFamily: 'Roboto Mono',
-        color: (theme) =>
-          theme.palette.mode === 'dark' ? 'error.light' : 'error.dark',
+        color: (theme) => (theme.palette.mode === 'dark' ? 'error.light' : 'error.dark'),
       }}
       {...overrides?.DecimalProps}
     >

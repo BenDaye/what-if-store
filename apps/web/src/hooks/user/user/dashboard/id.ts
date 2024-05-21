@@ -1,19 +1,16 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  IdSchema,
-  idSchema,
-  userUpdateProfileInputSchema,
-} from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { IdSchema } from '@/server/schemas';
+import { idSchema, userUpdateProfileInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 
-type DashboardUserRouterOutput =
-  RouterOutput['protectedDashboardUser']['getById'];
+type DashboardUserRouterOutput = RouterOutput['protectedDashboardUser']['getById'];
 export const useDashboardUserHookDataSchema = userUpdateProfileInputSchema
   .extend({
     id: idSchema,
@@ -21,16 +18,12 @@ export const useDashboardUserHookDataSchema = userUpdateProfileInputSchema
     role: z.nativeEnum(AuthRole),
     avatarSrc: z.string().nullable().optional(),
     avatarText: z.string(),
-    provider: z
-      .custom<DashboardUserRouterOutput['ProviderProfile']>()
-      .optional(),
+    provider: z.custom<DashboardUserRouterOutput['ProviderProfile']>().optional(),
     providerId: z.string().optional(),
     providerName: z.string().optional(),
   })
   .strict();
-export type UseDashboardUserHookDataSchema = z.infer<
-  typeof useDashboardUserHookDataSchema
->;
+export type UseDashboardUserHookDataSchema = z.infer<typeof useDashboardUserHookDataSchema>;
 
 export const useDashboardUser = (id: IdSchema) => {
   const { data: session, status } = useSession();
@@ -38,10 +31,9 @@ export const useDashboardUser = (id: IdSchema) => {
     () => status === 'authenticated' && session.user?.role === AuthRole.Admin,
     [status, session],
   );
-  const { data, refetch, isFetching, error, isError } =
-    trpc.protectedDashboardUser.getById.useQuery(id, {
-      enabled: !!id && id !== FallbackId && authenticated,
-    });
+  const { data, refetch, isFetching, error, isError } = trpc.protectedDashboardUser.getById.useQuery(id, {
+    enabled: !!id && id !== FallbackId && authenticated,
+  });
   trpc.protectedDashboardUser.subscribe.useSubscription(undefined, {
     enabled: authenticated,
     onData: (_id) => {
@@ -56,14 +48,13 @@ export const useDashboardUser = (id: IdSchema) => {
     showWarning(t(`errorMessage:${error.message}`));
   }, [isError, error, showWarning, t]);
 
-  const { mutateAsync: update } =
-    trpc.protectedDashboardUser.updateById.useMutation({
-      onSuccess: () => {
-        showSuccess(t('user:Profile.Updated'));
-        refetch();
-      },
-      onError: (err) => showError(err.message),
-    });
+  const { mutateAsync: update } = trpc.protectedDashboardUser.updateById.useMutation({
+    onSuccess: () => {
+      showSuccess(t('user:Profile.Updated'));
+      refetch();
+    },
+    onError: (err) => showError(err.message),
+  });
 
   const memoData = useMemo(
     (): UseDashboardUserHookDataSchema => ({

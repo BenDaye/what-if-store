@@ -15,8 +15,7 @@ export const CommonMessage: Record<CommonMessageType, string> = {
   REQUIRED: '必填',
   INVALID_ID: '无效ID',
   INVALID_TYPE_ERROR: '无效类型',
-  INVALID_USERNAME:
-    '无效用户名, 长度在8到32个字符之间, 可包含大小写英文字母, 数字, 下划线。',
+  INVALID_USERNAME: '无效用户名, 长度在8到32个字符之间, 可包含大小写英文字母, 数字, 下划线。',
   INVALID_PASSWORD:
     '无效密码, 长度在8到32个字符之间, 并且包含至少一个数字、一个大写字母、一个小写字母和一个特殊字符 ( - _ ! @ # $ % ^ & * ? )',
   INVALID_TOKEN_LENGTH: '无效验证码长度, 请输入6位验证码',

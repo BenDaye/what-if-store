@@ -1,18 +1,10 @@
 // ℹ️ Type-only import:
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 import type { AppRouter } from '@/server/routers/_app';
-import {
-  createWSClient,
-  httpLink,
-  loggerLink,
-  splitLink,
-  TRPCLink,
-  wsLink,
-} from '@trpc/client';
+import type { TRPCLink } from '@trpc/client';
+import { createWSClient, httpLink, loggerLink, splitLink, wsLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import type { inferRouterOutputs } from '@trpc/server';
-import { NextPageContext } from 'next';
-import superjson from 'superjson';
 
 let client: ReturnType<typeof createWSClient> | null = null;
 
@@ -81,8 +73,7 @@ export const trpc = createTRPCNext<AppRouter>({
         // adds pretty logs to your console in development and logs errors in production
         loggerLink({
           enabled: (opts) =>
-            (process.env.NODE_ENV === 'development' &&
-              typeof window !== 'undefined') ||
+            (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         splitLink({

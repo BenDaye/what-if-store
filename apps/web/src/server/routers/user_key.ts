@@ -1,16 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { userApiKeyEmitter } from '../modules';
-import { IdSchema, idSchema } from '../schemas';
-import {
-  userApiKeyCreateInputSchema,
-  userApiKeyListInputSchema,
-} from '../schemas/user_key';
-import {
-  protectedAdminProcedure,
-  protectedUserProcedure,
-  router,
-} from '../trpc';
+import type { IdSchema } from '../schemas';
+import { idSchema } from '../schemas';
+import { userApiKeyCreateInputSchema, userApiKeyListInputSchema } from '../schemas/user_key';
+import { protectedAdminProcedure, protectedUserProcedure, router } from '../trpc';
 import { formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.UserApiKeySelect>()({
@@ -67,45 +61,40 @@ export const protectedAppUserApiKey = router({
   }),
   list: protectedUserProcedure
     .input(userApiKeyListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma, session },
-        input: { limit, skip, cursor, query },
-      }) => {
-        try {
-          const where: Prisma.UserApiKeyWhereInput = {
-            ...(query
-              ? {
-                  remark: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-            userId: {
-              equals: session.user.id,
-            },
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.userApiKey.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
+    .query(async ({ ctx: { prisma, session }, input: { limit, skip, cursor, query } }) => {
+      try {
+        const where: Prisma.UserApiKeyWhereInput = {
+          ...(query
+            ? {
+                remark: {
+                  contains: query,
+                  mode: 'insensitive',
                 },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.userApiKey.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+              }
+            : {}),
+          userId: {
+            equals: session.user.id,
+          },
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.userApiKey.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.userApiKey.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   create: protectedUserProcedure
     .input(userApiKeyCreateInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: { remark } }) => {
@@ -180,80 +169,73 @@ export const protectedDashboardUserApiKey = router({
   }),
   list: protectedAdminProcedure
     .input(userApiKeyListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma, session },
-        input: { limit, skip, cursor, query },
-      }) => {
-        try {
-          const where: Prisma.UserApiKeyWhereInput = {
-            ...(query
-              ? {
-                  remark: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-            userId: {
-              equals: session.user.id,
-            },
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.userApiKey.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
+    .query(async ({ ctx: { prisma, session }, input: { limit, skip, cursor, query } }) => {
+      try {
+        const where: Prisma.UserApiKeyWhereInput = {
+          ...(query
+            ? {
+                remark: {
+                  contains: query,
+                  mode: 'insensitive',
                 },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.userApiKey.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+              }
+            : {}),
+          userId: {
+            equals: session.user.id,
+          },
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.userApiKey.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.userApiKey.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   listAll: protectedAdminProcedure
     .input(userApiKeyListInputSchema)
-    .query(
-      async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
-        try {
-          const where: Prisma.UserApiKeyWhereInput = {
-            ...(query
-              ? {
-                  remark: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.userApiKey.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query } }) => {
+      try {
+        const where: Prisma.UserApiKeyWhereInput = {
+          ...(query
+            ? {
+                remark: {
+                  contains: query,
+                  mode: 'insensitive',
                 },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.userApiKey.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.userApiKey.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.userApiKey.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   create: protectedAdminProcedure
     .input(userApiKeyCreateInputSchema)
     .mutation(async ({ ctx: { prisma, session }, input: { remark } }) => {

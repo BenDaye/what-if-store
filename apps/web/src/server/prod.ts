@@ -1,17 +1,11 @@
 import { createServer } from 'http';
 import type { Socket } from 'net';
 import { parse } from 'url';
-import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import next from 'next';
 import ws from 'ws';
+import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import { createContext } from './context';
-import {
-  appLogger,
-  env,
-  launchShutdownTasks,
-  launchStartupTasks,
-  redis,
-} from './modules';
+import { appLogger, env, launchShutdownTasks, launchStartupTasks, redis } from './modules';
 import { appRouter } from './routers/_app';
 
 const _logger = appLogger.child({}, { msgPrefix: '[Entry] ' });
@@ -94,8 +88,6 @@ app.prepare().then(() => {
   });
 
   server.listen(env.APP_PORT, () => {
-    _logger.info(
-      `Server listening on http://localhost:${env.APP_PORT} as ${env.NODE_ENV}`,
-    );
+    _logger.info(`Server listening on http://localhost:${env.APP_PORT} as ${env.NODE_ENV}`);
   });
 });

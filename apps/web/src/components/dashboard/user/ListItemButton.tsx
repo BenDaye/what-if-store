@@ -1,12 +1,7 @@
 import { useDashboardUser } from '@/hooks';
-import { IdSchema } from '@/server/schemas';
-import {
-  Avatar,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemButtonProps,
-  ListItemText,
-} from '@mui/material';
+import type { IdSchema } from '@/server/schemas';
+import type { ListItemButtonProps } from '@mui/material';
+import { Avatar, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
@@ -14,10 +9,7 @@ type UserListItemButtonProps = ListItemButtonProps & {
   itemId: IdSchema;
 };
 
-export const UserListItemButton = ({
-  itemId,
-  ...props
-}: UserListItemButtonProps) => {
+export const UserListItemButton = ({ itemId, ...props }: UserListItemButtonProps) => {
   const {
     data: { nickname, avatarSrc, avatarText, bio },
     router: { isError, error },
@@ -30,18 +22,9 @@ export const UserListItemButton = ({
   );
 
   return (
-    <ListItemButton
-      dense
-      selected={selected}
-      onClick={() => push(`/dashboard/user/${itemId}`)}
-      {...props}
-    >
+    <ListItemButton dense selected={selected} onClick={() => push(`/dashboard/user/${itemId}`)} {...props}>
       <ListItemAvatar>
-        <Avatar
-          alt={`Avatar:${itemId}`}
-          src={avatarSrc || undefined}
-          variant="rounded"
-        >
+        <Avatar alt={`Avatar:${itemId}`} src={avatarSrc || undefined} variant="rounded">
           {avatarText}
         </Avatar>
       </ListItemAvatar>

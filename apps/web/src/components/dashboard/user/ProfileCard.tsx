@@ -1,4 +1,4 @@
-import { UseDashboardUserHookDataSchema } from '@/hooks';
+import type { UseDashboardUserHookDataSchema } from '@/hooks';
 import { Edit as EditIcon } from '@mui/icons-material';
 import {
   Avatar,
@@ -77,12 +77,7 @@ export const UserProfileCard = ({
               flex: 0,
             }}
           />
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            component={'div'}
-            sx={{ flex: 1, mb: 0.8 }}
-          >
+          <Typography variant="body2" color="text.secondary" component="div" sx={{ flex: 1, mb: 0.8 }}>
             {bio}
           </Typography>
         </Box>
@@ -90,9 +85,7 @@ export const UserProfileCard = ({
       <Divider sx={{ opacity: 0.6 }} variant="middle" />
       <Stack
         direction="row"
-        divider={
-          <Divider orientation="vertical" sx={{ opacity: 0.6, height: 64 }} />
-        }
+        divider={<Divider orientation="vertical" sx={{ opacity: 0.6, height: 64 }} />}
         sx={{
           flex: 1,
           alignItems: 'center',

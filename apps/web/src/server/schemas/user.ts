@@ -19,15 +19,10 @@ export const userUpdateProfileInputSchema = z
     country: z.string().nullable(),
   })
   .partial();
-export type UserUpdateProfileInputSchema = z.infer<
-  typeof userUpdateProfileInputSchema
->;
+export type UserUpdateProfileInputSchema = z.infer<typeof userUpdateProfileInputSchema>;
 
-export const userUpdateProfileInputSchemaForAdmin =
-  userUpdateProfileInputSchema.extend({
-    id: idSchema,
-    role: z.nativeEnum(AuthRole).optional(),
-  });
-export type UserUpdateProfileInputSchemaForAdmin = z.infer<
-  typeof userUpdateProfileInputSchemaForAdmin
->;
+export const userUpdateProfileInputSchemaForAdmin = userUpdateProfileInputSchema.extend({
+  id: idSchema,
+  role: z.nativeEnum(AuthRole).optional(),
+});
+export type UserUpdateProfileInputSchemaForAdmin = z.infer<typeof userUpdateProfileInputSchemaForAdmin>;

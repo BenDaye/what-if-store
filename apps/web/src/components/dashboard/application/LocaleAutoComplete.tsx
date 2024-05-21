@@ -1,9 +1,6 @@
-import { MultipleAutoCompleteProps } from '@/types/overrides';
-import {
-  getLocaleData,
-  getLocaleDataList,
-  ILocaleData,
-} from '@/utils/getLocaleList';
+import type { MultipleAutoCompleteProps } from '@/types/overrides';
+import type { ILocaleData } from '@/utils/getLocaleList';
+import { getLocaleData, getLocaleDataList } from '@/utils/getLocaleList';
 import { Autocomplete, ListItem, ListItemText, TextField } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
@@ -20,18 +17,11 @@ export const LocalesAutoComplete = ({
   const { t } = useTranslation();
 
   const [locales, setLocales] = useState<ILocaleData[]>(
-    () =>
-      defaultValue
-        .map((code) => getLocaleData(code))
-        .filter((v) => v !== false) as ILocaleData[],
+    () => defaultValue.map((code) => getLocaleData(code)).filter((v) => v !== false) as ILocaleData[],
   );
 
   useEffect(() => {
-    setLocales(
-      defaultValue
-        .map((code) => getLocaleData(code))
-        .filter((v) => v !== false) as ILocaleData[],
-    );
+    setLocales(defaultValue.map((code) => getLocaleData(code)).filter((v) => v !== false) as ILocaleData[]);
   }, [defaultValue]);
 
   useEffect(() => {

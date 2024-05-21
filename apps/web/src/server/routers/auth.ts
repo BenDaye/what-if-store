@@ -1,17 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { TRPCError } from '@trpc/server';
 import { hash, verify } from 'argon2';
 import { sign } from 'jsonwebtoken';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 import { env, userEmitter } from '../modules';
 import { mutationOutputSchema, signUpSchema } from '../schemas';
-import {
-  protectedAdminProcedure,
-  protectedUserProcedure,
-  publicProcedure,
-  router,
-} from '../trpc';
+import { publicProcedure, router } from '../trpc';
 import { onError } from '../utils/errors';
 
 export const publicAppAuth = router({

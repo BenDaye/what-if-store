@@ -7,10 +7,7 @@ export const validStatusTransition = (
 ): [boolean, boolean] => {
   switch (role) {
     case AuthRole.Provider: {
-      const validStatusTransitions = new Map<
-        ApplicationStatus,
-        Map<ApplicationStatus, boolean>
-      >([
+      const validStatusTransitions = new Map<ApplicationStatus, Map<ApplicationStatus, boolean>>([
         [
           ApplicationStatus.Draft,
           new Map([
@@ -58,25 +55,14 @@ export const validStatusTransition = (
       ]);
 
       return [
-        (validStatusTransitions.has(prev) &&
-          validStatusTransitions.get(prev)?.has(next)) ??
-          false,
+        (validStatusTransitions.has(prev) && validStatusTransitions.get(prev)?.has(next)) ?? false,
         validStatusTransitions.get(prev)?.get(next) ?? true,
       ];
     }
     case AuthRole.Admin: {
-      const validStatusTransitions = new Map<
-        ApplicationStatus,
-        Map<ApplicationStatus, boolean>
-      >([
-        [
-          ApplicationStatus.Approved,
-          new Map([[ApplicationStatus.Banned, false]]),
-        ],
-        [
-          ApplicationStatus.Rejected,
-          new Map([[ApplicationStatus.Banned, false]]),
-        ],
+      const validStatusTransitions = new Map<ApplicationStatus, Map<ApplicationStatus, boolean>>([
+        [ApplicationStatus.Approved, new Map([[ApplicationStatus.Banned, false]])],
+        [ApplicationStatus.Rejected, new Map([[ApplicationStatus.Banned, false]])],
         [
           ApplicationStatus.Banned,
           new Map([
@@ -112,9 +98,7 @@ export const validStatusTransition = (
       ]);
 
       return [
-        (validStatusTransitions.has(prev) &&
-          validStatusTransitions.get(prev)?.has(next)) ??
-          false,
+        (validStatusTransitions.has(prev) && validStatusTransitions.get(prev)?.has(next)) ?? false,
         validStatusTransitions.get(prev)?.get(next) ?? false,
       ];
     }
@@ -127,6 +111,4 @@ export const getAvailableStatuses = (
   prev: ApplicationStatus,
   role: AuthRole = AuthRole.Provider,
 ): ApplicationStatus[] =>
-  Object.values(ApplicationStatus).filter(
-    (next) => validStatusTransition(prev, next, role)[0],
-  );
+  Object.values(ApplicationStatus).filter((next) => validStatusTransition(prev, next, role)[0]);

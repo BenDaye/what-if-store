@@ -1,17 +1,7 @@
-import {
-  AuthIconButton,
-  IconButtonWithTooltip,
-  PrimaryDrawerRnd,
-} from '@/components/common';
-import {
-  APP_PRIMARY_DRAWER_WIDTH,
-  APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
-} from '@/constants/drawer';
-import { OverridesDrawerProps } from '@/types/overrides';
-import {
-  Apps as ApplicationsIcon,
-  Home as HomeIcon,
-} from '@mui/icons-material';
+import { AuthIconButton, IconButtonWithTooltip, PrimaryDrawerRnd } from '@/components/common';
+import { APP_PRIMARY_DRAWER_WIDTH, APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY } from '@/constants/drawer';
+import type { OverridesDrawerProps } from '@/types/overrides';
+import { Apps as ApplicationsIcon, Home as HomeIcon } from '@mui/icons-material';
 import { Box, Drawer } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';

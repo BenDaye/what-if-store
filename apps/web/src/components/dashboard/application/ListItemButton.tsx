@@ -1,12 +1,7 @@
 import { useDashboardApplication } from '@/hooks';
-import { IdSchema } from '@/server/schemas';
-import {
-  Avatar,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemButtonProps,
-  ListItemText,
-} from '@mui/material';
+import type { IdSchema } from '@/server/schemas';
+import type { ListItemButtonProps } from '@mui/material';
+import { Avatar, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
@@ -14,10 +9,7 @@ type ApplicationListItemButtonProps = ListItemButtonProps & {
   itemId: IdSchema;
 };
 
-export const ApplicationListItemButton = ({
-  itemId,
-  ...props
-}: ApplicationListItemButtonProps) => {
+export const ApplicationListItemButton = ({ itemId, ...props }: ApplicationListItemButtonProps) => {
   const {
     router: { error, isError },
     data: { name, description, provider, primaryIcon, primaryIconText },
@@ -37,11 +29,7 @@ export const ApplicationListItemButton = ({
       {...props}
     >
       <ListItemAvatar>
-        <Avatar
-          alt={`Avatar:${itemId}`}
-          src={primaryIcon?.url}
-          variant="rounded"
-        >
+        <Avatar alt={`Avatar:${itemId}`} src={primaryIcon?.url} variant="rounded">
           {primaryIconText}
         </Avatar>
       </ListItemAvatar>

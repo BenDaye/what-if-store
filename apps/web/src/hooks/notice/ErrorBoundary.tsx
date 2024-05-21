@@ -1,22 +1,17 @@
-import { OptionsObject, SnackbarKey } from 'notistack';
-import { Component, ErrorInfo, ReactNode } from 'react';
+import type { OptionsObject, SnackbarKey } from 'notistack';
+import type { ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
 
 type ErrorBoundaryState = {
   hasError: boolean;
 };
 
 type ErrorBoundaryProps = {
-  showError: (
-    message: string,
-    options?: OptionsObject | undefined,
-  ) => SnackbarKey;
+  showError: (message: string, options?: OptionsObject | undefined) => SnackbarKey;
   children: ReactNode;
 };
 
-export class ErrorBoundary extends Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = {
     hasError: false,
   };

@@ -1,11 +1,8 @@
-import { UseDashboardApplicationGroupHookDataSchema, useNotice } from '@/hooks';
-import {
-  ApplicationGroupCreateInputSchema,
-  applicationGroupCreateInputSchema,
-  ApplicationGroupUpdateInputSchema,
-  applicationGroupUpdateInputSchema,
-} from '@/server/schemas';
-import { OverridesDialogProps } from '@/types/overrides';
+import type { UseDashboardApplicationGroupHookDataSchema } from '@/hooks';
+import { useNotice } from '@/hooks';
+import type { ApplicationGroupCreateInputSchema, ApplicationGroupUpdateInputSchema } from '@/server/schemas';
+import { applicationGroupCreateInputSchema, applicationGroupUpdateInputSchema } from '@/server/schemas';
+import type { OverridesDialogProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
@@ -46,10 +43,7 @@ export const ApplicationGroupDialog = ({
       defaultValues={defaultValues}
     />
   ) : (
-    <CreateApplicationGroupDialog
-      overrides={overrides}
-      DialogProps={DialogProps}
-    />
+    <CreateApplicationGroupDialog overrides={overrides} DialogProps={DialogProps} />
   );
 };
 
@@ -60,26 +54,24 @@ export const UpdateApplicationGroupDialog = ({
 }: ApplicationGroupDialogProps) => {
   const { t } = useTranslation();
 
-  const { handleSubmit, control, reset, setValue, formState } =
-    useForm<ApplicationGroupUpdateInputSchema>({
-      defaultValues,
-      mode: 'all',
-      resolver: zodResolver(applicationGroupUpdateInputSchema),
-    });
+  const { handleSubmit, control, reset, setValue, formState } = useForm<ApplicationGroupUpdateInputSchema>({
+    defaultValues,
+    mode: 'all',
+    resolver: zodResolver(applicationGroupUpdateInputSchema),
+  });
 
   useEffect(() => {
     reset(defaultValues, { keepDefaultValues: false });
   }, [reset, defaultValues]);
 
   const { showError, showSuccess } = useNotice();
-  const { mutateAsync: update, isPending } =
-    trpc.protectedDashboardApplicationGroup.updateById.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => {
-        showSuccess(t('common:Updated'));
-        DialogProps.onClose?.({}, 'backdropClick');
-      },
-    });
+  const { mutateAsync: update, isPending } = trpc.protectedDashboardApplicationGroup.updateById.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => {
+      showSuccess(t('common:Updated'));
+      DialogProps.onClose?.({}, 'backdropClick');
+    },
+  });
 
   const onSubmit = useCallback(
     async (data: ApplicationGroupUpdateInputSchema) => {
@@ -99,12 +91,7 @@ export const UpdateApplicationGroupDialog = ({
         <Toolbar variant="dense" sx={{ gap: 1 }}>
           <Typography variant="subtitle1">{t('common:Update')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton
-            edge="end"
-            onClick={onClose}
-            disabled={isPending}
-            color="inherit"
-          >
+          <IconButton edge="end" onClick={onClose} disabled={isPending} color="inherit">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -113,10 +100,7 @@ export const UpdateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="name"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -133,10 +117,7 @@ export const UpdateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="description"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -152,10 +133,7 @@ export const UpdateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="type"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -179,10 +157,7 @@ export const UpdateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="priority"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -198,25 +173,16 @@ export const UpdateApplicationGroupDialog = ({
           )}
         />
         <ApplicationsAutoComplete
-          onChange={(value) =>
-            setValue('applications', value, { shouldDirty: true })
-          }
+          onChange={(value) => setValue('applications', value, { shouldDirty: true })}
           defaultValue={defaultValues?.applications}
           error={formState.errors.applications}
           disabled={isPending}
         />
-        <Controller
-          control={control}
-          name="applications"
-          render={() => <Box />}
-        />
+        <Controller control={control} name="applications" render={() => <Box />} />
       </DialogContent>
       <DialogActions {...overrides?.DialogActionsProps}>
-        <Box sx={{ flexGrow: 1 }}></Box>
-        <LoadingButton
-          loading={isPending}
-          onClick={() => handleSubmit(onSubmit)()}
-        >
+        <Box sx={{ flexGrow: 1 }} />
+        <LoadingButton loading={isPending} onClick={() => handleSubmit(onSubmit)()}>
           {t('common:Submit')}
         </LoadingButton>
       </DialogActions>
@@ -239,22 +205,20 @@ export const CreateApplicationGroupDialog = ({
 }) => {
   const { t } = useTranslation();
 
-  const { handleSubmit, control, reset, setValue, formState } =
-    useForm<ApplicationGroupCreateInputSchema>({
-      defaultValues,
-      mode: 'all',
-      resolver: zodResolver(applicationGroupCreateInputSchema),
-    });
+  const { handleSubmit, control, reset, setValue, formState } = useForm<ApplicationGroupCreateInputSchema>({
+    defaultValues,
+    mode: 'all',
+    resolver: zodResolver(applicationGroupCreateInputSchema),
+  });
 
   const { showError, showSuccess } = useNotice();
-  const { mutateAsync: create, isPending } =
-    trpc.protectedDashboardApplicationGroup.create.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => {
-        showSuccess(t('common:Created'));
-        DialogProps.onClose?.({}, 'backdropClick');
-      },
-    });
+  const { mutateAsync: create, isPending } = trpc.protectedDashboardApplicationGroup.create.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => {
+      showSuccess(t('common:Created'));
+      DialogProps.onClose?.({}, 'backdropClick');
+    },
+  });
 
   const onSubmit = useCallback(
     async (data: ApplicationGroupCreateInputSchema) => {
@@ -274,12 +238,7 @@ export const CreateApplicationGroupDialog = ({
         <Toolbar variant="dense" sx={{ gap: 1 }}>
           <Typography variant="subtitle1">{t('common:Create')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton
-            edge="end"
-            onClick={onClose}
-            disabled={isPending}
-            color="inherit"
-          >
+          <IconButton edge="end" onClick={onClose} disabled={isPending} color="inherit">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -289,10 +248,7 @@ export const CreateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="name"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -309,10 +265,7 @@ export const CreateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="description"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -328,10 +281,7 @@ export const CreateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="type"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -355,10 +305,7 @@ export const CreateApplicationGroupDialog = ({
         <Controller
           control={control}
           name="priority"
-          render={({
-            field: { value, onChange, onBlur },
-            fieldState: { error },
-          }) => (
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <TextField
               value={value}
               onChange={onChange}
@@ -374,25 +321,16 @@ export const CreateApplicationGroupDialog = ({
           )}
         />
         <ApplicationsAutoComplete
-          onChange={(value) =>
-            setValue('applications', value, { shouldDirty: true })
-          }
+          onChange={(value) => setValue('applications', value, { shouldDirty: true })}
           defaultValue={defaultValues?.applications}
           error={formState.errors.applications}
           disabled={isPending}
         />
-        <Controller
-          control={control}
-          name="applications"
-          render={() => <Box />}
-        />
+        <Controller control={control} name="applications" render={() => <Box />} />
       </DialogContent>
       <DialogActions {...overrides?.DialogActionsProps}>
-        <Box sx={{ flexGrow: 1 }}></Box>
-        <LoadingButton
-          loading={isPending}
-          onClick={() => handleSubmit(onSubmit)()}
-        >
+        <Box sx={{ flexGrow: 1 }} />
+        <LoadingButton loading={isPending} onClick={() => handleSubmit(onSubmit)()}>
           {t('common:Submit')}
         </LoadingButton>
       </DialogActions>

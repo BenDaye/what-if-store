@@ -1,9 +1,7 @@
 import { useCopy, useNotice } from '@/hooks';
-import {
-  UserApiKeyCreateInputSchema,
-  userApiKeyCreateInputSchema,
-} from '@/server/schemas';
-import { OverridesButtonProps, OverridesDialogProps } from '@/types/overrides';
+import type { UserApiKeyCreateInputSchema } from '@/server/schemas';
+import { userApiKeyCreateInputSchema } from '@/server/schemas';
+import type { OverridesButtonProps, OverridesDialogProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
@@ -37,11 +35,7 @@ export const CreateApiKeyButton = ({ overrides }: CreateApiKeyButtonProps) => {
   } = useBoolean(false);
   return (
     <>
-      <Button
-        onClick={openApiKeyDialog}
-        disabled={apiKeyDialogVisible}
-        {...overrides?.ButtonProps}
-      >
+      <Button onClick={openApiKeyDialog} disabled={apiKeyDialogVisible} {...overrides?.ButtonProps}>
         {t('auth:ApiKey.Create')}
       </Button>
       <CreateApiKeyDialog
@@ -54,34 +48,24 @@ export const CreateApiKeyButton = ({ overrides }: CreateApiKeyButtonProps) => {
   );
 };
 
-export const CreateApiKeyDialog = ({
-  overrides,
-  DialogProps,
-}: OverridesDialogProps) => {
+export const CreateApiKeyDialog = ({ overrides, DialogProps }: OverridesDialogProps) => {
   const { showError, showSuccess } = useNotice();
   const { t } = useTranslation();
 
   const { data: session } = useSession();
   const isUser = useMemo(
-    () =>
-      session?.user?.role === AuthRole.User ||
-      session?.user?.role === AuthRole.Provider,
+    () => session?.user?.role === AuthRole.User || session?.user?.role === AuthRole.Provider,
     [session?.user?.role],
   );
-  const isAdmin = useMemo(
-    () => session?.user?.role === AuthRole.Admin,
-    [session?.user?.role],
-  );
+  const isAdmin = useMemo(() => session?.user?.role === AuthRole.Admin, [session?.user?.role]);
 
-  const { handleSubmit, control, reset } = useForm<UserApiKeyCreateInputSchema>(
-    {
-      defaultValues: {
-        remark: '',
-      },
-      mode: 'all',
-      resolver: zodResolver(userApiKeyCreateInputSchema),
+  const { handleSubmit, control, reset } = useForm<UserApiKeyCreateInputSchema>({
+    defaultValues: {
+      remark: '',
     },
-  );
+    mode: 'all',
+    resolver: zodResolver(userApiKeyCreateInputSchema),
+  });
 
   const copy = useCopy();
 
@@ -135,12 +119,7 @@ export const CreateApiKeyDialog = ({
         <Toolbar variant="dense" sx={{ gap: 1 }}>
           <Typography variant="subtitle1">{t('auth:ApiKey.Create')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton
-            edge="end"
-            onClick={onClose}
-            disabled={isUserPending || isAdminPending}
-            color="inherit"
-          >
+          <IconButton edge="end" onClick={onClose} disabled={isUserPending || isAdminPending} color="inherit">
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -201,7 +180,7 @@ export const CreateApiKeyDialog = ({
         )}
       </DialogContent>
       <DialogActions {...overrides?.DialogActionsProps}>
-        <Box sx={{ flexGrow: 1 }}></Box>
+        <Box sx={{ flexGrow: 1 }} />
         {isAdminSuccess ? (
           <Button color="success" onClick={() => copy(adminData.key)}>
             {t('common:Copy')}

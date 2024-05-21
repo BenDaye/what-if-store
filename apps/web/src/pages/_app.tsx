@@ -11,25 +11,22 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import 'overlayscrollbars/overlayscrollbars.css';
 import { DefaultLayout } from '@/components/layouts';
-import {
-  AuthProvider,
-  ElectronProvider,
-  TernaryDarkModeProvider,
-} from '@/hooks';
+import { AuthProvider, ElectronProvider, TernaryDarkModeProvider } from '@/hooks';
 import { NoticeProvider } from '@/hooks/notice';
-import { CreateContextOptions } from '@/server/context';
+import type { CreateContextOptions } from '@/server/context';
 import { createEmotionCache } from '@/theme';
 import { trpc } from '@/utils/trpc';
-import { CacheProvider, EmotionCache } from '@emotion/react';
+import type { EmotionCache } from '@emotion/react';
+import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 import { getSession, SessionProvider } from 'next-auth/react';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
-import { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { SWRConfig } from 'swr';
 import nextI18NextConfig from '../../next-i18next.config.js';
 
@@ -37,10 +34,7 @@ import nextI18NextConfig from '../../next-i18next.config.js';
 const clientSideEmotionCache = createEmotionCache();
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type NextPageWithLayout<TProps = {}, TInitialProps = TProps> = NextPage<
-  TProps,
-  TInitialProps
-> & {
+export type NextPageWithLayout<TProps = {}, TInitialProps = TProps> = NextPage<TProps, TInitialProps> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -56,8 +50,7 @@ const MyApp: AppType<CreateContextOptions> = ({
   emotionCache = clientSideEmotionCache,
   pageProps,
 }: MyAppProps) => {
-  const getLayout =
-    Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
+  const getLayout = Component.getLayout ?? ((page) => <DefaultLayout>{page}</DefaultLayout>);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -68,11 +61,7 @@ const MyApp: AppType<CreateContextOptions> = ({
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         {process.env.NODE_ENV === 'development' && (
-          <ReactQueryDevtools
-            initialIsOpen={false}
-            position="bottom"
-            buttonPosition="bottom-right"
-          />
+          <ReactQueryDevtools initialIsOpen={false} position="bottom" buttonPosition="bottom-right" />
         )}
         <SnackbarProvider
           maxSnack={3}
@@ -85,17 +74,12 @@ const MyApp: AppType<CreateContextOptions> = ({
               <SessionProvider session={pageProps?.session}>
                 <SWRConfig
                   value={{
-                    fetcher: (resource, init) =>
-                      fetch(resource, init).then((res) => res.json()),
+                    fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),
                   }}
                 >
                   <AuthProvider
-                    disableSignIn={Boolean(
-                      process.env.NEXT_PUBLIC_DISABLE_SIGN_IN,
-                    )}
-                    disableSignUp={Boolean(
-                      process.env.NEXT_PUBLIC_DISABLE_SIGN_UP,
-                    )}
+                    disableSignIn={Boolean(process.env.NEXT_PUBLIC_DISABLE_SIGN_IN)}
+                    disableSignUp={Boolean(process.env.NEXT_PUBLIC_DISABLE_SIGN_UP)}
                   >
                     {getLayout(<Component {...pageProps} />)}
                   </AuthProvider>

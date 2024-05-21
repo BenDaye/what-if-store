@@ -45,12 +45,8 @@ export const CurrencySymbol = {
   SAR: 'ر.س',
   QAR: 'ر.ق',
 } as const;
-export type CurrencySymbol =
-  (typeof CurrencySymbol)[keyof typeof CurrencySymbol];
+export type CurrencySymbol = (typeof CurrencySymbol)[keyof typeof CurrencySymbol];
 
 export const getCurrencySymbol = (currency: string): CurrencySymbol => {
-  return (
-    CurrencySymbol[currency as keyof typeof CurrencySymbol] ??
-    UnsupportedCurrencySymbol
-  );
+  return CurrencySymbol[currency as keyof typeof CurrencySymbol] ?? UnsupportedCurrencySymbol;
 };

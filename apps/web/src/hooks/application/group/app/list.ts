@@ -1,34 +1,27 @@
 import { useNotice } from '@/hooks/notice';
-import { ApplicationGroupListInputSchema } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { ApplicationGroupListInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
 
-export type UseAppApplicationGroupsDataSchema =
-  RouterOutput['publicAppApplicationGroup']['list']['items'];
+export type UseAppApplicationGroupsDataSchema = RouterOutput['publicAppApplicationGroup']['list']['items'];
 export const useAppApplicationGroups = (
   query?: ApplicationGroupListInputSchema,
   notify = true,
   fetchAll = true,
 ) => {
   const { showWarning } = useNotice();
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.publicAppApplicationGroup.list.useInfiniteQuery(
-    {
-      limit: 20,
-      ...query,
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
+  const { hasNextPage, fetchNextPage, isFetching, data, error, isError, refetch } =
+    trpc.publicAppApplicationGroup.list.useInfiniteQuery(
+      {
+        limit: 20,
+        ...query,
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      },
+    );
 
   useEffect(() => {
     if (!notify) return;
@@ -44,14 +37,10 @@ export const useAppApplicationGroups = (
     },
   });
 
-  useInterval(
-    fetchNextPage,
-    hasNextPage && fetchAll && !isFetching ? 1000 : null,
-  );
+  useInterval(fetchNextPage, hasNextPage && fetchAll && !isFetching ? 1000 : null);
 
   const memoData = useMemo(
-    (): UseAppApplicationGroupsDataSchema =>
-      data?.pages.flatMap((page) => page.items) ?? [],
+    (): UseAppApplicationGroupsDataSchema => data?.pages.flatMap((page) => page.items) ?? [],
     [data],
   );
 

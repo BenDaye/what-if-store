@@ -1,105 +1,78 @@
 import { FallbackAgeRating } from '@/constants/age_rating';
 import { FallbackId, FallbackString } from '@/constants/common';
-import {
-  FallbackCountry,
-  FallbackCurrency,
-  FallbackPriceText,
-  getCurrencySymbol,
-} from '@/constants/country';
+import { FallbackCountry, FallbackCurrency, FallbackPriceText, getCurrencySymbol } from '@/constants/country';
 import { FallbackVersion } from '@/constants/version';
 import { useNotice } from '@/hooks/notice';
+import type { ApplicationCreateInputSchema, IdSchema } from '@/server/schemas';
 import {
-  ApplicationCreateInputSchema,
   applicationCreateInputSchema,
   applicationVersionCreateInputSchema,
-  IdSchema,
   idSchema,
 } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
-import {
-  ApplicationAssetType,
-  ApplicationCategory,
-  ApplicationStatus,
-  AuthRole,
-} from '@prisma/client';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
+import { ApplicationAssetType, ApplicationCategory, ApplicationStatus, AuthRole } from '@prisma/client';
 import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 
-type DashboardApplicationRouterOutput =
-  RouterOutput['protectedDashboardApplication']['getById'];
-export const useDashboardApplicationHookDataSchema =
-  applicationCreateInputSchema
-    .extend({
-      id: idSchema,
-      // priceText: z.string(),
-      status: z.nativeEnum(ApplicationStatus),
+type DashboardApplicationRouterOutput = RouterOutput['protectedDashboardApplication']['getById'];
+export const useDashboardApplicationHookDataSchema = applicationCreateInputSchema
+  .extend({
+    id: idSchema,
+    // priceText: z.string(),
+    status: z.nativeEnum(ApplicationStatus),
 
-      provider: z.object({ id: idSchema }).optional(),
+    provider: z.object({ id: idSchema }).optional(),
 
-      count: z.custom<DashboardApplicationRouterOutput['_count']>(),
+    count: z.custom<DashboardApplicationRouterOutput['_count']>(),
 
-      versions:
-        z.custom<DashboardApplicationRouterOutput['VersionHistories']>(),
-      latestVersion: z
-        .custom<DashboardApplicationRouterOutput['VersionHistories'][number]>()
-        .optional(),
-      latestVersionText: applicationVersionCreateInputSchema.shape.version,
+    versions: z.custom<DashboardApplicationRouterOutput['VersionHistories']>(),
+    latestVersion: z.custom<DashboardApplicationRouterOutput['VersionHistories'][number]>().optional(),
+    latestVersionText: applicationVersionCreateInputSchema.shape.version,
 
-      followers: z.custom<DashboardApplicationRouterOutput['Followers']>(),
-      owners: z.custom<DashboardApplicationRouterOutput['Owners']>(),
-      collections: z.custom<DashboardApplicationRouterOutput['Collections']>(),
-      groups: z.custom<DashboardApplicationRouterOutput['Groups']>(),
-      tags: z.custom<DashboardApplicationRouterOutput['Tags']>(),
+    followers: z.custom<DashboardApplicationRouterOutput['Followers']>(),
+    owners: z.custom<DashboardApplicationRouterOutput['Owners']>(),
+    collections: z.custom<DashboardApplicationRouterOutput['Collections']>(),
+    groups: z.custom<DashboardApplicationRouterOutput['Groups']>(),
+    tags: z.custom<DashboardApplicationRouterOutput['Tags']>(),
 
-      assets: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      icons: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      primaryIcon: z
-        .custom<DashboardApplicationRouterOutput['Assets'][number]>()
-        .optional(),
-      primaryIconText: z.string(),
-      backgrounds: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      primaryBackground: z
-        .custom<DashboardApplicationRouterOutput['Assets'][number]>()
-        .optional(),
-      banners: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      primaryBanner: z
-        .custom<DashboardApplicationRouterOutput['Assets'][number]>()
-        .optional(),
-      screenshots: z.custom<DashboardApplicationRouterOutput['Assets']>(),
-      privacyPolicy: z.string().optional(),
-      termsOfUse: z.string().optional(),
-      copyright: z.string().optional(),
-      readme: z.string().optional(),
+    assets: z.custom<DashboardApplicationRouterOutput['Assets']>(),
+    icons: z.custom<DashboardApplicationRouterOutput['Assets']>(),
+    primaryIcon: z.custom<DashboardApplicationRouterOutput['Assets'][number]>().optional(),
+    primaryIconText: z.string(),
+    backgrounds: z.custom<DashboardApplicationRouterOutput['Assets']>(),
+    primaryBackground: z.custom<DashboardApplicationRouterOutput['Assets'][number]>().optional(),
+    banners: z.custom<DashboardApplicationRouterOutput['Assets']>(),
+    primaryBanner: z.custom<DashboardApplicationRouterOutput['Assets'][number]>().optional(),
+    screenshots: z.custom<DashboardApplicationRouterOutput['Assets']>(),
+    privacyPolicy: z.string().optional(),
+    termsOfUse: z.string().optional(),
+    copyright: z.string().optional(),
+    readme: z.string().optional(),
 
-      primaryPrice: z
-        .custom<DashboardApplicationRouterOutput['Price'][number]>()
-        .optional(),
-      primaryPriceText: z.string().optional(),
-      fallbackPrice: z
-        .custom<DashboardApplicationRouterOutput['Price'][number]>()
-        .optional(),
-      fallbackPriceText: z.string(),
-    })
-    .strict();
-export type UseDashboardApplicationHookDataSchema = z.infer<
-  typeof useDashboardApplicationHookDataSchema
->;
+    primaryPrice: z.custom<DashboardApplicationRouterOutput['Price'][number]>().optional(),
+    primaryPriceText: z.string().optional(),
+    fallbackPrice: z.custom<DashboardApplicationRouterOutput['Price'][number]>().optional(),
+    fallbackPriceText: z.string(),
+  })
+  .strict();
+export type UseDashboardApplicationHookDataSchema = z.infer<typeof useDashboardApplicationHookDataSchema>;
 
 export const useDashboardApplication = (id: IdSchema) => {
   const { data: session, status: sessionStatus } = useSession();
   const authenticated = useMemo(
-    () =>
-      sessionStatus === 'authenticated' &&
-      session.user?.role === AuthRole.Admin,
+    () => sessionStatus === 'authenticated' && session.user?.role === AuthRole.Admin,
     [sessionStatus, session],
   );
-  const { data, refetch, isFetching, error, isError } =
-    trpc.protectedDashboardApplication.getById.useQuery(id, {
+  const { data, refetch, isFetching, error, isError } = trpc.protectedDashboardApplication.getById.useQuery(
+    id,
+    {
       enabled: !!id && id !== FallbackId && authenticated,
-    });
+    },
+  );
   trpc.protectedDashboardApplication.subscribe.useSubscription(undefined, {
     enabled: authenticated,
     onData: (_id) => {
@@ -112,9 +85,7 @@ export const useDashboardApplication = (id: IdSchema) => {
       sessionStatus === 'authenticated'
         ? data?.Price?.find(({ country }) => session?.user?.country === country)
         : undefined;
-    const fallbackPrice = data?.Price?.find(
-      ({ country }) => country === FallbackCountry,
-    );
+    const fallbackPrice = data?.Price?.find(({ country }) => country === FallbackCountry);
 
     return {
       id,
@@ -136,9 +107,7 @@ export const useDashboardApplication = (id: IdSchema) => {
       provider: data?.Provider,
       platforms: data?.Information?.platforms ?? [],
       compatibility:
-        (data?.Information
-          ?.compatibility as ApplicationCreateInputSchema['compatibility']) ??
-        [],
+        (data?.Information?.compatibility as ApplicationCreateInputSchema['compatibility']) ?? [],
       ageRating: data?.Information?.ageRating ?? FallbackAgeRating,
       countries: data?.Information?.countries ?? [],
       locales: data?.Information?.locales ?? [],
@@ -146,9 +115,7 @@ export const useDashboardApplication = (id: IdSchema) => {
       github: data?.Information?.github ?? FallbackString,
       versions: data?.VersionHistories ?? [],
       latestVersion: data?.VersionHistories.find((v) => v.latest),
-      latestVersionText:
-        data?.VersionHistories.find((v) => v.latest)?.version ??
-        FallbackVersion,
+      latestVersionText: data?.VersionHistories.find((v) => v.latest)?.version ?? FallbackVersion,
       followers: data?.Followers ?? [],
       owners: data?.Owners ?? [],
       collections: data?.Collections ?? [],
@@ -156,51 +123,31 @@ export const useDashboardApplication = (id: IdSchema) => {
       tags: data?.Tags ?? [],
       // TODO: check if the "isLocal" is true then concat the url with the base url (https://nextjs.org/docs/app/api-reference/components/image#remotepatterns)
       assets: data?.Assets ?? [],
-      icons:
-        data?.Assets?.filter(
-          ({ type }) => type === ApplicationAssetType.Icon,
-        ) ?? [],
+      icons: data?.Assets?.filter(({ type }) => type === ApplicationAssetType.Icon) ?? [],
       primaryIcon: data?.Assets?.find(
-        ({ type, isPrimary }) =>
-          type === ApplicationAssetType.Icon && isPrimary,
+        ({ type, isPrimary }) => type === ApplicationAssetType.Icon && isPrimary,
       ),
       primaryIconText: data?.name?.charAt(0) ?? FallbackString,
-      backgrounds:
-        data?.Assets?.filter(
-          ({ type }) => type === ApplicationAssetType.Background,
-        ) ?? [],
+      backgrounds: data?.Assets?.filter(({ type }) => type === ApplicationAssetType.Background) ?? [],
       primaryBackground: data?.Assets?.find(
-        ({ type, isPrimary }) =>
-          type === ApplicationAssetType.Background && isPrimary,
+        ({ type, isPrimary }) => type === ApplicationAssetType.Background && isPrimary,
       ),
-      banners:
-        data?.Assets?.filter(
-          ({ type }) => type === ApplicationAssetType.Banner,
-        ) ?? [],
+      banners: data?.Assets?.filter(({ type }) => type === ApplicationAssetType.Banner) ?? [],
       primaryBanner: data?.Assets?.find(
-        ({ type, isPrimary }) =>
-          type === ApplicationAssetType.Banner && isPrimary,
+        ({ type, isPrimary }) => type === ApplicationAssetType.Banner && isPrimary,
       ),
-      screenshots:
-        data?.Assets?.filter(
-          ({ type }) => type === ApplicationAssetType.Screenshot,
-        ) ?? [],
+      screenshots: data?.Assets?.filter(({ type }) => type === ApplicationAssetType.Screenshot) ?? [],
       privacyPolicy: data?.Assets?.find(
-        ({ type, name }) =>
-          type === ApplicationAssetType.File && name === 'PrivacyPolicy',
+        ({ type, name }) => type === ApplicationAssetType.File && name === 'PrivacyPolicy',
       )?.id,
       termsOfUse: data?.Assets?.find(
-        ({ type, name }) =>
-          type === ApplicationAssetType.File && name === 'TermsOfUse',
+        ({ type, name }) => type === ApplicationAssetType.File && name === 'TermsOfUse',
       )?.id,
       copyright: data?.Assets?.find(
-        ({ type, name }) =>
-          type === ApplicationAssetType.File && name === 'Copyright',
+        ({ type, name }) => type === ApplicationAssetType.File && name === 'Copyright',
       )?.id,
-      readme: data?.Assets?.find(
-        ({ type, name }) =>
-          type === ApplicationAssetType.File && name === 'Readme',
-      )?.id,
+      readme: data?.Assets?.find(({ type, name }) => type === ApplicationAssetType.File && name === 'Readme')
+        ?.id,
 
       primaryPrice,
       primaryPriceText: primaryPrice

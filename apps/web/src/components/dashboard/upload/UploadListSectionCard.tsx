@@ -1,21 +1,10 @@
 import { useDashboardUploadWithPagination } from '@/hooks';
-import { OverridesCardProps } from '@/types/overrides';
-import {
-  createdAtColumn,
-  idColumn,
-  updatedAtColumn,
-} from '@/utils/dataGridColumn';
-import { RouterOutput } from '@/utils/trpc';
+import type { OverridesCardProps } from '@/types/overrides';
+import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
+import type { RouterOutput } from '@/utils/trpc';
 import { Card, CardContent, CardHeader } from '@mui/material';
-import {
-  DataGrid,
-  DataGridProps,
-  GridColDef,
-  GridFilterModel,
-  GridSortModel,
-  GridToolbar,
-  zhCN,
-} from '@mui/x-data-grid';
+import type { DataGridProps, GridColDef, GridFilterModel, GridSortModel } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar, zhCN } from '@mui/x-data-grid';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
 import { PreviewLink } from './PreviewLink';
@@ -27,12 +16,9 @@ type UploadListSectionCardProps = {
   };
 };
 
-type RowModel =
-  RouterOutput['protectedDashboardUpload']['list']['items'][number];
+type RowModel = RouterOutput['protectedDashboardUpload']['list']['items'][number];
 
-export const UploadListSectionCard = ({
-  overrides,
-}: UploadListSectionCardProps) => {
+export const UploadListSectionCard = ({ overrides }: UploadListSectionCardProps) => {
   const { t } = useTranslation();
   const {
     router: { refetch, isFetching },
@@ -81,10 +67,7 @@ export const UploadListSectionCard = ({
     },
   ];
   const processRowUpdate = useCallback(
-    (
-      updatedRow: RowModel,
-      originalRow: RowModel,
-    ): Promise<RowModel> | RowModel => {
+    (updatedRow: RowModel, originalRow: RowModel): Promise<RowModel> | RowModel => {
       // TODO: implement update
       console.log(updatedRow, originalRow);
       return originalRow;

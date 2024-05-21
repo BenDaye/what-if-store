@@ -5,21 +5,19 @@ import { AuthRole, ProviderType } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
-import { UseAppProviderHookDataSchema } from './id';
+import type { UseAppProviderHookDataSchema } from './id';
 
 export const useAppProviderMy = () => {
   const { data: session, status, update: updateSession } = useSession();
   const authenticated = useMemo(
     () =>
       status === 'authenticated' &&
-      (session.user?.role === AuthRole.User ||
-        session.user?.role === AuthRole.Provider),
+      (session.user?.role === AuthRole.User || session.user?.role === AuthRole.Provider),
     [status, session],
   );
-  const { data, refetch, isFetching, error, isError } =
-    trpc.protectedAppProvider.get.useQuery(undefined, {
-      enabled: authenticated,
-    });
+  const { data, refetch, isFetching, error, isError } = trpc.protectedAppProvider.get.useQuery(undefined, {
+    enabled: authenticated,
+  });
   trpc.publicAppProvider.subscribe.useSubscription(undefined, {
     enabled: authenticated,
     onData: (_id) => {

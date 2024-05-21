@@ -2,12 +2,10 @@
  * This file contains the tRPC http response handler and context creation for Next.js
  */
 import { createContext } from '@/server/context';
-import { AppRouter, appRouter } from '@/server/routers/_app';
-import {
-  createNextApiHandler,
-  NextApiRequest,
-  NextApiResponse,
-} from '@trpc/server/adapters/next';
+import type { AppRouter } from '@/server/routers/_app';
+import { appRouter } from '@/server/routers/_app';
+import type { NextApiRequest, NextApiResponse } from '@trpc/server/adapters/next';
+import { createNextApiHandler } from '@trpc/server/adapters/next';
 
 const nextApiHandler = createNextApiHandler<AppRouter>({
   router: appRouter,
@@ -31,10 +29,7 @@ const nextApiHandler = createNextApiHandler<AppRouter>({
   allowMethodOverride: true,
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // We can use the response object to enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');

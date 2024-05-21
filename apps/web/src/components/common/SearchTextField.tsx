@@ -1,28 +1,19 @@
-import { ApplicationListInputSchema } from '@/server/schemas';
-import { OverridesProps } from '@/types/overrides';
+import type { ApplicationListInputSchema } from '@/server/schemas';
+import type { OverridesProps } from '@/types/overrides';
 import { Clear as ClearIcon, Search as SearchIcon } from '@mui/icons-material';
-import {
-  alpha,
-  IconButton,
-  InputBase,
-  InputBaseProps,
-  styled,
-} from '@mui/material';
+import type { InputBaseProps } from '@mui/material';
+import { alpha, IconButton, InputBase, styled } from '@mui/material';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(
-    theme.palette.mode === 'light'
-      ? theme.palette.common.black
-      : theme.palette.common.white,
+    theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
     0.15,
   ),
   '&:hover': {
     backgroundColor: alpha(
-      theme.palette.mode === 'light'
-        ? theme.palette.common.black
-        : theme.palette.common.white,
+      theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
       0.25,
     ),
   },
@@ -71,11 +62,7 @@ export const SearchTextField = (props: SearchTextFieldProps) => {
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
-      <StyledInputBase
-        placeholder="Search…"
-        inputProps={{ 'aria-label': 'search' }}
-        {...props}
-      />
+      <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} {...props} />
     </Search>
   );
 };
@@ -85,24 +72,14 @@ export const SearchInput = ({
   input,
   setInput,
 }: OverridesProps<{ InputBaseProps?: InputBaseProps }> & {
-  input?: Omit<
-    ApplicationListInputSchema,
-    'limit' | 'skip' | 'cursor' | 'status'
-  >;
-  setInput?: (
-    input: Omit<
-      ApplicationListInputSchema,
-      'limit' | 'skip' | 'cursor' | 'status'
-    >,
-  ) => void;
+  input?: Omit<ApplicationListInputSchema, 'limit' | 'skip' | 'cursor' | 'status'>;
+  setInput?: (input: Omit<ApplicationListInputSchema, 'limit' | 'skip' | 'cursor' | 'status'>) => void;
 }) => {
   return (
     <Search>
       <InputBase
         value={input?.query ?? ''}
-        onChange={(e) =>
-          setInput?.({ ...input, query: e.target.value.trimStart() })
-        }
+        onChange={(e) => setInput?.({ ...input, query: e.target.value.trimStart() })}
         fullWidth
         autoFocus
         placeholder="Search…"

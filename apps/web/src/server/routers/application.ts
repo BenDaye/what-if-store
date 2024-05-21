@@ -1,16 +1,12 @@
-import {
-  ApplicationAssetType,
-  ApplicationStatus,
-  Prisma,
-} from '@prisma/client';
+import { ApplicationAssetType, ApplicationStatus, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationChangeStatusQueue, applicationEmitter } from '../modules';
+import type { IdSchema } from '../schemas';
 import {
   applicationChangeStatusInputSchema,
   applicationCreateInputSchema,
   applicationListInputSchema,
   applicationUpdateInputSchema,
-  IdSchema,
   idSchema,
   mutationOutputSchema,
 } from '../schemas';
@@ -173,236 +169,216 @@ export const publicAppApplication = router({
   }),
   list: publicProcedure
     .input(applicationListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(rest.category?.length
-              ? {
-                  category: {
-                    in: rest.category,
-                  },
-                }
-              : {}),
-            ...(rest.platforms?.length
-              ? {
-                  Information: {
-                    platforms: {
-                      hasSome: rest.platforms,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.locales?.length
-              ? {
-                  Information: {
-                    locales: {
-                      hasSome: rest.locales,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.status?.length
-              ? {
-                  status: {
-                    in: rest.status.filter(
-                      (status) =>
-                        status === ApplicationStatus.Published ||
-                        status === ApplicationStatus.Suspended ||
-                        status === ApplicationStatus.Achieved,
-                    ),
-                  },
-                }
-              : {
-                  status: {
-                    in: [
-                      ApplicationStatus.Published,
-                      ApplicationStatus.Suspended,
-                      ApplicationStatus.Achieved,
-                    ],
-                  },
-                }),
-            ...(rest.countries?.length
-              ? {
-                  Information: {
-                    countries: {
-                      hasSome: rest.countries,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.ageRating
-              ? {
-                  Information: {
-                    ageRating: {
-                      equals: rest.ageRating,
-                    },
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.application.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.application.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.application.findUniqueOrThrow({
-          where: {
-            id,
-            status: {
-              in: [
-                ApplicationStatus.Published,
-                ApplicationStatus.Suspended,
-                ApplicationStatus.Achieved,
-              ],
-            },
-          },
-          select: fullSelect,
-        });
+        const where: Prisma.ApplicationWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+          ...(rest.category?.length
+            ? {
+                category: {
+                  in: rest.category,
+                },
+              }
+            : {}),
+          ...(rest.platforms?.length
+            ? {
+                Information: {
+                  platforms: {
+                    hasSome: rest.platforms,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.locales?.length
+            ? {
+                Information: {
+                  locales: {
+                    hasSome: rest.locales,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.status?.length
+            ? {
+                status: {
+                  in: rest.status.filter(
+                    (status) =>
+                      status === ApplicationStatus.Published ||
+                      status === ApplicationStatus.Suspended ||
+                      status === ApplicationStatus.Achieved,
+                  ),
+                },
+              }
+            : {
+                status: {
+                  in: [ApplicationStatus.Published, ApplicationStatus.Suspended, ApplicationStatus.Achieved],
+                },
+              }),
+          ...(rest.countries?.length
+            ? {
+                Information: {
+                  countries: {
+                    hasSome: rest.countries,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.ageRating
+            ? {
+                Information: {
+                  ageRating: {
+                    equals: rest.ageRating,
+                  },
+                },
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.application.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.application.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: publicProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.application.findUniqueOrThrow({
+        where: {
+          id,
+          status: {
+            in: [ApplicationStatus.Published, ApplicationStatus.Suspended, ApplicationStatus.Achieved],
+          },
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });
 
 export const protectedAppApplication = router({
   list: protectedProviderProcedure
     .input(applicationListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma, session },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(rest.category?.length
-              ? {
-                  category: {
-                    in: rest.category,
-                  },
-                }
-              : {}),
-            ...(rest.platforms?.length
-              ? {
-                  Information: {
-                    platforms: {
-                      hasSome: rest.platforms,
+    .query(async ({ ctx: { prisma, session }, input: { limit, skip, cursor, query, ...rest } }) => {
+      try {
+        const where: Prisma.ApplicationWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
                     },
                   },
-                }
-              : {}),
-            ...(rest.locales
-              ? {
-                  Information: {
-                    locales: {
-                      hasSome: rest.locales,
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
                     },
                   },
-                }
-              : {}),
-            ...(rest.countries?.length
-              ? {
-                  Information: {
-                    countries: {
-                      hasSome: rest.countries,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.ageRating
-              ? {
-                  Information: {
-                    ageRating: {
-                      equals: rest.ageRating,
-                    },
-                  },
-                }
-              : {}),
-            Provider: {
-              id: session.user.id,
-            },
-            status: {
-              not: ApplicationStatus.Deleted,
-            },
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.application.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
+                ],
+              }
+            : {}),
+          ...(rest.category?.length
+            ? {
+                category: {
+                  in: rest.category,
                 },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.application.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+              }
+            : {}),
+          ...(rest.platforms?.length
+            ? {
+                Information: {
+                  platforms: {
+                    hasSome: rest.platforms,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.locales
+            ? {
+                Information: {
+                  locales: {
+                    hasSome: rest.locales,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.countries?.length
+            ? {
+                Information: {
+                  countries: {
+                    hasSome: rest.countries,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.ageRating
+            ? {
+                Information: {
+                  ageRating: {
+                    equals: rest.ageRating,
+                  },
+                },
+              }
+            : {}),
+          Provider: {
+            id: session.user.id,
+          },
+          status: {
+            not: ApplicationStatus.Deleted,
+          },
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.application.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.application.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   create: protectedProviderProcedure
     .input(applicationCreateInputSchema)
     .output(mutationOutputSchema)
@@ -516,8 +492,7 @@ export const protectedAppApplication = router({
             userId: session.user.id,
             status,
             reviewerId: session.user.id,
-            request:
-              request ?? `Change status to ${status} by ${session.user.id}`,
+            request: request ?? `Change status to ${status} by ${session.user.id}`,
           },
           {
             // NOTE: https://docs.bullmq.io/patterns/throttle-jobs
@@ -591,9 +566,7 @@ export const protectedAppApplication = router({
 
           if (input.price) {
             for await (const next of input.price) {
-              const created = exists.Price.find(
-                (price) => price.country === next.country,
-              );
+              const created = exists.Price.find((price) => price.country === next.country);
               if (!created) {
                 await tx.application.update({
                   where: {
@@ -616,11 +589,7 @@ export const protectedAppApplication = router({
                   },
                 });
               } else {
-                if (
-                  created.price === next.price &&
-                  created.currency === next.currency
-                )
-                  continue;
+                if (created.price === next.price && created.currency === next.currency) continue;
 
                 await tx.application.update({
                   where: {
@@ -697,22 +666,20 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
-  followedList: protectedUserProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
-      try {
-        return await prisma.applicationFollow.findMany({
-          where: {
-            userId: session.user.id,
-          },
-          select: {
-            applicationId: true,
-          },
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    },
-  ),
+  followedList: protectedUserProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      return await prisma.applicationFollow.findMany({
+        where: {
+          userId: session.user.id,
+        },
+        select: {
+          applicationId: true,
+        },
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   followById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -722,11 +689,7 @@ export const protectedAppApplication = router({
           where: {
             id,
             status: {
-              in: [
-                ApplicationStatus.Published,
-                ApplicationStatus.Suspended,
-                ApplicationStatus.Achieved,
-              ],
+              in: [ApplicationStatus.Published, ApplicationStatus.Suspended, ApplicationStatus.Achieved],
             },
           },
           data: {
@@ -778,26 +741,25 @@ export const protectedAppApplication = router({
         throw onError(err);
       }
     }),
-  ownedList: protectedUserProcedure.query(
-    async ({ ctx: { prisma, session } }) => {
-      try {
-        return await prisma.applicationOwn.findMany({
-          where: {
-            userId: session.user.id,
-          },
-          select: {
-            applicationId: true,
-          },
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    },
-  ),
+  ownedList: protectedUserProcedure.query(async ({ ctx: { prisma, session } }) => {
+    try {
+      return await prisma.applicationOwn.findMany({
+        where: {
+          userId: session.user.id,
+        },
+        select: {
+          applicationId: true,
+        },
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   ownById: protectedUserProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
-    .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+    // .mutation(async ({ ctx: { prisma, session }, input: id }) => {
+    .mutation(async () => {
       try {
         // TODO: It should be checked if the user can pay for the application
         // await prisma.application.update({
@@ -859,116 +821,109 @@ export const protectedDashboardApplication = router({
   }),
   list: protectedAdminProcedure
     .input(applicationListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(rest.category?.length
-              ? {
-                  category: {
-                    in: rest.category,
-                  },
-                }
-              : {}),
-            ...(rest.platforms?.length
-              ? {
-                  Information: {
-                    platforms: {
-                      hasSome: rest.platforms,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.locales?.length
-              ? {
-                  Information: {
-                    locales: {
-                      hasSome: rest.locales,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.status?.length
-              ? {
-                  status: {
-                    in: rest.status,
-                  },
-                }
-              : {}),
-            ...(rest.countries?.length
-              ? {
-                  Information: {
-                    countries: {
-                      hasSome: rest.countries,
-                    },
-                  },
-                }
-              : {}),
-            ...(rest.ageRating
-              ? {
-                  Information: {
-                    ageRating: {
-                      equals: rest.ageRating,
-                    },
-                  },
-                }
-              : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.application.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.application.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.application.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
+        const where: Prisma.ApplicationWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+          ...(rest.category?.length
+            ? {
+                category: {
+                  in: rest.category,
+                },
+              }
+            : {}),
+          ...(rest.platforms?.length
+            ? {
+                Information: {
+                  platforms: {
+                    hasSome: rest.platforms,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.locales?.length
+            ? {
+                Information: {
+                  locales: {
+                    hasSome: rest.locales,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.status?.length
+            ? {
+                status: {
+                  in: rest.status,
+                },
+              }
+            : {}),
+          ...(rest.countries?.length
+            ? {
+                Information: {
+                  countries: {
+                    hasSome: rest.countries,
+                  },
+                },
+              }
+            : {}),
+          ...(rest.ageRating
+            ? {
+                Information: {
+                  ageRating: {
+                    equals: rest.ageRating,
+                  },
+                },
+              }
+            : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.application.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.application.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.application.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   updateById: protectedAdminProcedure
     .input(applicationUpdateInputSchema)
     .output(mutationOutputSchema)
@@ -1010,9 +965,7 @@ export const protectedDashboardApplication = router({
 
           if (input.price) {
             for await (const next of input.price) {
-              const created = exists.Price.find(
-                (price) => price.country === next.country,
-              );
+              const created = exists.Price.find((price) => price.country === next.country);
               if (!created) {
                 await tx.application.update({
                   where: {
@@ -1033,11 +986,7 @@ export const protectedDashboardApplication = router({
                   },
                 });
               } else {
-                if (
-                  created.price === next.price &&
-                  created.currency === next.currency
-                )
-                  continue;
+                if (created.price === next.price && created.currency === next.currency) continue;
 
                 await tx.application.update({
                   where: {

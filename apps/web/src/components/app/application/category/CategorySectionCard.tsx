@@ -1,17 +1,10 @@
 import { EmptyDataBox } from '@/components/common';
-import { UseAppApplicationsHookDataSchema } from '@/hooks';
-import { ApplicationListInputSchema } from '@/server/schemas';
-import { OverridesCardProps } from '@/types/overrides';
-import {
-  Box,
-  Card,
-  CardContent,
-  Divider,
-  Stack,
-  Typography,
-} from '@mui/material';
+import type { UseAppApplicationsHookDataSchema } from '@/hooks';
+import type { ApplicationListInputSchema } from '@/server/schemas';
+import type { OverridesCardProps } from '@/types/overrides';
+import { Box, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-import { ApplicationCategory } from '@prisma/client';
+import type { ApplicationCategory } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 import { SimpleApplicationCard } from '../Card';
@@ -20,44 +13,32 @@ type CategorySectionCardProps = OverridesCardProps & {
   input: ApplicationListInputSchema;
   data: UseAppApplicationsHookDataSchema;
 };
-export const CategorySectionCard = ({
-  data,
-  input,
-  overrides,
-}: CategorySectionCardProps) => {
+export const CategorySectionCard = ({ data, input, overrides }: CategorySectionCardProps) => {
   const _data = useMemo(
     () =>
       data
         .filter((v) =>
           input.platforms?.length
-            ? v.Information?.platforms.some((platform) =>
-                input.platforms?.includes(platform),
-              )
+            ? v.Information?.platforms.some((platform) => input.platforms?.includes(platform))
             : true,
         )
         .filter((v) =>
           input.locales?.length
-            ? v.Information?.locales.some((locale) =>
-                input.locales?.includes(locale),
-              )
+            ? v.Information?.locales.some((locale) => input.locales?.includes(locale))
             : true,
         )
         .filter((v) =>
           input.countries?.length
-            ? v.Information?.countries.some((country) =>
-                input.countries?.includes(country),
-              )
+            ? v.Information?.countries.some((country) => input.countries?.includes(country))
             : true,
         )
-        .filter((v) =>
-          input.ageRating ? v.Information?.ageRating === input.ageRating : true,
-        ),
+        .filter((v) => (input.ageRating ? v.Information?.ageRating === input.ageRating : true)),
     [data, input],
   );
   return (
     <Card {...overrides?.CardProps}>
       <CardContent {...overrides?.CardContentProps}>
-        <Stack direction={'column'} spacing={2} alignItems={'stretch'}>
+        <Stack direction="column" spacing={2} alignItems="stretch">
           {input.category?.map((item, index) => (
             <CommonSection
               key={item}
@@ -77,16 +58,12 @@ type CommonSectionProps = {
   data: UseAppApplicationsHookDataSchema;
   divider?: boolean;
 };
-const CommonSection = ({
-  category,
-  data: applications,
-  divider = true,
-}: CommonSectionProps) => {
+const CommonSection = ({ category, data: applications, divider = true }: CommonSectionProps) => {
   const { t } = useTranslation();
 
   return (
     <Box
-      component={'section'}
+      component="section"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -96,17 +73,15 @@ const CommonSection = ({
     >
       {divider && <Divider />}
       <Stack
-        direction={'row'}
-        alignItems={'baseline'}
-        justifyContent={'space-between'}
+        direction="row"
+        alignItems="baseline"
+        justifyContent="space-between"
         sx={{
           mt: 1,
           mb: 2,
         }}
       >
-        <Typography variant="h6">
-          {t(`application:Category.Name.${category}`)}
-        </Typography>
+        <Typography variant="h6">{t(`application:Category.Name.${category}`)}</Typography>
       </Stack>
       <Grid container spacing={2}>
         {applications.map((item) => (

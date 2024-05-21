@@ -1,16 +1,10 @@
 import { createServer } from 'http';
 import path from 'path';
-import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import { default as serveHandler } from 'serve-handler';
 import ws from 'ws';
+import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import { createContext } from './context';
-import {
-  appLogger,
-  env,
-  launchShutdownTasks,
-  launchStartupTasks,
-  redis,
-} from './modules';
+import { appLogger, env, launchShutdownTasks, launchStartupTasks, redis } from './modules';
 import { appRouter } from './routers/_app';
 
 const _logger = appLogger.child({}, { msgPrefix: '[Entry] ' });
@@ -76,7 +70,5 @@ server.once('error', async (err) => {
 });
 
 server.listen(env.SERVER_PORT ?? 3002, () => {
-  _logger.info(
-    `Serve listening on ${env.NEXT_PUBLIC_SERVER_URL} as ${env.NODE_ENV}`,
-  );
+  _logger.info(`Serve listening on ${env.NEXT_PUBLIC_SERVER_URL} as ${env.NODE_ENV}`);
 });

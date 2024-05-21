@@ -13,37 +13,21 @@ import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
 
 type PrimaryDrawerRndProps = { role?: AuthRole };
-export const PrimaryDrawerRnd = ({
-  role = AuthRole.User,
-}: PrimaryDrawerRndProps) => {
+export const PrimaryDrawerRnd = ({ role = AuthRole.User }: PrimaryDrawerRndProps) => {
   const localStorageKey =
     role === AuthRole.Admin
       ? DASHBOARD_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY
       : APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY;
-  const width =
-    role === AuthRole.Admin
-      ? DASHBOARD_PRIMARY_DRAWER_WIDTH
-      : APP_PRIMARY_DRAWER_WIDTH;
+  const width = role === AuthRole.Admin ? DASHBOARD_PRIMARY_DRAWER_WIDTH : APP_PRIMARY_DRAWER_WIDTH;
   const editable =
-    role === AuthRole.Admin
-      ? DASHBOARD_PRIMARY_DRAWER_WIDTH_EDITABLE
-      : APP_PRIMARY_DRAWER_WIDTH_EDITABLE;
+    role === AuthRole.Admin ? DASHBOARD_PRIMARY_DRAWER_WIDTH_EDITABLE : APP_PRIMARY_DRAWER_WIDTH_EDITABLE;
 
   const theme = useTheme();
-  const [primaryRndZIndex, setPrimaryRndZIndex] = useState<number>(
-    () => theme.zIndex.drawer + 8,
-  );
-  const [primaryDrawerWidth, setPrimaryDrawerWidth] = useLocalStorage<number>(
-    localStorageKey,
-    width,
-    {
-      initializeWithValue: false,
-    },
-  );
-  const handlePrimaryDrawerWidth = useDebounceCallback(
-    setPrimaryDrawerWidth,
-    10,
-  );
+  const [primaryRndZIndex, setPrimaryRndZIndex] = useState<number>(() => theme.zIndex.drawer + 8);
+  const [primaryDrawerWidth, setPrimaryDrawerWidth] = useLocalStorage<number>(localStorageKey, width, {
+    initializeWithValue: false,
+  });
+  const handlePrimaryDrawerWidth = useDebounceCallback(setPrimaryDrawerWidth, 10);
   return (
     <Rnd
       style={{
@@ -58,10 +42,7 @@ export const PrimaryDrawerRnd = ({
         width: editable ? primaryDrawerWidth : 0,
       }}
       resizeHandleClasses={{
-        right:
-          theme.palette.mode === 'dark'
-            ? 'resizeHandleClass darkMode'
-            : 'resizeHandleClass',
+        right: theme.palette.mode === 'dark' ? 'resizeHandleClass darkMode' : 'resizeHandleClass',
       }}
       position={{ x: 0, y: 0 }}
       maxWidth={240}

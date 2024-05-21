@@ -3,21 +3,16 @@ import path from 'path';
 import { ApplicationAssetType, Prisma } from '@prisma/client';
 import { observable } from '@trpc/server/observable';
 import { applicationAssetEmitter } from '../modules';
+import type { IdSchema } from '../schemas';
 import {
   applicationAssetCreateInputSchema,
   applicationAssetListInputSchema,
   applicationAssetUpdateInputSchema,
   applicationAssetUpsertFileContentInputSchema,
-  IdSchema,
   idSchema,
   mutationOutputSchema,
 } from '../schemas';
-import {
-  protectedAdminProcedure,
-  protectedProviderProcedure,
-  publicProcedure,
-  router,
-} from '../trpc';
+import { protectedAdminProcedure, protectedProviderProcedure, publicProcedure, router } from '../trpc';
 import { access, formatListArgs, formatListResponse, onError } from '../utils';
 
 const defaultSelect = Prisma.validator<Prisma.ApplicationAssetSelect>()({
@@ -80,72 +75,65 @@ export const publicAppApplicationAsset = router({
       };
     });
   }),
-  getById: publicProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
-      try {
-        return await prisma.applicationAsset.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+  getById: publicProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.applicationAsset.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });
 
 export const protectedAppApplicationAsset = router({
   list: protectedProviderProcedure
     .input(applicationAssetListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationAssetWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
+      try {
+        const where: Prisma.ApplicationAssetWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
                     },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
+                  },
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
                     },
-                  ],
-                }
-              : {}),
-            ...(rest.type?.length ? { type: { in: rest.type } } : {}),
-          };
+                  },
+                ],
+              }
+            : {}),
+          ...(rest.type?.length ? { type: { in: rest.type } } : {}),
+        };
 
-          const [items, total] = await prisma.$transaction([
-            prisma.applicationAsset.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.applicationAsset.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+        const [items, total] = await prisma.$transaction([
+          prisma.applicationAsset.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.applicationAsset.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   create: protectedProviderProcedure
     .input(applicationAssetCreateInputSchema)
     .output(mutationOutputSchema)
@@ -202,67 +190,60 @@ export const protectedDashboardApplicationAsset = router({
   }),
   list: protectedAdminProcedure
     .input(applicationAssetListInputSchema)
-    .query(
-      async ({
-        ctx: { prisma },
-        input: { limit, skip, cursor, query, ...rest },
-      }) => {
-        try {
-          const where: Prisma.ApplicationAssetWhereInput = {
-            ...(query
-              ? {
-                  OR: [
-                    {
-                      name: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                    {
-                      description: {
-                        contains: query,
-                        mode: 'insensitive',
-                      },
-                    },
-                  ],
-                }
-              : {}),
-            ...(rest.type?.length ? { type: { in: rest.type } } : {}),
-          };
-
-          const [items, total] = await prisma.$transaction([
-            prisma.applicationAsset.findMany({
-              where,
-              ...formatListArgs(limit, skip, cursor),
-              orderBy: [
-                {
-                  createdAt: 'asc',
-                },
-              ],
-              select: defaultSelect,
-            }),
-            prisma.applicationAsset.count({ where }),
-          ]);
-          return formatListResponse(items, limit, total);
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
-  getById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
+    .query(async ({ ctx: { prisma }, input: { limit, skip, cursor, query, ...rest } }) => {
       try {
-        return await prisma.applicationAsset.findUniqueOrThrow({
-          where: {
-            id,
-          },
-          select: fullSelect,
-        });
+        const where: Prisma.ApplicationAssetWhereInput = {
+          ...(query
+            ? {
+                OR: [
+                  {
+                    name: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    description: {
+                      contains: query,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
+              }
+            : {}),
+          ...(rest.type?.length ? { type: { in: rest.type } } : {}),
+        };
+
+        const [items, total] = await prisma.$transaction([
+          prisma.applicationAsset.findMany({
+            where,
+            ...formatListArgs(limit, skip, cursor),
+            orderBy: [
+              {
+                createdAt: 'asc',
+              },
+            ],
+            select: defaultSelect,
+          }),
+          prisma.applicationAsset.count({ where }),
+        ]);
+        return formatListResponse(items, limit, total);
       } catch (err) {
         throw onError(err);
       }
     }),
+  getById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      return await prisma.applicationAsset.findUniqueOrThrow({
+        where: {
+          id,
+        },
+        select: fullSelect,
+      });
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
   updateById: protectedAdminProcedure
     .input(applicationAssetUpdateInputSchema)
     .output(mutationOutputSchema)
@@ -283,34 +264,32 @@ export const protectedDashboardApplicationAsset = router({
   upsertFileContent: protectedAdminProcedure
     .input(applicationAssetUpsertFileContentInputSchema)
     .output(mutationOutputSchema)
-    .mutation(
-      async ({ ctx: { prisma }, input: { applicationId, name, content } }) => {
-        try {
-          await prisma.applicationAsset.upsert({
-            where: {
-              applicationId_type_name: {
-                applicationId,
-                name,
-                type: ApplicationAssetType.File,
-              },
-            },
-            create: {
+    .mutation(async ({ ctx: { prisma }, input: { applicationId, name, content } }) => {
+      try {
+        await prisma.applicationAsset.upsert({
+          where: {
+            applicationId_type_name: {
               applicationId,
-              type: ApplicationAssetType.File,
               name,
-              url: '',
-              content,
+              type: ApplicationAssetType.File,
             },
-            update: {
-              content,
-            },
-          });
-          return true;
-        } catch (err) {
-          throw onError(err);
-        }
-      },
-    ),
+          },
+          create: {
+            applicationId,
+            type: ApplicationAssetType.File,
+            name,
+            url: '',
+            content,
+          },
+          update: {
+            content,
+          },
+        });
+        return true;
+      } catch (err) {
+        throw onError(err);
+      }
+    }),
   removeById: protectedAdminProcedure
     .input(idSchema)
     .output(mutationOutputSchema)
@@ -327,50 +306,46 @@ export const protectedDashboardApplicationAsset = router({
         throw onError(err);
       }
     }),
-  getFileById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
-      try {
-        const { url } = await prisma.applicationAsset.findUniqueOrThrow({
-          where: {
-            id,
-            type: ApplicationAssetType.File,
-          },
-          select: {
-            url: true,
-          },
-        });
-        const filePath = path.join(process.cwd(), url);
-        await access(filePath, true);
-        const file = await readFile(filePath, {
-          encoding: 'utf8',
-        });
-        return file;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
-  updateFileById: protectedAdminProcedure
-    .input(idSchema)
-    .query(async ({ ctx: { prisma }, input: id }) => {
-      try {
-        const { url } = await prisma.applicationAsset.findUniqueOrThrow({
-          where: {
-            id,
-            type: ApplicationAssetType.File,
-          },
-          select: {
-            url: true,
-          },
-        });
-        const filePath = path.join(process.cwd(), url);
-        await access(filePath, true);
-        const file = await readFile(filePath, {
-          encoding: 'utf8',
-        });
-        return file;
-      } catch (err) {
-        throw onError(err);
-      }
-    }),
+  getFileById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      const { url } = await prisma.applicationAsset.findUniqueOrThrow({
+        where: {
+          id,
+          type: ApplicationAssetType.File,
+        },
+        select: {
+          url: true,
+        },
+      });
+      const filePath = path.join(process.cwd(), url);
+      await access(filePath, true);
+      const file = await readFile(filePath, {
+        encoding: 'utf8',
+      });
+      return file;
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
+  updateFileById: protectedAdminProcedure.input(idSchema).query(async ({ ctx: { prisma }, input: id }) => {
+    try {
+      const { url } = await prisma.applicationAsset.findUniqueOrThrow({
+        where: {
+          id,
+          type: ApplicationAssetType.File,
+        },
+        select: {
+          url: true,
+        },
+      });
+      const filePath = path.join(process.cwd(), url);
+      await access(filePath, true);
+      const file = await readFile(filePath, {
+        encoding: 'utf8',
+      });
+      return file;
+    } catch (err) {
+      throw onError(err);
+    }
+  }),
 });

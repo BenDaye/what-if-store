@@ -1,21 +1,18 @@
 import { useGridPagination } from '@/hooks/common';
-import { ApplicationGroupListInputSchema } from '@/server/schemas';
+import type { ApplicationGroupListInputSchema } from '@/server/schemas';
 import { trpc } from '@/utils/trpc';
 
-export const useAppApplicationGroupsWithPagination = (
-  input?: ApplicationGroupListInputSchema,
-) => {
+export const useAppApplicationGroupsWithPagination = (input?: ApplicationGroupListInputSchema) => {
   const {
     pagination: { page, pageSize },
     setPaginationModel,
     skip,
   } = useGridPagination();
-  const { data, isFetching, refetch, error, isError } =
-    trpc.publicAppApplicationGroup.list.useQuery({
-      limit: pageSize,
-      skip,
-      query: input?.query,
-    });
+  const { data, isFetching, refetch, error, isError } = trpc.publicAppApplicationGroup.list.useQuery({
+    limit: pageSize,
+    skip,
+    query: input?.query,
+  });
 
   trpc.publicAppApplicationGroup.subscribe.useSubscription(undefined, {
     onData: () => refetch(),

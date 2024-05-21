@@ -1,11 +1,9 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  IdSchema,
-  idSchema,
-  userUpdateProfileInputSchema,
-} from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { IdSchema } from '@/server/schemas';
+import { idSchema, userUpdateProfileInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
@@ -27,10 +25,9 @@ export const useAppUserHookDataSchema = userUpdateProfileInputSchema
 export type UseAppUserHookDataSchema = z.infer<typeof useAppUserHookDataSchema>;
 
 export const useAppUser = (id: IdSchema) => {
-  const { data, refetch, isFetching, error, isError } =
-    trpc.publicAppUser.getById.useQuery(id, {
-      enabled: !!id && id !== FallbackId,
-    });
+  const { data, refetch, isFetching, error, isError } = trpc.publicAppUser.getById.useQuery(id, {
+    enabled: !!id && id !== FallbackId,
+  });
   trpc.publicAppUser.subscribe.useSubscription(undefined, {
     onData: (_id) => {
       if (_id === id) refetch();

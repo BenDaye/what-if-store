@@ -1,4 +1,4 @@
-import { ListItemSchema, ListOutputSchema } from '../schemas/list';
+import type { ListItemSchema, ListOutputSchema } from '../schemas/list';
 
 export const formatListArgs = (
   limit = 20,

@@ -1,10 +1,7 @@
 import { useAuth, useNotice } from '@/hooks';
-import { OverridesButtonProps } from '@/types/overrides';
+import type { OverridesButtonProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
-import {
-  Favorite as FollowedIcon,
-  FavoriteBorder as FollowIcon,
-} from '@mui/icons-material';
+import { Favorite as FollowedIcon, FavoriteBorder as FollowIcon } from '@mui/icons-material';
 import { Button, IconButton } from '@mui/material';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
@@ -37,8 +34,7 @@ export const FollowApplicationButton = ({
   } = trpc.protectedAppApplication.isFollowedById.useQuery(applicationId, {
     enabled:
       status === 'authenticated' &&
-      (session.user?.role === AuthRole.User ||
-        session.user?.role === AuthRole.Provider),
+      (session.user?.role === AuthRole.User || session.user?.role === AuthRole.Provider),
     placeholderData: false,
   });
   const { mutateAsync: follow, isPending: isFollowPending } =
@@ -79,10 +75,7 @@ export const FollowApplicationButton = ({
       disabled={disabled}
       {...overrides?.ButtonProps}
     >
-      {text ??
-        (followed
-          ? t('application:Follow.Followed')
-          : t('application:Follow.Follow'))}
+      {text ?? (followed ? t('application:Follow.Followed') : t('application:Follow.Follow'))}
     </Button>
   ) : (
     <IconButton
@@ -93,11 +86,7 @@ export const FollowApplicationButton = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {followed ? (
-        <FollowedIcon sx={{ fontSize: 'inherit' }} />
-      ) : (
-        <FollowIcon sx={{ fontSize: 'inherit' }} />
-      )}
+      {followed ? <FollowedIcon sx={{ fontSize: 'inherit' }} /> : <FollowIcon sx={{ fontSize: 'inherit' }} />}
     </IconButton>
   );
 };

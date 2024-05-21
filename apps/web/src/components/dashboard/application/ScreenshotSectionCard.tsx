@@ -1,5 +1,5 @@
-import { UseDashboardApplicationHookDataSchema } from '@/hooks';
-import { OverridesCardProps } from '@/types/overrides';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import type { OverridesCardProps } from '@/types/overrides';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTranslation } from 'next-i18next';
@@ -9,18 +9,12 @@ type ScreenshotSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const ScreenshotSectionCard = ({
-  overrides,
-  defaultValues,
-}: ScreenshotSectionCardProps) => {
+export const ScreenshotSectionCard = ({ overrides, defaultValues }: ScreenshotSectionCardProps) => {
   const { t } = useTranslation();
 
   return (
     <Card variant="outlined" {...overrides?.CardProps}>
-      <CardHeader
-        title={t('application:Media.Screenshots')}
-        {...overrides?.CardHeaderProps}
-      />
+      <CardHeader title={t('application:Media.Screenshots')} {...overrides?.CardHeaderProps} />
       <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={2}>
           {defaultValues.screenshots.filter(Boolean).map((asset) => (

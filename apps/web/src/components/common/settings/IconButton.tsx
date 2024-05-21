@@ -1,23 +1,15 @@
 import { UpdateLocaleDialog } from '@/components/common/locale/UpdateDialog';
 import { Settings as SettingsIcon } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  DialogProps,
-  ListItem,
-  ListItemText,
-  Menu,
-  MenuItem,
-  MenuProps,
-  Typography,
-} from '@mui/material';
-import { AuthRole } from '@prisma/client';
+import type { DialogProps, MenuProps } from '@mui/material';
+import { Box, Button, ButtonGroup, ListItem, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
+import type { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { PropsWithChildren, useRef } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useRef } from 'react';
 import { useBoolean, useTernaryDarkMode } from 'usehooks-ts';
-import { IconButtonWithTooltip, IconButtonWithTooltipProps } from '..';
+import type { IconButtonWithTooltipProps } from '..';
+import { IconButtonWithTooltip } from '..';
 
 type SettingsIconButtonProps = {
   role?: AuthRole;
@@ -31,17 +23,11 @@ type SettingsIconButtonProps = {
   };
 };
 
-export const SettingsIconButton = (
-  props: PropsWithChildren<SettingsIconButtonProps>,
-) => {
+export const SettingsIconButton = (props: PropsWithChildren<SettingsIconButtonProps>) => {
   const router = useRouter();
   const { t } = useTranslation();
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const {
-    value: menuVisible,
-    setTrue: openMenu,
-    setFalse: closeMenu,
-  } = useBoolean(false);
+  const { value: menuVisible, setTrue: openMenu, setFalse: closeMenu } = useBoolean(false);
   const {
     value: updateLocaleDialogVisible,
     setTrue: openUpdateLocaleDialog,
@@ -89,18 +75,12 @@ export const SettingsIconButton = (
                 primary={t('common:DarkMode._')}
                 primaryTypographyProps={{ color: 'text.secondary' }}
               />
-              <ButtonGroup
-                size="small"
-                onClick={(ev) => ev.stopPropagation()}
-                disableElevation
-              >
+              <ButtonGroup size="small" onClick={(ev) => ev.stopPropagation()} disableElevation>
                 <Button
                   onClick={() => {
                     setTernaryDarkMode('light');
                   }}
-                  variant={
-                    ternaryDarkMode === 'light' ? 'contained' : undefined
-                  }
+                  variant={ternaryDarkMode === 'light' ? 'contained' : undefined}
                 >
                   {t('common:DarkMode.Off')}
                 </Button>
@@ -116,9 +96,7 @@ export const SettingsIconButton = (
                   onClick={() => {
                     setTernaryDarkMode('system');
                   }}
-                  variant={
-                    ternaryDarkMode === 'system' ? 'contained' : undefined
-                  }
+                  variant={ternaryDarkMode === 'system' ? 'contained' : undefined}
                 >
                   {t('common:DarkMode.Auto')}
                 </Button>

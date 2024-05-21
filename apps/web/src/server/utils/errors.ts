@@ -17,10 +17,7 @@ export const CommonTRPCErrorMap = {
 
 export type CommonTRPCErrorType = keyof typeof CommonTRPCErrorMap;
 
-export const CommonTRPCErrorToTRPCError: Record<
-  CommonTRPCErrorType,
-  TRPCError
-> = {
+export const CommonTRPCErrorToTRPCError: Record<CommonTRPCErrorType, TRPCError> = {
   UNAUTHORIZED: new TRPCError({
     code: 'UNAUTHORIZED',
     message: CommonTRPCErrorMap.UNAUTHORIZED,

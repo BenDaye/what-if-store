@@ -1,12 +1,12 @@
 import { useNotice } from '@/hooks';
 import { Close as CloseIcon } from '@mui/icons-material';
+import type { DialogProps } from '@mui/material';
 import {
   AppBar,
   Box,
   Chip,
   Dialog,
   DialogContent,
-  DialogProps,
   IconButton,
   List,
   ListItemButton,
@@ -38,9 +38,7 @@ export const UpdateLocaleDialog = (props: UpdateLocaleDialogProps) => {
     <Dialog {...props}>
       <AppBar elevation={0}>
         <Toolbar variant="dense" sx={{ gap: 1 }}>
-          <Typography variant="subtitle1">
-            {t('common:Language.Update')}
-          </Typography>
+          <Typography variant="subtitle1">{t('common:Language.Update')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             edge="end"

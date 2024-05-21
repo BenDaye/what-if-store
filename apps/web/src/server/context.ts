@@ -1,12 +1,9 @@
-import { IncomingMessage } from 'node:http';
-import type {
-  CreateNextContextOptions,
-  NextApiRequest,
-} from '@trpc/server/adapters/next';
-import type { CreateWSSContextFnOptions } from '@trpc/server/adapters/ws';
-import { Session } from 'next-auth';
+import type { IncomingMessage } from 'node:http';
+import type { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
-import { appLogger, prisma, redis } from './modules';
+import type { CreateNextContextOptions, NextApiRequest } from '@trpc/server/adapters/next';
+import type { CreateWSSContextFnOptions } from '@trpc/server/adapters/ws';
+import type { appLogger, prisma, redis } from './modules';
 
 export interface CreateContextOptions {
   session: Session | null;
@@ -16,18 +13,13 @@ export interface CreateContextOptions {
  * Creates context for an incoming request
  * @link https://trpc.io/docs/v11/context
  */
-export const createContext = async (
-  opts: CreateNextContextOptions | CreateWSSContextFnOptions,
-) => {
+export const createContext = async (opts: CreateNextContextOptions | CreateWSSContextFnOptions) => {
   const session = await getSession(opts);
   const sessionFromApiKey = await getSessionFromApiKey(opts);
 
   appLogger
     .child({}, { msgPrefix: '[tRPC] ' })
-    .debug(
-      session || sessionFromApiKey || 'Create Context For Guest',
-      'Create Context For User',
-    );
+    .debug(session || sessionFromApiKey || 'Create Context For Guest', 'Create Context For User');
 
   return {
     session: session || sessionFromApiKey,

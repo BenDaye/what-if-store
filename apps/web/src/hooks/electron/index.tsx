@@ -1,10 +1,5 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import type { PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useIsClient } from 'usehooks-ts';
 
 export interface ElectronProviderProps {
@@ -29,9 +24,5 @@ export const ElectronProvider = ({ children }: PropsWithChildren) => {
     const isRunningInElectron = typeof window?.electronAPI !== 'undefined';
     setIsElectron(isRunningInElectron);
   }, [isClient]);
-  return (
-    <ElectronContext.Provider value={{ isElectron }}>
-      {children}
-    </ElectronContext.Provider>
-  );
+  return <ElectronContext.Provider value={{ isElectron }}>{children}</ElectronContext.Provider>;
 };

@@ -1,6 +1,7 @@
 import { useNotice } from '@/hooks/notice';
-import { ProviderListInputSchema } from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { ProviderListInputSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
 
@@ -11,17 +12,10 @@ export const useDashboardProviders = (
 ) => {
   const { showWarning } = useNotice();
 
-  const {
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-    data,
-    error,
-    isError,
-    refetch,
-  } = trpc.protectedDashboardProvider.list.useInfiniteQuery(input, {
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+  const { hasNextPage, fetchNextPage, isFetching, data, error, isError, refetch } =
+    trpc.protectedDashboardProvider.list.useInfiniteQuery(input, {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    });
 
   trpc.protectedDashboardProvider.subscribe.useSubscription(undefined, {
     onData: () => refetch(),
@@ -38,10 +32,7 @@ export const useDashboardProviders = (
     showWarning(error.message);
   }, [error, isError, showWarning, notify]);
 
-  useInterval(
-    fetchNextPage,
-    hasNextPage && fetchAll && !isFetching ? 1000 : null,
-  );
+  useInterval(fetchNextPage, hasNextPage && fetchAll && !isFetching ? 1000 : null);
 
   const memoData = useMemo(
     (): RouterOutput['protectedDashboardProvider']['list']['items'] =>

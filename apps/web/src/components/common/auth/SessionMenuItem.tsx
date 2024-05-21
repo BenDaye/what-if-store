@@ -1,6 +1,6 @@
 import { FallbackString } from '@/constants/common';
 import { useAuth } from '@/hooks';
-import { OverridesMenuItemProps } from '@/types/overrides';
+import type { OverridesMenuItemProps } from '@/types/overrides';
 import { Avatar, ListItemAvatar, ListItemText, MenuItem } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
@@ -43,20 +43,14 @@ export const SessionMenuItem = ({ overrides }: SessionMenuItemProps) => {
       </ListItemAvatar>
       <ListItemText
         primary={
-          status !== 'authenticated'
-            ? t('auth:Unauthenticated')
-            : session?.user?.nickname ?? FallbackString
+          status !== 'authenticated' ? t('auth:Unauthenticated') : session?.user?.nickname ?? FallbackString
         }
         primaryTypographyProps={{
           color: status !== 'authenticated' ? 'text.disabled' : 'primary.light',
           noWrap: true,
           textOverflow: 'ellipsis',
         }}
-        secondary={
-          status !== 'authenticated'
-            ? FallbackString
-            : session?.user?.email ?? FallbackString
-        }
+        secondary={status !== 'authenticated' ? FallbackString : session?.user?.email ?? FallbackString}
         secondaryTypographyProps={{
           noWrap: true,
           textOverflow: 'ellipsis',

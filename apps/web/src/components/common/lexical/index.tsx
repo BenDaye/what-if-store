@@ -1,22 +1,13 @@
 import { useNotice } from '@/hooks';
-import { OverridesProps } from '@/types/overrides';
+import type { OverridesProps } from '@/types/overrides';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import {
-  InitialConfigType,
-  LexicalComposer,
-} from '@lexical/react/LexicalComposer';
+import type { InitialConfigType } from '@lexical/react/LexicalComposer';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import {
-  Box,
-  Card,
-  CardContent,
-  Divider,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Card, CardContent, Divider, Typography, useTheme } from '@mui/material';
 import { ToolbarPlugin } from './plugins/ToolbarPlugin';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
 
@@ -28,12 +19,7 @@ type LexicalProps = OverridesProps<{
   minHeight?: string | number;
 };
 
-export const Lexical = ({
-  overrides,
-  namespace,
-  placeholderText = '',
-  minHeight = 480,
-}: LexicalProps) => {
+export const Lexical = ({ overrides, namespace, placeholderText = '', minHeight = 480 }: LexicalProps) => {
   const muiTheme = useTheme();
   const { showError } = useNotice();
 

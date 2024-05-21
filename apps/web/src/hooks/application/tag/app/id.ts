@@ -1,32 +1,25 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import {
-  applicationTagCreateInputSchema,
-  IdSchema,
-  idSchema,
-} from '@/server/schemas';
-import { RouterOutput, trpc } from '@/utils/trpc';
+import type { IdSchema } from '@/server/schemas';
+import { applicationTagCreateInputSchema, idSchema } from '@/server/schemas';
+import type { RouterOutput } from '@/utils/trpc';
+import { trpc } from '@/utils/trpc';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-type AppApplicationTagRouterOutput =
-  RouterOutput['publicAppApplicationTag']['getById'];
-export const useAppApplicationTagHookDataSchema =
-  applicationTagCreateInputSchema
-    .extend({
-      id: idSchema,
-    })
-    .strict();
-export type UseAppApplicationTagHookDataSchema = z.infer<
-  typeof useAppApplicationTagHookDataSchema
->;
+type _AppApplicationTagRouterOutput = RouterOutput['publicAppApplicationTag']['getById'];
+export const useAppApplicationTagHookDataSchema = applicationTagCreateInputSchema
+  .extend({
+    id: idSchema,
+  })
+  .strict();
+export type UseAppApplicationTagHookDataSchema = z.infer<typeof useAppApplicationTagHookDataSchema>;
 
 export const useAppApplicationTag = (id: IdSchema) => {
-  const { data, refetch, isFetching, error, isError } =
-    trpc.publicAppApplicationTag.getById.useQuery(id, {
-      enabled: !!id && id !== FallbackId,
-    });
+  const { data, refetch, isFetching, error, isError } = trpc.publicAppApplicationTag.getById.useQuery(id, {
+    enabled: !!id && id !== FallbackId,
+  });
   trpc.publicAppApplicationTag.subscribe.useSubscription(undefined, {
     onData: (_id) => {
       if (_id === id) refetch();

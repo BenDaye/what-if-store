@@ -1,4 +1,4 @@
-import { PartialBlock } from '@blocknote/core';
+import type { PartialBlock } from '@blocknote/core';
 import { ApplicationAssetType } from '@prisma/client';
 import { z } from 'zod';
 import { idSchema } from './id';
@@ -9,9 +9,7 @@ export const applicationAssetListInputSchema = listInputSchema
     type: z.nativeEnum(ApplicationAssetType).array(),
   })
   .partial();
-export type ApplicationAssetListInputSchema = z.infer<
-  typeof applicationAssetListInputSchema
->;
+export type ApplicationAssetListInputSchema = z.infer<typeof applicationAssetListInputSchema>;
 
 export const applicationAssetCreateInputSchema = z
   .object({
@@ -30,27 +28,21 @@ export const applicationAssetCreateInputSchema = z
     type: true,
     url: true,
   });
-export type ApplicationAssetCreateInputSchema = z.infer<
-  typeof applicationAssetCreateInputSchema
->;
+export type ApplicationAssetCreateInputSchema = z.infer<typeof applicationAssetCreateInputSchema>;
 
-export const applicationAssetUpdateInputSchema =
-  applicationAssetCreateInputSchema.partial().extend({
-    id: idSchema,
+export const applicationAssetUpdateInputSchema = applicationAssetCreateInputSchema.partial().extend({
+  id: idSchema,
+});
+export type ApplicationAssetUpdateInputSchema = z.infer<typeof applicationAssetUpdateInputSchema>;
+
+export const applicationAssetUpsertFileContentInputSchema = applicationAssetCreateInputSchema
+  .pick({
+    applicationId: true,
+    content: true,
+  })
+  .extend({
+    name: z.enum(['PrivacyPolicy', 'TermsOfUse', 'Copyright', 'Readme']),
   });
-export type ApplicationAssetUpdateInputSchema = z.infer<
-  typeof applicationAssetUpdateInputSchema
->;
-
-export const applicationAssetUpsertFileContentInputSchema =
-  applicationAssetCreateInputSchema
-    .pick({
-      applicationId: true,
-      content: true,
-    })
-    .extend({
-      name: z.enum(['PrivacyPolicy', 'TermsOfUse', 'Copyright', 'Readme']),
-    });
 
 export type ApplicationAssetUpsertFileContentInputSchema = z.infer<
   typeof applicationAssetUpsertFileContentInputSchema

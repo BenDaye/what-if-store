@@ -1,22 +1,12 @@
-import { UseDashboardApplicationHookDataSchema, useNotice } from '@/hooks';
-import {
-  ApplicationUpdateInputSchema,
-  applicationUpdateInputSchema,
-} from '@/server/schemas';
-import { OverridesCardProps } from '@/types/overrides';
+import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
+import { useNotice } from '@/hooks';
+import type { ApplicationUpdateInputSchema } from '@/server/schemas';
+import { applicationUpdateInputSchema } from '@/server/schemas';
+import type { OverridesCardProps } from '@/types/overrides';
 import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  MenuItem,
-  TextField,
-} from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, MenuItem, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { ApplicationCategory } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
@@ -27,17 +17,13 @@ type GeneralSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;
 };
 
-export const GeneralSectionCard = ({
-  overrides,
-  defaultValues,
-}: GeneralSectionCardProps) => {
+export const GeneralSectionCard = ({ overrides, defaultValues }: GeneralSectionCardProps) => {
   const { t } = useTranslation();
-  const { handleSubmit, reset, control, formState } =
-    useForm<ApplicationUpdateInputSchema>({
-      defaultValues,
-      mode: 'all',
-      resolver: zodResolver(applicationUpdateInputSchema),
-    });
+  const { handleSubmit, reset, control, formState } = useForm<ApplicationUpdateInputSchema>({
+    defaultValues,
+    mode: 'all',
+    resolver: zodResolver(applicationUpdateInputSchema),
+  });
 
   useEffect(() => {
     if (!defaultValues) return;
@@ -45,14 +31,12 @@ export const GeneralSectionCard = ({
   }, [defaultValues, reset]);
 
   const { showSuccess, showError } = useNotice();
-  const { mutateAsync: update, isPending } =
-    trpc.protectedDashboardApplication.updateById.useMutation({
-      onError: (err) => showError(err.message),
-      onSuccess: () => showSuccess(t('common:Updated')),
-    });
+  const { mutateAsync: update, isPending } = trpc.protectedDashboardApplication.updateById.useMutation({
+    onError: (err) => showError(err.message),
+    onSuccess: () => showSuccess(t('common:Updated')),
+  });
 
-  const onSubmit = async (data: ApplicationUpdateInputSchema) =>
-    await update(data).catch(() => null);
+  const onSubmit = async (data: ApplicationUpdateInputSchema) => await update(data).catch(() => null);
 
   useEffect(() => {
     if (!window) return;
@@ -79,20 +63,14 @@ export const GeneralSectionCard = ({
       }}
       {...overrides?.CardProps}
     >
-      <CardHeader
-        title={t('application:General._')}
-        {...overrides?.CardHeaderProps}
-      />
+      <CardHeader title={t('application:General._')} {...overrides?.CardHeaderProps} />
       <CardContent {...overrides?.CardContentProps}>
         <Grid container spacing={1}>
           <Grid md={12} xl={6}>
             <Controller
               control={control}
               name="name"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <TextField
                   value={value}
                   onChange={onChange}
@@ -111,10 +89,7 @@ export const GeneralSectionCard = ({
             <Controller
               control={control}
               name="category"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <TextField
                   value={value}
                   onChange={onChange}
@@ -140,10 +115,7 @@ export const GeneralSectionCard = ({
             <Controller
               control={control}
               name="description"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <TextField
                   value={value}
                   onChange={onChange}
@@ -165,10 +137,7 @@ export const GeneralSectionCard = ({
             <Controller
               control={control}
               name="website"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <TextField
                   value={value}
                   onChange={onChange}
@@ -186,10 +155,7 @@ export const GeneralSectionCard = ({
             <Controller
               control={control}
               name="github"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <TextField
                   value={value}
                   onChange={onChange}

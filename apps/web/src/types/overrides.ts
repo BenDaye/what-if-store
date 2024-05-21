@@ -1,5 +1,5 @@
-import { ApplicationListInputSchema } from '@/server/schemas';
-import {
+import type { ApplicationListInputSchema } from '@/server/schemas';
+import type {
   AppBarProps,
   AutocompleteProps,
   AvatarProps,
@@ -27,7 +27,7 @@ import {
   MenuItemProps,
   TextFieldProps,
 } from '@mui/material';
-import { FieldError, Merge } from 'react-hook-form';
+import type { FieldError, Merge } from 'react-hook-form';
 
 export type OverridesProps<T = object> = {
   overrides?: T;
@@ -88,12 +88,7 @@ export type MultipleAutoCompleteProps<
   ErrorType = Merge<FieldError, (FieldError | undefined)[]>,
   RouterInput = ApplicationListInputSchema,
 > = OverridesProps<{
-  AutoCompleteProps?: AutocompleteProps<
-    AutoCompleteValueType,
-    true,
-    false,
-    false
-  >;
+  AutoCompleteProps?: AutocompleteProps<AutoCompleteValueType, true, false, false>;
   TextFieldProps?: TextFieldProps;
 }> & {
   defaultValue?: ValueType;

@@ -1,23 +1,16 @@
 import { ApplicationStatusChip } from '@/components/common';
 import { useDashboardApplications, useDashboardUser } from '@/hooks';
 import { idSchema } from '@/server/schemas';
-import { MultipleAutoCompleteProps, OverridesProps } from '@/types/overrides';
-import { RouterOutput } from '@/utils/trpc';
-import {
-  Autocomplete,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  ListItemTextProps,
-  TextField,
-} from '@mui/material';
+import type { MultipleAutoCompleteProps, OverridesProps } from '@/types/overrides';
+import type { RouterOutput } from '@/utils/trpc';
+import type { ListItemTextProps } from '@mui/material';
+import { Autocomplete, ListItem, ListItemSecondaryAction, ListItemText, TextField } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 import { z } from 'zod';
 
-type IApplicationData =
-  RouterOutput['protectedDashboardApplication']['list']['items'][number];
+type IApplicationData = RouterOutput['protectedDashboardApplication']['list']['items'][number];
 const idArraySchema = z.object({ id: idSchema }).array();
 type IdArraySchema = z.infer<typeof idArraySchema>;
 
@@ -58,18 +51,11 @@ export const ApplicationsAutoComplete = ({
   );
 
   const [value, setValue] = useState<IApplicationData[]>(
-    () =>
-      defaultValue
-        .map((code) => getTagData(code))
-        .filter((v) => v !== false) as IApplicationData[],
+    () => defaultValue.map((code) => getTagData(code)).filter((v) => v !== false) as IApplicationData[],
   );
 
   useEffect(() => {
-    setValue(
-      defaultValue
-        .map((code) => getTagData(code))
-        .filter((v) => v !== false) as IApplicationData[],
-    );
+    setValue(defaultValue.map((code) => getTagData(code)).filter((v) => v !== false) as IApplicationData[]);
   }, [defaultValue, getTagData]);
 
   useEffect(() => {
