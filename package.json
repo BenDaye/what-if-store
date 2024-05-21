@@ -29,7 +29,6 @@
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "7.5.0",
     "@typescript-eslint/parser": "7.5.0",
-    "@what-if-store/bridge": "workspace:*",
     "@what-if-store/electron": "workspace:*",
     "@what-if-store/web": "workspace:*",
     "dotenv-cli": "7.4.2",

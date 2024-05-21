@@ -1,10 +1,10 @@
-import { Server } from 'http';
+import { type Server } from 'http';
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import { applyWSSHandler } from '@trpc/server/adapters/ws';
 import { WebSocketServer } from 'ws';
 import { createContext } from './context';
-import { AppRouter, appRouter } from './routers/_app';
-import { StartTRPCServerProps, startTRPCServerProps } from './schema';
+import { appRouter, type AppRouter } from './routers/_app';
+import { startTRPCServerProps, type StartTRPCServerProps } from './schema';
 
 let server: Server,
   wss: WebSocketServer,
