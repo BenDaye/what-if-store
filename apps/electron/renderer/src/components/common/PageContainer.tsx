@@ -1,16 +1,8 @@
-import {
-  AppBar,
-  AppBarProps,
-  Box,
-  BoxProps,
-  Toolbar,
-  ToolbarProps,
-} from '@mui/material';
-import {
-  OverlayScrollbarsComponent,
-  OverlayScrollbarsComponentProps,
-} from 'overlayscrollbars-react';
-import { PropsWithChildren, ReactNode } from 'react';
+import type { AppBarProps, BoxProps, ToolbarProps } from '@mui/material';
+import { AppBar, Box, Toolbar } from '@mui/material';
+import type { OverlayScrollbarsComponentProps } from 'overlayscrollbars-react';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
 type PageContainerPropsBase = {
   overrides?: {
@@ -33,9 +25,7 @@ type PageContainerWithoutHeaderProps = PageContainerPropsBase & {
   header?: undefined;
 };
 
-type PageContainerProps =
-  | PageContainerWithHeaderProps
-  | PageContainerWithoutHeaderProps;
+type PageContainerProps = PageContainerWithHeaderProps | PageContainerWithoutHeaderProps;
 
 export const PageContainer = ({
   overrides,
@@ -55,12 +45,7 @@ export const PageContainer = ({
       {...overrides?.OuterBoxProps}
     >
       {hasHeader && (
-        <AppBar
-          position="static"
-          component="div"
-          color="inherit"
-          {...overrides?.AppBarProps}
-        >
+        <AppBar position="static" component="div" color="inherit" {...overrides?.AppBarProps}>
           <Toolbar sx={{ gap: 1 }} variant="dense" {...overrides?.ToolbarProps}>
             {header}
           </Toolbar>

@@ -1,12 +1,4 @@
-import {
-  blue,
-  deepOrange,
-  green,
-  grey,
-  lightBlue,
-  orange,
-  red,
-} from '@mui/material/colors';
+import { blue, deepOrange, green, grey, lightBlue, orange, red } from '@mui/material/colors';
 import { zhCN } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 

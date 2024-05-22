@@ -101,6 +101,7 @@
     "@types/serve-handler": "^6.1.4",
     "@types/uuid": "^9.0.8",
     "@types/ws": "^8.5.10",
+    "@what-if-store/bridge": "workspace:*",
     "@what-if-store/config": "workspace:*",
     "@what-if-store/types": "workspace:*",
     "locize-cli": "^8.0.1",

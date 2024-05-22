@@ -1,5 +1,5 @@
-import { SortDirection } from '@mui/material';
-import { GridCallbackDetails, GridPaginationModel } from '@mui/x-data-grid';
+import type { SortDirection } from '@mui/material';
+import type { GridCallbackDetails, GridPaginationModel } from '@mui/x-data-grid';
 import { useCallback, useMemo, useState } from 'react';
 
 type GridPagination = {
@@ -19,7 +19,7 @@ export function useGridPagination(params?: GridPagination) {
   );
 
   const setPaginationModel = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     (model: GridPaginationModel, _details: GridCallbackDetails<any>) => {
       setPagination({
         ...pagination,
@@ -53,10 +53,7 @@ export function useGridPagination(params?: GridPagination) {
     });
   }, []);
 
-  const skip = useMemo(
-    () => pagination.page * pagination.pageSize,
-    [pagination],
-  );
+  const skip = useMemo(() => pagination.page * pagination.pageSize, [pagination]);
 
   return {
     pagination,

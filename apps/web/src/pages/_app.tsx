@@ -11,8 +11,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import 'overlayscrollbars/overlayscrollbars.css';
 import { DefaultLayout } from '@/components/layouts';
-import { AuthProvider, ElectronProvider, TernaryDarkModeProvider } from '@/hooks';
-import { NoticeProvider } from '@/hooks/notice';
+import { AuthProvider, BridgeProvider, NoticeProvider, TernaryDarkModeProvider } from '@/hooks';
 import type { CreateContextOptions } from '@/server/context';
 import { createEmotionCache } from '@/theme';
 import { trpc } from '@/utils/trpc';
@@ -70,7 +69,7 @@ const MyApp: AppType<CreateContextOptions> = ({
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <NoticeProvider>
-            <ElectronProvider>
+            <BridgeProvider>
               <SessionProvider session={pageProps?.session}>
                 <SWRConfig
                   value={{
@@ -85,7 +84,7 @@ const MyApp: AppType<CreateContextOptions> = ({
                   </AuthProvider>
                 </SWRConfig>
               </SessionProvider>
-            </ElectronProvider>
+            </BridgeProvider>
           </NoticeProvider>
         </SnackbarProvider>
       </TernaryDarkModeProvider>

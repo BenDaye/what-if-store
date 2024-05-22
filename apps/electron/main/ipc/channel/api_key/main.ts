@@ -1,6 +1,7 @@
-import { ipcMain, IpcMainInvokeEvent } from 'electron';
+import type { IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
+import type { ApiKey } from '../../../store';
 import {
-  ApiKey,
   clearApiKey,
   createApiKey,
   getActiveApiKey,
@@ -37,18 +38,13 @@ class Channel extends IpcChannel {
   }
 
   private _get = (): string[] => getApiKeys().map((item) => item.key);
-  private _set = (_ev: IpcMainInvokeEvent, apiKey: ApiKey[]): void =>
-    setApiKeys(apiKey);
+  private _set = (_ev: IpcMainInvokeEvent, apiKey: ApiKey[]): void => setApiKeys(apiKey);
   private _clear = (): void => clearApiKey();
-  private _create = (_ev: IpcMainInvokeEvent, apiKey: string): void =>
-    createApiKey(apiKey);
-  private _remove = (_ev: IpcMainInvokeEvent, apiKey: string): void =>
-    removeApiKey(apiKey);
-  private _has = (_ev: IpcMainInvokeEvent, apiKey: string): boolean =>
-    hasApiKey(apiKey);
+  private _create = (_ev: IpcMainInvokeEvent, apiKey: string): void => createApiKey(apiKey);
+  private _remove = (_ev: IpcMainInvokeEvent, apiKey: string): void => removeApiKey(apiKey);
+  private _has = (_ev: IpcMainInvokeEvent, apiKey: string): boolean => hasApiKey(apiKey);
   private _getActive = (): string | null => getActiveApiKey();
-  private _setActive = (_ev: IpcMainInvokeEvent, apiKey: string) =>
-    setActiveApiKey(apiKey);
+  private _setActive = (_ev: IpcMainInvokeEvent, apiKey: string) => setActiveApiKey(apiKey);
 }
 
 export const apiKeyChannelMain = new Channel();

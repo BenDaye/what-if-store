@@ -8,7 +8,9 @@
   "scripts": {
     "build": "nextron build",
     "dev": "nextron",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --fix"
   },
   "dependencies": {
     "electron-log": "5.1.4",
@@ -49,6 +51,7 @@
     "@types/react-swipeable-views": "^0.13.5",
     "@types/react-swipeable-views-utils": "^0.13.7",
     "@types/ws": "8.5.10",
+    "@what-if-store/bridge": "workspace:*",
     "@what-if-store/config": "workspace:*",
     "@what-if-store/types": "workspace:*",
     "cors": "2.8.5",

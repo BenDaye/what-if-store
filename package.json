@@ -9,7 +9,10 @@
   "scripts": {
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "dev": "turbo run dev",
+    "dev": "dotenv -e .env.development.local -- turbo run dev",
+    "dev:env-check": "dotenv-checker --schema .env.example --env .env.development.local",
+    "build": "dotenv -e .env.production.local -- turbo run build",
+    "build:env-check": "dotenv-checker --schema .env.example --env .env.production.local",
     "prepare": "husky"
   },
   "resolutions": {
@@ -22,6 +25,7 @@
   "devDependencies": {
     "@commitlint/cli": "19.3.0",
     "@commitlint/config-conventional": "19.2.2",
+    "dotenv-checker": "^1.1.5",
     "dotenv-cli": "7.4.2",
     "eslint": "^8.57.0",
     "husky": "9.0.11",

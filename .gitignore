@@ -54,3 +54,6 @@ test-timings.json
 .swc/
 .turbo
 .eslintcache
+
+.env*
+!.env*.example

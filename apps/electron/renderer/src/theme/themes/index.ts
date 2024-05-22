@@ -1,5 +1,5 @@
-import { Theme } from '@mui/material';
-import { AppColorThemeType } from '../constants';
+import type { Theme } from '@mui/material';
+import type { AppColorThemeType } from '../constants';
 import { theme as custom } from './custom';
 import { theme as dark } from './dark';
 import { theme as light } from './light';

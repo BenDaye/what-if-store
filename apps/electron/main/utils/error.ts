@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const prettyError = (error: any): { error: Error } => {
   return {
     error:

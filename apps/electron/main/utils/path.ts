@@ -1,5 +1,6 @@
 import path from 'path';
-import { App, app } from 'electron';
+import type { App } from 'electron';
+import { app } from 'electron';
 import { ensureDirSync } from 'fs-extra';
 
 export const initializePath = () => {

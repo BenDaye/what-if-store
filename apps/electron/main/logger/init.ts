@@ -9,15 +9,8 @@ export const initializeLogger = () => {
 
     Object.assign(console, log.functions);
 
-    log.transports.file.resolvePathFn = (
-      pathVariables: log.PathVariables,
-      message?: log.LogMessage,
-    ) =>
-      path.join(
-        getPath('logs'),
-        message?.level ?? 'silly',
-        pathVariables.fileName,
-      );
+    log.transports.file.resolvePathFn = (pathVariables: log.PathVariables, message?: log.LogMessage) =>
+      path.join(getPath('logs'), message?.level ?? 'silly', pathVariables.fileName);
 
     log.errorHandler.startCatching({
       showDialog: false,
@@ -34,17 +27,10 @@ export const initializeLogger = () => {
           })
           .then(({ response }) => {
             if (response === 1) {
-              return createIssue(
-                'https://github.com/bendaye/what-if-store/issues/new',
-                {
-                  title: `Error report for ${versions.app}`,
-                  body:
-                    'Error:\n```' +
-                    error.stack +
-                    '\n```\n' +
-                    `OS: ${versions.os}`,
-                },
-              );
+              return createIssue('https://github.com/bendaye/what-if-store/issues/new', {
+                title: `Error report for ${versions.app}`,
+                body: 'Error:\n```' + error.stack + '\n```\n' + `OS: ${versions.os}`,
+              });
             }
 
             if (response === 2) app.quit();

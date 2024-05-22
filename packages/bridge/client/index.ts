@@ -1,22 +1,18 @@
-import {
-  createTRPCClient,
-  createWSClient,
-  httpLink,
-  splitLink,
-  wsLink,
-} from '@trpc/client';
 import SuperJSON from 'superjson';
 import { WebSocket } from 'ws';
+import { createTRPCClient, createWSClient, httpLink, splitLink, wsLink } from '@trpc/client';
 import type { AppRouter } from '../server/routers/_app';
-import { StartTRPCServerProps } from '../server/schema';
+import type { StartTRPCServerProps } from '../server/schema';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 globalThis.WebSocket = WebSocket as any;
 
 export const createBridgeTRPCClient = (
   props?: StartTRPCServerProps,
 ): ReturnType<typeof createTRPCClient<AppRouter>> => {
+  const port = props?.port ?? process.env.NEXT_PUBLIC_BRIDGE_PORT;
   const wsClient = createWSClient({
-    url: `ws://localhost:${props?.port ?? 3232}`,
+    url: `ws://localhost:${port}`,
   });
   return createTRPCClient<AppRouter>({
     links: [
@@ -29,7 +25,7 @@ export const createBridgeTRPCClient = (
           transformer: SuperJSON,
         }),
         false: httpLink({
-          url: `http://localhost:${props?.port ?? 3232}`,
+          url: `http://localhost:${port}`,
           transformer: SuperJSON,
         }),
       }),

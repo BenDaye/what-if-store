@@ -1,14 +1,10 @@
 import { app, BrowserWindow } from 'electron';
 import serve from 'electron-serve';
 import { default as waitPort } from 'wait-port';
-import { startTRPCServer, stopTRPCServer } from './bridge/server/main';
+import { startTRPCServer, stopTRPCServer } from '@what-if-store/bridge';
 import { initializeIpc } from './ipc';
 import { initializeLogger } from './logger';
-import {
-  initializePath,
-  startPowerSaveBlocker,
-  stopPowerSaveBlocker,
-} from './utils';
+import { initializePath, startPowerSaveBlocker, stopPowerSaveBlocker } from './utils';
 import { createWindow } from './window';
 
 const isDev = process.env.NODE_ENV !== 'production';

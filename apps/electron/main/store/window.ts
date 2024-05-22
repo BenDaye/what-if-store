@@ -1,5 +1,6 @@
-import { Rectangle } from 'electron';
-import { Schema, default as Store } from 'electron-store';
+import type { Rectangle } from 'electron';
+import type { Schema } from 'electron-store';
+import { default as Store } from 'electron-store';
 import { getPath } from '../utils';
 import { MIN_HEIGHT, MIN_WIDTH } from '../window';
 
