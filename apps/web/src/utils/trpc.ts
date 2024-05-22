@@ -1,15 +1,17 @@
 // ℹ️ Type-only import:
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 import type { AppRouter } from '@/server/routers/_app';
+import type { NextPageContext } from 'next';
+import SuperJSON from 'superjson';
 import type { TRPCLink } from '@trpc/client';
-import { createWSClient, httpLink, loggerLink, splitLink, wsLink } from '@trpc/client';
+import { createWSClient, httpBatchLink, loggerLink, splitLink, wsLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import type { inferRouterOutputs } from '@trpc/server';
 
 let client: ReturnType<typeof createWSClient> | null = null;
 
 function getHttpLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
-  return httpLink({
+  return httpBatchLink({
     url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
     headers() {
       if (!ctx?.req?.headers) {
@@ -20,7 +22,7 @@ function getHttpLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
         'x-ssr': '1',
       };
     },
-    transformer: superjson,
+    transformer: SuperJSON,
     fetch: (url, options) => fetch(url, { ...options, credentials: 'include' }),
     methodOverride: 'POST',
   });
@@ -36,7 +38,7 @@ function getWSLink(): TRPCLink<AppRouter> {
   });
   return wsLink<AppRouter>({
     client,
-    transformer: superjson,
+    transformer: SuperJSON,
   });
 }
 
@@ -100,7 +102,7 @@ export const trpc = createTRPCNext<AppRouter>({
    * @link https://trpc.io/docs/ssr
    */
   ssr: false,
-  transformer: superjson,
+  transformer: SuperJSON,
 });
 
 export type RouterOutput = inferRouterOutputs<AppRouter>;

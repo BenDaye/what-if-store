@@ -11,7 +11,7 @@
 import { AuthRole } from '@prisma/client';
 import SuperJSON from 'superjson';
 import { ZodError } from 'zod';
-import type { initTRPC } from '@trpc/server';
+import { initTRPC } from '@trpc/server';
 import type { Context } from './context';
 import { CommonTRPCError } from './utils/errors';
 

@@ -25,7 +25,7 @@ const nextApiHandler = createNextApiHandler<AppRouter>({
   /**
    * Enable query batching
    */
-  allowBatching: false,
+  allowBatching: true,
   allowMethodOverride: true,
 });
 
