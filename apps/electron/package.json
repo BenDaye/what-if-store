@@ -54,6 +54,7 @@
     "@what-if-store/bridge": "workspace:*",
     "@what-if-store/config": "workspace:*",
     "@what-if-store/types": "workspace:*",
+    "@what-if-store/web": "workspace:*",
     "cors": "2.8.5",
     "electron": "^29.4.0",
     "electron-builder": "^24.13.3",

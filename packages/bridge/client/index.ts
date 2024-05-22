@@ -10,6 +10,7 @@ globalThis.WebSocket = WebSocket as any;
 export const createBridgeTRPCClient = (
   props?: StartTRPCServerProps,
 ): ReturnType<typeof createTRPCClient<AppRouter>> => {
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   const port = props?.port ?? process.env.NEXT_PUBLIC_BRIDGE_PORT;
   const wsClient = createWSClient({
     url: `ws://localhost:${port}`,
