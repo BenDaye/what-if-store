@@ -21,6 +21,10 @@
       "cache": false,
       "inputs": ["./.env.example", "./.env.production.local"],
       "outputs": ["./.env.production.local"]
+    },
+    "@what-if-store/prisma#dev": {
+      "cache": false,
+      "dependsOn": ["//#dev:env-check"]
     }
   },
   "globalEnv": [

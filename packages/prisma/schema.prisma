@@ -1,0 +1,448 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuthRole {
+  User
+  Admin
+  Provider
+}
+
+model User {
+  id                    String                        @id @default(uuid())
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
+  username              String                        @unique
+  password              String
+  role                  AuthRole                      @default(User)
+  UserProfile           UserProfile?
+  ProviderProfile       ProviderProfile?
+  FollowingUsers        UserFollow[]                  @relation("UserFollowing")
+  Followers             UserFollow[]                  @relation("UserFollowers")
+  ProvidingApplications Application[]
+  OwningApplications    ApplicationOwn[]
+  FollowingApplications ApplicationFollow[]
+  ProvidingCollections  ApplicationCollection[]
+  OwningCollections     ApplicationCollectionOwn[]
+  FollowingCollections  ApplicationCollectionFollow[]
+  Files                 File[]
+  ApiKeys               UserApiKey[]
+  Balance               UserBalance?
+  BalanceLogs           UserBalanceLog[]
+  Donors                UserDonation[]                @relation("UserDonationDonor")
+  Donees                UserDonation[]                @relation("UserDonationDonee")
+}
+
+model UserFollow {
+  createdAt    DateTime @default(now())
+  Following    User     @relation("UserFollowing", fields: [followingId], references: [id])
+  followingId  String
+  FollowedBy   User     @relation("UserFollowers", fields: [followedById], references: [id])
+  followedById String
+
+  @@id([followingId, followedById])
+}
+
+model UserDonation {
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  donorId      String
+  Donor        User           @relation("UserDonationDonor", fields: [donorId], references: [id])
+  doneeId      String
+  Donee        User           @relation("UserDonationDonee", fields: [doneeId], references: [id])
+  balanceLogId String         @unique
+  BalanceLog   UserBalanceLog @relation(fields: [balanceLogId], references: [id])
+}
+
+model UserProfile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String?
+  nickname  String?
+  bio       String?
+  avatar    String?
+  country   String?
+  userId    String   @unique
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserApiKey {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  key       String   @unique @default(uuid())
+  remark    String
+  userId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, remark])
+}
+
+model UserBalance {
+  id        String           @id @default(uuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  available Int              @default(0)
+  frozen    Int              @default(0)
+  userId    String           @unique
+  User      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Logs      UserBalanceLog[]
+}
+
+enum UserBalanceLogType {
+  Deposit
+  Withdraw
+  Refund
+  Reward
+  Purchase
+  Sale
+  Prepayment
+  Donation
+  Other
+}
+
+model UserBalanceLog {
+  id                       String                    @id @default(uuid())
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  amount                   Int
+  balance                  Int
+  remark                   String?
+  type                     UserBalanceLogType        @default(Other)
+  prevId                   String?                   @unique
+  PrevLog                  UserBalanceLog?           @relation("UserBalanceLogContext", fields: [prevId], references: [id])
+  NextLog                  UserBalanceLog?           @relation("UserBalanceLogContext")
+  userId                   String
+  User                     User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balanceId                String
+  Balance                  UserBalance               @relation(fields: [balanceId], references: [id], onDelete: Cascade)
+  UserDonation             UserDonation?
+  ApplicationOwn           ApplicationOwn?
+  ApplicationCollectionOwn ApplicationCollectionOwn?
+}
+
+enum ProviderType {
+  IndependentDeveloper
+  Company
+  Community
+}
+
+model ProviderProfile {
+  id            String                 @id @default(uuid())
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  type          ProviderType
+  name          String
+  email         String?
+  bio           String?
+  website       String?
+  avatar        String?
+  verified      Boolean                @default(false)
+  Verifications ProviderVerification[]
+  userId        String                 @unique
+  User          User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum ProviderVerificationStatus {
+  Pending
+  Approved
+  rejected
+}
+
+model ProviderVerification {
+  id          String                     @id @default(uuid())
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt
+  status      ProviderVerificationStatus @default(Pending)
+  application String?
+  replication String?
+  providerId  String
+  Provider    ProviderProfile            @relation(fields: [providerId], references: [id], onDelete: Cascade)
+}
+
+enum ApplicationCategory {
+  AR
+  Books
+  Business
+  DeveloperTools
+  Education
+  Entertainment
+  Finance
+  FoodDrink
+  GraphicsDesign
+  HealthFitness
+  Kids
+  Lifestyle
+  MagazinesNewspapers
+  Medical
+  Music
+  Navigation
+  News
+  PhotoVideo
+  Productivity
+  Reference
+  Extensions
+  Shopping
+  SocialNetworking
+  Sports
+  Travel
+  Utilities
+  Weather
+  Other
+}
+
+enum ApplicationPlatform {
+  iOS
+  Android
+  Web
+  Mac
+  Windows
+  Linux
+  Other
+}
+
+enum ApplicationStatus {
+  Draft
+  Pending
+  Approved
+  Rejected
+  Deleted
+  Banned
+  Hidden
+  Published
+  Suspended
+  Achieved
+}
+
+enum ApplicationPurchaseType {
+  Store
+  InApp
+}
+
+model Application {
+  id               String                  @id @default(uuid())
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  name             String
+  description      String?
+  category         ApplicationCategory
+  status           ApplicationStatus       @default(Draft)
+  Information      ApplicationInformation?
+  VersionHistories ApplicationVersion[]
+  providerId       String
+  Provider         User                    @relation(fields: [providerId], references: [id], onDelete: Restrict)
+  Followers        ApplicationFollow[]
+  Owners           ApplicationOwn[]
+  Collections      ApplicationCollection[]
+  Groups           ApplicationGroup[]
+  Tags             ApplicationTag[]
+  Assets           ApplicationAsset[]
+  purchaseType     ApplicationPurchaseType @default(Store)
+  Price            Price[]
+  PriceHistories   PriceHistory[]
+
+  @@unique([name, providerId, status])
+}
+
+model Price {
+  id                      String                 @id @default(uuid())
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  price                   Int                    @default(0)
+  country                 String
+  currency                String
+  applicationId           String?
+  Application             Application?           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationCollectionId String?
+  ApplicationCollection   ApplicationCollection? @relation(fields: [applicationCollectionId], references: [id], onDelete: Cascade)
+}
+
+model PriceHistory {
+  id                      String                 @id @default(uuid())
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  price                   Int                    @default(0)
+  country                 String
+  currency                String
+  startedAt               DateTime               @default(now())
+  endedAt                 DateTime?
+  applicationId           String?
+  Application             Application?           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationCollectionId String?
+  ApplicationCollection   ApplicationCollection? @relation(fields: [applicationCollectionId], references: [id], onDelete: Cascade)
+}
+
+model ApplicationInformation {
+  id            String                @id @default(uuid())
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  platforms     ApplicationPlatform[]
+  // NOTE: 如果db用的是mongodb可以使用type来定义(暂时先不改了).既然用的是pg,那就用zod做验证吧
+  compatibility Json
+  ageRating     String
+  countries     String[]
+  locales       String[]
+  website       String?
+  github        String?
+  applicationId String                @unique
+  Application   Application           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+}
+
+model ApplicationVersion {
+  id            String      @id @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  version       String
+  releaseDate   DateTime    @default(now())
+  changelog     String?
+  latest        Boolean     @default(false)
+  deprecated    Boolean     @default(false)
+  preview       Boolean     @default(false)
+  applicationId String
+  Application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([version, applicationId])
+}
+
+enum ApplicationGroupType {
+  Permanent
+  Persistent
+  Temporary
+}
+
+model ApplicationGroup {
+  id           String               @id @default(uuid())
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  name         String               @unique
+  description  String?
+  type         ApplicationGroupType @default(Temporary)
+  priority     Int                  @default(0)
+  Applications Application[]
+}
+
+enum ApplicationCollectionStatus {
+  Draft
+  Deleted
+  Published
+  Suspended
+  Achieved
+}
+
+model ApplicationCollection {
+  id             String                        @id @default(uuid())
+  createdAt      DateTime                      @default(now())
+  updatedAt      DateTime                      @updatedAt
+  name           String
+  description    String?
+  status         ApplicationCollectionStatus   @default(Draft)
+  providerId     String
+  Provider       User                          @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  Applications   Application[]
+  Followers      ApplicationCollectionFollow[]
+  Owners         ApplicationCollectionOwn[]
+  Price          Price[]
+  PriceHistories PriceHistory[]
+
+  @@unique([name, providerId, status])
+}
+
+model ApplicationTag {
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  name         String        @unique
+  Applications Application[]
+}
+
+enum ApplicationAssetType {
+  Icon
+  Screenshot
+  Banner
+  Background
+  Video
+  File
+}
+
+model ApplicationAsset {
+  id            String               @id @default(uuid())
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  type          ApplicationAssetType
+  url           String
+  name          String?
+  description   String?
+  content       Json?
+  isPrimary     Boolean              @default(false)
+  isLocal       Boolean              @default(false)
+  applicationId String
+  Application   Application          @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, type, name])
+}
+
+model File {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  md5       String   @unique
+  name      String   @unique
+  path      String   @unique
+  size      Int
+  mimeType  String
+  Users     User[]
+}
+
+model ApplicationFollow {
+  createdAt     DateTime    @default(now())
+  Application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String
+  User          User        @relation(fields: [userId], references: [id])
+  userId        String
+
+  @@id([applicationId, userId])
+}
+
+model ApplicationCollectionFollow {
+  createdAt               DateTime              @default(now())
+  ApplicationCollection   ApplicationCollection @relation(fields: [applicationCollectionId], references: [id])
+  applicationCollectionId String
+  User                    User                  @relation(fields: [userId], references: [id])
+  userId                  String
+
+  @@id([applicationCollectionId, userId])
+}
+
+model ApplicationOwn {
+  createdAt     DateTime       @default(now())
+  Application   Application    @relation(fields: [applicationId], references: [id])
+  applicationId String
+  User          User           @relation(fields: [userId], references: [id])
+  userId        String
+  balanceLogId  String         @unique
+  BalanceLog    UserBalanceLog @relation(fields: [balanceLogId], references: [id])
+
+  @@id([applicationId, userId])
+}
+
+model ApplicationCollectionOwn {
+  createdAt               DateTime              @default(now())
+  ApplicationCollection   ApplicationCollection @relation(fields: [applicationCollectionId], references: [id])
+  applicationCollectionId String
+  User                    User                  @relation(fields: [userId], references: [id])
+  userId                  String
+  balanceLogId            String                @unique
+  BalanceLog              UserBalanceLog        @relation(fields: [balanceLogId], references: [id])
+
+  @@id([applicationCollectionId, userId])
+}

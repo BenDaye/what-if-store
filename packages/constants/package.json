@@ -1,0 +1,9 @@
+{
+  "name": "@what-if-store/constants",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "devDependencies": {
+    "@what-if-store/config": "workspace:*"
+  }
+}

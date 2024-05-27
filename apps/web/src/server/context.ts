@@ -3,7 +3,7 @@ import type { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
 import type { CreateNextContextOptions, NextApiRequest } from '@trpc/server/adapters/next';
 import type { CreateWSSContextFnOptions } from '@trpc/server/adapters/ws';
-import type { appLogger, prisma, redis } from './modules';
+import { appLogger, prisma, redis } from './modules';
 
 export interface CreateContextOptions {
   session: Session | null;

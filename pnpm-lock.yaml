@@ -5,9 +5,14 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@blocknote/core': 0.13.4
+  '@blocknote/mantine': 0.13.4
+  '@blocknote/react': 0.13.4
+  '@faker-js/faker': 8.4.1
   '@types/node': 20.12.12
   '@types/react': 18.3.2
   '@types/react-dom': 18.3.0
+  countries-list: 3.1.0
   react: 18.3.1
   react-dom: 18.3.1
 
@@ -22,7 +27,7 @@ importers:
         specifier: 19.2.2
         version: 19.2.2
       dotenv-checker:
-        specifier: ^1.1.5
+        specifier: 1.1.5
         version: 1.1.5
       dotenv-cli:
         specifier: 7.4.2
@@ -92,14 +97,14 @@ importers:
         specifier: 7.24.5
         version: 7.24.5
       '@blocknote/core':
-        specifier: 0.13.2
-        version: 0.13.2
+        specifier: 0.13.4
+        version: 0.13.4
       '@blocknote/mantine':
-        specifier: 0.13.2
-        version: 0.13.2(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 0.13.4
+        version: 0.13.4(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
       '@blocknote/react':
-        specifier: 0.13.2
-        version: 0.13.2(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 0.13.4
+        version: 0.13.4(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
       '@emotion/cache':
         specifier: 11.11.0
         version: 11.11.0
@@ -251,14 +256,14 @@ importers:
   apps/web:
     dependencies:
       '@blocknote/core':
-        specifier: 0.13.2
-        version: 0.13.2
+        specifier: 0.13.4
+        version: 0.13.4
       '@blocknote/mantine':
-        specifier: 0.13.2
-        version: 0.13.2(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 0.13.4
+        version: 0.13.4(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
       '@blocknote/react':
-        specifier: 0.13.2
-        version: 0.13.2(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 0.13.4
+        version: 0.13.4(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
       '@emotion/cache':
         specifier: 11.11.0
         version: 11.11.0
@@ -584,11 +589,109 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
 
+  packages/constants:
+    devDependencies:
+      '@what-if-store/config':
+        specifier: workspace:*
+        version: link:../config
+
+  packages/prisma:
+    dependencies:
+      '@faker-js/faker':
+        specifier: 8.4.1
+        version: 8.4.1
+      '@prisma/client':
+        specifier: 5.13.0
+        version: 5.13.0(prisma@5.13.0)
+      '@what-if-store/config':
+        specifier: workspace:*
+        version: link:../config
+      '@what-if-store/constants':
+        specifier: workspace:*
+        version: link:../constants
+      '@what-if-store/utils':
+        specifier: workspace:*
+        version: link:../utils
+      argon2:
+        specifier: 0.40.1
+        version: 0.40.1
+    devDependencies:
+      '@types/node':
+        specifier: 20.12.12
+        version: 20.12.12
+      npm-run-all:
+        specifier: 4.1.5
+        version: 4.1.5
+      prisma:
+        specifier: 5.13.0
+        version: 5.13.0
+      tsx:
+        specifier: 4.10.2
+        version: 4.10.2
+
+  packages/server:
+    dependencies:
+      '@blocknote/core':
+        specifier: 0.13.4
+        version: 0.13.4
+      '@blocknote/mantine':
+        specifier: 0.13.4
+        version: 0.13.4(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
+      '@blocknote/react':
+        specifier: 0.13.4
+        version: 0.13.4(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
+      '@trpc/client':
+        specifier: 11.0.0-rc.374
+        version: 11.0.0-rc.374(@trpc/server@11.0.0-rc.374)
+      '@trpc/next':
+        specifier: 11.0.0-rc.374
+        version: 11.0.0-rc.374(@tanstack/react-query@5.28.14)(@trpc/client@11.0.0-rc.374)(@trpc/react-query@11.0.0-rc.374)(@trpc/server@11.0.0-rc.374)(next@14.1.4)(react-dom@18.3.1)(react@18.3.1)
+      '@trpc/react-query':
+        specifier: 11.0.0-rc.374
+        version: 11.0.0-rc.374(@tanstack/react-query@5.28.14)(@trpc/client@11.0.0-rc.374)(@trpc/server@11.0.0-rc.374)(react-dom@18.3.1)(react@18.3.1)
+      '@trpc/server':
+        specifier: 11.0.0-rc.374
+        version: 11.0.0-rc.374
+      '@what-if-store/config':
+        specifier: workspace:*
+        version: link:../config
+      '@what-if-store/prisma':
+        specifier: workspace:*
+        version: link:../prisma
+      superjson:
+        specifier: 2.2.1
+        version: 2.2.1
+      ws:
+        specifier: 8.17.0
+        version: 8.17.0
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+      zod-form-data:
+        specifier: 2.0.2
+        version: 2.0.2(zod@3.23.8)
+    devDependencies:
+      '@types/ws':
+        specifier: 8.5.10
+        version: 8.5.10
+
   packages/types:
     devDependencies:
       '@what-if-store/config':
         specifier: workspace:*
         version: link:../config
+
+  packages/utils:
+    dependencies:
+      '@faker-js/faker':
+        specifier: 8.4.1
+        version: 8.4.1
+      '@what-if-store/config':
+        specifier: workspace:*
+        version: link:../config
+      countries-list:
+        specifier: 3.1.0
+        version: 3.1.0
 
 packages:
 
@@ -1887,8 +1990,8 @@ packages:
       '@babel/helper-validator-identifier': 7.24.5
       to-fast-properties: 2.0.0
 
-  /@blocknote/core@0.13.2:
-    resolution: {integrity: sha512-HthOOI22YLMWc6lL/+xniJh4ujldwOkOKAZRUbVf8+PPFqMpbuOaNwRlmUfwG0YB4W0+YHFpgnhiYuo4t1NEdA==}
+  /@blocknote/core@0.13.4:
+    resolution: {integrity: sha512-kC+twbj73MoLnlDpzu01zDo2h3n4iELSTTPxNpiw+MMMTigK+Jel9e9SogFeKCIjImAJNlKvmdAPSxJC+Kvb/g==}
     dependencies:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
       '@tiptap/extension-bold': 2.4.0(@tiptap/core@2.4.0)
@@ -1932,40 +2035,40 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@blocknote/mantine@0.13.2(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-kMARgF+PrJxaKX73fXBicWEUCpkdBXqU+a2hrLhA347YcbEu80+5Gn1u3o6IJ0WsYCZT6cWM/IpzgOzaEpF7mA==}
+  /@blocknote/mantine@0.13.4(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-zq1uh8cE9K9lRSQjWgo8nvDiV7y9wHqoklrlASTI9atHJTx7c33doXrMOwBwyeCTxuWnqk6mbF34CeAh8A3MRQ==}
     peerDependencies:
       react: 18.3.1
       react-dom: 18.3.1
     dependencies:
-      '@blocknote/core': 0.13.2
-      '@blocknote/react': 0.13.2(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
+      '@blocknote/core': 0.13.4
+      '@blocknote/react': 0.13.4(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
       '@mantine/core': 7.9.1(@mantine/hooks@7.9.1)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
       '@mantine/hooks': 7.9.1(react@18.3.1)
       '@mantine/utils': 6.0.21(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-icons: 4.12.0(react@18.3.1)
+      react-icons: 5.2.1(react@18.3.1)
       use-prefers-color-scheme: 1.1.3(react@18.3.1)
     transitivePeerDependencies:
       - '@tiptap/pm'
       - '@types/react'
       - supports-color
 
-  /@blocknote/react@0.13.2(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-QD6sfg1IUsxgsDQ1rOMQ1pYwXQf9AU1gRwt1jyXpJpl5mKJmoZRVKdsDAUwcZcseVGJaX8WSmlOaEhwNWqcrqQ==}
+  /@blocknote/react@0.13.4(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-4B7ANJJufxcF4WDV2LUnomii1xd05xyNx+OXWZ5IHhPhvOU083KZWFXTw7y2IPyZ3G8I+xHegF/9CEdTB0Asxw==}
     peerDependencies:
       react: 18.3.1
       react-dom: 18.3.1
     dependencies:
-      '@blocknote/core': 0.13.2
+      '@blocknote/core': 0.13.4
       '@floating-ui/react': 0.26.14(react-dom@18.3.1)(react@18.3.1)
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
       '@tiptap/react': 2.4.0(@tiptap/core@2.4.0)(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
       lodash.merge: 4.6.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-icons: 4.12.0(react@18.3.1)
+      react-icons: 5.2.1(react@18.3.1)
       use-prefers-color-scheme: 1.1.3(react@18.3.1)
     transitivePeerDependencies:
       - '@tiptap/pm'
@@ -10275,8 +10378,8 @@ packages:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  /react-icons@4.12.0(react@18.3.1):
-    resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
+  /react-icons@5.2.1(react@18.3.1):
+    resolution: {integrity: sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==}
     peerDependencies:
       react: 18.3.1
     dependencies:
