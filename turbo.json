@@ -1,40 +1,5 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
-    "lint": {
-      "cache": false
-    },
-    "lint:fix": {
-      "cache": false
-    },
-    "dev": {
-      "cache": false,
-      "dependsOn": ["//#dev:env-check"],
-      "persistent": true
-    },
-    "//#dev:env-check": {
-      "cache": false,
-      "inputs": ["./.env.example", "./.env.development.local"],
-      "outputs": ["./.env.development.local"]
-    },
-    "//#build:env-check": {
-      "cache": false,
-      "inputs": ["./.env.example", "./.env.production.local"],
-      "outputs": ["./.env.production.local"]
-    },
-    "@what-if-store/prisma#dev": {
-      "cache": false,
-      "dependsOn": ["//#dev:env-check"]
-    },
-    "@what-if-store/server#dev": {
-      "cache": false,
-      "dependsOn": ["//#dev:env-check"]
-    },
-    "@what-if-store/web#dev": {
-      "cache": false,
-      "dependsOn": ["//#dev:env-check"]
-    }
-  },
   "globalEnv": [
     "NODE_ENV",
     "APP_PORT",
@@ -55,5 +20,58 @@
     "REDIS_URL",
     "NEXT_PUBLIC_DISABLE_SIGN_IN",
     "NEXT_PUBLIC_DISABLE_SIGN_UP"
-  ]
+  ],
+  "tasks": {
+    "lint": {
+      "cache": false
+    },
+    "lint:fix": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "dependsOn": [
+        "//#dev:env-check"
+      ],
+      "persistent": true
+    },
+    "//#dev:env-check": {
+      "cache": false,
+      "inputs": [
+        "./.env.example",
+        "./.env.development.local"
+      ],
+      "outputs": [
+        "./.env.development.local"
+      ]
+    },
+    "//#build:env-check": {
+      "cache": false,
+      "inputs": [
+        "./.env.example",
+        "./.env.production.local"
+      ],
+      "outputs": [
+        "./.env.production.local"
+      ]
+    },
+    "@what-if-store/prisma#dev": {
+      "cache": false,
+      "dependsOn": [
+        "//#dev:env-check"
+      ]
+    },
+    "@what-if-store/server#dev": {
+      "cache": false,
+      "dependsOn": [
+        "//#dev:env-check"
+      ]
+    },
+    "@what-if-store/web#dev": {
+      "cache": false,
+      "dependsOn": [
+        "//#dev:env-check"
+      ]
+    }
+  }
 }
