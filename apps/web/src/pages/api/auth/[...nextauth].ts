@@ -1,11 +1,11 @@
-import { prisma } from '@/server/modules/prisma';
-import { signInSchema } from '@/server/schemas/auth';
-import { Prisma } from '@prisma/client';
 import { verify } from 'argon2';
 import type { AuthOptions, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { z } from 'zod';
+import { Prisma } from '@what-if-store/prisma/client';
+import { prisma } from '@what-if-store/server/server/modules/prisma';
+import { signInSchema } from '@what-if-store/server/server/schemas/auth';
 
 const select = Prisma.validator<Prisma.UserSelect>()({
   id: true,

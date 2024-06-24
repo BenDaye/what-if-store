@@ -1,9 +1,9 @@
 import { useGridPagination } from '@/hooks/common';
-import type { ApplicationGroupListInputSchema } from '@/server/schemas';
-import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
+import { AuthRole } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ApplicationGroupListInputSchema } from '@what-if-store/server/server/schemas';
 
 export const useDashboardApplicationGroupsWithPagination = (input?: ApplicationGroupListInputSchema) => {
   const {

@@ -1,7 +1,6 @@
 import { useAppUserApiKeysWithPagination, useDashboardUserApiKeysWithPagination, useNotice } from '@/hooks';
 import type { OverridesProps } from '@/types/overrides';
 import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
-import type { RouterOutput } from '@/utils/trpc';
 import { DeleteForever as RemoveIcon } from '@mui/icons-material';
 import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
 import type {
@@ -12,10 +11,11 @@ import type {
   GridSortModel,
 } from '@mui/x-data-grid';
 import { DataGrid, GridActionsCellItem, zhCN } from '@mui/x-data-grid';
-import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
+import { AuthRole } from '@what-if-store/prisma/client';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 import { trpc } from '@what-if-store/server/react/trpc';
 
 type ApiKeyDataGridProps = OverridesProps<{

@@ -1,7 +1,5 @@
 import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { useNotice } from '@/hooks';
-import type { ApplicationUpdateInputSchema } from '@/server/schemas';
-import { applicationUpdateInputSchema } from '@/server/schemas';
 import type { OverridesCardProps } from '@/types/overrides';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
@@ -11,6 +9,8 @@ import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ApplicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
+import { applicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
 import { CountriesAutoComplete } from './CountriesAutoComplete';
 import { LocalesAutoComplete } from './LocaleAutoComplete';
 import { TagsAutoComplete } from './TagsAutoComplete';

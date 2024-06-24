@@ -1,7 +1,5 @@
 import nextI18NextConfig from '@/../next-i18next.config';
 import type { NextPageWithLayout } from '@/pages/_app';
-import { prisma, redis } from '@/server/modules';
-import { appRouter } from '@/server/routers/_app';
 import { Box, Divider, Link, Typography } from '@mui/material';
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -9,6 +7,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import SuperJSON from 'superjson';
 import { useCountdown } from 'usehooks-ts';
+import { prisma, redis } from '@what-if-store/server/server/modules';
+import { appRouter } from '@what-if-store/server/server/routers/_app';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 
 const Page: NextPageWithLayout<InferGetStaticPropsType<typeof getStaticProps>> = () => {

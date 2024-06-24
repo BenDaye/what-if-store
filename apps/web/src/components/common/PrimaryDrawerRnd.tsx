@@ -7,10 +7,10 @@ import {
   DASHBOARD_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
 } from '@/constants/drawer';
 import { useTheme } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { useDebounceCallback, useLocalStorage } from 'usehooks-ts';
+import { AuthRole } from '@what-if-store/prisma/client';
 
 type PrimaryDrawerRndProps = { role?: AuthRole };
 export const PrimaryDrawerRnd = ({ role = AuthRole.User }: PrimaryDrawerRndProps) => {

@@ -1,12 +1,12 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import type { IdSchema } from '@/server/schemas';
-import { idSchema, providerUpdateProfileInputSchema } from '@/server/schemas';
-import { ProviderType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
+import { ProviderType } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
+import { idSchema, providerUpdateProfileInputSchema } from '@what-if-store/server/server/schemas';
 
 // type AppProviderRouterOutput = RouterOutput['publicAppProvider']['getById'];
 export const useAppProviderHookDataSchema = providerUpdateProfileInputSchema

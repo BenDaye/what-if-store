@@ -1,13 +1,13 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import type { IdSchema } from '@/server/schemas';
-import { applicationAssetCreateInputSchema, idSchema } from '@/server/schemas';
 import type { PartialBlock } from '@blocknote/core';
-import { ApplicationAssetType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import type { z } from 'zod';
+import { ApplicationAssetType } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
+import { applicationAssetCreateInputSchema, idSchema } from '@what-if-store/server/server/schemas';
 
 // type AppApplicationAssetRouterOutput =
 //   RouterOutput['publicAppApplicationAsset']['getById'];

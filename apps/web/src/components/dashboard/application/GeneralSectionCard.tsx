@@ -1,17 +1,18 @@
 import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { useNotice } from '@/hooks';
-import type { ApplicationUpdateInputSchema } from '@/server/schemas';
-import { applicationUpdateInputSchema } from '@/server/schemas';
 import type { OverridesCardProps } from '@/types/overrides';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, MenuItem, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-import { ApplicationCategory } from '@prisma/client';
+
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ApplicationCategory } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ApplicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
+import { applicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
 
 type GeneralSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;

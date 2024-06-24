@@ -1,9 +1,9 @@
 import type { ChipProps } from '@mui/material';
 import { Chip } from '@mui/material';
-import { ProviderType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import type { PropsWithChildren } from 'react';
 import { useMemo } from 'react';
+import { ProviderType } from '@what-if-store/prisma/client';
 
 type ProviderTypeChipProps = {
   overrides?: {

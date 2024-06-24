@@ -1,6 +1,4 @@
 import { useCopy, useNotice } from '@/hooks';
-import type { UserApiKeyCreateInputSchema } from '@/server/schemas';
-import { userApiKeyCreateInputSchema } from '@/server/schemas';
 import type { OverridesButtonProps, OverridesDialogProps } from '@/types/overrides';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
@@ -17,13 +15,15 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
+import { AuthRole } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { UserApiKeyCreateInputSchema } from '@what-if-store/server/server/schemas';
+import { userApiKeyCreateInputSchema } from '@what-if-store/server/server/schemas';
 
 type CreateApiKeyButtonProps = OverridesButtonProps;
 export const CreateApiKeyButton = ({ overrides }: CreateApiKeyButtonProps) => {

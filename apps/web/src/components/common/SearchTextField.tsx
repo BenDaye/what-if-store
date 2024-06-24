@@ -1,8 +1,8 @@
-import type { ApplicationListInputSchema } from '@/server/schemas';
 import type { OverridesProps } from '@/types/overrides';
 import { Clear as ClearIcon, Search as SearchIcon } from '@mui/icons-material';
 import type { InputBaseProps } from '@mui/material';
 import { alpha, IconButton, InputBase, styled } from '@mui/material';
+import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',

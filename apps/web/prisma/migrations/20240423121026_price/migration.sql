@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "PriceHistory" ALTER COLUMN "startedAt" SET DEFAULT CURRENT_TIMESTAMP;

@@ -1,5 +1,4 @@
 import { FallbackString } from '@/constants/common';
-import type { RouterOutput } from '@/utils/trpc';
 import { Edit as EditIcon } from '@mui/icons-material';
 import {
   Avatar,
@@ -14,6 +13,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 
 type ProviderProfileCardProps = {
   data?: RouterOutput['protectedDashboardProvider']['getById'];

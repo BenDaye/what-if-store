@@ -1,5 +1,5 @@
-import { AuthRole } from '@prisma/client';
 import { withAuth } from 'next-auth/middleware';
+import { AuthRole } from '@what-if-store/prisma/client';
 
 export default withAuth({
   callbacks: {

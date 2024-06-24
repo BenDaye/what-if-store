@@ -19,7 +19,8 @@
     "DATABASE_URL",
     "REDIS_URL",
     "NEXT_PUBLIC_DISABLE_SIGN_IN",
-    "NEXT_PUBLIC_DISABLE_SIGN_UP"
+    "NEXT_PUBLIC_DISABLE_SIGN_UP",
+    "NEXT_PUBLIC_BRIDGE_PORT"
   ],
   "tasks": {
     "lint": {
@@ -30,48 +31,18 @@
     },
     "dev": {
       "cache": false,
-      "dependsOn": [
-        "//#dev:env-check"
-      ],
+      "dependsOn": ["//#dev:env-check"],
       "persistent": true
     },
     "//#dev:env-check": {
       "cache": false,
-      "inputs": [
-        "./.env.example",
-        "./.env.development.local"
-      ],
-      "outputs": [
-        "./.env.development.local"
-      ]
+      "inputs": ["./.env.example", "./.env.development.local"],
+      "outputs": ["./.env.development.local"]
     },
     "//#build:env-check": {
       "cache": false,
-      "inputs": [
-        "./.env.example",
-        "./.env.production.local"
-      ],
-      "outputs": [
-        "./.env.production.local"
-      ]
-    },
-    "@what-if-store/prisma#dev": {
-      "cache": false,
-      "dependsOn": [
-        "//#dev:env-check"
-      ]
-    },
-    "@what-if-store/server#dev": {
-      "cache": false,
-      "dependsOn": [
-        "//#dev:env-check"
-      ]
-    },
-    "@what-if-store/web#dev": {
-      "cache": false,
-      "dependsOn": [
-        "//#dev:env-check"
-      ]
+      "inputs": ["./.env.example", "./.env.production.local"],
+      "outputs": ["./.env.production.local"]
     }
   }
 }

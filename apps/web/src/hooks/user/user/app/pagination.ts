@@ -1,9 +1,9 @@
 import { useGridPagination } from '@/hooks/common';
 import { useNotice } from '@/hooks/notice';
-import type { UserListInputSchema } from '@/server/schemas';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { UserListInputSchema } from '@what-if-store/server/server/schemas';
 
 export const useAppUsersWithPagination = (input?: UserListInputSchema) => {
   const {

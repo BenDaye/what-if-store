@@ -1,6 +1,11 @@
 import '@/components/common/BlockNote/styles.css';
 import '@/components/common/lexical/themes/PlaygroundEditorTheme.css';
+import { DefaultLayout } from '@/components/layouts';
+import { AuthProvider, BridgeProvider, NoticeProvider, TernaryDarkModeProvider } from '@/hooks';
+import { createEmotionCache } from '@/theme';
 import '@/theme/global.css';
+import type { EmotionCache } from '@emotion/react';
+import { CacheProvider } from '@emotion/react';
 import '@fontsource/roboto-mono/300.css';
 import '@fontsource/roboto-mono/400.css';
 import '@fontsource/roboto-mono/500.css';
@@ -9,13 +14,6 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import 'overlayscrollbars/overlayscrollbars.css';
-import { DefaultLayout } from '@/components/layouts';
-import { AuthProvider, BridgeProvider, NoticeProvider, TernaryDarkModeProvider } from '@/hooks';
-import type { CreateContextOptions } from '@/server/context';
-import { createEmotionCache } from '@/theme';
-import type { EmotionCache } from '@emotion/react';
-import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { NextPage } from 'next';
@@ -24,9 +22,11 @@ import { appWithTranslation } from 'next-i18next';
 import type { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
+import { trpc } from '@what-if-store/server/react/trpc';
+import type { CreateContextOptions } from '@what-if-store/server/server/context';
+import 'overlayscrollbars/overlayscrollbars.css';
 import type { ReactElement, ReactNode } from 'react';
 import { SWRConfig } from 'swr';
-import { trpc } from '@what-if-store/server/react/trpc';
 import nextI18NextConfig from '../../next-i18next.config.js';
 
 // Client-side cache, shared for the whole session of the user in the browser.

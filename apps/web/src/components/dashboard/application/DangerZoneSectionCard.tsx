@@ -1,8 +1,8 @@
 import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import type { OverridesCardProps } from '@/types/overrides';
 import { Button, Card, CardContent, CardHeader, List, ListItem, ListItemText } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
+import { AuthRole } from '@what-if-store/prisma/client';
 import { ChangeStatusButton } from './ChangeStatusButton';
 
 type DangerZoneSectionCardProps = OverridesCardProps & {

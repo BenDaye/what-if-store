@@ -13,6 +13,7 @@
     "dev:env-check": "dotenv-checker --schema .env.example --env .env.development.local",
     "dev:db": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/prisma\"",
     "dev:web": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/server\"  --filter=\"@what-if-store/web\"",
+    "dev:bridge": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/bridge\"",
     "build": "dotenv -e .env.production.local -- turbo run build",
     "build:env-check": "dotenv-checker --schema .env.example --env .env.production.local",
     "prepare": "husky"
@@ -39,6 +40,7 @@
     "@commitlint/cli": "19.3.0",
     "@commitlint/config-conventional": "19.2.2",
     "@ianvs/prettier-plugin-sort-imports": "4.2.1",
+    "@what-if-store/bridge": "workspace:*",
     "@what-if-store/config": "workspace:*",
     "@what-if-store/constants": "workspace:*",
     "@what-if-store/electron": "workspace:*",

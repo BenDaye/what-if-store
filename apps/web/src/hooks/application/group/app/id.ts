@@ -1,13 +1,13 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import type { IdSchema } from '@/server/schemas';
-import { applicationGroupCreateInputSchema, idSchema } from '@/server/schemas';
-import type { RouterOutput } from '@/utils/trpc';
-import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
+import { ApplicationGroupType } from '@what-if-store/prisma/client';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
+import { applicationGroupCreateInputSchema, idSchema } from '@what-if-store/server/server/schemas';
 
 export type AppApplicationGroupRouterOutput = RouterOutput['publicAppApplicationGroup']['getById'];
 export const useAppApplicationGroupHookDataSchema = applicationGroupCreateInputSchema

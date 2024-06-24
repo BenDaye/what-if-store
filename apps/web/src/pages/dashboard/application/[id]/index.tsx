@@ -11,15 +11,15 @@ import { DashboardLayout } from '@/components/layouts';
 import { useDashboardApplication } from '@/hooks';
 import type { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { prisma, redis } from '@/server/modules';
-import { appRouter } from '@/server/routers/_app';
-import type { IdSchema } from '@/server/schemas';
 import { Container } from '@mui/material';
-import { ApplicationCategory } from '@prisma/client';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import SuperJSON from 'superjson';
+import { ApplicationCategory } from '@what-if-store/prisma/client';
+import { prisma, redis } from '@what-if-store/server/server/modules';
+import { appRouter } from '@what-if-store/server/server/routers/_app';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
 import { createServerSideHelpers } from '@trpc/react-query/server';
 
 const Page: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ id }) => {

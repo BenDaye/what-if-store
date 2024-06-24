@@ -1,11 +1,11 @@
 import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { useDashboardUser } from '@/hooks';
-import type { IdSchema } from '@/server/schemas';
 import type { OverridesCardProps } from '@/types/overrides';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
 
 type UserSectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;

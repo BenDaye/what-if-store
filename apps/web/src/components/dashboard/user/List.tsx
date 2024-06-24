@@ -1,10 +1,10 @@
 import { CollapseList } from '@/components/common';
 import { useDashboardUsers } from '@/hooks';
-import type { UserListInputSchema } from '@/server/schemas';
 import type { ListProps } from '@mui/material';
 import { List } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
+import { AuthRole } from '@what-if-store/prisma/client';
+import type { UserListInputSchema } from '@what-if-store/server/server/schemas';
 import { UserListItemButton } from './ListItemButton';
 
 type UserListProps = ListProps & { input?: UserListInputSchema };

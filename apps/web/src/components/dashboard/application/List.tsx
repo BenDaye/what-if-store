@@ -1,10 +1,10 @@
 import { CollapseList } from '@/components/common';
 import { useDashboardApplications } from '@/hooks';
-import type { ApplicationListInputSchema } from '@/server/schemas';
 import type { ListProps } from '@mui/material';
 import { List } from '@mui/material';
-import { ApplicationCategory } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
+import { ApplicationCategory } from '@what-if-store/prisma/client';
+import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 import { ApplicationListItemButton } from './ListItemButton';
 
 type ApplicationListProps = ListProps & { input?: ApplicationListInputSchema };

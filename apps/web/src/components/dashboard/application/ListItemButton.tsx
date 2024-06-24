@@ -1,9 +1,9 @@
 import { useDashboardApplication } from '@/hooks';
-import type { IdSchema } from '@/server/schemas';
 import type { ListItemButtonProps } from '@mui/material';
 import { Avatar, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
 
 type ApplicationListItemButtonProps = ListItemButtonProps & {
   itemId: IdSchema;

@@ -3,8 +3,9 @@ import type { UseAppApplicationGroupsDataSchema } from '@/hooks';
 import { useAppApplicationGroup } from '@/hooks';
 import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-import { ApplicationGroupType } from '@prisma/client';
+
 import { useTranslation } from 'next-i18next';
+import { ApplicationGroupType } from '@what-if-store/prisma/client';
 import { SimpleApplicationCard } from '../Card';
 
 type CommonSectionProps = {

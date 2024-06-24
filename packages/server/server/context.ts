@@ -1,8 +1,9 @@
 import type { IncomingMessage } from 'node:http';
 import type { Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
-import type { CreateNextContextOptions, NextApiRequest } from '@trpc/server/adapters/next';
-import type { CreateWSSContextFnOptions } from '@trpc/server/adapters/ws';
+import type { CreateNextContextOptions, NextApiRequest } from './adapters/next';
+import type { CreateHTTPContextOptions } from './adapters/standalone';
+import type { CreateWSSContextFnOptions } from './adapters/ws';
 import { logger, prisma, redis } from './modules';
 
 export interface CreateContextOptions {
@@ -14,7 +15,7 @@ export interface CreateContextOptions {
  * @link https://trpc.io/docs/v11/context
  */
 export const createContext = async (
-  opts: CreateNextContextOptions | CreateWSSContextFnOptions,
+  opts: CreateNextContextOptions | CreateWSSContextFnOptions | CreateHTTPContextOptions,
 ): Promise<Context> => {
   const session = await getSession(opts);
   const sessionFromApiKey = await getSessionFromApiKey(opts);
@@ -38,7 +39,7 @@ export type Context = CreateContextOptions & {
 };
 
 export const getSessionFromApiKey = async (
-  opts: CreateNextContextOptions | CreateWSSContextFnOptions,
+  opts: CreateNextContextOptions | CreateWSSContextFnOptions | CreateHTTPContextOptions,
 ): Promise<CreateContextOptions['session']> => {
   const apiKey = opts.req.headers['x-api-key'];
   if (!apiKey) {

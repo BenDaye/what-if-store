@@ -3,20 +3,20 @@ import { FallbackId, FallbackString } from '@/constants/common';
 import { FallbackCountry, FallbackCurrency, FallbackPriceText, getCurrencySymbol } from '@/constants/country';
 import { FallbackVersion } from '@/constants/version';
 import { useNotice } from '@/hooks/notice';
-import type { ApplicationCreateInputSchema, IdSchema } from '@/server/schemas';
-import {
-  applicationCreateInputSchema,
-  applicationVersionCreateInputSchema,
-  idSchema,
-} from '@/server/schemas';
-import type { RouterOutput } from '@/utils/trpc';
-import { ApplicationAssetType, ApplicationCategory, ApplicationStatus } from '@prisma/client';
 import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
+import { ApplicationAssetType, ApplicationCategory, ApplicationStatus } from '@what-if-store/prisma/client';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ApplicationCreateInputSchema, IdSchema } from '@what-if-store/server/server/schemas';
+import {
+  applicationCreateInputSchema,
+  applicationVersionCreateInputSchema,
+  idSchema,
+} from '@what-if-store/server/server/schemas';
 
 type AppApplicationRouterOutput = RouterOutput['protectedAppApplication']['getById'];
 export const useAppApplicationHookDataSchema = applicationCreateInputSchema

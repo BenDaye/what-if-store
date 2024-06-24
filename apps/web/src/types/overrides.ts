@@ -1,4 +1,3 @@
-import type { ApplicationListInputSchema } from '@/server/schemas';
 import type {
   AppBarProps,
   AutocompleteProps,
@@ -28,6 +27,7 @@ import type {
   TextFieldProps,
 } from '@mui/material';
 import type { FieldError, Merge } from 'react-hook-form';
+import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 
 export type OverridesProps<T = object> = {
   overrides?: T;

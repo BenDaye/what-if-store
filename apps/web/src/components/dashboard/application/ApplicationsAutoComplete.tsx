@@ -1,14 +1,14 @@
 import { ApplicationStatusChip } from '@/components/common';
 import { useDashboardApplications, useDashboardUser } from '@/hooks';
-import { idSchema } from '@/server/schemas';
 import type { MultipleAutoCompleteProps, OverridesProps } from '@/types/overrides';
-import type { RouterOutput } from '@/utils/trpc';
 import type { ListItemTextProps } from '@mui/material';
 import { Autocomplete, ListItem, ListItemSecondaryAction, ListItemText, TextField } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useState } from 'react';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 import { z } from 'zod';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
+import { idSchema } from '@what-if-store/server/server/schemas';
 
 type IApplicationData = RouterOutput['protectedDashboardApplication']['list']['items'][number];
 const idArraySchema = z.object({ id: idSchema }).array();

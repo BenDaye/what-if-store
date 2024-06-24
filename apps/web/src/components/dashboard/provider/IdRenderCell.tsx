@@ -1,7 +1,7 @@
 import { useDashboardUser } from '@/hooks';
-import type { IdSchema } from '@/server/schemas';
 import type { LinkProps, TypographyProps } from '@mui/material';
 import { Link, Typography } from '@mui/material';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
 
 type IdRenderCellProps = {
   providerId: IdSchema;

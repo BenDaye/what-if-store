@@ -1,15 +1,15 @@
 import { useNotice } from '@/hooks';
-import type { IdSchema } from '@/server/schemas';
 import type { OverridesProps } from '@/types/overrides';
-import { getAvailableStatuses } from '@/utils/validApplicationStatusTransition';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import type { ButtonProps, MenuItemProps, MenuProps } from '@mui/material';
 import { Button, ListItemText, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
-import type { ApplicationStatus, AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
+import type { ApplicationStatus, AuthRole } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
+import { getAvailableStatuses } from '@what-if-store/utils/validator';
 
 type ChangeStatusButtonProps = OverridesProps<{
   ButtonProps?: ButtonProps;

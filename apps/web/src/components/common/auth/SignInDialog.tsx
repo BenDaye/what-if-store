@@ -1,9 +1,6 @@
 import type { AuthProps } from '@/hooks';
 import { useNotice } from '@/hooks';
-import type { SignInSchema } from '@/server/schemas/auth';
-import { signInSchema } from '@/server/schemas/auth';
 import type { OverridesDialogProps } from '@/types/overrides';
-import { resetTRPCClient } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -18,13 +15,16 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { getSession, signIn, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
+import { AuthRole } from '@what-if-store/prisma/client';
+import { resetTRPCClient } from '@what-if-store/server/react/trpc';
+import type { SignInSchema } from '@what-if-store/server/server/schemas/auth';
+import { signInSchema } from '@what-if-store/server/server/schemas/auth';
 import { SignUpButton } from './SignUpButton';
 
 type SignInDialogProps = OverridesDialogProps & AuthProps;

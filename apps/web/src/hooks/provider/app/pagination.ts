@@ -1,9 +1,9 @@
 import { useGridPagination } from '@/hooks/common';
 import { useNotice } from '@/hooks/notice';
-import type { ProviderListInputSchema } from '@/server/schemas';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ProviderListInputSchema } from '@what-if-store/server/server/schemas';
 
 export const useAppProvidersWithPagination = (input?: ProviderListInputSchema) => {
   const {

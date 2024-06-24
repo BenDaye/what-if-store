@@ -2,12 +2,12 @@ import { UpdateLocaleDialog } from '@/components/common/locale/UpdateDialog';
 import { Settings as SettingsIcon } from '@mui/icons-material';
 import type { DialogProps, MenuProps } from '@mui/material';
 import { Box, Button, ButtonGroup, ListItem, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
-import type { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import type { PropsWithChildren } from 'react';
 import { useRef } from 'react';
 import { useBoolean, useTernaryDarkMode } from 'usehooks-ts';
+import type { AuthRole } from '@what-if-store/prisma/client';
 import type { IconButtonWithTooltipProps } from '..';
 import { IconButtonWithTooltip } from '..';
 

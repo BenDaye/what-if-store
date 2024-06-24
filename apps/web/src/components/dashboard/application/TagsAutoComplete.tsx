@@ -1,11 +1,11 @@
 import { useDashboardApplicationTags } from '@/hooks';
-import type { ApplicationUpdateInputSchema } from '@/server/schemas';
 import type { MultipleAutoCompleteProps } from '@/types/overrides';
-import type { RouterOutput } from '@/utils/trpc';
 import { Autocomplete, ListItem, ListItemText, TextField } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useState } from 'react';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
+import type { ApplicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
 
 type ITagData = RouterOutput['protectedDashboardApplicationTag']['list']['items'][number];
 

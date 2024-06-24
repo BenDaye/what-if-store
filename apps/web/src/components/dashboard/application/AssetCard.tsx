@@ -2,10 +2,10 @@ import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import type { OverridesCardProps } from '@/types/overrides';
 import { DeleteForever as RemoveIcon, AttachFile as ReplaceIcon } from '@mui/icons-material';
 import { Box, Card, CardActions, CardContent, IconButton, Typography } from '@mui/material';
-import { ApplicationAssetType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { default as NextImage } from 'next/image';
 import { useEffect, useState } from 'react';
+import { ApplicationAssetType } from '@what-if-store/prisma/client';
 
 type AssetCardProps = OverridesCardProps & {
   asset?: UseDashboardApplicationHookDataSchema['assets'][number];

@@ -1,12 +1,13 @@
 import { EmptyDataBox } from '@/components/common';
 import type { UseAppApplicationsHookDataSchema } from '@/hooks';
-import type { ApplicationListInputSchema } from '@/server/schemas';
 import type { OverridesCardProps } from '@/types/overrides';
 import { Box, Card, CardContent, Divider, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
-import type { ApplicationCategory } from '@prisma/client';
+
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+import type { ApplicationCategory } from '@what-if-store/prisma/client';
+import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 import { SimpleApplicationCard } from '../Card';
 
 type CategorySectionCardProps = OverridesCardProps & {

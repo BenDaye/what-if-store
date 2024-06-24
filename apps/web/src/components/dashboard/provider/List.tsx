@@ -1,10 +1,10 @@
 import { CollapseList } from '@/components/common';
 import { useDashboardProviders } from '@/hooks';
-import type { ProviderListInputSchema } from '@/server/schemas';
 import type { ListProps } from '@mui/material';
 import { List } from '@mui/material';
-import { ProviderType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
+import { ProviderType } from '@what-if-store/prisma/client';
+import type { ProviderListInputSchema } from '@what-if-store/server/server/schemas';
 import { ProviderListItemButton } from './ListItemButton';
 
 type ProviderListProps = ListProps & { input?: ProviderListInputSchema };

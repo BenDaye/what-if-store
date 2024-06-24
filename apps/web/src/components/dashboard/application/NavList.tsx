@@ -1,4 +1,3 @@
-import type { IdSchema } from '@/server/schemas';
 import {
   Link as CollectionIcon,
   Support as CompatibilityIcon,
@@ -25,6 +24,7 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 import { useCallback, useMemo } from 'react';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
 
 export type NavListProps = {
   applicationId: IdSchema;

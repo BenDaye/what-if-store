@@ -1,8 +1,8 @@
-import type { IdSchema } from '@/server/schemas';
 import type { OverridesCardProps, OverridesProps } from '@/types/overrides';
 import type { PaperProps, StackProps } from '@mui/material';
 import { Card, CardContent, Paper, Stack } from '@mui/material';
 import type { PropsWithChildren } from 'react';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
 import type { NavListProps } from './NavList';
 import { NavList } from './NavList';
 

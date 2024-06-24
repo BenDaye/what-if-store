@@ -1,12 +1,12 @@
 import { useDashboardApplicationGroup } from '@/hooks';
 import type { OverridesProps } from '@/types/overrides';
-import type { RouterOutput } from '@/utils/trpc';
 import type { LinkProps } from '@mui/material';
 import { Link } from '@mui/material';
-import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 import { useBoolean } from 'usehooks-ts';
+import { ApplicationGroupType } from '@what-if-store/prisma/client';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 import { ApplicationGroupDialog } from './Dialog';
 
 type RowModel = RouterOutput['protectedDashboardApplicationGroup']['list']['items'][number];

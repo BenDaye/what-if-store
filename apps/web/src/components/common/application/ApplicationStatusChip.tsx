@@ -1,9 +1,9 @@
 import type { OverridesProps } from '@/types/overrides';
 import type { ChipProps } from '@mui/material';
 import { Chip } from '@mui/material';
-import { ApplicationStatus } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+import { ApplicationStatus } from '@what-if-store/prisma/client';
 
 type ApplicationStatusChipProps = OverridesProps<{
   ChipProps?: ChipProps;

@@ -1,6 +1,5 @@
 import type { AuthProps } from '@/hooks';
 import { useAuth, useNotice } from '@/hooks';
-import { signUpSchema } from '@/server/schemas/auth';
 import type { OverridesDialogProps } from '@/types/overrides';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon, Visibility, VisibilityOff } from '@mui/icons-material';
@@ -23,6 +22,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
 import type { z } from 'zod';
 import { trpc } from '@what-if-store/server/react/trpc';
+import { signUpSchema } from '@what-if-store/server/server/schemas/auth';
 import { SignInButton } from './SignInButton';
 
 type SignUpDialogProps = OverridesDialogProps & AuthProps;

@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "UserProfile" ALTER COLUMN "email" DROP NOT NULL,
-ALTER COLUMN "nickname" DROP NOT NULL;

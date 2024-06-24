@@ -12,6 +12,7 @@ const config = {
     '@what-if-store/constants',
     '@what-if-store/electron',
     '@what-if-store/prisma',
+    '@what-if-store/bridge',
     '@what-if-store/server',
     '@what-if-store/tsconfig',
     '@what-if-store/types',

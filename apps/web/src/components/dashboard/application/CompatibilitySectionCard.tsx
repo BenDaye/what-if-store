@@ -1,7 +1,5 @@
 import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { useNotice } from '@/hooks';
-import type { ApplicationUpdateInputSchema } from '@/server/schemas';
-import { applicationUpdateInputSchema } from '@/server/schemas';
 import type { OverridesCardProps } from '@/types/overrides';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,11 +19,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { ApplicationPlatform } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ApplicationPlatform } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ApplicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
+import { applicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
 
 type CompatibilitySectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;

@@ -1,11 +1,11 @@
 import { useNotice } from '@/hooks/notice';
-import type { ApplicationGroupListInputSchema } from '@/server/schemas';
-import type { RouterOutput } from '@/utils/trpc';
-import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
+import { AuthRole } from '@what-if-store/prisma/client';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { ApplicationGroupListInputSchema } from '@what-if-store/server/server/schemas';
 
 export type UseDashboardApplicationGroupsDataSchema =
   RouterOutput['protectedDashboardApplicationGroup']['list']['items'];

@@ -1,14 +1,14 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import type { IdSchema } from '@/server/schemas';
-import { applicationAssetCreateInputSchema, idSchema } from '@/server/schemas';
 import type { PartialBlock } from '@blocknote/core';
-import { ApplicationAssetType, AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import type { z } from 'zod';
+import { ApplicationAssetType, AuthRole } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { IdSchema } from '@what-if-store/server/server/schemas';
+import { applicationAssetCreateInputSchema, idSchema } from '@what-if-store/server/server/schemas';
 
 // type DashboardApplicationAssetRouterOutput =
 //   RouterOutput['protectedDashboardApplicationAsset']['getById'];

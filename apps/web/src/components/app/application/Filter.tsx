@@ -6,7 +6,6 @@ import {
   APP_SECONDARY_DRAWER_WIDTH,
   APP_SECONDARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
 } from '@/constants/drawer';
-import type { ApplicationListInputSchema } from '@/server/schemas';
 import type { OverridesDrawerProps, OverridesListProps } from '@/types/overrides';
 import { getLocaleStringList } from '@/utils/getLocaleList';
 import {
@@ -20,10 +19,11 @@ import {
   ListItemText,
   Toolbar,
 } from '@mui/material';
-import { ApplicationCategory, ApplicationPlatform } from '@prisma/client';
 import countries from 'countries-list/minimal/countries.2to3.min.json';
 import { useTranslation } from 'next-i18next';
 import { useLocalStorage } from 'usehooks-ts';
+import { ApplicationCategory, ApplicationPlatform } from '@what-if-store/prisma/client';
+import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 
 type ApplicationFilterProps = OverridesDrawerProps &
   OverridesListProps & {

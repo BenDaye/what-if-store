@@ -1,8 +1,8 @@
-import type { UploadListInputSchema } from '@/server/schemas';
-import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
+import { AuthRole } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type { UploadListInputSchema } from '@what-if-store/server/server/schemas';
 import { useGridPagination } from '../common';
 
 export const useDashboardUploadWithPagination = (input?: UploadListInputSchema) => {

@@ -1,7 +1,5 @@
 import type { UseDashboardApplicationGroupHookDataSchema } from '@/hooks';
 import { useNotice } from '@/hooks';
-import type { ApplicationGroupCreateInputSchema, ApplicationGroupUpdateInputSchema } from '@/server/schemas';
-import { applicationGroupCreateInputSchema, applicationGroupUpdateInputSchema } from '@/server/schemas';
 import type { OverridesDialogProps } from '@/types/overrides';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
@@ -18,11 +16,19 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { ApplicationGroupType } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ApplicationGroupType } from '@what-if-store/prisma/client';
 import { trpc } from '@what-if-store/server/react/trpc';
+import type {
+  ApplicationGroupCreateInputSchema,
+  ApplicationGroupUpdateInputSchema,
+} from '@what-if-store/server/server/schemas';
+import {
+  applicationGroupCreateInputSchema,
+  applicationGroupUpdateInputSchema,
+} from '@what-if-store/server/server/schemas';
 import { ApplicationsAutoComplete } from '../ApplicationsAutoComplete';
 
 type ApplicationGroupDialogProps = OverridesDialogProps & {

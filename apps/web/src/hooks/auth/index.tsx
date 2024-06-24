@@ -1,12 +1,12 @@
 import { SignInDialog, SignUpDialog } from '@/components/common/auth';
 import { NOOP, NOOPAsync } from '@/utils/noop';
-import { resetTRPCClient } from '@/utils/trpc';
 import { signOut as signOutNextAuth, useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext } from 'react';
 import { useBoolean } from 'usehooks-ts';
+import { resetTRPCClient } from '@what-if-store/server/react/trpc';
 import { useNotice } from '../notice';
 
 export interface AuthProps {

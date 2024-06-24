@@ -1,12 +1,12 @@
 import { useDashboardUploadWithPagination } from '@/hooks';
 import type { OverridesCardProps } from '@/types/overrides';
 import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
-import type { RouterOutput } from '@/utils/trpc';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import type { DataGridProps, GridColDef, GridFilterModel, GridSortModel } from '@mui/x-data-grid';
 import { DataGrid, GridToolbar, zhCN } from '@mui/x-data-grid';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 import { PreviewLink } from './PreviewLink';
 import { UploadButton } from './UploadButton';
 

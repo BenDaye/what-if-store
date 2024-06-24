@@ -1,6 +1,5 @@
 import { useDashboardApplicationTagsWithPagination } from '@/hooks';
 import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
-import type { RouterOutput } from '@/utils/trpc';
 import { AddBox as CreateIcon } from '@mui/icons-material';
 import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
 import { Button, Card, CardContent, CardHeader } from '@mui/material';
@@ -13,6 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
+import type { RouterOutput } from '@what-if-store/server/react/trpc';
 
 type ApplicationTagDataGridProps = {
   overrides?: {

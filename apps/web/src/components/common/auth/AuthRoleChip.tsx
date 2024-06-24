@@ -1,10 +1,10 @@
 import type { OverridesProps } from '@/types/overrides';
 import type { ChipProps } from '@mui/material';
 import { Chip } from '@mui/material';
-import { AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import type { PropsWithChildren } from 'react';
 import { useMemo } from 'react';
+import { AuthRole } from '@what-if-store/prisma/client';
 
 type AuthRoleChipProps = OverridesProps<{
   ChipProps?: ChipProps;

@@ -5,7 +5,7 @@ export const createContext = async (opts?: CreateHTTPContextOptions | CreateWSSC
   const apiKey = opts?.req.headers['x-api-key'];
 
   return {
-    apiKey: Array.isArray(apiKey) ? apiKey[0] : apiKey,
+    apiKey: Array.isArray(apiKey) ? apiKey[0] : typeof apiKey === 'string' ? apiKey : undefined,
     req: opts?.req,
   };
 };
