@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 
 type HeadMetaType = 'Default' | 'App' | 'Dashboard';
 interface HeadMeta {

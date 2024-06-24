@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 import { useBoolean } from 'usehooks-ts';
 import { ApplicationGroupType } from '@what-if-store/prisma/client';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
 import { ApplicationGroupDialog } from './Dialog';
 
 type RowModel = RouterOutput['protectedDashboardApplicationGroup']['list']['items'][number];

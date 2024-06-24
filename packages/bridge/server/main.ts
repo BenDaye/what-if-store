@@ -14,7 +14,7 @@ export const startTRPCServer = async (props?: StartTRPCServerProps) => {
     throw new Error(validateProps.error.errors.join('\n'));
   }
 
-  const port = validateProps.data.port ?? process.env.BRIDGE_PORT;
+  const port = validateProps.data.port ?? process.env.NEXT_PUBLIC_BRIDGE_PORT;
 
   server = createHTTPServer({
     router: appRouter,

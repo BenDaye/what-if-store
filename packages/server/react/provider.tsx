@@ -15,12 +15,12 @@ export const TRPCProvider = ({ children }: PropsWithChildren) => {
           condition: (op) => op.type === 'subscription',
           true: wsLink({
             client: createWSClient({
-              url: env.NEXT_PUBLIC_BRIDGE_WS_URL,
+              url: env.NEXT_PUBLIC_SERVER_WS_URL,
             }),
             transformer: SuperJSON,
           }),
           false: httpBatchLink({
-            url: env.NEXT_PUBLIC_BRIDGE_HTTP_URL,
+            url: env.NEXT_PUBLIC_SERVER_HTTP_URL,
             transformer: SuperJSON,
           }),
         }),

@@ -3,8 +3,8 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
 import { AuthRole } from '@what-if-store/prisma/client';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
-import { trpc } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { ApplicationGroupListInputSchema } from '@what-if-store/server/server/schemas';
 
 export type UseDashboardApplicationGroupsDataSchema =

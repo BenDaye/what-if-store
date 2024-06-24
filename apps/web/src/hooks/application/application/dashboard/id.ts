@@ -14,8 +14,8 @@ import {
   ApplicationStatus,
   AuthRole,
 } from '@what-if-store/prisma/client';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
-import { trpc } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { ApplicationCreateInputSchema, IdSchema } from '@what-if-store/server/server/schemas';
 import {
   applicationCreateInputSchema,

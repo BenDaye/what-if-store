@@ -2,7 +2,7 @@ import { useGridPagination } from '@/hooks/common';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { AuthRole } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { UserApiKeyListInputSchema } from '@what-if-store/server/server/schemas';
 
 export const useDashboardUserApiKeysWithPagination = (input?: UserApiKeyListInputSchema) => {

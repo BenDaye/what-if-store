@@ -2,16 +2,16 @@ import type { NextPageContext } from 'next';
 import SuperJSON from 'superjson';
 import type { TRPCLink } from '../client';
 import { createWSClient, httpBatchLink, loggerLink, splitLink, wsLink } from '../client';
+import type { CreateTRPCNext } from '../next';
+import { createTRPCNext } from '../next';
 import type { inferRouterOutputs } from '../server';
 import type { AppRouter } from '../server/routers/_app';
-import type { CreateTRPCNext } from './index';
-import { createTRPCNext } from './index';
 
 let client: ReturnType<typeof createWSClient> | null = null;
 
 function getHttpLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
   return httpBatchLink({
-    url: `${process.env.NEXT_PUBLIC_BRIDGE_HTTP_URL}/api/trpc`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/api/trpc`,
     headers() {
       if (!ctx?.req?.headers) {
         return {};
@@ -29,7 +29,7 @@ function getHttpLink(ctx: NextPageContext | undefined): TRPCLink<AppRouter> {
 
 function getWSLink(): TRPCLink<AppRouter> {
   client = createWSClient({
-    url: `${process.env.NEXT_PUBLIC_BRIDGE_WS_URL}`,
+    url: `${process.env.NEXT_PUBLIC_SERVER_WS_URL}`,
     lazy: {
       enabled: true,
       closeMs: 30 * 1000,

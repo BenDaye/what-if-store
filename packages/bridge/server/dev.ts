@@ -9,7 +9,7 @@ import { appRouter } from './routers/_app';
 const _logger = logger.child({}, { msgPrefix: '[Entry] ' });
 
 const httpHandler = createHTTPHandler({ router: appRouter, createContext });
-const httpServer = createServer(httpHandler).listen(env.BRIDGE_PORT);
+const httpServer = createServer(httpHandler).listen(env.NEXT_PUBLIC_BRIDGE_PORT);
 
 const wsServer = new ws.Server({ server: httpServer });
 const wsHandler = applyWSSHandler({ wss: wsServer, router: appRouter, createContext });
@@ -23,11 +23,15 @@ wsServer.on('connection', (ws) => {
 
 httpServer.once('listening', async () => {
   await launchStartupTasks();
-  _logger.debug(`HTTP Server listening on http://localhost:${env.BRIDGE_PORT} as ${env.NODE_ENV}`);
+  _logger.debug(
+    `HTTP Server listening on http://localhost:${env.NEXT_PUBLIC_BRIDGE_PORT} as ${env.NODE_ENV}`,
+  );
 });
 
 wsServer.once('listening', async () => {
-  _logger.debug(`Websocket Server listening on ws://localhost:${env.BRIDGE_PORT} as ${env.NODE_ENV}`);
+  _logger.debug(
+    `Websocket Server listening on ws://localhost:${env.NEXT_PUBLIC_BRIDGE_PORT} as ${env.NODE_ENV}`,
+  );
 });
 
 httpServer.on('error', async (err) => {

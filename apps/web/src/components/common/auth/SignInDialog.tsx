@@ -22,7 +22,7 @@ import { useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
 import { AuthRole } from '@what-if-store/prisma/client';
-import { resetTRPCClient } from '@what-if-store/server/react/trpc';
+import { resetTRPCClient } from '@what-if-store/server/next/trpc';
 import type { SignInSchema } from '@what-if-store/server/server/schemas/auth';
 import { signInSchema } from '@what-if-store/server/server/schemas/auth';
 import { SignUpButton } from './SignUpButton';

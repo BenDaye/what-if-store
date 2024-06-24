@@ -18,7 +18,7 @@ import {
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { UploadFormDataSchema } from '@what-if-store/server/server/schemas';
 import { uploadFormDataSchema } from '@what-if-store/server/server/schemas';
 

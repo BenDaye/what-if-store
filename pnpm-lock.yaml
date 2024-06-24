@@ -494,6 +494,12 @@ importers:
         specifier: 2.0.2
         version: 2.0.2(zod@3.23.8)
     devDependencies:
+      '@types/react':
+        specifier: 18.3.2
+        version: 18.3.2
+      '@types/react-dom':
+        specifier: 18.3.0
+        version: 18.3.0
       '@types/ws':
         specifier: 8.5.10
         version: 8.5.10
@@ -577,18 +583,12 @@ importers:
 
   packages/server:
     dependencies:
-      '@blocknote/core':
-        specifier: 0.13.4
-        version: 0.13.4
-      '@blocknote/mantine':
-        specifier: 0.13.4
-        version: 0.13.4(@tiptap/pm@2.4.0)(@types/react@18.3.2)(react-dom@18.3.1)(react@18.3.1)
-      '@blocknote/react':
-        specifier: 0.13.4
-        version: 0.13.4(@tiptap/pm@2.4.0)(react-dom@18.3.1)(react@18.3.1)
       '@faker-js/faker':
         specifier: 8.4.1
         version: 8.4.1
+      '@tanstack/react-query':
+        specifier: 5.28.14
+        version: 5.28.14(react@18.3.1)
       '@trpc/client':
         specifier: 11.0.0-rc.374
         version: 11.0.0-rc.374(@trpc/server@11.0.0-rc.374)
@@ -628,6 +628,12 @@ importers:
       pino-pretty:
         specifier: 11.0.0
         version: 11.0.0
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
       serve-handler:
         specifier: 6.1.5
         version: 6.1.5
@@ -647,6 +653,12 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.6
         version: 9.0.6
+      '@types/react':
+        specifier: 18.3.2
+        version: 18.3.2
+      '@types/react-dom':
+        specifier: 18.3.0
+        version: 18.3.0
       '@types/serve-handler':
         specifier: ^6.1.4
         version: 6.1.4
@@ -4199,7 +4211,6 @@ packages:
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
     dependencies:
       '@types/react': 18.3.2
-    dev: false
 
   /@types/react-swipeable-views-utils@0.13.7:
     resolution: {integrity: sha512-ED8pf8dq3S79uWtP8EnSdrg7dUCrxyL9Uapq1dSA2mz+H83SjS8vsqmlFWmmBQoTuEHsQp5Ru9fxxsofQ+bI9Q==}

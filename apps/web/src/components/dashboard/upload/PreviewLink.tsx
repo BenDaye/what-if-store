@@ -14,7 +14,7 @@ type PreviewLinkProps = OverridesProps<{
 
 export const PreviewLink = ({ overrides, path, name }: PreviewLinkProps) => {
   const src = useMemo(() => {
-    const prefix = process.env.NEXT_PUBLIC_SERVER_URL;
+    const prefix = process.env.NEXT_PUBLIC_STATIC_HTTP_URL;
     return `${prefix}${path}`.replace('/uploads', '');
   }, [path]);
 

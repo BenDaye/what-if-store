@@ -4,8 +4,8 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 import { AuthRole } from '@what-if-store/prisma/client';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
-import { trpc } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { IdSchema } from '@what-if-store/server/server/schemas';
 import { idSchema, userUpdateProfileInputSchema } from '@what-if-store/server/server/schemas';
 

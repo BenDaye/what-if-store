@@ -8,7 +8,7 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { ApplicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
 import { applicationUpdateInputSchema } from '@what-if-store/server/server/schemas';
 import { CountriesAutoComplete } from './CountriesAutoComplete';

@@ -22,7 +22,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
 import { AuthRole } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { UserUpdateProfileInputSchema } from '@what-if-store/server/server/schemas/user';
 import { userUpdateProfileInputSchema } from '@what-if-store/server/server/schemas/user';
 

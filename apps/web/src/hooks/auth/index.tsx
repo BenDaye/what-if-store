@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import type { PropsWithChildren } from 'react';
 import { createContext, useCallback, useContext } from 'react';
 import { useBoolean } from 'usehooks-ts';
-import { resetTRPCClient } from '@what-if-store/server/react/trpc';
+import { resetTRPCClient } from '@what-if-store/server/next/trpc';
 import { useNotice } from '../notice';
 
 export interface AuthProps {

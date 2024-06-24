@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { AuthRole, ProviderType } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { UseAppProviderHookDataSchema } from './id';
 
 export const useAppProviderMy = () => {

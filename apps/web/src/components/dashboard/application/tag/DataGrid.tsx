@@ -12,7 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
 
 type ApplicationTagDataGridProps = {
   overrides?: {

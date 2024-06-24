@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import type { z } from 'zod';
 import { ApplicationAssetType, AuthRole } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { IdSchema } from '@what-if-store/server/server/schemas';
 import { applicationAssetCreateInputSchema, idSchema } from '@what-if-store/server/server/schemas';
 

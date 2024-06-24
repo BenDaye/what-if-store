@@ -21,7 +21,7 @@ import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
 import type { z } from 'zod';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import { signUpSchema } from '@what-if-store/server/server/schemas/auth';
 import { SignInButton } from './SignInButton';
 

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import { useCallback } from 'react';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 
 const Editor = dynamic(() => import('../../common/BlockNote/Editor'), {
   ssr: false,

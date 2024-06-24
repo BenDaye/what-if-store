@@ -4,7 +4,9 @@ import { getSession } from 'next-auth/react';
 import type { CreateNextContextOptions, NextApiRequest } from './adapters/next';
 import type { CreateHTTPContextOptions } from './adapters/standalone';
 import type { CreateWSSContextFnOptions } from './adapters/ws';
-import { logger, prisma, redis } from './modules';
+import { logger } from './modules/logger';
+import { prisma } from './modules/prisma';
+import { redis } from './modules/redis';
 
 export interface CreateContextOptions {
   session: Session | null;

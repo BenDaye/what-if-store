@@ -22,7 +22,7 @@ import { appWithTranslation } from 'next-i18next';
 import type { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { CreateContextOptions } from '@what-if-store/server/server/context';
 import 'overlayscrollbars/overlayscrollbars.css';
 import type { ReactElement, ReactNode } from 'react';

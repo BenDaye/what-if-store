@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
 import { ProviderType } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { IdSchema } from '@what-if-store/server/server/schemas';
 import { idSchema, providerUpdateProfileInputSchema } from '@what-if-store/server/server/schemas';
 

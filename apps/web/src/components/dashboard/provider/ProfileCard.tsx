@@ -13,7 +13,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
 
 type ProviderProfileCardProps = {
   data?: RouterOutput['protectedDashboardProvider']['getById'];

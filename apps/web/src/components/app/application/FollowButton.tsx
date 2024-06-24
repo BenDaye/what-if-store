@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
 import { AuthRole } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 
 type FollowApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;

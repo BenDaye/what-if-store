@@ -21,7 +21,7 @@ import { useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
 import { AuthRole } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { UserApiKeyCreateInputSchema } from '@what-if-store/server/server/schemas';
 import { userApiKeyCreateInputSchema } from '@what-if-store/server/server/schemas';
 

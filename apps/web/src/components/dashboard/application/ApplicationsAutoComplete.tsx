@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useState } from 'react';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 import { z } from 'zod';
-import type { RouterOutput } from '@what-if-store/server/react/trpc';
+import type { RouterOutput } from '@what-if-store/server/next/trpc';
 import { idSchema } from '@what-if-store/server/server/schemas';
 
 type IApplicationData = RouterOutput['protectedDashboardApplication']['list']['items'][number];

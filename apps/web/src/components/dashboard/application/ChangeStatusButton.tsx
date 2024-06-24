@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { useMemo, useRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
 import type { ApplicationStatus, AuthRole } from '@what-if-store/prisma/client';
-import { trpc } from '@what-if-store/server/react/trpc';
+import { trpc } from '@what-if-store/server/next/trpc';
 import type { IdSchema } from '@what-if-store/server/server/schemas';
 import { getAvailableStatuses } from '@what-if-store/utils/validator';
 
