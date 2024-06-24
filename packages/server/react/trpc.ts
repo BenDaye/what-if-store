@@ -2,7 +2,8 @@ import type { NextPageContext } from 'next';
 import SuperJSON from 'superjson';
 import type { TRPCLink } from '../client';
 import { createWSClient, httpBatchLink, loggerLink, splitLink, wsLink } from '../client';
-import { CreateTRPCNext, createTRPCNext } from '../next';
+import type { CreateTRPCNext } from '../next';
+import { createTRPCNext } from '../next';
 import type { inferRouterOutputs } from '../server';
 import type { AppRouter } from '../server/routers/_app';
 
