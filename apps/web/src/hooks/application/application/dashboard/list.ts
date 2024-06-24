@@ -1,11 +1,11 @@
 import { useNotice } from '@/hooks/notice';
 import type { ApplicationListInputSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 export const useDashboardApplications = (
   query?: ApplicationListInputSchema,

@@ -10,13 +10,13 @@ import {
   idSchema,
 } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { ApplicationAssetType, ApplicationCategory, ApplicationStatus } from '@prisma/client';
 import currency from 'currency.js';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type AppApplicationRouterOutput = RouterOutput['protectedAppApplication']['getById'];
 export const useAppApplicationHookDataSchema = applicationCreateInputSchema

@@ -2,7 +2,7 @@
   "name": "@what-if-store/types",
   "version": "0.0.0",
   "private": true,
-  "devDependencies": {
-    "@what-if-store/config": "workspace:*"
+  "dependencies": {
+    "next-auth": "4.24.7"
   }
 }

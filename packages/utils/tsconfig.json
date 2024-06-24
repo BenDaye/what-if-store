@@ -1,9 +1,7 @@
 {
-  "extends": "@what-if-store/config/tsconfig.base.json",
+  "extends": "@what-if-store/tsconfig/base.json",
   "compilerOptions": {
     "resolveJsonModule": true,
     "lib": ["esnext"]
-  },
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
+  }
 }

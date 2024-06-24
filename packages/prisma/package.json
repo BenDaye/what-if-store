@@ -21,9 +21,6 @@
   "dependencies": {
     "@faker-js/faker": "8.4.1",
     "@prisma/client": "5.13.0",
-    "@what-if-store/config": "workspace:*",
-    "@what-if-store/constants": "workspace:*",
-    "@what-if-store/utils": "workspace:*",
     "argon2": "0.40.1"
   },
   "devDependencies": {

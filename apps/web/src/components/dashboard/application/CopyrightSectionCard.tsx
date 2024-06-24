@@ -3,12 +3,12 @@ import { FallbackId } from '@/constants/common';
 import type { UseDashboardApplicationHookDataSchema } from '@/hooks';
 import { useDashboardApplicationAsset, useNotice } from '@/hooks';
 import type { OverridesCardProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import type { PartialBlock } from '@blocknote/core';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import { useCallback } from 'react';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 const Editor = dynamic(() => import('../../common/BlockNote/Editor'), {
   ssr: false,

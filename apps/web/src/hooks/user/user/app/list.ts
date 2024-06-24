@@ -1,9 +1,9 @@
 import { useNotice } from '@/hooks/notice';
 import type { UserListInputSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 export const useAppUsers = (input: UserListInputSchema = { limit: 20 }, notify = true, fetchAll = true) => {
   const { showWarning } = useNotice();

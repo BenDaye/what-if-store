@@ -1,9 +1,9 @@
 import { useGridPagination } from '@/hooks/common';
 import type { ApplicationCollectionListInputSchema } from '@/server/schemas';
-import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 export const useDashboardApplicationCollectionsWithPagination = (
   input?: ApplicationCollectionListInputSchema,

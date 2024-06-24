@@ -1,10 +1,10 @@
 import { FallbackId, FallbackString } from '@/constants/common';
 import { useNotice } from '@/hooks/notice';
-import { trpc } from '@/utils/trpc';
 import { AuthRole, ProviderType } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
+import { trpc } from '@what-if-store/server/react/trpc';
 import type { UseAppProviderHookDataSchema } from './id';
 
 export const useAppProviderMy = () => {

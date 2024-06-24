@@ -1,12 +1,12 @@
 import { useAuth, useNotice } from '@/hooks';
 import type { OverridesButtonProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import { DownloadDone as OwnedIcon, GetApp as OwnIcon } from '@mui/icons-material';
 import { Button, IconButton } from '@mui/material';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type OwnApplicationButtonProps = OverridesButtonProps & {
   applicationId: string;

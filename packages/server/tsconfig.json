@@ -1,0 +1,4 @@
+{
+  "extends": "@what-if-store/tsconfig/react-library.json",
+  "include": [".", "../types/next-auth.d.ts"]
+}

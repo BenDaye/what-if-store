@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { CommonMessage } from '../utils/message';
-import { CommonRegex } from '../utils/regex';
+import { ErrorMessage } from '@what-if-store/utils/error';
+import { CommonRegex } from '@what-if-store/utils/regex';
 import { idSchema } from './id';
 
 export const tokenStringSchema = z
-  .string({ required_error: CommonMessage.REQUIRED })
-  .length(6, { message: CommonMessage.INVALID_TOKEN_LENGTH });
+  .string({ required_error: ErrorMessage.REQUIRED })
+  .length(6, { message: ErrorMessage.INVALID_TOKEN_LENGTH });
 export type TokenStringSchema = z.infer<typeof tokenSchema>;
 
 export const tokenSchema = z.object({
@@ -14,16 +14,16 @@ export const tokenSchema = z.object({
 export type TokenSchema = z.infer<typeof tokenSchema>;
 
 export const usernameSchema = z
-  .string({ required_error: CommonMessage.REQUIRED })
+  .string({ required_error: ErrorMessage.REQUIRED })
   .regex(CommonRegex.USERNAME, {
-    message: CommonMessage.INVALID_USERNAME,
+    message: ErrorMessage.INVALID_USERNAME,
   });
 export type UsernameSchema = z.infer<typeof usernameSchema>;
 
 export const passwordSchema = z
-  .string({ required_error: CommonMessage.REQUIRED })
+  .string({ required_error: ErrorMessage.REQUIRED })
   .regex(CommonRegex.PASSWORD, {
-    message: CommonMessage.INVALID_PASSWORD,
+    message: ErrorMessage.INVALID_PASSWORD,
   });
 export type PasswordSchema = z.infer<typeof passwordSchema>;
 
@@ -37,7 +37,7 @@ export const signInSchema = signUpSchema.extend({});
 export type SignInSchema = z.infer<typeof signInSchema>;
 
 export const bindTokenSchema = tokenSchema.extend({
-  secret: z.string({ required_error: CommonMessage.REQUIRED }),
+  secret: z.string({ required_error: ErrorMessage.REQUIRED }),
 });
 export type BindTokenSchema = z.infer<typeof bindTokenSchema>;
 

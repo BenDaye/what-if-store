@@ -14,7 +14,6 @@ import { DefaultLayout } from '@/components/layouts';
 import { AuthProvider, BridgeProvider, NoticeProvider, TernaryDarkModeProvider } from '@/hooks';
 import type { CreateContextOptions } from '@/server/context';
 import { createEmotionCache } from '@/theme';
-import { trpc } from '@/utils/trpc';
 import type { EmotionCache } from '@emotion/react';
 import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
@@ -27,6 +26,7 @@ import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import type { ReactElement, ReactNode } from 'react';
 import { SWRConfig } from 'swr';
+import { trpc } from '@what-if-store/server/react/trpc';
 import nextI18NextConfig from '../../next-i18next.config.js';
 
 // Client-side cache, shared for the whole session of the user in the browser.

@@ -2,7 +2,6 @@ import { useAppUserApiKeysWithPagination, useDashboardUserApiKeysWithPagination,
 import type { OverridesProps } from '@/types/overrides';
 import { createdAtColumn, idColumn, updatedAtColumn } from '@/utils/dataGridColumn';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { DeleteForever as RemoveIcon } from '@mui/icons-material';
 import type { CardContentProps, CardHeaderProps, CardProps } from '@mui/material';
 import type {
@@ -17,6 +16,7 @@ import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type ApiKeyDataGridProps = OverridesProps<{
   DataGridProps?: DataGridProps;

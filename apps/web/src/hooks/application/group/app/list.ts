@@ -1,9 +1,9 @@
 import { useNotice } from '@/hooks/notice';
 import type { ApplicationGroupListInputSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 export type UseAppApplicationGroupsDataSchema = RouterOutput['publicAppApplicationGroup']['list']['items'];
 export const useAppApplicationGroups = (

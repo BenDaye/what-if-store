@@ -25,6 +25,14 @@
     "@what-if-store/prisma#dev": {
       "cache": false,
       "dependsOn": ["//#dev:env-check"]
+    },
+    "@what-if-store/server#dev": {
+      "cache": false,
+      "dependsOn": ["//#dev:env-check"]
+    },
+    "@what-if-store/web#dev": {
+      "cache": false,
+      "dependsOn": ["//#dev:env-check"]
     }
   },
   "globalEnv": [

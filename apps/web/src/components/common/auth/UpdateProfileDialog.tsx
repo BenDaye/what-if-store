@@ -3,7 +3,6 @@ import { useNotice } from '@/hooks';
 import type { UserUpdateProfileInputSchema } from '@/server/schemas/user';
 import { userUpdateProfileInputSchema } from '@/server/schemas/user';
 import type { OverridesDialogProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -25,6 +24,7 @@ import { useTranslation } from 'next-i18next';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useDebounceValue } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type AuthUpdateProfileDialogProps = OverridesDialogProps;
 export const AuthUpdateProfileDialog = ({ overrides, DialogProps }: AuthUpdateProfileDialogProps) => {

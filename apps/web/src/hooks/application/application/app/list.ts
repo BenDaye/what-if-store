@@ -1,9 +1,9 @@
 import { useNotice } from '@/hooks/notice';
 import type { ApplicationListInputSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { useEffect, useMemo } from 'react';
 import { useInterval } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 export type UseAppApplicationsHookDataSchema = RouterOutput['publicAppApplication']['list']['items'];
 export const useAppApplications = (query?: ApplicationListInputSchema, notify = true, fetchAll = true) => {

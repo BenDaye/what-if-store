@@ -2,7 +2,6 @@ import { useCopy, useNotice } from '@/hooks';
 import type { UserApiKeyCreateInputSchema } from '@/server/schemas';
 import { userApiKeyCreateInputSchema } from '@/server/schemas';
 import type { OverridesButtonProps, OverridesDialogProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -24,6 +23,7 @@ import { useTranslation } from 'next-i18next';
 import { useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useBoolean } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type CreateApiKeyButtonProps = OverridesButtonProps;
 export const CreateApiKeyButton = ({ overrides }: CreateApiKeyButtonProps) => {

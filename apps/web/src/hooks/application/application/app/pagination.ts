@@ -1,6 +1,6 @@
 import { useGridPagination } from '@/hooks/common';
 import type { ApplicationListInputSchema } from '@/server/schemas';
-import { trpc } from '@/utils/trpc';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 export const useAppApplicationsWithPagination = (input?: ApplicationListInputSchema) => {
   const {

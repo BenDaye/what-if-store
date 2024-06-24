@@ -3,12 +3,12 @@ import { useNotice } from '@/hooks/notice';
 import type { IdSchema } from '@/server/schemas';
 import { idSchema, userUpdateProfileInputSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type DashboardUserRouterOutput = RouterOutput['protectedDashboardUser']['getById'];
 export const useDashboardUserHookDataSchema = userUpdateProfileInputSchema

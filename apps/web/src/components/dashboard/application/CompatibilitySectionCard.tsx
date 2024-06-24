@@ -3,7 +3,6 @@ import { useNotice } from '@/hooks';
 import type { ApplicationUpdateInputSchema } from '@/server/schemas';
 import { applicationUpdateInputSchema } from '@/server/schemas';
 import type { OverridesCardProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoadingButton } from '@mui/lab';
@@ -26,6 +25,7 @@ import { ApplicationPlatform } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type CompatibilitySectionCardProps = OverridesCardProps & {
   defaultValues: UseDashboardApplicationHookDataSchema;

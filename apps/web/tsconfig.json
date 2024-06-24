@@ -1,5 +1,5 @@
 {
-  "extends": "@what-if-store/config/tsconfig.next.json",
+  "extends": "@what-if-store/tsconfig/nextjs.json",
   "compilerOptions": {
     "plugins": [
       {

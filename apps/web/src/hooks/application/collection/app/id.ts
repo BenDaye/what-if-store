@@ -3,11 +3,11 @@ import { useNotice } from '@/hooks/notice';
 import type { IdSchema } from '@/server/schemas';
 import { applicationCollectionCreateInputSchema, idSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 // import currency from 'currency.js';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import { z } from 'zod';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type AppApplicationCollectionRouterOutput = RouterOutput['publicAppApplicationCollection']['getById'];
 export const useAppApplicationCollectionHookDataSchema = applicationCollectionCreateInputSchema

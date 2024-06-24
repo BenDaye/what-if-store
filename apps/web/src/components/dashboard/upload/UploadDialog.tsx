@@ -2,7 +2,6 @@ import { useNotice } from '@/hooks';
 import type { UploadFormDataSchema } from '@/server/schemas';
 import { uploadFormDataSchema } from '@/server/schemas';
 import type { OverridesProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -21,6 +20,7 @@ import {
 import { useTranslation } from 'next-i18next';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type UploadDialogProps = OverridesProps<{
   DialogContentProps?: DialogContentProps;

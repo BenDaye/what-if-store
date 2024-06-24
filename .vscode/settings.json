@@ -80,5 +80,24 @@
   "i18n-ally.keystyle": "nested",
   "i18n-ally.namespace": true,
   "i18n-ally.sourceLanguage": "en-US",
-  "i18n-ally.displayLanguage": "en-US"
+  "i18n-ally.displayLanguage": "en-US",
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "dist",
+    "build",
+    ".next",
+    ".cache",
+    ".vscode",
+    ".github",
+    ".git",
+    "node_modules",
+    "vscode-extension",
+    ".git/objects",
+    ".vscode",
+    ".vscode-insiders",
+    "*preset.js",
+    "tsconfig*.json"
+  ]
 }

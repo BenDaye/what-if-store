@@ -1,11 +1,11 @@
 /**
  * This file contains the tRPC http response handler and context creation for Next.js
  */
-import { createContext } from '@/server/context';
-import type { AppRouter } from '@/server/routers/_app';
-import { appRouter } from '@/server/routers/_app';
-import type { NextApiRequest, NextApiResponse } from '@trpc/server/adapters/next';
-import { createNextApiHandler } from '@trpc/server/adapters/next';
+import type { NextApiRequest, NextApiResponse } from '@what-if-store/server/server/adapters/next';
+import { createNextApiHandler } from '@what-if-store/server/server/adapters/next';
+import { createContext } from '@what-if-store/server/server/context';
+import type { AppRouter } from '@what-if-store/server/server/routers/_app';
+import { appRouter } from '@what-if-store/server/server/routers/_app';
 
 const nextApiHandler = createNextApiHandler<AppRouter>({
   router: appRouter,

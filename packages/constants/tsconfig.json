@@ -1,5 +1,3 @@
 {
-  "extends": "@what-if-store/config/tsconfig.base.json",
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
+  "extends": "@what-if-store/tsconfig/base.json"
 }

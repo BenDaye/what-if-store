@@ -1,7 +1,6 @@
 import { useNotice } from '@/hooks';
 import type { IdSchema } from '@/server/schemas';
 import type { OverridesProps } from '@/types/overrides';
-import { trpc } from '@/utils/trpc';
 import { getAvailableStatuses } from '@/utils/validApplicationStatusTransition';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import type { ButtonProps, MenuItemProps, MenuProps } from '@mui/material';
@@ -10,6 +9,7 @@ import type { ApplicationStatus, AuthRole } from '@prisma/client';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type ChangeStatusButtonProps = OverridesProps<{
   ButtonProps?: ButtonProps;

@@ -3,12 +3,12 @@ import { useNotice } from '@/hooks/notice';
 import type { IdSchema } from '@/server/schemas';
 import { applicationTagCreateInputSchema, idSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { AuthRole } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import type { z } from 'zod';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type _DashboardApplicationTagRouterOutput = RouterOutput['protectedDashboardApplicationTag']['getById'];
 export const useDashboardApplicationTagHookDataSchema = applicationTagCreateInputSchema

@@ -3,10 +3,10 @@ import { useNotice } from '@/hooks/notice';
 import type { IdSchema } from '@/server/schemas';
 import { applicationTagCreateInputSchema, idSchema } from '@/server/schemas';
 import type { RouterOutput } from '@/utils/trpc';
-import { trpc } from '@/utils/trpc';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo } from 'react';
 import type { z } from 'zod';
+import { trpc } from '@what-if-store/server/react/trpc';
 
 type _AppApplicationTagRouterOutput = RouterOutput['publicAppApplicationTag']['getById'];
 export const useAppApplicationTagHookDataSchema = applicationTagCreateInputSchema
