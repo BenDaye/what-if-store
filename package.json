@@ -14,9 +14,11 @@
     "dev:db": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/prisma\"",
     "dev:web": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/server\"  --filter=\"@what-if-store/web\"",
     "dev:bridge": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/bridge\"",
+    "dev:electron": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/electron\"",
     "build": "dotenv -e .env.production.local -- turbo run build",
     "build:env-check": "dotenv-checker --schema .env.example --env .env.production.local",
-    "prepare": "husky"
+    "prepare": "husky",
+    "predev": "dotenv-checker --schema .env.schema --env .env.local"
   },
   "resolutions": {
     "@blocknote/core": "0.13.4",

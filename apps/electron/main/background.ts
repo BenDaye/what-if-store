@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import serve from 'electron-serve';
 import { default as waitPort } from 'wait-port';
-import { startTRPCServer, stopTRPCServer } from '@what-if-store/bridge';
+import { bridgeBootstrap } from '@what-if-store/bridge';
 import { initializeIpc } from './ipc';
 import { initializeLogger } from './logger';
 import { initializePath, startPowerSaveBlocker, stopPowerSaveBlocker } from './utils';
@@ -13,9 +13,9 @@ const main = async () => {
   initializePath();
   initializeLogger();
   initializeIpc();
-  startTRPCServer({ port: 3232 });
+  bridgeBootstrap.start();
 
-  await waitPort({ port: 3232, timeout: 30 * 1000 });
+  await waitPort({ port: bridgeBootstrap.port, timeout: 30 * 1000 });
 
   const mainWindow = createWindow({
     webPreferences: {
@@ -44,8 +44,8 @@ app.whenReady().then(async () => {
       await main();
     }
   });
-  app.on('before-quit', () => {
+  app.on('before-quit', async () => {
+    await bridgeBootstrap.stop();
     stopPowerSaveBlocker();
-    stopTRPCServer();
   });
 });
