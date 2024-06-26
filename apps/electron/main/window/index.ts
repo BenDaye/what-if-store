@@ -1,2 +1,2 @@
 export * from './constants';
-export { createWindow } from './create';
+export { createWindow, initializeWindow } from './create';

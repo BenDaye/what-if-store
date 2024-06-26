@@ -1,6 +1,7 @@
 import path from 'path';
 import type { BrowserWindowConstructorOptions, Rectangle } from 'electron';
 import { app, BrowserWindow, screen } from 'electron';
+import serve from 'electron-serve';
 import { windowStore } from '../store';
 import { MIN_HEIGHT, MIN_WIDTH } from './constants';
 
@@ -110,4 +111,26 @@ export const createWindow = (
   });
 
   return win;
+};
+
+export const initializeWindow = async () => {
+  const isDev = process.env.NODE_ENV !== 'production';
+
+  const mainWindow = createWindow({
+    webPreferences: {
+      webSecurity: false,
+    },
+  });
+
+  mainWindow.removeMenu();
+  // if (mainWindow.maximizable) mainWindow.maximize();
+
+  if (isDev) {
+    const rendererPort = process.argv[2];
+    await mainWindow.loadURL(`http://localhost:${rendererPort}`);
+    mainWindow.webContents.openDevTools({ mode: 'bottom' });
+  } else {
+    serve({ directory: 'app' });
+    await mainWindow.loadURL('app://./index.html');
+  }
 };

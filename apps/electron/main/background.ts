@@ -1,47 +1,29 @@
 import { app, BrowserWindow } from 'electron';
-import serve from 'electron-serve';
 import { default as waitPort } from 'wait-port';
 import { bridgeBootstrap } from '@what-if-store/bridge';
 import { initializeIpc } from './ipc';
 import { initializeLogger } from './logger';
-import { initializePath, startPowerSaveBlocker, stopPowerSaveBlocker } from './utils';
-import { createWindow } from './window';
+import { initializePath, initializeTray, startPowerSaveBlocker, stopPowerSaveBlocker } from './utils';
+import { initializeWindow } from './window';
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-const main = async () => {
+const bootstrap = async () => {
   initializePath();
   initializeLogger();
   initializeIpc();
-  bridgeBootstrap.start();
 
+  bridgeBootstrap.start();
   await waitPort({ port: bridgeBootstrap.port, timeout: 30 * 1000 });
 
-  const mainWindow = createWindow({
-    webPreferences: {
-      webSecurity: false,
-    },
-  });
-
-  mainWindow.removeMenu();
-  // if (mainWindow.maximizable) mainWindow.maximize();
-
-  if (isDev) {
-    const rendererPort = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${rendererPort}`);
-    mainWindow.webContents.openDevTools({ mode: 'undocked' });
-  } else {
-    serve({ directory: 'app' });
-    await mainWindow.loadURL('app://./index.html');
-  }
+  initializeTray();
 };
 
 app.whenReady().then(async () => {
-  await main();
+  await bootstrap();
   startPowerSaveBlocker();
+
   app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      await main();
+      await initializeWindow();
     }
   });
   app.on('before-quit', async () => {
