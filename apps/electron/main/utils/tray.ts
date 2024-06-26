@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu, nativeImage, Tray } from 'electron';
+import { getInstalledApps } from 'get-installed-apps';
 import { initializeWindow } from '../window';
 import { client } from './bridge';
 
@@ -22,6 +23,13 @@ export const initializeTray = () => {
         } else {
           windows[0].show();
         }
+      },
+    },
+    {
+      label: 'Test Get Installed Apps',
+      click: async () => {
+        const apps = await getInstalledApps();
+        console.log(apps);
       },
     },
     {
