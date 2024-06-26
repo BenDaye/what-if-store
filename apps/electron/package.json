@@ -7,7 +7,7 @@
   "main": "app/background.js",
   "scripts": {
     "build": "nextron build",
-    "dev": "nextron dev --renderer-port=${PORT:3204} ",
+    "dev": "x-var -e=.env.development.local nextron dev --renderer-port=\\$NEXT_PUBLIC_RENDERER_PORT",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --fix"
@@ -57,6 +57,7 @@
     "react-swipeable-views-utils": "0.14.0",
     "swr": "2.2.5",
     "usehooks-ts": "3.1.0",
+    "x-var": "2.0.1",
     "zod": "3.23.8",
     "zod-form-data": "2.0.2"
   },
