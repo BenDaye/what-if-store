@@ -21,7 +21,8 @@
     "DATABASE_URL",
     "REDIS_URL",
     "NEXT_PUBLIC_DISABLE_SIGN_IN",
-    "NEXT_PUBLIC_DISABLE_SIGN_UP"
+    "NEXT_PUBLIC_DISABLE_SIGN_UP",
+    "windir"
   ],
   "tasks": {
     "lint": {
