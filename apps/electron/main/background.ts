@@ -3,7 +3,13 @@ import { default as waitPort } from 'wait-port';
 import { bridgeBootstrap } from '@what-if-store/bridge';
 import { initializeIpc } from './ipc';
 import { initializeLogger } from './logger';
-import { initializePath, initializeTray, startPowerSaveBlocker, stopPowerSaveBlocker } from './utils';
+import {
+  initializePath,
+  initializeTray,
+  startPowerSaveBlocker,
+  startupTask,
+  stopPowerSaveBlocker,
+} from './utils';
 import { initializeWindow } from './window';
 
 const bootstrap = async () => {
@@ -15,6 +21,8 @@ const bootstrap = async () => {
   await waitPort({ port: bridgeBootstrap.port, timeout: 30 * 1000 });
 
   initializeTray();
+
+  await startupTask();
 };
 
 app.whenReady().then(async () => {

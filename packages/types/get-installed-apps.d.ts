@@ -1,11 +1,11 @@
 declare module 'get-installed-apps' {
-  interface App {
+  export interface BaseApp {
     appName: string;
     appIdentifier: string;
     appInstallDate: string;
     appVersion: string;
   }
-  export interface MacApp extends App {
+  export interface MacApp extends BaseApp {
     _kMDItemDisplayNameWithExtensions: string;
     kMDItemAppStoreCategory: string;
     kMDItemAppStoreCategoryType: string;
@@ -38,7 +38,7 @@ declare module 'get-installed-apps' {
     kMDItemUseCount: string;
     kMDItemVersion: string;
   }
-  export interface WinApp extends App {
+  export interface WinApp extends BaseApp {
     'Inno Setup: Setup Version': string;
     'Inno Setup: App Path': string;
     InstallLocation: string;
