@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
+    "predev": "dotenv-checker --schema .env.example --env .env.development.local",
     "dev": "dotenv -e .env.development.local -- turbo run dev",
     "dev:env-check": "dotenv-checker --schema .env.example --env .env.development.local",
     "dev:db": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/prisma\"",
@@ -17,8 +18,7 @@
     "dev:electron": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/electron\"",
     "build": "dotenv -e .env.production.local -- turbo run build",
     "build:env-check": "dotenv-checker --schema .env.example --env .env.production.local",
-    "prepare": "husky",
-    "predev": "dotenv-checker --schema .env.schema --env .env.local"
+    "prepare": "husky"
   },
   "resolutions": {
     "@blocknote/core": "0.13.4",
@@ -34,6 +34,7 @@
     "@types/react": "18.3.2",
     "@types/react-dom": "18.3.0",
     "countries-list": "3.1.0",
+    "next-auth": "4.24.7",
     "prisma": "5.13.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
