@@ -1,7 +1,7 @@
-import { Bootstrap } from './bootstrap';
+import { ExpressBootstrap } from './bootstrap';
 import { env, logger } from './modules';
 
-const bootstrap = new Bootstrap(env.NEXT_PUBLIC_BRIDGE_PORT);
+const bootstrap = new ExpressBootstrap(env.NEXT_PUBLIC_BRIDGE_PORT);
 
 bootstrap.start();
 

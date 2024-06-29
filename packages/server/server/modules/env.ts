@@ -32,7 +32,7 @@ export const envSchema = z.object({
 const _env = envSchema.safeParse(process.env);
 
 if (!_env.success) {
-  console.error('🚫', _env.error.message);
+  console.error(_env.error.message);
   process.exit(1);
 }
 

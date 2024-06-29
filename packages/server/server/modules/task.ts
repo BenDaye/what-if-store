@@ -8,12 +8,12 @@ export const launchStartupTasks = async () => {
     .then((result) => {
       result.forEach((task) =>
         task.status === 'fulfilled'
-          ? _logger.info(`✅ ${task.value} startup task done`)
-          : _logger.error({ err: task.reason }, `❌ startup task failed`),
+          ? _logger.info(`${task.value} startup task done`)
+          : _logger.error({ err: task.reason }, `startup task failed`),
       );
     })
     .catch((err) => {
-      _logger.error({ err }, '❌ Some startup tasks failed');
+      _logger.error({ err }, 'Some startup tasks failed');
     });
 };
 
@@ -22,11 +22,11 @@ export const launchShutdownTasks = async () => {
     .then((result) => {
       result.forEach((task) =>
         task.status === 'fulfilled'
-          ? _logger.info(`✅ ${task.value} startup task done`)
-          : _logger.error({ err: task.reason }, `❌ startup task failed`),
+          ? _logger.info(`${task.value} startup task done`)
+          : _logger.error({ err: task.reason }, `startup task failed`),
       );
     })
     .catch((err) => {
-      _logger.error({ err }, '❌ Some shutdown tasks failed');
+      _logger.error({ err }, 'Some shutdown tasks failed');
     });
 };

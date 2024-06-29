@@ -41,8 +41,8 @@ export const startupBullMQ = async () => {
   ]).then((result) => {
     result.forEach((task) =>
       task.status === 'fulfilled'
-        ? _logger.info({ queue: task.value }, `✅ startup task done`)
-        : _logger.error({ err: task.reason }, `❌ startup task failed`),
+        ? _logger.info({ queue: task.value }, `startup task done`)
+        : _logger.error({ err: task.reason }, `startup task failed`),
     );
   });
   return 'BullMQ';
@@ -55,8 +55,8 @@ export const shutdownBullMQ = async () => {
   ]).then((result) => {
     result.forEach((task) =>
       task.status === 'fulfilled'
-        ? _logger.info({ queue: task.value }, `✅ shutdown task done`)
-        : _logger.error({ err: task.reason }, `❌ shutdown task failed`),
+        ? _logger.info({ queue: task.value }, `shutdown task done`)
+        : _logger.error({ err: task.reason }, `shutdown task failed`),
     );
   });
   return 'BullMQ';

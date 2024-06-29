@@ -1,2 +1,9 @@
 export * from '@trpc/server';
-export { Bootstrap as BridgeBootstrap, bootstrap as bridgeBootstrap } from './bootstrap';
+export {
+  StandaloneBootstrap as BridgeBootstrap,
+  standaloneBootstrap as bridgeBootstrap,
+  StandaloneBootstrap as BridgeStandaloneBootstrap,
+  standaloneBootstrap as bridgeStandaloneBootstrap,
+  ExpressBootstrap as BridgeExpressBootstrap,
+  expressBootstrap as bridgeExpressBootstrap,
+} from './bootstrap';
