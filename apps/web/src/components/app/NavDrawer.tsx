@@ -1,7 +1,7 @@
 import { AuthIconButton, IconButtonWithTooltip, PrimaryDrawerRnd } from '@/components/common';
 import { APP_PRIMARY_DRAWER_WIDTH, APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY } from '@/constants/drawer';
 import type { OverridesDrawerProps } from '@/types/overrides';
-import { Apps as ApplicationsIcon, Home as HomeIcon } from '@mui/icons-material';
+import { Apps as ApplicationsIcon, Home as HomeIcon, Inbox as ManagerIcon } from '@mui/icons-material';
 import { Box, Drawer } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -57,6 +57,12 @@ export const AppNavDrawer = ({ overrides }: AppNavDrawerProps) => {
             icon={<ApplicationsIcon />}
             onClick={() => push('/app/application')}
             active={pathname.startsWith('/app/application')}
+          />
+          <IconButtonWithTooltip
+            title={t('common:Manager')}
+            icon={<ManagerIcon />}
+            onClick={() => push('/app/manager')}
+            active={pathname.startsWith('/app/manager')}
           />
         </Box>
         <Box

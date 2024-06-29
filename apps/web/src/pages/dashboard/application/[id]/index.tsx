@@ -17,10 +17,10 @@ import { getServerSession } from 'next-auth';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import SuperJSON from 'superjson';
 import { ApplicationCategory } from '@what-if-store/prisma/client';
+import { createServerSideHelpers } from '@what-if-store/server/react';
 import { prisma, redis } from '@what-if-store/server/server/modules';
 import { appRouter } from '@what-if-store/server/server/routers/_app';
 import type { IdSchema } from '@what-if-store/server/server/schemas';
-import { createServerSideHelpers } from '@trpc/react-query/server';
 
 const Page: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ id }) => {
   const { data } = useDashboardApplication(id);

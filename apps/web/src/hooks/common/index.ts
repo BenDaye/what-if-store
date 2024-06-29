@@ -1,3 +1,3 @@
-export * from './copy';
-export * from './pagination';
-export * from './throttle';
+export { useCopy } from './copy';
+export { useGridPagination } from './pagination';
+export { useThrottle } from './throttle';

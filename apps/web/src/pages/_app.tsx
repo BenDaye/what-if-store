@@ -1,7 +1,7 @@
 import '@/components/common/BlockNote/styles.css';
 import '@/components/common/lexical/themes/PlaygroundEditorTheme.css';
 import { DefaultLayout } from '@/components/layouts';
-import { AuthProvider, BridgeProvider, NoticeProvider, TernaryDarkModeProvider } from '@/hooks';
+import { AuthProvider, NoticeProvider, TernaryDarkModeProvider } from '@/hooks';
 import { createEmotionCache } from '@/theme';
 import '@/theme/global.css';
 import type { EmotionCache } from '@emotion/react';
@@ -69,22 +69,20 @@ const MyApp: AppType<CreateContextOptions> = ({
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <NoticeProvider>
-            <BridgeProvider>
-              <SessionProvider session={pageProps?.session}>
-                <SWRConfig
-                  value={{
-                    fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),
-                  }}
+            <SessionProvider session={pageProps?.session}>
+              <SWRConfig
+                value={{
+                  fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),
+                }}
+              >
+                <AuthProvider
+                  disableSignIn={Boolean(process.env.NEXT_PUBLIC_DISABLE_SIGN_IN)}
+                  disableSignUp={Boolean(process.env.NEXT_PUBLIC_DISABLE_SIGN_UP)}
                 >
-                  <AuthProvider
-                    disableSignIn={Boolean(process.env.NEXT_PUBLIC_DISABLE_SIGN_IN)}
-                    disableSignUp={Boolean(process.env.NEXT_PUBLIC_DISABLE_SIGN_UP)}
-                  >
-                    {getLayout(<Component {...pageProps} />)}
-                  </AuthProvider>
-                </SWRConfig>
-              </SessionProvider>
-            </BridgeProvider>
+                  {getLayout(<Component {...pageProps} />)}
+                </AuthProvider>
+              </SWRConfig>
+            </SessionProvider>
           </NoticeProvider>
         </SnackbarProvider>
       </TernaryDarkModeProvider>

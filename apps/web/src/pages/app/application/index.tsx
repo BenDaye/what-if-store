@@ -13,10 +13,10 @@ import { useEffect, useState } from 'react';
 import SuperJSON from 'superjson';
 import { useDebounceValue } from 'usehooks-ts';
 import { ApplicationCategory, ApplicationPlatform } from '@what-if-store/prisma/client';
+import { createServerSideHelpers } from '@what-if-store/server/react';
 import { prisma, redis } from '@what-if-store/server/server/modules';
 import { appRouter } from '@what-if-store/server/server/routers/_app';
 import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
-import { createServerSideHelpers } from '@trpc/react-query/server';
 
 const Page: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = () => {
   const [input, setInput] = useState<ApplicationListInputSchema>({
