@@ -1,4 +1,4 @@
 import { createBridgeTRPCClient } from '@what-if-store/bridge/client/trpc';
-import { bootstrap } from '@what-if-store/bridge/server/bootstrap';
+import { bridgeBootstrap } from '@what-if-store/bridge/server';
 
-export const client = createBridgeTRPCClient(bootstrap.port);
+export const client = createBridgeTRPCClient(bridgeBootstrap.port);

@@ -6,6 +6,7 @@ import { initializeLogger } from './logger';
 import {
   initializePath,
   initializeTray,
+  shutdownTask,
   startPowerSaveBlocker,
   startupTask,
   stopPowerSaveBlocker,
@@ -35,6 +36,7 @@ app.whenReady().then(async () => {
     }
   });
   app.on('before-quit', async () => {
+    await shutdownTask();
     await bridgeBootstrap.stop();
     stopPowerSaveBlocker();
   });

@@ -1,3 +1,10 @@
-export { envSchema, env } from './env';
+export { env, envSchema } from './env';
 export { logger } from './logger';
-export { launchStartupTasks, launchShutdownTasks } from './task';
+export {
+  installedAppsEmitter,
+  installedApps,
+  getInstalledApps,
+  setInstalledApps,
+  clearInstalledApps,
+} from './store';
+export { launchShutdownTasks, launchStartupTasks } from './task';

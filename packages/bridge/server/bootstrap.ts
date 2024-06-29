@@ -8,7 +8,7 @@ import { createHTTPServer } from '../server/adapters/standalone';
 import { applyWSSHandler } from '../server/adapters/ws';
 import { createContext } from './context';
 import { launchShutdownTasks, launchStartupTasks, logger } from './modules';
-import { appRouter, appRouterWithTRPC, type AppRouterWithTRPC } from './routers/_app';
+import { appRouter, type AppRouter } from './routers/_app';
 
 class BaseBootstrap {
   public isHttpServerReady: boolean = false;
@@ -110,9 +110,9 @@ class BaseBootstrap {
       return;
     }
     const wsServer = new WebSocketServer({ server: this._httpServer });
-    const wsHandler = applyWSSHandler<AppRouterWithTRPC>({
+    const wsHandler = applyWSSHandler<AppRouter>({
       wss: wsServer,
-      router: appRouterWithTRPC,
+      router: appRouter,
       createContext,
     });
     this._wsHandler = wsHandler;
@@ -134,7 +134,7 @@ export class StandaloneBootstrap extends BaseBootstrap {
   protected startHttpServer = () => {
     const httpHandler = createHTTPServer({
       middleware: cors(),
-      router: appRouterWithTRPC,
+      router: appRouter,
       createContext,
     });
     const httpServer = httpHandler.listen(this.port);
@@ -159,10 +159,10 @@ export class ExpressBootstrap extends BaseBootstrap {
       limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
       standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
       legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-      skip: (req) => req.url === '/trpc/healthCheck',
+      skip: (req) => req.url === '/healthCheck',
     });
     app.use(limiter);
-    app.use('/trpc', createExpressMiddleware({ router: appRouter, createContext }));
+    app.use('/', createExpressMiddleware({ router: appRouter, createContext }));
 
     const httpHandler = app.listen(this.port);
     const httpServer = httpHandler;

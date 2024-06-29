@@ -37,6 +37,7 @@ declare module 'get-installed-apps' {
     kMDItemPhysicalSize: string;
     kMDItemUseCount: string;
     kMDItemVersion: string;
+    [k: string]: unknown;
   }
   export interface WinApp extends BaseApp {
     'Inno Setup: Setup Version': string;
@@ -65,6 +66,7 @@ declare module 'get-installed-apps' {
     VersionMajor: string;
     VersionMinor: string;
     EstimatedSize: string;
+    [k: string]: unknown;
   }
 
   export const getInstalledApps: () => Promise<MacApp[] | WinApp[]>;

@@ -8,7 +8,7 @@ import { createTRPCClient, createWSClient, httpLink, splitLink, wsLink } from '.
 globalThis.WebSocket = WebSocket as any;
 
 export const createBridgeTRPCClient = (port?: number): CreateTRPCClient<AppRouter> => {
-  const _port = port ?? process.env.NEXT_PUBLIC_BRIDGE_PORT;
+  const _port = port ?? process.env.NEXT_PUBLIC_SERVER_PORT;
   if (!_port) {
     throw new Error('Bridge port is not provided');
   }

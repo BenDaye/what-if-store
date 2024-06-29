@@ -7,3 +7,4 @@ export {
   ExpressBootstrap as BridgeExpressBootstrap,
   expressBootstrap as bridgeExpressBootstrap,
 } from './bootstrap';
+export type { Unsubscribable } from '@trpc/server/observable';
