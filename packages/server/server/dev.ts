@@ -1,10 +1,10 @@
 import { createServer } from 'http';
 import path from 'path';
 import { default as serveHandler } from 'serve-handler';
-import { Bootstrap } from './bootstrap';
+import { ExpressBootstrap } from './bootstrap';
 import { env, logger } from './modules';
 
-const bootstrap = new Bootstrap(env.NEXT_PUBLIC_SERVER_PORT);
+const bootstrap = new ExpressBootstrap(env.NEXT_PUBLIC_SERVER_PORT);
 
 bootstrap.start();
 

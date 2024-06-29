@@ -1,7 +1,7 @@
 /**
  * This file contains the root router of your tRPC-backend
  */
-import { router } from '../trpc';
+import { publicProcedure, router } from '../trpc';
 import {
   protectedAppApplication,
   protectedDashboardApplication,
@@ -61,6 +61,7 @@ import {
 } from './user_key';
 
 export const appRouter = router({
+  healthCheck: publicProcedure.query(async () => 'ok'),
   app: router({
     public: router({
       meta: publicAppMeta,
@@ -131,3 +132,8 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+
+export const appRouterWithTRPC = router({
+  trpc: appRouter,
+});
+export type AppRouterWithTRPC = typeof appRouterWithTRPC;

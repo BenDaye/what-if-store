@@ -14,6 +14,7 @@
     "dev:env-check": "dotenv-checker --schema .env.example --env .env.development.local",
     "dev:db": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/prisma\"",
     "dev:web": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/server\"  --filter=\"@what-if-store/web\"",
+    "dev:server": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/server\"",
     "dev:bridge": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/bridge\"",
     "dev:electron": "dotenv -e .env.development.local -- turbo run dev --filter=\"@what-if-store/electron\"",
     "build": "dotenv -e .env.production.local -- turbo run build",

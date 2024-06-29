@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { WebSocketServer, type WebSocket } from 'ws';
-import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { createExpressMiddleware } from '../server/adapters/express';
 import { createHTTPServer } from '../server/adapters/standalone';
 import { applyWSSHandler } from '../server/adapters/ws';
 import { createContext } from './context';
@@ -55,15 +55,15 @@ class BaseBootstrap {
   };
 
   protected addWsServerListeners = () => {
-    this._wsServer?.once('listening', () => this.onWsServerListening());
-    this._wsServer?.on('error', () => (err: Error) => this.onWsServerError(err));
-    this._wsServer?.on('connection', (ws: WebSocket) => this.onWsServerConnection(ws));
+    this._wsServer?.once('listening', this.onWsServerListening);
+    this._wsServer?.on('error', () => this.onWsServerError);
+    this._wsServer?.on('connection', this.onWsServerConnection);
   };
 
   protected removeWsServerListeners = () => {
-    this._wsServer?.off('listening', () => this.onWsServerListening());
-    this._wsServer?.off('error', (err: Error) => this.onWsServerError(err));
-    this._wsServer?.off('connection', (ws: WebSocket) => this.onWsServerConnection(ws));
+    this._wsServer?.off('listening', this.onWsServerListening);
+    this._wsServer?.off('error', this.onWsServerError);
+    this._wsServer?.off('connection', this.onWsServerConnection);
   };
 
   protected onWsServerListening = () => {
