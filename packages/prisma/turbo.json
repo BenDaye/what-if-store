@@ -1,0 +1,32 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "dev": {
+      "dependsOn": ["dev:studio"],
+      "cache": false,
+      "persistent": true
+    },
+    "dev:migrate": {
+      "dependsOn": ["dev:env-check"],
+      "cache": false
+    },
+    "dev:studio": {
+      "dependsOn": ["dev:migrate"],
+      "cache": false
+    },
+    "dev:seed": {
+      "dependsOn": ["dev:migrate"],
+      "cache": false
+    },
+    "dev:reset": {
+      "dependsOn": ["dev:env-check"],
+      "cache": false
+    },
+    "dev:env-check": {
+      "dependsOn": ["//#dev:env-check"],
+      "inputs": ["../../.env.development.local", ".env.development.local"],
+      "outputs": [".env.development.local"],
+      "cache": false
+    }
+  }
+}

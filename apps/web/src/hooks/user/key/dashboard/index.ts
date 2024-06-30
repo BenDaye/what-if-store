@@ -1,1 +1,1 @@
-export * from './pagination';
+export { useDashboardUserApiKeysWithPagination } from './pagination';

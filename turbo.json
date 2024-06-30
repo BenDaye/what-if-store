@@ -45,6 +45,10 @@
       "cache": false,
       "inputs": ["./.env.example", "./.env.production.local"],
       "outputs": ["./.env.production.local"]
+    },
+    "dev:db:seed": {
+      "cache": false,
+      "dependsOn": ["@what-if-store/prisma#dev:seed"]
     }
   }
 }
