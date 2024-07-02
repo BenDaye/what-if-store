@@ -1,5 +1,9 @@
 import type { SortDirection } from '@mui/material';
-import type { GridCallbackDetails, GridPaginationModel } from '@mui/x-data-grid';
+import type {
+  GridCallbackDetails,
+  GridControlledStateReasonLookup,
+  GridPaginationModel,
+} from '@mui/x-data-grid';
 import { useCallback, useMemo, useState } from 'react';
 
 type GridPagination = {
@@ -19,8 +23,7 @@ export function useGridPagination(params?: GridPagination) {
   );
 
   const setPaginationModel = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (model: GridPaginationModel, _details: GridCallbackDetails<any>) => {
+    (model: GridPaginationModel, _details: GridCallbackDetails<keyof GridControlledStateReasonLookup>) => {
       setPagination({
         ...pagination,
         page: model.page,

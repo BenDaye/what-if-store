@@ -76,7 +76,7 @@ export const ApplicationTagDataGrid = ({ overrides }: ApplicationTagDataGridProp
     },
     [],
   );
-  const onProcessRowUpdateError = useCallback((error: any) => {
+  const onProcessRowUpdateError = useCallback((error: unknown) => {
     // TODO: implement error handling
     console.error(error);
   }, []);

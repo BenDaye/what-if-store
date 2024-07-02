@@ -91,7 +91,7 @@ export const ApplicationCollectionDataGrid = ({ overrides }: ApplicationCollecti
     },
     [],
   );
-  const onProcessRowUpdateError = useCallback((error: any) => {
+  const onProcessRowUpdateError = useCallback((error: unknown) => {
     // TODO: implement error handling
     console.error(error);
   }, []);
