@@ -36,7 +36,8 @@
     "undocked",
     "unfollow",
     "upsert",
-    "usehooks"
+    "usehooks",
+    "winget"
   ],
   "editor.formatOnType": true,
   "editor.formatOnPaste": false,

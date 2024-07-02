@@ -38,7 +38,7 @@ export const InstalledApps = () => {
   }
 
   return (
-    <Paper>
+    <Paper sx={{ height: (theme) => `calc(100vh - ${theme.spacing(4)})` }}>
       <InstalledAppList data={data} isFetching={isFetching} />
     </Paper>
   );
