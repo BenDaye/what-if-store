@@ -1,8 +1,9 @@
 import path from 'path';
 import type { BrowserWindowConstructorOptions, Rectangle } from 'electron';
-import { app, BrowserWindow, screen } from 'electron';
+import { BrowserWindow, screen } from 'electron';
 import serve from 'electron-serve';
 import { windowStore } from '../store';
+import { appTitle, isDev } from '../utils';
 import { MIN_HEIGHT, MIN_WIDTH } from './constants';
 
 export const createWindow = (
@@ -96,6 +97,7 @@ export const createWindow = (
   };
 
   const win = new BrowserWindow(browserOptions);
+  win.setTitle(appTitle);
 
   win.once('focus', saveBounds);
 
@@ -105,17 +107,10 @@ export const createWindow = (
 
   win.on('close', saveBounds);
 
-  win.webContents.once('did-finish-load', () => {
-    const isDev = process.env.NODE_ENV !== 'production';
-    win.setTitle(`${isDev ? '[Dev] ' : ''}${app.getName()} ${app.getVersion()}`);
-  });
-
   return win;
 };
 
 export const initializeWindow = async () => {
-  const isDev = process.env.NODE_ENV !== 'production';
-
   const mainWindow = createWindow({
     webPreferences: {
       webSecurity: false,
@@ -124,6 +119,12 @@ export const initializeWindow = async () => {
 
   mainWindow.removeMenu();
   // if (mainWindow.maximizable) mainWindow.maximize();
+  mainWindow.on('close', (event) => {
+    if (mainWindow.isVisible()) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
+  });
 
   if (isDev) {
     const rendererPort = process.argv[2];

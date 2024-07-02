@@ -1,7 +1,6 @@
 import { app, BrowserWindow, Menu, nativeImage, Tray } from 'electron';
-import { getInstalledApps } from 'get-installed-apps';
 import { initializeWindow } from '../window';
-import { client } from './bridge';
+import { appTitle } from './app';
 
 export let tray: Tray;
 
@@ -13,39 +12,41 @@ export const initializeTray = () => {
     .resize({ width: 20, height: 20 });
   tray = new Tray(trayIcon);
 
+  const showWindow = () => {
+    const windows = BrowserWindow.getAllWindows();
+    if (windows.length === 0) {
+      initializeWindow();
+    } else {
+      windows.forEach((win) => win.show());
+    }
+  };
+
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Dashboard',
-      click: async () => {
-        const windows = BrowserWindow.getAllWindows();
-        if (windows.length === 0) {
-          await initializeWindow();
-        } else {
-          windows[0].show();
-        }
-      },
+      click: () => showWindow(),
     },
     {
-      label: 'Test Get Installed Apps',
-      click: async () => {
-        const apps = await getInstalledApps();
-        console.log(apps);
-      },
+      type: 'separator',
     },
     {
-      label: 'Test Bridge',
-      click: async () => {
-        const res = await client.healthCheck.query();
-        console.log(res);
-      },
+      label: appTitle,
+      enabled: false,
+    },
+    {
+      type: 'separator',
     },
     {
       label: 'Quit',
       click: () => {
+        BrowserWindow.getAllWindows().forEach((win) => win.close());
         app.quit();
       },
     },
   ]);
+
+  tray.on('click', () => showWindow());
+
   tray.setToolTip('What If Store');
   tray.setContextMenu(contextMenu);
 };

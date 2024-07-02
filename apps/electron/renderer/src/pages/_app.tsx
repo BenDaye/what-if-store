@@ -22,7 +22,7 @@ import type { AppProps, AppType } from 'next/app';
 import Head from 'next/head';
 import { SnackbarProvider } from 'notistack';
 import type { ReactElement, ReactNode } from 'react';
-import nextI18NextConfig from '../../next-i18next.config.js';
+import nextI18NextConfig from '../../../next-i18next.config.js';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

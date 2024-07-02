@@ -3,7 +3,7 @@ import type { AppType } from 'next/app';
 import type { DocumentContext, DocumentProps } from 'next/document';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import * as React from 'react';
-import i18nextConfig from '../../next-i18next.config.js';
+import i18nextConfig from '../../../next-i18next.config.js';
 import { createEmotionCache } from '../theme';
 import type { MyAppProps } from './_app';
 

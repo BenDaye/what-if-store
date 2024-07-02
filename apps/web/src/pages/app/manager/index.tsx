@@ -1,17 +1,23 @@
 import nextI18NextConfig from '@/../next-i18next.config';
 import { InstalledApps } from '@/components/app/manager';
 import { PageContainer } from '@/components/common';
+import { EmptyDataBox } from '@/components/common/EmptyDataBox';
 import { AppLayout } from '@/components/layouts';
 import type { NextPageWithLayout } from '@/pages/_app';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { getServerSession } from 'next-auth';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import dynamic from 'next/dynamic';
 import SuperJSON from 'superjson';
-import { BridgeTrpcProvider } from '@what-if-store/bridge/react/provider';
 import { createServerSideHelpers } from '@what-if-store/server/react';
 import { prisma, redis } from '@what-if-store/server/server/modules';
 import { appRouter } from '@what-if-store/server/server/routers/_app';
+
+const BridgeTrpcProvider = dynamic(
+  () => import('@what-if-store/bridge/react/provider').then((component) => component.BridgeTrpcProvider),
+  { ssr: false, loading: () => <EmptyDataBox /> },
+);
 
 const Page: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = () => {
   return (

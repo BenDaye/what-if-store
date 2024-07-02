@@ -26,6 +26,7 @@ import type {
   MenuItemProps,
   TextFieldProps,
 } from '@mui/material';
+import type { DataGridProps } from '@mui/x-data-grid';
 import type { FieldError, Merge } from 'react-hook-form';
 import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 
@@ -97,3 +98,10 @@ export type MultipleAutoCompleteProps<
   disabled?: boolean;
   routerInput?: RouterInput;
 };
+
+export type OverridesDataGridProps = OverridesProps<{
+  DataGridProps?: DataGridProps;
+  CardProps?: CardProps;
+  CardHeaderProps?: CardHeaderProps;
+  CardContentProps?: CardContentProps;
+}>;

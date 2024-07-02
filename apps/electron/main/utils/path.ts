@@ -2,9 +2,9 @@ import path from 'path';
 import type { App } from 'electron';
 import { app } from 'electron';
 import { ensureDirSync } from 'fs-extra';
+import { isDev } from './app';
 
 export const initializePath = () => {
-  const isDev = process.env.NODE_ENV !== 'production';
   const appName = isDev ? `${app.getName()} (Dev)` : app.getName();
 
   const appDataPath = path.join(app.getPath('home'), '.config');

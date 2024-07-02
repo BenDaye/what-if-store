@@ -76,7 +76,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "prisma.fileWatcher": true,
-  "i18n-ally.localesPaths": ["packages/web/public/locales"],
+  "i18n-ally.localesPaths": ["apps/web/public/locales", "apps/electron/renderer/public/locales"],
   "i18n-ally.keystyle": "nested",
   "i18n-ally.namespace": true,
   "i18n-ally.sourceLanguage": "en-US",
@@ -99,5 +99,6 @@
     ".vscode-insiders",
     "*preset.js",
     "tsconfig*.json"
-  ]
+  ],
+  "i18n-ally.enabledFrameworks": ["next-intl"]
 }

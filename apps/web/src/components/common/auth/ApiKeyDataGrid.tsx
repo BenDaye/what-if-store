@@ -116,7 +116,7 @@ const AppApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     },
     [],
   );
-  const onProcessRowUpdateError = useCallback((error: any) => {
+  const onProcessRowUpdateError = useCallback((error: unknown) => {
     // TODO: implement error handling
     console.error(error);
   }, []);
@@ -232,7 +232,7 @@ const DashboardApiKeyDataGrid = ({ overrides }: ApiKeyDataGridProps) => {
     },
     [],
   );
-  const onProcessRowUpdateError = useCallback((error: any) => {
+  const onProcessRowUpdateError = useCallback((error: unknown) => {
     // TODO: implement error handling
     console.error(error);
   }, []);

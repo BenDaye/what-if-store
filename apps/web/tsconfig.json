@@ -11,11 +11,11 @@
     }
   },
   "include": [
+    "src",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "../../packages/types/*.d.ts",
-    "../../packages/types/next-auth.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
