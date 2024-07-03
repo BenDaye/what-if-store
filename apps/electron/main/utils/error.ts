@@ -9,3 +9,17 @@ export const prettyError = (error: any): { error: Error } => {
           : new Error('UNEXPECTED_ERROR'),
   };
 };
+
+export const isDev = process.env.NODE_ENV !== 'production';
+
+export const transformErrorToString = (error: unknown): string => {
+  if (isDev) console.error(error);
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  return 'UNEXPECTED_ERROR';
+};
