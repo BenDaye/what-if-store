@@ -25,6 +25,10 @@
     "windir"
   ],
   "tasks": {
+    "clean": {
+      "cache": false,
+      "dependsOn": ["^clean"]
+    },
     "lint": {
       "cache": false
     },

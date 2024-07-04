@@ -7,6 +7,7 @@
   "main": "app/background.js",
   "scripts": {
     "build": "nextron build",
+    "clean": "rimraf node_modules && rimraf logs && rimraf .turbo && rimraf app && rimraf renderer/.next",
     "dev": "x-var -e=.env.development.local nextron dev --renderer-port=\\$NEXT_PUBLIC_RENDERER_PORT",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",

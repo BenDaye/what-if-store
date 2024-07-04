@@ -12,6 +12,7 @@
     "build:reset": "dotenv -e .env.production.local -- prisma migrate reset --force --skip-seed",
     "build:seed": "dotenv -e .env.production.local -- prisma db seed",
     "build:studio": "dotenv -e .env.production.local -- prisma studio -b none",
+    "clean": "rimraf node_modules",
     "dev": "turbo run dev",
     "dev:env-check": "dotenv-checker --schema ../../.env.development.local --env .env.development.local",
     "dev:migrate": "dotenv -e .env.development.local -- prisma migrate dev --skip-seed",

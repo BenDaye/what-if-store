@@ -5,6 +5,7 @@
   "description": "Web app for What If Store",
   "scripts": {
     "build": "next build",
+    "clean": "rimraf node_modules && rimraf logs && rimraf .turbo && rimraf .next",
     "dev": "next dev",
     "lint": "eslint . --ext .js,.ts,.tsx --ignore-path .gitignore",
     "lint:fix": "eslint . --ext .js,.ts,.tsx --ignore-path .gitignore --fix",

@@ -2,5 +2,8 @@
   "name": "@what-if-store/constants",
   "version": "0.0.0",
   "private": true,
-  "main": "index.ts"
+  "main": "index.ts",
+  "scripts": {
+    "clean": "rimraf node_modules"
+  }
 }

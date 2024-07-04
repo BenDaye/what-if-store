@@ -5,6 +5,7 @@
   "sideEffects": false,
   "main": "index.ts",
   "scripts": {
+    "clean": "rimraf node_modules && rimraf logs && rimraf .turbo",
     "dev": "tsx watch server/dev.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --fix"
