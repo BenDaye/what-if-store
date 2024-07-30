@@ -6,7 +6,7 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
-import type { ApplicationCategory } from '@what-if-store/prisma/client';
+import { ApplicationCategory } from '@what-if-store/prisma/client';
 import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 import { SimpleApplicationCard } from '../Card';
 
@@ -40,14 +40,16 @@ export const CategorySectionCard = ({ data, input, overrides }: CategorySectionC
     <Card {...overrides?.CardProps}>
       <CardContent {...overrides?.CardContentProps}>
         <Stack direction="column" spacing={2} alignItems="stretch">
-          {input.category?.map((item, index) => (
-            <CommonSection
-              key={item}
-              data={_data.filter((v) => v.category === item)}
-              category={item}
-              divider={index !== 0}
-            />
-          ))}
+          {Object.values(ApplicationCategory)
+            .filter((item) => input.category?.includes(item))
+            .map((item, index) => (
+              <CommonSection
+                key={item}
+                data={_data.filter((v) => v.category === item)}
+                category={item}
+                divider={index !== 0}
+              />
+            ))}
         </Stack>
       </CardContent>
     </Card>
