@@ -51,6 +51,11 @@ import { IpcChannel } from '../types';
 import { channelMap } from './map';
 import type { WingetChannelResult } from './types';
 
+const DEFAULT_ARGS = {
+  '--disable-interactivity': true,
+  '--ignore-warnings': true,
+} as const;
+
 class WingetChannel extends IpcChannel {
   protected create(): void {
     // Original: Always return WingetOutput
@@ -118,7 +123,7 @@ class WingetChannel extends IpcChannel {
 
   private _configure = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetConfigureArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetConfigureArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetConfigure(args);
@@ -129,7 +134,7 @@ class WingetChannel extends IpcChannel {
 
   private _download = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetDownloadArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetDownloadArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetDownload(args);
@@ -140,7 +145,7 @@ class WingetChannel extends IpcChannel {
 
   private _export = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetExportArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetExportArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetExport(args);
@@ -151,7 +156,7 @@ class WingetChannel extends IpcChannel {
 
   private _features = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetFeaturesArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetFeaturesArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetFeatures(args);
@@ -162,7 +167,7 @@ class WingetChannel extends IpcChannel {
 
   private _hash = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetHashArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetHashArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetHash(args);
@@ -173,7 +178,7 @@ class WingetChannel extends IpcChannel {
 
   private _import = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetImportArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetImportArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetImport(args);
@@ -184,7 +189,7 @@ class WingetChannel extends IpcChannel {
 
   private _install = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetInstallArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetInstallArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetInstall(args);
@@ -195,7 +200,7 @@ class WingetChannel extends IpcChannel {
 
   private _add = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetInstallArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetInstallArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetAdd(args);
@@ -206,7 +211,7 @@ class WingetChannel extends IpcChannel {
 
   private _list = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetListArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetListArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetList(args);
@@ -217,7 +222,7 @@ class WingetChannel extends IpcChannel {
 
   private _ls = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetListArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetListArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetLs(args);
@@ -228,7 +233,7 @@ class WingetChannel extends IpcChannel {
 
   private _pin = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetCommonArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetCommonArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetPin(args);
@@ -239,7 +244,7 @@ class WingetChannel extends IpcChannel {
 
   private _search = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetSearchArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetSearchArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetSearch(args);
@@ -250,7 +255,7 @@ class WingetChannel extends IpcChannel {
 
   private _find = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetSearchArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetSearchArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetFind(args);
@@ -261,7 +266,7 @@ class WingetChannel extends IpcChannel {
 
   private _settings = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetSettingsArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetSettingsArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetSettings(args);
@@ -272,7 +277,7 @@ class WingetChannel extends IpcChannel {
 
   private _config = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetSettingsArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetSettingsArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetConfig(args);
@@ -283,7 +288,7 @@ class WingetChannel extends IpcChannel {
 
   private _show = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetShowArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetShowArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetShow(args);
@@ -294,7 +299,7 @@ class WingetChannel extends IpcChannel {
 
   private _view = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetShowArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetShowArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetView(args);
@@ -305,7 +310,7 @@ class WingetChannel extends IpcChannel {
 
   private _source = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetCommonArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetCommonArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetSource(args);
@@ -316,7 +321,7 @@ class WingetChannel extends IpcChannel {
 
   private _uninstall = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetUninstallArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetUninstallArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetUninstall(args);
@@ -327,7 +332,7 @@ class WingetChannel extends IpcChannel {
 
   private _remove = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetUninstallArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetUninstallArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetRemove(args);
@@ -338,7 +343,7 @@ class WingetChannel extends IpcChannel {
 
   private _rm = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetUninstallArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetUninstallArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetRm(args);
@@ -349,7 +354,7 @@ class WingetChannel extends IpcChannel {
 
   private _upgrade = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetUpgradeArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetUpgradeArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetUpgrade(args);
@@ -360,7 +365,7 @@ class WingetChannel extends IpcChannel {
 
   private _update = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetUpgradeArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetUpgradeArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetUpdate(args);
@@ -371,7 +376,7 @@ class WingetChannel extends IpcChannel {
 
   private _validate = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetValidateArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetValidateArgs = DEFAULT_ARGS,
   ): Promise<WingetOutput> => {
     try {
       return await wingetValidate(args);
@@ -390,7 +395,7 @@ class WingetChannel extends IpcChannel {
 
   private _formattedList = async (
     _ev: IpcMainInvokeEvent,
-    args: WingetListArgs = { '--disable-interactivity': true, '--ignore-warnings': true },
+    args: WingetListArgs = DEFAULT_ARGS,
   ): Promise<WingetChannelResult<WingetListItem[]>> => {
     try {
       return transformWingetResultToChannelResult(await wingetList(args), transformWingetListStdoutToItems);

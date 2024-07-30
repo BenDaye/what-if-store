@@ -75,6 +75,9 @@
       "Type": "分组类型"
     },
     "Name": "应用名称",
+    "Identifier": "唯一标识",
+    "InstallDate": "安装日期",
+    "Version": "版本",
     "Price": "价格",
     "Provider": "作者",
     "Status": "状态",
