@@ -11,7 +11,7 @@ export const applicationListInputSchema = listInputSchema
     locales: z.string().array(),
     status: z.nativeEnum(ApplicationStatus).array(),
     countries: z.string().array(),
-    ageRating: z.string().regex(/^\d+\+$/),
+    ageRating: z.number().int().nonnegative(),
   })
   .partial();
 export type ApplicationListInputSchema = z.infer<typeof applicationListInputSchema>;
@@ -29,7 +29,7 @@ export const applicationCreateInputSchema = z.object({
       requirement: z.string(),
     })
     .array(),
-  ageRating: z.string().regex(/^\d+\+$/),
+  ageRating: z.number().int().nonnegative(),
   countries: z.string().array().min(1),
   locales: z.string().array().min(1),
   website: z.string().url(),

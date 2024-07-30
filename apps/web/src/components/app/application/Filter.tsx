@@ -1,5 +1,4 @@
 import { CollapseList, SearchInput, SecondaryDrawerRnd } from '@/components/common';
-import { AgeRating } from '@/constants/age_rating';
 import {
   APP_PRIMARY_DRAWER_WIDTH,
   APP_PRIMARY_DRAWER_WIDTH_LOCAL_STORAGE_KEY,
@@ -22,6 +21,7 @@ import {
 import countries from 'countries-list/minimal/countries.2to3.min.json';
 import { useTranslation } from 'next-i18next';
 import { useLocalStorage } from 'usehooks-ts';
+import { AgeRating, getAgeRatingLabel } from '@what-if-store/constants/ageRating';
 import { ApplicationCategory, ApplicationPlatform } from '@what-if-store/prisma/client';
 import type { ApplicationListInputSchema } from '@what-if-store/server/server/schemas';
 
@@ -281,7 +281,7 @@ export const ApplicationAgeRatingFilter = ({
   setInput = () => null,
 }: Pick<ApplicationFilterProps, 'input' | 'setInput'>) => {
   const { t } = useTranslation();
-  const handleSelect = (ageRating: string) => {
+  const handleSelect = (ageRating: number) => {
     setInput({
       ...input,
       ageRating: ageRating === input.ageRating ? undefined : ageRating,
@@ -299,7 +299,7 @@ export const ApplicationAgeRatingFilter = ({
     >
       {Object.values(AgeRating).map((item) => (
         <ListItemButton key={item} onClick={() => handleSelect(item)} dense>
-          <ListItemText primary={item} />
+          <ListItemText primary={getAgeRatingLabel(item)} />
           <ListItemSecondaryAction>
             <Checkbox size="small" edge="end" checked={selected === item} disableRipple />
           </ListItemSecondaryAction>
